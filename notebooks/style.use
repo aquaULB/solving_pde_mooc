@@ -1,0 +1,18 @@
+# latex
+text.usetex : True
+font.family  : sans-serif
+font.sans-serif: "Computer Modern Roman"
+
+# lines and markers
+lines.markersize : 10
+lines.linestyle : dotted    ## solid line
+lines.linewidth : 2
+lines.marker          : o  ## the default marker
+
+#lines.color     : C0   ## has no affect on plot(); see axes.prop_cycle
+#lines.markerfacecolor : auto  ## the default marker face color
+#lines.markeredgecolor : red  ## the default marker edge color
+#lines.markeredgewidth : 2.5   ## the line width around the marker symbol
+
+axes.prop_cycle : cycler('color', ['1f77b4'])
+figure.frameon     : True

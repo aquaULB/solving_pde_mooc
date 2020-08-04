@@ -4,7 +4,7 @@ font.family  : sans-serif
 font.sans-serif: "Computer Modern Roman"
 
 # lines and markers
-lines.markersize : 10
+lines.markersize : 8
 lines.linestyle : dotted    ## solid line
 lines.linewidth : 2
 lines.marker          : o  ## the default marker

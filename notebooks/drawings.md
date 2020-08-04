@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.0
+      jupytext_version: 1.5.2
   kernelspec:
     display_name: 'Python 3.7.7 64-bit (''course'': conda)'
     language: python
@@ -57,11 +57,12 @@ ax.text(0, 0.5, r'$a$', fontsize=18, horizontalalignment='center')
 ax.text(10, 0.5, r'$b$', fontsize=18, horizontalalignment='center')
 
 # inside
-x=np.asarray([5, 7])
+x=np.asarray([5, 5.8, 7])
 y = 0.0 * x
 
 ax.plot(x, y, linestyle='')
 ax.text(5, 0.5, r'$x$', fontsize=18, horizontalalignment='center')
+ax.text(5.8, 0.5, r'$\xi$', fontsize=18, horizontalalignment='center')
 ax.text(7, 0.5, r'$x+\Delta x$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('figures/taylor.png', dpi=300)

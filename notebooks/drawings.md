@@ -52,6 +52,7 @@ ax.axis('equal')
 x=np.asarray([0, 10])
 y = 0.0 * x
 
+# edges
 ax.plot(x, y, marker='|')
 ax.text(0, 0.5, r'$a$', fontsize=18, horizontalalignment='center')
 ax.text(10, 0.5, r'$b$', fontsize=18, horizontalalignment='center')

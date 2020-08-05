@@ -1,0 +1,23 @@
+# latex
+text.usetex : True
+font.family  : sans-serif
+font.sans-serif: "Computer Modern Roman"
+font.size    : 18.0
+# lines and markers
+lines.markersize : 8
+lines.linewidth : 2
+
+#lines.color     : C0   ## has no affect on plot(); see axes.prop_cycle
+#lines.markerfacecolor : auto  ## the default marker face color
+#lines.markeredgecolor : red  ## the default marker edge color
+#lines.markeredgewidth : 2.5   ## the line width around the marker symbol
+
+axes.prop_cycle : cycler('color', ['1f77b4'])
+axes.linewidth : 1.2
+
+xtick.major.width : 1.2
+ytick.major.width   : 1.2
+
+legend.frameon       : False
+
+figure.autolayout : True

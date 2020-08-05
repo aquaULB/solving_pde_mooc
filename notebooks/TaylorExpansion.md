@@ -51,7 +51,7 @@ In order to estimate the accuracy of discretized differential operators or time 
 
 <img src="figures/taylor.png">
 
-Any *well behaved* function in $[a\ b]$ can then be approximated using the following expression (Taylor's expansion):
+Any *well behaved* function in $[a\ b]$ can then be approximated using the following expression (Taylor's expansion) $\cite{Arfken}$:
 
 \begin{align}
 f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k + R_{k+1}
@@ -84,11 +84,45 @@ f(x+\Delta x)\approx f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \fra
 
 is of order $k+1$. Importantly, this implies that the remainder is at least reduced by a factor of $2^{k+1}$ if $\Delta x$ is divided by $2$. This is a very important concept that will be discussed numerous times in this course.
 
-To make things more concrete, let us consider the Taylor expansion of the exponential function $e^x$.
+## Expansion of $e^x$
 
-* mention how the error is reduced if one divides de grid size by 2 etc.
+To make things more concrete and to write our first python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
-<img src="figures/sample.png">
+\begin{align}
+e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!}, \quad\quad 0\leq \xi \leq \Delta x.
+\end{align}
+
+As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$. Let's check using python that this is indeed the case.
+
+We first import two packages that... 
+```python
+import numpy as np
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+plt.style.use('./mainstyle.use')
+
+delta_list = [2**(-k) for k in range(1, 10)]
+
+delta = np.asarray(delta_list)
+print(delta)
+```
+
+```python
+R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
+slope = delta**3
+```
+
+```python
+fig, ax = plt.subplots()
+ax.loglog(delta, R3, '*', label=r'$R_3$')
+ax.loglog(delta, slope, color='green', label=r'$\Delta^{-3}$')
+ax.set_xlabel(r'$\Delta x$')
+ax.set_ylabel(r'$R_3$')
+ax.set_title(r'Accuracy')
+ax.legend()
+fig.savefig('sample.png', dpi=300)
+```
 
 # Spatial discretization
 

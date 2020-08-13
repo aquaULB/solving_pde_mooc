@@ -37,12 +37,12 @@ As an example and toy problem, let us consider radioactive decay. Imagine we hav
   \frac{dN(t)}{dt}=-\alpha N(t).
 \end{align}
 
-where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really a computer to solve this equation as its solution is readilly obtained and reads:
+where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readilly obtained and reads:
 
 \begin{align}
   N(t)=N(t_0)e^{-\alpha t} \label{eq:expDecay}
 \end{align}
-Our objective is obtain this time evolution using a numerical scheme.
+However, our objective here is to obtain the above time evolution using a numerical scheme.
 
 ## Forward Euler method
 
@@ -139,6 +139,8 @@ ax.loglog(dt_list, error, '*', label=r'Error')
 # fit a slope to the previous curve
 slope = dt_list
 ax.loglog(dt_list, slope, color='green', label=r'$dt^{-1}$')
+
+# set plot options
 ax.set_xlabel(r'$dt$')
 ax.set_ylabel(r'Error')
 ax.set_title(r'Accuracy')
@@ -151,27 +153,29 @@ Do you notice something 'surprising' in this plot? Earlier we mentioned an accur
 As an exercise, write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
 
 
+
+**Solution (to hide from students)**
+
 ```python
-# Restore initial condition
 for i, dt in enumerate(dt_list):
-    values[i] = N0 - alpha*N*dt
+    values[i] = N0 - alpha*N0*dt
     
 fig, ax = plt.subplots()
 
 # error computation
-error = np.abs(values - N0*np.exp(-alpha*dt_list)) # numpy can substract the same number to the array of values
+error = np.abs(values - N0*np.exp(-alpha*dt_list))
 ax.loglog(dt_list, error, '*', label=r'Error')
 
 # fit a slope to the previous curve
-slope = dt_list
-ax.loglog(dt_list, slope, color='green', label=r'$dt^{-1}$')
+slope = dt_list**2
+ax.loglog(dt_list, slope, color='green', label=r'$dt^{-2}$')
+
+# set plot options
 ax.set_xlabel(r'$dt$')
 ax.set_ylabel(r'Error')
 ax.set_title(r'Accuracy')
 ax.legend()
 fig.savefig('eulerSlope2.png', dpi=300)
-
-# this is a test
 ```
 
 # Finite difference discretization

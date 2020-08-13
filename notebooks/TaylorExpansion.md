@@ -123,22 +123,3 @@ ax.set_title(r'Accuracy')
 ax.legend()
 fig.savefig('sample.png', dpi=300)
 ```
-
-# Spatial discretization
-
-# Time integration
-
-# Ordinary differential equations
-
-# Partial differential equations
-
-# Iterative methods
-
-# Spectral methods
-
-## Fourier transform
-
-## Chebyshev polynomials
-```python
-
-```

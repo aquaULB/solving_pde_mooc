@@ -140,55 +140,15 @@ In order to create comment in Python (text in your code which will be ignored by
 # Note that numpy has already been imported above.
 # Here it is imported repetedly for the sake of
 # demonstration what your code should look like.
-#
-# matplotlib.pyplot provides all the tools which
-# are usually necessary for 2D plotting.
 
 import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-As we are working in *Jupyter*, we will take advantage of so-called **magic commands**. They are crazily helpful in some cases, but note that they are *specific to IPython and Jupyter* (IPython and Jupyter are projects offering interactive shell for Python programming).
-
-What magic command does? It basically creates an *alias* to some command.
-
-Magic commands have `%` in front. We use
-
 ```python
 %matplotlib inline
-```
-
-So that whatever we plot will appear *inline* - in our notebook, right below the code which produced graphical output.
-
-We then set the style of our plots, which will be universal througout the whole course. Matplotlib has several predefines styles encoded in files. You, of course, can always create your own style.
-
-```python
 plt.style.use('./mainstyle.use')
-```
 
-Let us now create the first mathematical object that will represent $\Delta$.
-
-When we want to define certain quantity at the set of points, we might use *either* built-in Python sequences (list, tuple, range etc.) *or* 1D numpy arrays. What to choose? In many cases yor choice will not affect the result, **but** usually numpy array is better because of the following [reasons][3]:
-* *Memory*
-
-    They occupy less space.
-
-
-* *Performance*
-
-    They are faster.
-
-
-* *Functionality*
-
-    They support **way more** mathematical operations.
-
-
-[3]: <https://webcourses.ucf.edu/courses/1249560/pages/python-lists-vs-numpy-arrays-what-is-the-difference> "Lists vs NumPy arrays"
-
-Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into numpy array.
-
-```python
 delta_list = [2**(-k) for k in range(1, 10)]
 
 delta = np.asarray(delta_list)

@@ -189,16 +189,167 @@ When we want to define certain quantity at the set of points, we might use *eith
 
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
+Let us consider few ways of building $\Delta x$ sequence which produce equivalent output. Assume $\Delta x = 2^{-k}$ for $k = 1, 2, ..., 9$. To demonstrate advantages of one approaches over the others, we will use *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
+
+
+1. *Create Python list in a loop and then transform it into NumPy array*
+
 ```python
+%%time
+
+# First create an empty Python list, which
+# will contain values of delta at all k.
+delta_list = []
+
+# We loop for k = 1, 2, ..., 9. We use built-in
+# range(min, max, step) function. It returns the
+# sequence of integer numbers, such as:
+# min, min+step, min+2*step,..., max-step.
+# As you can see, max value is not included in
+# sequence. Min and step arguments are OPTIONAL
+# for range function => if you don't pass them
+# ti function, they will be at their default values:
+# min = 0, step = 1.
+# For more info:
+# https://docs.python.org/3/library/functions.html#func-range
+#
+# Example:
+# range(5) will produce the following sequence:
+# 0, 1, 2, 3, 4.
+#
+# We use append method of Python class to add
+# values to the list at each iteration. As well as
+# a function method is a piece of code which
+# executes specific task, BUT unlike a simple
+# function it is bound to specific object.
+# In this particular case append method is bound to
+# the list.
+# For more info:
+# https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+for k in range(1, 10):
+    delta_list.append(2**(-k))
+
+# We now convert the list into the NumPy array.
+# For that particular purpose there is a NumPy
+# function - numpy.asarray(a). Here a is some
+# sequence.
+# For more info:
+# https://numpy.org/doc/stable/reference/generated/numpy.asarray.html
+delta = np.asarray(delta_list)
+```
+
+2. *Create Python list using list comprehension and then convert it to NumPy array*
+
+    This method is conceptually equivalent to the described above, except for that we use *list comprehension* for list creation - shortened way to generate lists in Python. Such approach is thr preferred one when possible.  
+
+```python
+%%time
+
+# As you can see we managed to shorten our code - 
+# what has been previously accomplished in 3 lines,
+# is now done in 1 line.
+# For more info:
+# https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
 delta_list = [2**(-k) for k in range(1, 10)]
 
 delta = np.asarray(delta_list)
-print(delta)
 ```
 
+3. *Create empty NumPy array and then fill it with values in a loop*
+
 ```python
+%%time
+
+delta = np.zeros(9)
+
+for i in range(len(delta)):
+    delta[i] = 2**(-i-1)
+```
+
+For such small piece of data we cannot see any advantages in speed which one method would have over the other.
+
+**Exercise 1:** generate the same delta array using all 3 approaches but for more points (100, 1000, 10000...) and make your own conclusion which approach is the best.
+
+We are now all set to buid $R_3$.
+
+```python
+# Here you can clearly see the advantage of
+# NumPy over built-in tools of Python. 
+#
+# NumPy functions, such as exp, sin, cos, log etc.,
+# can be applied on the WHOLE array. In this
+# the corresponding mathematical operation will
+# be applied on each element of array. This is
+# possible with the respective functions from
+# Python's standard math module - there you
+# would have to loop.
+#
+# NumPy arrays provide possibility to avoid
+# looping when applying the same operation
+# on each element.
 R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
+
 slope = delta**3
+```
+
+**Exercise 2:** in order to see yourself the advantages of *NumPy*, create the same $R_3$ array, but use *Python's* standard `math` module. Use `delta_list` object instead of `delta`. Time both the above cell and your code. *Note* that cell magic commands by their design *must* be at the very top of the cell.
+
+```python
+import math
+
+# Insert your code here.
+```
+
+As we have built the set of numerical data, we are ready to visualize it. 
+
+The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create figure explicitely, it will be created implicitely*, but explicit call to the object allows you to manipulate your plots in a more flexible way.
+
+Let us create the first figure of the course.
+
+[4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
+
+```python
+# We create an empty figure.
+fig = plt.figure()
+
+# Print id of figure.
+print(fig.number)
+
+# We create a figure and assign a unique
+# id to it.
+#
+# Note that since we assign the same name
+# to the variable which stores our diffe-
+# rent figures, the variable gets OVERWRITTEN
+# by a new value each time.
+fig = plt.figure(num=0)
+
+# Now if you call the figure function and pass
+# the same id to it, NEW FIGURE WILL NOT BE
+# CREATED. fig_copy is just a copy of fig.
+fig_copy = plt.figure(num=0)
+
+print(fig_copy.number)
+```
+
+In such a way, we have currently stored a figure of size (9, 7) and id 0 in a `fig` variable. Now let's proceed to the creation of axes.
+
+The most efficient way to add *Matplotlib* axes to a figure is through the methods of figure dedicated to this purpose. These are `add_axes` and `add_subplot` methods - they both return the instances of `matplotlib.axes.Axes` object - *Matplotlib* object which contains all the tools corresponding to the visualization of axes. The difference is that `add_axes` accepts as its arguments the *location* in of where you place your axes - location is passed in units of figure sizing; `add_subplot` allows you to divide your figure in parts, you configure locations of these parts by setting amount of *rows and columns* in your figures.
+
+Let's see how it looks.
+
+```python
+# Get the figure with id 0, which has
+# already been created.
+fig = plt.figure(num=0)
+
+# First of all, let's change the size
+# of a figure, so that it contains all
+# our subplots.
+fig.set_size_inches((12, 10))
+
+ax_1 = fig.add_axes([0., 0., 0.1, 0.1])
+ax_2 = fig.add_axes([0.05, 0.05, 0.15, 0.2])
 ```
 
 ```python

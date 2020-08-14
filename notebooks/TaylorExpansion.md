@@ -89,30 +89,31 @@ is of order $k+1$. Importantly, this implies that the remainder is at least redu
 To make things more concrete and to write our first python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
 \begin{align}
-e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!}, \quad\quad 0\leq \xi \leq \Delta x.
+e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
 \end{align}
 
 As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$. Let's check using python that this is indeed the case.
 
-First of all, we shall need to *import* some Python packages into our code. One Python file cann access the containing of another by *importing*. At this stage we are interested the most in suc packages as
-* ``numpy``
+First of all, we need to *import* some Python packages into our code. One Python file can access the containings of another by *importing* it. Packages we are interested in at this stage are: 
+
+* ``NumPy``
 
     > [NumPy][1] is the fundamental package for scientific computing in Python. It is a Python library that provides a multidimensional array object, various derived objects (such as masked arrays and matrices), and an assortment of routines for fast operations on arrays, including mathematical, logical, shape manipulation, sorting, selecting, I/O, discrete Fourier transforms, basic linear algebra, basic statistical operations, random simulation and much more.
     
-* ``matplotlib``
+* ``Matplotlib``
     > [Matplotlib][2] is a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
 [1]: <https://numpy.org/doc/stable/user/whatisnumpy.html> "Why NumPy?"
 [2]: <https://matplotlib.org> "Matplotlib"
 
+These 2 packages form the basis of scientific computations in Python. *NumPy* provides tools to solve huge variety of different mathematical problems, and *Matplotlib* provides tools to visualize any kind of numerical data.
 
 Imports in Python are performed using `import` statement:
-
 ```python
 import numpy
 ```
 
-In order to access then the tools of module (unit of Python code), we have put the name of this module in front of the name of the necessary object:
+In order to access then the tools of module (unit of Python code), we put the name of this module in front of the name of the necessary object:
 
 ```python
 print(numpy.pi)
@@ -134,7 +135,7 @@ from numpy import cos
 
 Imports are usually performed on top of the Python file before any other code.
 
-In order to create comment in Python (text in your code which will be ignored by Python), put `#` in front.
+In order to create comment in Python (text in your code which will be ignored by Python), put `#` in front of the text.
 
 ```python
 # Note that numpy has already been imported above.
@@ -166,9 +167,9 @@ We then set the style of our plots, which will be universal througout the whole 
 plt.style.use('./mainstyle.use')
 ```
 
-Let us now create the first mathematical object that will represent $\Delta$.
+Let us now create the first mathematical object that will represent the error term $R_3$ of the approximation of the exponential function (see \ref{eq:residual}).
 
-When we want to define certain quantity at the set of points, we might use *either* built-in Python sequences (list, tuple, range etc.) *or* 1D numpy arrays. What to choose? In many cases yor choice will not affect the result, **but** usually numpy array is better because of the following [reasons][3]:
+When we want to define certain quantity at the set of points, we might use *either* built-in *Python* sequences (list, tuple, range etc.) *or* 1D *NumPy* arrays. What to choose? In many cases yor choice will not affect the result, **but** usually *NumPy* array is better because of the following [reasons][3]:
 * *Memory*
 
     They occupy less space.
@@ -186,7 +187,7 @@ When we want to define certain quantity at the set of points, we might use *eith
 
 [3]: <https://webcourses.ucf.edu/courses/1249560/pages/python-lists-vs-numpy-arrays-what-is-the-difference> "Lists vs NumPy arrays"
 
-Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into numpy array.
+Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
 ```python
 delta_list = [2**(-k) for k in range(1, 10)]
@@ -214,6 +215,8 @@ fig.savefig('sample.png', dpi=300)
 # References
 
 (<a id="cit-Arfken" href="#call-Arfken">?</a>) !! _This reference was not found in biblio.bib _ !!
+
+
 
 ```python
 

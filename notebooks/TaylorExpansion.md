@@ -153,13 +153,13 @@ As we are working in *Jupyter*, we will take advantage of so-called **magic comm
 
 What magic command does? It basically creates an *alias* to some command.
 
-Magic commands have `%` in front. We use
+Magic commands have `%` in front.
+
+A simple example of the usefulness of a magic command can be made with `%pinfo`. It outputs documentation of an object, which is useful both for beginners and for the advanced programmers, and spares you the need to google it. We've already used above the `print` function to output the value of $\pi$ - run the following cell to see documentation of `print`:
 
 ```python
-%matplotlib inline
+%pinfo print
 ```
-
-So that whatever we plot will appear *inline* - in our notebook, right below the code which produced graphical output.
 
 We then set the style of our plots, which will be universal througout the whole course. Matplotlib has several predefines styles encoded in files. You, of course, can always create your own style.
 
@@ -266,11 +266,14 @@ for i in range(len(delta)):
     delta[i] = 2**(-i-1)
 ```
 
-For such small piece of data we cannot see any advantages in speed which one method would have over the other.
+For such small piece of data we cannot see any advantages in speed which one method would have over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. Good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, not that important for producibility, but this is wrong. Whatever are your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of cases programming is a collaborative work, so there are *naming conventions* in each programmimg language which regulate style of coding. Python's naming conventions are provided by 
+[PEP 8][5]. 
 
-**Exercise 1:** generate the same delta array using all 3 approaches but for more points (100, 1000, 10000...) and make your own conclusion which approach is the best.
+**Exercise 1:** generate the same delta array using all 3 approaches but for more points (100, 1000, 10000...) and make your own conclusion which approach is the fastest.
 
 We are now all set to buid $R_3$.
+
+[5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
 ```python
 # Here you can clearly see the advantage of
@@ -306,7 +309,15 @@ The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whene
 
 Let us create the first figure of the course.
 
+Before all we run the following magic command:
+
 [4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
+
+```python
+%matplotlib inline
+```
+
+So that whatever we plot will appear *inline* - in our notebook, right below the code which produced graphical output.
 
 ```python
 # We create an empty figure.

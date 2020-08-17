@@ -220,7 +220,212 @@ In particular we observe that the forward Euler scheme cannot be made stable if 
 
 ### Multi-dimensional example
 
-So far we have only considered a simple one dimensional example in which the unkown function is a scalar. In pratice, many problems are modelled with a series of coupled variables and the corresponding equation is multi-dimensional. Multi-dimensional equations also arise when our starting equations contain higher-order derivatives and need to be converted to a system of first-order equations. For example, let's consider an object in free fall. Its acceleration is constant and equal to the gravitational constant $g$.
+So far we have only considered a simple one dimensional example in which the unkown function is a scalar. In pratice, many problems are modelled with a series of coupled variables and the corresponding equation is multi-dimensional. Multi-dimensional equations also arise when our starting equations contain higher-order derivatives and need to be converted to a system of first-order equations. For example, let's consider an object in free fall. Its acceleration is constant and equal to minus the gravitational constant $g$. We therefore have:
+
+\begin{align}
+    \frac{d^2 h}{d t^2}=-g,
+\end{align}
+
+where $h$ is the height of the object with respect to the ground. In order to solve this equation, it is easier to introduce the velocity $v=\frac{dh}{dt}$ of the object and consider the system:
+
+\begin{align}
+    \frac{dh}{dt}=v,\\
+    \frac{dv}{dt}=-g. 
+\end{align}
+
+If we apply the forward Euler scheme to this system we get:
+
+\begin{align}
+    h^{n+1}=h^n + v^n dt,\\
+    v^{n+1}=v^n  - g dt 
+\end{align}
+
+Note that on the rhs of the equations, all the quantities are at time $t_n$ and are explicitely known to jump to time $t_{n+1}$. One says that the scheme is *explicit*. We will consider *implicit* scheme further in the course. We can also write the system of equation in matrix form:
+
+\begin{align}
+\begin{pmatrix}
+    h^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    h^{n} \\
+    v^{n}
+\end{pmatrix}
++&
+\begin{pmatrix}
+    0 & 1 \\
+    0 & 0
+\end{pmatrix}
+\begin{pmatrix}
+    h^{n} \\
+    v^{n}
+\end{pmatrix}
+dt
++
+\begin{pmatrix}
+    0 \\
+    -g
+\end{pmatrix}
+dt \\
+&\Leftrightarrow \nonumber \\
+y^{n+1} &= y^n + Ly^n dt + bdt
+\end{align}
+
+with $y=(h\;\; v)$, $b=(0\;\; -g)$ and
+
+\begin{align}
+L=
+\begin{pmatrix}
+    0 & 1 \\
+    0 & 0
+\end{pmatrix}
+\end{align}
+
+Let's solve this system numerically and use numpy array functionalities to write our solution in a more compact way. As initial condition, we choose $h_0=100\textrm{m}$ and $v_0=0\textrm{m/s}$.
+
+```python
+# parameters
+g = 9.81 # ms^-2, gravitational constant
+h0 = 100. # initial height
+v0 = 0. # initial speed
+
+t0 = 0. # initial time
+tf = 4.0
+dt = 0.1
+nt = int((tf-t0) / dt) # number of time steps
+
+# Create a numpy array to contain the intermediate values of y,
+# including those at ti and tf
+y = np.empty((nt+1, 2))
+
+# Store initial condition in y[:,0]
+y[0] = np.array([h0, v0])
+
+# Create vector b
+b = np.array([0, -g])
+
+# Create matrix L
+L = np.array([[0, 1], [0, 0]])
+
+# Perform the time stepping
+for i in range(nt):
+    y[i+1] = y[i] + np.dot(L,y[i])*dt + b*dt
+```
+
+Make a comment here on how numpy arrays make the code so much easier to write compared to manipulating each components.
+
+Let's display our results graphically:
+
+```python
+fig, ax = plt.subplots(1, 2, figsize=(9, 4))
+
+# create an array containing the multiples of dt
+t = np.arange(nt+1) * dt
+
+ax[0].plot(t,y[:,1])
+ax[0].set_xlabel(r'$t$')
+ax[0].set_ylabel(r'$v$')
+ax[0].set_title(r'Speed vs time (m/s)')
+
+ax[1].plot(t,y[:,0])
+ax[1].set_xlabel(r'$t$')
+ax[1].set_ylabel(r'$h$')
+ax[1].set_title(r'Height vs time (m)')
+```
+
+We need to ask students to compare this solution to the exact solution and mention the scheme works pretty well.
+
+
+### Numerical stability of the forward Euler method revisited
+
+Let's consider another two dimensional example and analyse the motion of an object attached to a spring. The equation of motion reads:
+
+\begin{align}
+    m\frac{d^2 x}{d t^2}=-kx,
+\end{align}
+
+where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is a constant charaterising the spring (this should have a name). Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
+
+\begin{align}
+    \frac{dx}{dt}=v,\\
+    \frac{dv}{dt}=-\gamma x,
+\end{align}
+with $\gamma =-k/m$.
+
+For the forward Euler scheme we have:
+
+\begin{align}
+\begin{pmatrix}
+    x^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    x^{n} \\
+    v^{n}
+\end{pmatrix}
++&
+\begin{pmatrix}
+    0 & 1 \\
+    \gamma & 0
+\end{pmatrix}
+\begin{pmatrix}
+    x^{n} \\
+    v^{n}
+\end{pmatrix}
+dt
+\end{align}
+
+Let's implement this. It does not seem very different from the previous problem...
+
+```python
+# parameters
+k = 2. # spring constant
+m = 1. # object's mass
+x0 = 0.75 # initial position
+v0 = 0. # initial velocity
+
+gamma = -k/m
+
+t0 = 0. # initial time
+tf = 40.0
+dt = 0.1
+nt = int((tf-t0) / dt) # number of time steps
+
+# Create a numpy array to contain the intermediate values of y,
+# including those at ti and tf
+y = np.empty((nt+1, 2))
+
+# Store initial condition in y[:,0]
+y[0] = np.array([x0, v0])
+
+# Create matrix L
+L = np.array([[0, 1], [gamma, 0]])
+
+# Perform the time stepping
+for i in range(nt):
+    y[i+1] = y[i] + np.dot(L,y[i])*dt
+```
+
+```python
+fig, ax = plt.subplots(1, 2, figsize=(9, 4))
+
+# create an array containing the multiples of dt
+t = np.arange(nt+1) * dt
+
+ax[0].plot(t,y[:,1])
+ax[0].set_xlabel(r'$t$')
+ax[0].set_ylabel(r'$v$')
+ax[0].set_title(r'Speed vs time (m/s)')
+
+ax[1].plot(t,y[:,0])
+ax[1].set_xlabel(r'$t$')
+ax[1].set_ylabel(r'$x$')
+ax[1].set_title(r'Position vs time (m)')
+```
+
+What's going on ? We know a fritionless simple oscillator like the one we are considering here should oscillate back and forth with a constant amplitude. Something has to be wrong in our implementation. Or maybe not...
 
 
 ## Exercices

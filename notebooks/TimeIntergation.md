@@ -213,6 +213,9 @@ fig.savefig('figures/eulerStabilityMap.png', dpi=300)
 
 In particular we observe that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
 
+<!--
+    BK not touching furhter above this line
+-->
 
 ## Exercices
 

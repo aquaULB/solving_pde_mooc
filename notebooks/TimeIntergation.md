@@ -29,7 +29,7 @@ where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-
   y^{(n)}=\frac{d^n y}{dt^n}.
 \end{align}
 
-Note that we have used $t$ as the variable on which the unkown function $y$ depends and we will usually refer to it as *time*. However, all the methods we describe in this chapter also apply to other problems in which a given function depends on an independant variable and the corresponding ODE can be put in the form \eqref{eq:ODE}.
+Note that we have used $t$ as the variable on which the unkown function $y$ depends and we will usually refer to it as *time*. However, all the methods we describe in this chapter also apply to other problems in which a given function depends on an independant variable and the corresponding ODE have the form \eqref{eq:ODE}.
 
 As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law given by:
 
@@ -42,19 +42,32 @@ where $\alpha>0$ is a constant depending on the type of nuclei present in the ma
 \begin{align}
   N(t)=N(t_0)e^{-\alpha t} \label{eq:expDecay}
 \end{align}
+
 However, our objective here is to obtain the above time evolution using a numerical scheme.
 
 ## Forward Euler method
 
-The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. It is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For the radioactive decay, we then have:
+The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. It is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
    & N(t+dt) \approx N(t) + N'(t)dt + O(dt^2)& \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From the above equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on...
+From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on...
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
+
+By convention, we will denote the different intermediate times as $t_n = t+ndt$ and the corresponding values of $N$ as $N_n = N(t+ndt)$ so that $N_n = N(t_n)$.
+
+The forward Euler scheme is then written as:
+
+\begin{align}
+    & N_{n+1} \equiv N_n + N'_n dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
+\end{align}
+
+In the above equation we have replaced the $\approx$ symbol by an $\equiv$ symbol and dropped the $O(dt^2)$ to stress that it constitues a *definition* of the forward Euler scheme.
+
+Here is a Python implementation of the algorithm:
 ```python
 import numpy as np
 
@@ -78,7 +91,12 @@ for i in range(nt):
     N[i+1] = N[i] - alpha*N[i]*dt
 ```
 
-Done! The last entry in the array N now contains an estimate for $N(t_f)$. Let us now compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
+Done! The last entry in the array N now contains an estimate for $N(t_f)$.
+
+
+### Numerical accuracy of the forward Euler method
+
+Let us now compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
 
 ```python
 import matplotlib.pyplot as plt
@@ -99,7 +117,7 @@ ax.set_xlabel(r'$t$')
 ax.set_ylabel(r'$N$')
 ax.set_title(r'Radioactive decay')
 ax.legend()
-fig.savefig('radioactiveDecay.png', dpi=300)
+fig.savefig('figures/radioactiveDecay.png', dpi=300)
 
 
 ```
@@ -145,16 +163,61 @@ ax.set_xlabel(r'$dt$')
 ax.set_ylabel(r'Error')
 ax.set_title(r'Accuracy')
 ax.legend()
-fig.savefig('eulerSlope.png', dpi=300)
+fig.savefig('figures/eulerSlope.png', dpi=300)
 ```
 
-Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is the product of the error made at each time step multiplied by the number of steps. As the latter scale as $dt^{-1}$, the total error scale like $dt^2 / dt = dt$. One says that error made during one time step *accumulates* during the computation.
-
-As an exercise, write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
+Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is proportioanl to the product of the error made at each time step multiplied by the number of steps. As the latter scale as $dt^{-1}$, the total error scale like $dt^2 / dt = dt$. One says that the error made during one time step *accumulates* during the computation.
 
 
+### Numerical stability of the forward Euler method
 
-**Solution (to hide from students)**
+For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial properties of numerical schemes called their stability. 
+
+For our radioactive problem, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
+
+\begin{align}
+    N_{n} &= (1-\alpha dt)N_{n-1}  = (1-\alpha dt)^2 N_{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
+\end{align}
+
+This relation implies that $N_n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
+
+In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). Here, if we generalise our radioactive decay problem to allow for complex valued coefficient $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
+
+\begin{align}
+  \vert 1-\alpha dt \vert < 1 \Leftrightarrow\qquad (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
+\end{align}
+
+where $\vert \vert$ is the complex norm.
+
+Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$ where the forward Euler scheme is stable.
+
+```python
+# This graph looks really bad, some better styling is needed.
+
+fig, ax = plt.subplots()
+draw_circle = plt.Circle((-1, 0), 1)
+
+ax.set_aspect(1)
+ax.add_artist(draw_circle)
+
+# set plot options
+ax.set_xlim(-2.5,2.5)
+ax.set_ylim(-2.5,2.5)
+ax.set_position([0, 0, 1, 1])
+ax.set_xlabel(r'$\alpha_r dt$')
+ax.set_ylabel(r'$\alpha_i dt$')
+ax.set_title(r'Stability of forward Euler scheme')
+
+fig.savefig('figures/eulerStabilityMap.png', dpi=300)
+```
+
+In particular we observe that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
+
+
+## Exercices
+
+
+**Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
 
 ```python
 for i, dt in enumerate(dt_list):
@@ -168,14 +231,14 @@ ax.loglog(dt_list, error, '*', label=r'Error')
 
 # fit a slope to the previous curve
 slope = dt_list**2
-ax.loglog(dt_list, slope, color='green', label=r'$dt^{-2}$')
+ax.loglog(dt_list, slope, color='green', label=r'$dt$')
 
 # set plot options
 ax.set_xlabel(r'$dt$')
 ax.set_ylabel(r'Error')
 ax.set_title(r'Accuracy')
 ax.legend()
-fig.savefig('eulerSlope2.png', dpi=300)
+fig.savefig('figures/eulerSlope2.png', dpi=300)
 ```
 
 # Finite difference discretization

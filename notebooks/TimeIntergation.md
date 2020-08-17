@@ -72,7 +72,7 @@ Here is a Python implementation of the algorithm:
 import numpy as np
 
 # parameters
-alpha = 0.25*1.j # exponential law coeffecient
+alpha = 0.25 # exponential law coeffecient
 t0 = 0.0 # initial time
 tf = 5.0 # final time
 dt = 0.5 # time step
@@ -81,7 +81,7 @@ N0 = 100
 
 # Create a numpy array to contain the intermediate values of N,
 # including those at ti and tf
-N = np.empty(nt+1,dtype='complex')
+N = np.empty(nt+1)
 
 # Store initial value in N[0]
 N[0] = N0

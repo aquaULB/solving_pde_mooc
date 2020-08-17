@@ -72,7 +72,7 @@ Here is a Python implementation of the algorithm:
 import numpy as np
 
 # parameters
-alpha = 0.25 # exponential law coeffecient
+alpha = 0.25*1.j # exponential law coeffecient
 t0 = 0.0 # initial time
 tf = 5.0 # final time
 dt = 0.5 # time step
@@ -81,7 +81,7 @@ N0 = 100
 
 # Create a numpy array to contain the intermediate values of N,
 # including those at ti and tf
-N = np.empty(nt+1)
+N = np.empty(nt+1,dtype='complex')
 
 # Store initial value in N[0]
 N[0] = N0
@@ -211,11 +211,17 @@ ax.set_title(r'Stability of forward Euler scheme')
 fig.savefig('figures/eulerStabilityMap.png', dpi=300)
 ```
 
-In particular we observe that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
+In particular we observe that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below). In exercise 2, we ask you to to check this statement.
 
 <!--
     BK not touching further above this line
 -->
+
+
+### Multi-dimensional example
+
+So far we have only considered a simple one dimensional example in which the unkown function is a scalar. In pratice, many problems are modelled with a series of coupled variables and the corresponding equation is multi-dimensional. Multi-dimensional equations also arise when our starting equations contain higher-order derivatives and need to be converted to a system of first-order equations. For example, let's consider an object in free fall. Its acceleration is constant and equal to the gravitational constant $g$.
+
 
 ## Exercices
 

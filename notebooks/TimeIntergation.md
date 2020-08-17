@@ -156,7 +156,7 @@ ax.loglog(dt_list, error, '*', label=r'Error')
 
 # fit a slope to the previous curve
 slope = dt_list
-ax.loglog(dt_list, slope, color='green', label=r'$dt^{-1}$')
+ax.loglog(dt_list, slope, color='green', label=r'$dt$')
 
 # set plot options
 ax.set_xlabel(r'$dt$')
@@ -240,7 +240,7 @@ ax.loglog(dt_list, error, '*', label=r'Error')
 
 # fit a slope to the previous curve
 slope = dt_list**2
-ax.loglog(dt_list, slope, color='green', label=r'$dt$')
+ax.loglog(dt_list, slope, color='green', label=r'$dt^2$')
 
 # set plot options
 ax.set_xlabel(r'$dt$')

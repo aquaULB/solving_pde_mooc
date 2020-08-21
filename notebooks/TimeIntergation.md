@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-# Time integration
+# Time integration - Part 1
 
 In this part of the course we discuss how to solve what are known as ordinary differential equations (ODE). Although their numerical resolution is not the main subject of this course, they nevertheless allow to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDE).
 
@@ -47,7 +47,7 @@ However, our objective here is to obtain the above time evolution using a numeri
 
 ## Forward Euler method
 
-The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. It is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
+The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. We will use it to introduce several concepts that will pop up frequently in the rest of course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
    & N(t+dt) \approx N(t) + N'(t)dt + O(dt^2)& \textrm{Forward Euler method} \label{eq:ForwardEuler}
@@ -57,12 +57,12 @@ From this equation, we note that the forward Euler method is second order for go
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
-By convention, we will denote the different intermediate times as $t_n = t+ndt$ and the corresponding values of $N$ as $N_n = N(t+ndt)$ so that $N_n = N(t_n)$.
+By convention, we will denote the different intermediate times as $t^n = t+ndt$ and the corresponding values of $N$ as $N^n = N(t+ndt)$ so that $N^n = N(t^n)$.
 
 The forward Euler scheme is then written as:
 
 \begin{align}
-    & N_{n+1} \equiv N_n + N'_n dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
+    & N^{n+1} \equiv N^n + N^{'n} dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
 \end{align}
 
 In the above equation we have replaced the $\approx$ symbol by an $\equiv$ symbol and dropped the $O(dt^2)$ to stress that it constitues a *definition* of the forward Euler scheme.
@@ -96,7 +96,7 @@ Done! The last entry in the array N now contains an estimate for $N(t_f)$.
 
 ### Numerical accuracy of the forward Euler method
 
-Let us now compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
+Let us compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
 
 ```python
 import matplotlib.pyplot as plt
@@ -171,17 +171,17 @@ Do you notice something 'surprising' in this plot? Earlier we mentioned an accur
 
 ### Numerical stability of the forward Euler method
 
-For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial properties of numerical schemes called their stability. 
+For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial property of numerical schemes called their stability. 
 
 For our radioactive problem, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
 
 \begin{align}
-    N_{n} &= (1-\alpha dt)N_{n-1}  = (1-\alpha dt)^2 N_{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
+    N^{n} &= (1-\alpha dt)N^{n-1}  = (1-\alpha dt)^2 N^{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
 \end{align}
 
-This relation implies that $N_n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
+This relation implies that $N^n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
 
-In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). Here, if we generalise our radioactive decay problem to allow for complex valued coefficient $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
+In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficient $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{align}
   \vert 1-\alpha dt \vert < 1 \Leftrightarrow\qquad (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
@@ -192,7 +192,7 @@ where $\vert \vert$ is the complex norm.
 Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$ where the forward Euler scheme is stable.
 
 ```python
-# This graph looks really bad, some better styling is needed.
+# This graph looks really bad, some better styling is needed. Could it be made similar to the one shown in Moin?
 
 fig, ax = plt.subplots()
 draw_circle = plt.Circle((-1, 0), 1)
@@ -211,11 +211,7 @@ ax.set_title(r'Stability of forward Euler scheme')
 fig.savefig('figures/eulerStabilityMap.png', dpi=300)
 ```
 
-In particular we observe that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below). In exercise 2, we ask you to to check this statement.
-
-<!--
-    BK not touching further above this line
--->
+If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$ can be made to lie in the disk shown in the plot, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below). In exercise 2, we ask you to to check this statement.
 
 
 ### Multi-dimensional example
@@ -240,7 +236,7 @@ If we apply the forward Euler scheme to this system we get:
     v^{n+1}=v^n  - g dt 
 \end{align}
 
-Note that on the rhs of the equations, all the quantities are at time $t_n$ and are explicitely known to jump to time $t_{n+1}$. One says that the scheme is *explicit*. We will consider *implicit* scheme further in the course. We can also write the system of equation in matrix form:
+Note that on the rhs of the equations, all the quantities are at time $t^n$ and are explicitely known and allow to jump to time $t^{n+1}$. One says that the scheme is *explicit*. We will consider *implicit* scheme further in the course. We can also write the system of equation in matrix form:
 
 \begin{align}
 \begin{pmatrix}
@@ -313,7 +309,7 @@ for i in range(nt):
     y[i+1] = y[i] + np.dot(L,y[i])*dt + b*dt
 ```
 
-Make a comment here on how numpy arrays make the code so much easier to write compared to manipulating each components.
+BK or Liza: Make a comment here on how numpy arrays make the code so much easier to write compared to manipulating each components.
 
 Let's display our results graphically:
 
@@ -334,7 +330,7 @@ ax[1].set_ylabel(r'$h$')
 ax[1].set_title(r'Height vs time (m)')
 ```
 
-We need to ask students to compare this solution to the exact solution and mention the scheme works pretty well.
+We need to ask students to compare this solution to the exact solution and mention the scheme works pretty well. Exercice?
 
 
 ### Numerical stability of the forward Euler method revisited
@@ -345,13 +341,13 @@ Let's consider another two dimensional example and analyse the motion of an obje
     m\frac{d^2 x}{d t^2}=-kx,
 \end{align}
 
-where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is a constant charaterising the spring (this should have a name). Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
+where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is the spring constant. Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
 
 \begin{align}
     \frac{dx}{dt}=v,\\
-    \frac{dv}{dt}=-\gamma x,
+    \frac{dv}{dt}=-\gamma^2 x,
 \end{align}
-with $\gamma =-k/m$.
+with $\gamma =\sqrt{k/m}$.
 
 For the forward Euler scheme we have:
 
@@ -368,7 +364,7 @@ For the forward Euler scheme we have:
 +&
 \begin{pmatrix}
     0 & 1 \\
-    \gamma & 0
+    \gamma^2 & 0
 \end{pmatrix}
 \begin{pmatrix}
     x^{n} \\
@@ -386,7 +382,7 @@ m = 1. # object's mass
 x0 = 0.75 # initial position
 v0 = 0. # initial velocity
 
-gamma = -k/m
+gamma = np.sqrt(k/m)
 
 t0 = 0. # initial time
 tf = 40.0
@@ -401,7 +397,7 @@ y = np.empty((nt+1, 2))
 y[0] = np.array([x0, v0])
 
 # Create matrix L
-L = np.array([[0, 1], [gamma, 0]])
+L = np.array([[0, 1], [-gamma**2, 0]])
 
 # Perform the time stepping
 for i in range(nt):
@@ -425,7 +421,76 @@ ax[1].set_ylabel(r'$x$')
 ax[1].set_title(r'Position vs time (m)')
 ```
 
-What's going on ? We know a fritionless simple oscillator like the one we are considering here should oscillate back and forth with a constant amplitude. Something has to be wrong in our implementation. Or maybe not...
+What's going on ? We know a fritionless harmonic oscillator like the one we are considering here should oscillate back and forth with a constant amplitude. Something has to be wrong in our implementation. Or maybe not...
+
+Let us first compute the eigenvalues $\lambda_i$ and the eigenvectors $v_i$ of the matrix, 
+
+\begin{align}
+L=
+\begin{pmatrix}
+    0 & 1 \\
+    \gamma^2 & 0
+\end{pmatrix}
+\end{align}
+
+We get:
+
+\begin{align}
+\lambda_1 = i\gamma,\;\; \lambda_2=-i\gamma,\;\;
+v_1 =
+\begin{pmatrix}
+    1 \\
+    i\gamma
+\end{pmatrix}
+\;\;
+v_2 =
+\begin{pmatrix}
+    1 \\
+    -i\gamma
+\end{pmatrix}.
+\end{align}
+
+The matrix $L$ can then be decomposed as,
+
+\begin{align}
+L=Q\Lambda Q^{-1}\; \hbox{with,} \;\;
+\Lambda = 
+\begin{pmatrix}
+    i\gamma & 0 \\
+    0 & -i\gamma
+\end{pmatrix} \;\; \hbox{and} \;\;
+Q=
+\begin{pmatrix}
+   1 & 1 \\
+    i\gamma & -i\gamma
+\end{pmatrix}.
+\end{align}
+
+
+Using the vector notation $y=(x\;\; v)$, we can then reformulate our time advancement scheme as,
+
+\begin{align}
+y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n+1} + Q^{-1}Ly^{n}dt \\
+& \Leftrightarrow \;\; z^{n+1} = z^{n+1} + \Lambda z^{n}dt. \label{eq:eigenCoor}
+\end{align}
+
+In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) v_1 + z_2(t) v_2$. In this basis, the system of equation is decoupled and reads:
+
+\begin{align}
+    z_1^{n+1} = z_1^{n} + i\gamma z_1^{n} dt\\
+    z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
+\end{align}
+
+It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that they then lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is therefore not adapted to the simulation of a simple harmonic oscillator.
+
+
+## Summary
+
+In this notebook we have described the foward Euler scheme and how we can discretise an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
+
+We have discussed the accuracy of the scheme and its stability. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing the discretized equations.
+
+In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analysing partial differential equations later on in the course.
 
 
 ## Exercices

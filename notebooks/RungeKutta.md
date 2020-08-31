@@ -245,8 +245,8 @@ In the following plot, we compare the regions of stability for the various schem
 ```python
 nx = 100
 ny = 100
-x = np.linspace(-3.0, 1.0, nx)
-y = np.linspace(-3.0, 3.0, ny)
+x = np.linspace(-3.5, 1.5, nx)
+y = np.linspace(-3.5, 3.5, ny)
 X, Y = np.meshgrid(x, y)
 
 Z = X + 1j*Y
@@ -266,12 +266,28 @@ NORM4 = np.real(sigma4*sigma4.conj())
 
 ```python
 fig, ax = plt.subplots(figsize=(8,8))
-CS1 = ax.contour(X, Y, NORM1, levels = [1], colors='k')
-CS2 = ax.contour(X, Y, NORM2, levels = [1], colors='k')
-CS4 = ax.contour(X, Y, NORM4, levels = [1], colors='k')
+CS1 = ax.contour(X, Y, NORM1, levels = [1], colors='r')
+CS2 = ax.contour(X, Y, NORM2, levels = [1], colors='b')
+CS4 = ax.contour(X, Y, NORM4, levels = [1], colors='g')
+
+# Label contours
+ax.text(-1, 1.1, r'Euler', fontsize=14, horizontalalignment='center')
+ax.text(-1, 1.85, r'RK2', fontsize=14, horizontalalignment='center')
+ax.text(-2.05, 2.05, r'RK4', fontsize=14, horizontalalignment='center')
+
+ax.set_xlabel(r'$\lambda_r dt$')
+ax.set_ylabel(r'$\lambda_i dt$')
 ax.set_aspect(1)
+
 ax.set_title('Stability regions')
+
+fig.savefig('figures/stabilityDomains.png', dpi=300)
+
+
 ```
+
+We already pointed out that the forward Euler scheme is unstable if one of the eigenvalues of our system is purely imaginery (as in the case of the harmonic oscillator). Although the RK2 scheme has a larger domain of stability, it suffers from the defect. Of all the schemes considered so far, RK4 has a significantly larger domain of stability and more importantly, it does englobe a part of the imaginery axis so it can handle problems with purely imaginery eigenvalues !
+
 
 ## Exercises
 
@@ -282,6 +298,8 @@ ax.set_title('Stability regions')
 **Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two stage Runge-Kutta scheme to the exact solution. Check that the method is second order for a finite time interval.
 
 **Exercise 3.** Solve the problem of a body in free fall using the RK4 method.
+
+**Exercise 4.** Solve again the equation of the harmonic oscillator using the RK4 method and show that the solution is not blowing up.
 
 
 

@@ -15,12 +15,12 @@ jupyter:
 
 # Time integration - Part 1
 
-In this part of the course we discuss how to solve what are known as ordinary differential equations (ODE). Although their numerical resolution is not the main subject of this course, they nevertheless allow to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDE).
+In this part of the course we discuss how to solve ordinary differential equations (ODE). Although their numerical resolution is not the main subject of this course, their study nevertheless allows to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDE).
 
 The ODEs we consider can be written in the form:
 
 \begin{align}
-  y^{(n)}=F(y, \dots, y^{(n-1)}, t) \label{eq:ODE},
+  y^{(n)}=f(t, y, \dots, y^{(n-1)}) \label{eq:ODE},
 \end{align}
 
 where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-th derivative of $y$ with respect to $t$: 
@@ -29,9 +29,11 @@ where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-
   y^{(n)}=\frac{d^n y}{dt^n}.
 \end{align}
 
+When $f$ does not depend explicitely on time, we qualify the problem as *autonomous*.
+
 Note that we have used $t$ as the variable on which the unkown function $y$ depends and we will usually refer to it as *time*. However, all the methods we describe in this chapter also apply to other problems in which a given function depends on an independant variable and the corresponding ODE have the form \eqref{eq:ODE}.
 
-As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law given by:
+As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law:
 
 \begin{align}
   \frac{dN(t)}{dt}=-\alpha N(t).
@@ -45,27 +47,25 @@ where $\alpha>0$ is a constant depending on the type of nuclei present in the ma
 
 However, our objective here is to obtain the above time evolution using a numerical scheme.
 
-## Forward Euler method
+## The Forward Euler method
 
 The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. We will use it to introduce several concepts that will pop up frequently in the rest of course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
-   & N(t+dt) \approx N(t) + N'(t)dt + O(dt^2)& \textrm{Forward Euler method} \label{eq:ForwardEuler}
+   & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on...
+From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on...
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
-By convention, we will denote the different intermediate times as $t^n = t+ndt$ and the corresponding values of $N$ as $N^n = N(t+ndt)$ so that $N^n = N(t^n)$.
+By convention, we denote the different intermediate times as $t^n = t+ndt$ and the corresponding values of $N$ as $N^n = N(t+ndt)$ so that $N^n = N(t^n)$.
 
-The forward Euler scheme is then written as:
+The forward Euler scheme is then alternatively written as:
 
 \begin{align}
     & N^{n+1} \equiv N^n + N^{'n} dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
 \end{align}
-
-In the above equation we have replaced the $\approx$ symbol by an $\equiv$ symbol and dropped the $O(dt^2)$ to stress that it constitues a *definition* of the forward Euler scheme.
 
 Here is a Python implementation of the algorithm:
 ```python
@@ -166,7 +166,7 @@ ax.legend()
 fig.savefig('figures/eulerSlope.png', dpi=300)
 ```
 
-Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is proportioanl to the product of the error made at each time step multiplied by the number of steps. As the latter scale as $dt^{-1}$, the total error scale like $dt^2 / dt = dt$. One says that the error made during one time step *accumulates* during the computation.
+Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that the error made during one time step *accumulates* during the computation.
 
 
 ### Numerical stability of the forward Euler method
@@ -181,7 +181,7 @@ For our radioactive problem, we first observe that according to equation \eqref{
 
 This relation implies that $N^n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
 
-In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficient $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
+In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{align}
   \vert 1-\alpha dt \vert < 1 \Leftrightarrow\qquad (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
@@ -211,7 +211,7 @@ ax.set_title(r'Stability of forward Euler scheme')
 fig.savefig('figures/eulerStabilityMap.png', dpi=300)
 ```
 
-If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$ can be made to lie in the disk shown in the plot, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below). In exercise 2, we ask you to to check this statement.
+If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$ lie in the disk shown in the plot, the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
 
 
 ### Multi-dimensional example
@@ -222,7 +222,7 @@ So far we have only considered a simple one dimensional example in which the unk
     \frac{d^2 h}{d t^2}=-g,
 \end{align}
 
-where $h$ is the height of the object with respect to the ground. In order to solve this equation, it is easier to introduce the velocity $v=\frac{dh}{dt}$ of the object and consider the system:
+where $h$ is the height of the object with respect to the ground. In order to solve this equation, we introduce the velocity $v=\frac{dh}{dt}$ of the object and consider the system:
 
 \begin{align}
     \frac{dh}{dt}=v,\\
@@ -330,7 +330,7 @@ ax[1].set_ylabel(r'$h$')
 ax[1].set_title(r'Height vs time (m)')
 ```
 
-We need to ask students to compare this solution to the exact solution and mention the scheme works pretty well. Exercice?
+In exercise 2 we ask you to compare this numerical solutions to the exact solution.
 
 
 ### Numerical stability of the forward Euler method revisited
@@ -373,7 +373,7 @@ For the forward Euler scheme we have:
 dt
 \end{align}
 
-Let's implement this. It does not seem very different from the previous problem...
+It does not seem very different from the previous problem so let's implement this. 
 
 ```python
 # parameters
@@ -474,14 +474,14 @@ y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n+
 & \Leftrightarrow \;\; z^{n+1} = z^{n+1} + \Lambda z^{n}dt. \label{eq:eigenCoor}
 \end{align}
 
-In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) v_1 + z_2(t) v_2$. In this basis, the system of equation is decoupled and reads:
+In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:
 
 \begin{align}
     z_1^{n+1} = z_1^{n} + i\gamma z_1^{n} dt\\
     z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
 \end{align}
 
-It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that they then lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is therefore not adapted to the simulation of a simple harmonic oscillator.
+It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is therefore not adapted to the simulation of a simple harmonic oscillator !
 
 
 ## Summary
@@ -498,41 +498,8 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 **Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
 
-```python
-for i, dt in enumerate(dt_list):
-    values[i] = N0 - alpha*N0*dt
-    
-fig, ax = plt.subplots()
+**Exercise 2.** Compare the solution obtained with the forward Euler scheme to the exact solution. Check again that the method is first order for a finite time interval.
 
-# error computation
-error = np.abs(values - N0*np.exp(-alpha*dt_list))
-ax.loglog(dt_list, error, '*', label=r'Error')
-
-# fit a slope to the previous curve
-slope = dt_list**2
-ax.loglog(dt_list, slope, color='green', label=r'$dt^2$')
-
-# set plot options
-ax.set_xlabel(r'$dt$')
-ax.set_ylabel(r'Error')
-ax.set_title(r'Accuracy')
-ax.legend()
-fig.savefig('figures/eulerSlope2.png', dpi=300)
-```
-
-# Finite difference discretization
-
-# Ordinary differential equations
-
-# Partial differential equations
-
-# Iterative methods
-
-# Spectral methods
-
-## Fourier transform
-
-## Chebyshev polynomials
 ```python
 
 ```

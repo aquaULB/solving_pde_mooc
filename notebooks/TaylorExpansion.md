@@ -314,6 +314,7 @@ Before all, we run the following magic command:
 
 ```python
 %matplotlib inline
+plt.style.use('./mainstyle.use')
 ```
 
 So that whatever we plot will appear *inline* - in our notebook, right below the code which produced graphical output.
@@ -482,6 +483,11 @@ delta_list = [2**(-k) for k in range(1, 10)]
 (<a id="cit-Arfken" href="#call-Arfken">?</a>) !! _This reference was not found in biblio.bib _ !!
 
 
+
+```python
+
+```
+<!-- #endregion -->
 
 ```python
 

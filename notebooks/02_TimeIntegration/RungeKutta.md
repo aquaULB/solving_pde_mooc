@@ -28,7 +28,7 @@ plt.style.use('./mainstyle.use')
 
 In the previous notebook we have considered the forward Euler scheme to time march ordinary differential equations. We have discussed its accuracy and stability with respect to the size of the time step.
 
-Here we introduce some more accurate methods with larger domains of stability that are therefore applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equation thus reads,
+Here we introduce some more accurate methods with larger domains of stability that are therefore applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
 
 \begin{align}
     y'(t)=f(t,y)
@@ -64,7 +64,7 @@ so that,
 \end{align}
 
 
-In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we definitely hope to improve these orders of accuracy. Let's check that this is indeed the case by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
+In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we definitely hope to improve these orders of accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
 
 \begin{align}
  y^{n+1} & = y^n + dt f(t^n+\frac{dt}{2},y^n + \frac{dt}{2}f(t^n, y^n)) \nonumber \\

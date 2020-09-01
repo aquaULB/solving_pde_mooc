@@ -299,7 +299,7 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 
 **Exercise 3.** Solve the problem of a body in free fall using the RK4 method.
 
-**Exercise 4.** Solve again the equation of the harmonic oscillator using the RK4 method and show that the solution is not blowing up.
+**Exercise 4.** Solve again the equation of the harmonic oscillator using the RK4 method and show that the solution is not blowing up (choose an appropraite time step).
 
 
 
@@ -307,14 +307,10 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 
 # References
 
-<mark> <b>The bib file biblio.bib was not found
+(<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 
-</b> </mark>(<a id="cit-Hairer1987" href="#call-Hairer1987">?</a>) !! _This reference was not found in biblio.bib _ !!
+(<a id="cit-Butcher2008" href="#call-Butcher2008">Butcher and Goodwin, 2008</a>) John Charles Butcher and Nicolette Goodwin, ``_Numerical methods for ordinary differential equations_'',  2008.
 
-(<a id="cit-Butcher2008" href="#call-Butcher2008">?</a>) !! _This reference was not found in biblio.bib _ !!
+(<a id="cit-Butcher1996" href="#call-Butcher1996">Butcher, 1996</a>) Butcher J.C., ``_A history of Runge-Kutta methods_'', Applied Numerical Mathematics, vol. 20, number 3, pp. 247--260,  1996.
 
-(<a id="cit-Butcher1996" href="#call-Butcher1996">?</a>) !! _This reference was not found in biblio.bib _ !!
-
-(<a id="cit-Kutta1901" href="#call-Kutta1901">?</a>) !! _This reference was not found in biblio.bib _ !!
-
-
+(<a id="cit-Kutta1901" href="#call-Kutta1901">Kutta, 1901</a>) Kutta Wilhelm, ``_Beitrag zur naherungsweisen Integration totaler Differentialgleichungen_'', Z. Math. Phys., vol. 46, number , pp. 435--453,  1901.

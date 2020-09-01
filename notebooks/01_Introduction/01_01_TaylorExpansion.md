@@ -459,7 +459,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 All excercise perixes are links, click on them to see what part of text they refer to.
 
 
-**Exercise 1:** expand <a name="funcs|"> following functions </a> into Tyalor series around x with:
+**Exercise 1:** expand <a name="funcs|"> following functions </a> into Taylor series around x with:
 
 * 
 

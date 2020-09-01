@@ -47,11 +47,11 @@ In the context of the numerical discretisation of ordinary or partial diffential
 
 ## Taylor's theorem
 
-In order to estimate the accuracy of discretized differential operators or time integration schemes, Taylor's theorem provides a valuable tool.
+In order to estimate the accuracy of discretized differential operators or time integration schemes, Taylor's theorem provides a valuable tool \cite{arfken2012}.
 
 ***Theorem.*** *Let $x$ be any point in the interval $[a\ b]$ and $\Delta x$ a small positive real number. Schematically we have*:
 
-<img src="figures/taylor.png">
+<img src="../figures/taylor.png">
 
 *Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exist a $\xi$, so that*
 
@@ -171,10 +171,18 @@ A simple example of the usefulness of a magic command can be made with `%pinfo`.
 %pinfo print
 ```
 
+To use matplotlib in notebooks, a very useful magic command is:
+
+```python
+%matplotlib inline
+```
+
+From now on, whatever we plot will appear inline - in our notebook, right below the code which produced graphical output.
+
 We then set the style of our plots, which will be universal througout the whole course. Matplotlib has several predefines styles encoded in files. You, of course, can always create your own style.
 
 ```python
-plt.style.use('./mainstyle.use')
+plt.style.use('../styles/mainstyle.use')
 ```
 
 Let us now create the first mathematical object that will represent the error term $R_3$ of the approximation of the exponential function (see \ref{eq:residual}).
@@ -302,22 +310,16 @@ R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
 slope = delta**3
 ```
 
+<!-- #region -->
 As we have built the set of numerical data, we are ready to visualize it. 
 
 The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create the figure explicitely, it will be created implicitely*, but an explicit call to the object allows you to manipulate your plots in a more flexible way.
 
 Let us create the first figure of the course.
 
-Before all, we run the following magic command:
 
 [4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
-
-```python
-%matplotlib inline
-plt.style.use('./mainstyle.use')
-```
-
-So that whatever we plot will appear *inline* - in our notebook, right below the code which produced graphical output.
+<!-- #endregion -->
 
 ```python
 # We create 2 empty figures and assign id
@@ -420,7 +422,7 @@ ax.legend()
 
 # Save figure. Default format is png.
 # dpi defines the resolution in dots per inch.
-fig.savefig('sample', dpi=300)
+fig.savefig('../figures/taylorSlope', dpi=300)
 ```
 
 <!-- #region -->
@@ -478,17 +480,10 @@ delta_list = [2**(-k) for k in range(1, 10)]
 **Exercise 3:** plot functions 
 
 
-# References
-
-(<a id="cit-Arfken" href="#call-Arfken">?</a>) !! _This reference was not found in biblio.bib _ !!
-
-
-
-```python
-
-```
 <!-- #endregion -->
 
-```python
+# References
 
-```
+(<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
+
+

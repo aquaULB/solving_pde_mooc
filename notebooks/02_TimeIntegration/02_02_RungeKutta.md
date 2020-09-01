@@ -23,7 +23,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 %matplotlib inline
-plt.style.use('./mainstyle.use')
+plt.style.use('../styles/mainstyle.use')
 ```
 
 In the previous notebook we have considered the forward Euler scheme to time march ordinary differential equations. We have discussed its accuracy and stability with respect to the size of the time step.
@@ -48,13 +48,13 @@ with all the intermediate times denoted $t^n = t+ndt$ and the corresponding valu
 
 Graphically, we see that $y^{n+1}$ is evaluated using the value $y^n$ and the slope (derivative) of $y$ at time $t^n$:
 
-<img src="figures/Euler.png" align="center" width="500">
+<img src="../figures/Euler.png" align="center" width="500">
 
 Runge-Kutta schemes increase the accuracy of the estimated value $y^{n+1}$ by introducing intermediate instants between $t^n$ and $t^{n+1}$ at which the derivative of $y$ is evaluated and by making use of this information.
 
 The following two stage Runge-Kutta method is the simplest of such schemes. Graphically, this scheme is defined as follows:
 
-<img src="figures/RK2.png" align="center" width="500">
+<img src="../figures/RK2.png" align="center" width="500">
 
 so that,
 
@@ -281,7 +281,7 @@ ax.set_aspect(1)
 
 ax.set_title('Stability regions')
 
-fig.savefig('figures/stabilityDomains.png', dpi=300)
+fig.savefig('../figures/stabilityDomains.png', dpi=300)
 
 
 ```
@@ -301,5 +301,20 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 
 **Exercise 4.** Solve again the equation of the harmonic oscillator using the RK4 method and show that the solution is not blowing up.
 
+
+
+
+
+# References
+
+<mark> <b>The bib file biblio.bib was not found
+
+</b> </mark>(<a id="cit-Hairer1987" href="#call-Hairer1987">?</a>) !! _This reference was not found in biblio.bib _ !!
+
+(<a id="cit-Butcher2008" href="#call-Butcher2008">?</a>) !! _This reference was not found in biblio.bib _ !!
+
+(<a id="cit-Butcher1996" href="#call-Butcher1996">?</a>) !! _This reference was not found in biblio.bib _ !!
+
+(<a id="cit-Kutta1901" href="#call-Kutta1901">?</a>) !! _This reference was not found in biblio.bib _ !!
 
 

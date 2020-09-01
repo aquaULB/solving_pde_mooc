@@ -101,7 +101,7 @@ Let us compare graphically our numerical values with the exact solution \eqref{e
 ```python
 import matplotlib.pyplot as plt
 %matplotlib inline
-plt.style.use('./mainstyle.use')
+plt.style.use('../styles/mainstyle.use')
 
 # create an array containing the multiples of dt
 t = np.arange(nt+1) * dt
@@ -117,7 +117,7 @@ ax.set_xlabel(r'$t$')
 ax.set_ylabel(r'$N$')
 ax.set_title(r'Radioactive decay')
 ax.legend()
-fig.savefig('figures/radioactiveDecay.png', dpi=300)
+fig.savefig('../figures/radioactiveDecay.png', dpi=300)
 
 
 ```
@@ -163,7 +163,7 @@ ax.set_xlabel(r'$dt$')
 ax.set_ylabel(r'Error')
 ax.set_title(r'Accuracy')
 ax.legend()
-fig.savefig('figures/eulerSlope.png', dpi=300)
+fig.savefig('../figures/eulerSlope.png', dpi=300)
 ```
 
 Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that the error made during one time step *accumulates* during the computation.
@@ -208,7 +208,7 @@ ax.set_xlabel(r'$\alpha_r dt$')
 ax.set_ylabel(r'$\alpha_i dt$')
 ax.set_title(r'Stability of forward Euler scheme')
 
-fig.savefig('figures/eulerStabilityMap.png', dpi=300)
+fig.savefig('../figures/eulerStabilityMap.png', dpi=300)
 ```
 
 If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$ lie in the disk shown in the plot, the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
@@ -498,7 +498,7 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 **Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
 
-**Exercise 2.** Compare the solution obtained with the forward Euler scheme to the exact solution. Check again that the method is first order for a finite time interval.
+**Exercise 2.** In the case of the body in free fall, compare the solution obtained with the forward Euler scheme to the exact solution. Check again that the method is first order for a finite time interval.
 
 ```python
 

@@ -19,15 +19,15 @@ In this part of the course we discuss how to solve ordinary differential equatio
 
 The ODEs we consider can be written in the form:
 
-\begin{align}
+\begin{equation}
   y^{(n)}=f(t, y, \dots, y^{(n-1)}) \label{eq:ODE},
-\end{align}
+\end{equation}
 
 where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-th derivative of $y$ with respect to $t$: 
 
-\begin{align}
+\begin{equation}
   y^{(n)}=\frac{d^n y}{dt^n}.
-\end{align}
+\end{equation}
 
 When $f$ does not depend explicitely on time, we qualify the problem as *autonomous*.
 
@@ -35,15 +35,15 @@ Note that we have used $t$ as the variable on which the unkown function $y$ depe
 
 As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law:
 
-\begin{align}
+\begin{equation}
   \frac{dN(t)}{dt}=-\alpha N(t).
-\end{align}
+\end{equation}
 
 where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readilly obtained and reads:
 
-\begin{align}
+\begin{equation}
   N(t)=N(t_0)e^{-\alpha t} \label{eq:expDecay}
-\end{align}
+\end{equation}
 
 However, our objective here is to obtain the above time evolution using a numerical scheme.
 
@@ -55,7 +55,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on...
+From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
@@ -67,26 +67,54 @@ The forward Euler scheme is then alternatively written as:
     & N^{n+1} \equiv N^n + N^{'n} dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
 \end{align}
 
-Here is a Python implementation of the algorithm:
+Let's write a Python code for that. First, we perform necessary imports.
 ```python
 import numpy as np
+```
 
-# parameters
-alpha = 0.25 # exponential law coeffecient
-t0 = 0.0 # initial time
-tf = 5.0 # final time
-dt = 0.5 # time step
-nt = int((tf-t0) / dt) # number of time steps
-N0 = 100
+Now let's set some constant parameters of our problem. In a real-world codes constant parameters are usually separated from the main code. They are either put into separate module, or set in the inputfile. At this stage, let's just isolate them in a separate cell.
 
-# Create a numpy array to contain the intermediate values of N,
-# including those at ti and tf
+```python
+alpha = 0.25 # Exponential law coeffecient
+ti = 0.0     # Initial time
+tf = 5.0     # Final time
+dt = 0.5     # Time step
+N0 = 100     # Initial condition
+```
+
+Now we can write a code for the actual numerical procedure.
+
+```python
+# First, we compute number of steps.
+# Note that te number of steps must
+# be an integer, but the timedata
+# we construct it from is of float type.
+# It is the reason, why we use int() funtion.
+# It attempts conversion of input data to
+# integer. If float is provided as an input,
+# it disregards the decimals.
+nt = int((tf-ti)/dt)
+
+# Create an empty numpy array to contain
+# the intermediate values of N, including
+# those at ti and tf.
+#
+# You can wonder, how piece of numerical
+# data can be empty or not empty? But here
+# it is rather the conventional term used
+# to indicate that the values have not been
+# initialized - set to 0. It means that they
+# can have any value in a range allowed by
+# numerical precision. Why to do so? Well,
+# initializing data takes time. So, unless,
+# you'll need array of zeros, np.empty is
+# preferable over np.zeros.
 N = np.empty(nt+1)
 
-# Store initial value in N[0]
+# We pass initial condition to the N array.
 N[0] = N0
 
-# Perform the time stepping
+# Perform the time stepping.
 for i in range(nt):
     N[i+1] = N[i] - alpha*N[i]*dt
 ```
@@ -175,17 +203,17 @@ For the radioactive decay equation, the forward Euler method does a decent job: 
 
 For our radioactive problem, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
 
-\begin{align}
-    N^{n} &= (1-\alpha dt)N^{n-1}  = (1-\alpha dt)^2 N^{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
-\end{align}
+\begin{equation}
+    N^{n} = (1-\alpha dt)N^{n-1}  = (1-\alpha dt)^2 N^{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
+\end{equation}
 
 This relation implies that $N^n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
 
 In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
-\begin{align}
-  \vert 1-\alpha dt \vert < 1 \Leftrightarrow\qquad (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
-\end{align}
+\begin{equation}
+  \vert 1-\alpha dt \vert < 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
+\end{equation}
 
 where $\vert \vert$ is the complex norm.
 
@@ -218,22 +246,22 @@ If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$
 
 So far we have only considered a simple one dimensional example in which the unkown function is a scalar. In pratice, many problems are modelled with a series of coupled variables and the corresponding equation is multi-dimensional. Multi-dimensional equations also arise when our starting equations contain higher-order derivatives and need to be converted to a system of first-order equations. For example, let's consider an object in free fall. Its acceleration is constant and equal to minus the gravitational constant $g$. We therefore have:
 
-\begin{align}
+\begin{equation}
     \frac{d^2 h}{d t^2}=-g,
-\end{align}
+\end{equation}
 
 where $h$ is the height of the object with respect to the ground. In order to solve this equation, we introduce the velocity $v=\frac{dh}{dt}$ of the object and consider the system:
 
 \begin{align}
-    \frac{dh}{dt}=v,\\
-    \frac{dv}{dt}=-g. 
+    & \frac{dh}{dt}=v,\\
+    & \frac{dv}{dt}=-g. 
 \end{align}
 
 If we apply the forward Euler scheme to this system we get:
 
 \begin{align}
-    h^{n+1}=h^n + v^n dt,\\
-    v^{n+1}=v^n  - g dt 
+    & h^{n+1}=h^n + v^n dt,\\
+    & v^{n+1}=v^n  - g dt 
 \end{align}
 
 Note that on the rhs of the equations, all the quantities are at time $t^n$ and are explicitely known and allow to jump to time $t^{n+1}$. One says that the scheme is *explicit*. We will consider *implicit* scheme further in the course. We can also write the system of equation in matrix form:
@@ -337,15 +365,15 @@ In exercise 2 we ask you to compare this numerical solutions to the exact soluti
 
 Let's consider another two dimensional example and analyse the motion of an object attached to a spring. The equation of motion reads:
 
-\begin{align}
+\begin{equation}
     m\frac{d^2 x}{d t^2}=-kx,
-\end{align}
+\end{equation}
 
 where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is the spring constant. Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
 
 \begin{align}
-    \frac{dx}{dt}=v,\\
-    \frac{dv}{dt}=-\gamma^2 x,
+    & \frac{dx}{dt}=v,\\
+    & \frac{dv}{dt}=-\gamma^2 x,
 \end{align}
 with $\gamma =\sqrt{k/m}$.
 
@@ -477,8 +505,8 @@ y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n+
 In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:
 
 \begin{align}
-    z_1^{n+1} = z_1^{n} + i\gamma z_1^{n} dt\\
-    z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
+    & z_1^{n+1} = z_1^{n} + i\gamma z_1^{n} dt\\
+    & z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
 \end{align}
 
 It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is therefore not adapted to the simulation of a simple harmonic oscillator !

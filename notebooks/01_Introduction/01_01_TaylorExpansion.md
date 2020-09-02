@@ -286,7 +286,7 @@ for i in range(len(delta)):
 
 For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][5]. 
 
-We are now <a name="exc2"> all set to buid $R_3$</a>.
+We are now <a name="exc2"> all set to build $R_3$</a>.
 
 [5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
@@ -456,7 +456,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 # Exercises
 
 
-Some excercise prefixes are links, click on them to see what part of text they refer to.
+Some exercises' prefixes are links, click on them to see what part of text they refer to.
 
 [**Exercise 1:**](#exc1) Make a valid estimate, which approach to generate delta is the fastest.
 

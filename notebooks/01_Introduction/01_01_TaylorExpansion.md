@@ -458,24 +458,24 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 
 Some exercises' prefixes are links, click on them to see what part of text they refer to.
 
-[**Exercise 1:**](#exc1) Make a valid estimate, which approach to generate delta is the fastest.
+[**Exercise 1:**](#exc1) If you were to make a valid estimate of which approach to generate the deltas is the fastest, how would you proceed ? What result do you then get?
 
 
-[**Exercise 2:**](#exc2) in order to see yourself the advantages of *NumPy*, generate $R_3$ sequence, but use *Python's* standard `math` module. Use `delta_list` object instead of `delta`. Time both the referenced cell and your code. *Note* that cell magic commands by their design *must* be at the very top of the cell. In order to import `math` module, run
+[**Exercise 2:**](#exc2) In order to see by yourself the advantages of *NumPy*, generate the $R_3$ sequence using *Python's* standard `math` module. For that purpose, only use the `delta_list` object instead of the `delta` numpy array. Time both the referenced cell and your code. *Note* that by design, cell magic commands *must* be at the very top of the cell. In order to import the `math` module, run
 
 ```python
 import math
 ```
 
-**Exercise 3:** Expand a function into series using Taylor expansion:
+**Exercise 3:** Expand these functions into series using Taylor's expansion:
 
 * $\displaystyle f(x)=2x\cos^2\frac{x}{2}-x$ at $x=0$;
 * $\displaystyle f(x)=\frac{1}{2x-x^2}$ at $x=1$;
 * $f(x)=3x$ at $x=1$.
 
-Make a figure of 9 subplots (3 rows by 3 columns). Each line must correspond to one of three expansions for the functions above. For each subplot in a row increase amount of expansion terms taken into account - in this way each row must demonstrate the growth in accuracy. Each subplot must also contain *exact plot* for the function. This is a great way to check, if your expansions are correct.
+Make a figure of 9 subplots (3 rows by 3 columns). Each line must correspond to one of three expansions for the functions above. For each subplot in a row, increase amount of expansion terms taken into account - in this way each row must demonstrate the growth in accuracy. Each subplot must also contain an *exact curve* for the function. This is a great way to check if your expansions are correct.
 
-For better understanding of the task consider following example:
+For a better understanding of the task consider the following example:
 
 <img src="../figures/TaylorExampleExercise.png">
 

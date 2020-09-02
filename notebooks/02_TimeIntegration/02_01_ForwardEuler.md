@@ -500,6 +500,8 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 **Exercise 2.** In the case of the body in free fall, compare the solution obtained with the forward Euler scheme to the exact solution. Check again that the method is first order for a finite time interval.
 
+**Exercise 3.** Check that the forward Euler scheme is unstable for the case of the body in free fall when $dt$ is large enough so that the product $\lambda dt$ lies outside the domain of stability. What is the maximum time step allowed?
+
 ```python
 
 ```

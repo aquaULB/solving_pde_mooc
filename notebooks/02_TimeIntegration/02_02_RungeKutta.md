@@ -292,7 +292,7 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 ## Exercises
 
 
-**Exercise 1.** Prove that the two stage Runge-Kutta scheme is not fourth-order accurate for one time step.
+**Exercise 1.** Prove analytically that the two stage Runge-Kutta scheme is not fourth-order accurate for one time step.
 
 
 **Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two stage Runge-Kutta scheme to the exact solution. Check that the method is second order for a finite time interval.
@@ -314,3 +314,5 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 (<a id="cit-Butcher1996" href="#call-Butcher1996">Butcher, 1996</a>) Butcher J.C., ``_A history of Runge-Kutta methods_'', Applied Numerical Mathematics, vol. 20, number 3, pp. 247--260,  1996.
 
 (<a id="cit-Kutta1901" href="#call-Kutta1901">Kutta, 1901</a>) Kutta Wilhelm, ``_Beitrag zur naherungsweisen Integration totaler Differentialgleichungen_'', Z. Math. Phys., vol. 46, number , pp. 435--453,  1901.
+
+

@@ -207,7 +207,7 @@ When we want to define a given quantity at a set of points, we might use *either
 
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
-Let us consider <a name="exc1"> a few ways </a> of building a sequence of $\Delta x$ which produce equivalent outputs. Assume $\Delta x = 2^{-k}$ for $k = 1, 2, ..., 9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
+Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
 
 
 1. *Create a Python list in a loop and then transform it into a NumPy array*
@@ -286,7 +286,7 @@ for i in range(len(delta)):
 
 For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][5]. 
 
-We are now <a name="exc2"> all set to build $R_3$</a>.
+We are now <a name="exc2"> all set to buid $R_3$</a>.
 
 [5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
@@ -456,30 +456,32 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 # Exercises
 
 
-All excercise perixes are links, click on them to see what part of text they refer to.
+Some excercise perixes are links, click on them to see what part of text they refer to.
+
+[**Exercise 1:**](#exc1) Make a valid estimate, which approach to generate delta is the fastest.
 
 
-**Exercise 1:** expand <a name="funcs|"> following functions </a> into Taylor series around x with:
-
-* 
-
-
-[**Exercise 2:**](#exc1) generate the same delta array using all 3 approaches but for more points (100, 1000, 10000...) and make your own conclusion which approach is the fastest.
-
-
-[**Exercise 3:**](#exc2) in order to see yourself the advantages of *NumPy*, create the same $R_3$ array, but use *Python's* standard `math` module. Use `delta_list` object instead of `delta`. Time both the referenced cell and your code. *Note* that cell magic commands by their design *must* be at the very top of the cell.
+[**Exercise 2:**](#exc2) in order to see yourself the advantages of *NumPy*, generate $R_3$ sequence, but use *Python's* standard `math` module. Use `delta_list` object instead of `delta`. Time both the referenced cell and your code. *Note* that cell magic commands by their design *must* be at the very top of the cell. In order to import `math` module, run
 
 ```python
 import math
-
-delta_list = [2**(-k) for k in range(1, 10)]
-
-# Insert your code here.
 ```
 
-**Exercise 3:** plot functions 
+**Exercise 3:** Expand a function into series using Taylor expansion:
 
+* $\displaystyle f(x)=2x\cos^2\frac{x}{2}-x$ at $x=0$;
+* $\displaystyle f(x)=\frac{1}{2x-x^2}$ at $x=1$;
+* $f(x)=3x$ at $x=1$.
 
+Make a figure of 9 subplots (3 rows by 3 columns). Each line must correspond to one of three expansions for the functions above. For each subplot in a row increase amount of expansion terms taken into account - in this way each row must demonstrate the growth in accuracy. Each subplot must also contain *exact plot* for the function. This is a great way to check, if your expansions are correct.
+
+For better understanding of the task consider following example:
+
+<img src="../figures/TaylorExampleExercise.png">
+
+Find expansion of a function on [*Wikipedia*][9].
+
+[9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
 <!-- #endregion -->
 
 # References

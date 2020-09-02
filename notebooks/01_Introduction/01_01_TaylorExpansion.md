@@ -456,7 +456,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 # Exercises
 
 
-Some excercise perixes are links, click on them to see what part of text they refer to.
+Some excercise prefixes are links, click on them to see what part of text they refer to.
 
 [**Exercise 1:**](#exc1) Make a valid estimate, which approach to generate delta is the fastest.
 

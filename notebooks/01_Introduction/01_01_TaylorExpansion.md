@@ -43,7 +43,7 @@ In this course, we always use double precision for real numbers as this is the d
 - https://docs.python.org/3/tutorial/floatingpoint.html
 - https://floating-point-gui.de
 
-In the context of the numerical discretisation of ordinary or partial diffential equations, the more significant limitation in precision usually comes from the limited computer resources available to solve a problem or the time needed to get the solution. Indeed, from the physical point of view, both time and space are continuous variables...
+In the context of the numerical discretisation of ordinary or partial diffential equations, the more significant limitation in precision usually comes from the limited computer resources available to solve a problem or the time needed to get the solution. Indeed, from the physical point of view, both time and space are continuous variables.
 
 ## Taylor's theorem
 
@@ -55,42 +55,42 @@ In order to estimate the accuracy of discretized differential operators or time 
 
 *Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exist a $\xi$, so that*
 
-\begin{align}
+\begin{equation}
 f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k + R_{k+1}
 \label{eq:taylorExpansion}
-\end{align}
+\end{equation}
 
 *where $R_{k+1}$ is a **remainder term**:*
 
-\begin{align}
+\begin{equation}
 R_{k+1} = \frac{f^{(k+1)}(\xi)}{(k+1)!}\Delta x^{k+1}, \quad\quad x\leq \xi \leq x+\Delta x.
-\end{align}
+\end{equation}
 
 In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note that at this stage, no approximations have been made. 
 
 Assuming that $\vert f^{(k+1)}\vert$ is bounded by a constant $C$ in $[a\ b]$, read $\vert f^{(k+1)} \vert \leq C$, we can then write:
 
-\begin{align}
+\begin{equation}
 \vert R_{k+1}\vert \leq \frac{C}{(k+1)!}\Delta x^{k+1}\label{eq:remainder}
-\end{align}
+\end{equation}
 
 Equation $\ref{eq:remainder}$ gives a bound on the error made by dropping terms beyond $\displaystyle\frac{f^{(k)}(x)}{k!}\Delta x^k$ in $\ref{eq:taylorExpansion}$. One then gets as estimate for the remainder $R_{k+1}$:
 
-\begin{align}
+\begin{equation}
 R_{k+1} = O(\Delta x^{k+1})
-\end{align}
+\end{equation}
 
 The above notation means that $\vert R_{k+1}\vert$ goes to $0$ at least as fast as $\Delta x^{k+1}$ for $\Delta x \rightarrow 0$:
 
-\begin{align}
+\begin{equation}
 \lim_{\Delta x^{k+1}\rightarrow 0} R_{k+1} = 0.
-\end{align}
+\end{equation}
 
 We then say that the approximation,
 
-\begin{align}
+\begin{equation}
 f(x+\Delta x)\approx f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k
-\end{align}
+\end{equation}
 
 is of order $k+1$. Importantly, this implies that the remainder is at least reduced by a factor of $2^{k+1}$ if $\Delta x$ is divided by $2$. This is a very important concept that will be discussed numerous times in this course.
 
@@ -98,9 +98,9 @@ is of order $k+1$. Importantly, this implies that the remainder is at least redu
 
 To make things more concrete and to write our first Python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
-\begin{align}
+\begin{equation}
 e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
-\end{align}
+\end{equation}
 
 As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$. Let's check using Python that this is indeed the case.
 
@@ -286,7 +286,7 @@ for i in range(len(delta)):
 
 For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][5]. 
 
-We are now <a name="exc2"> all set to buid $R_3$ </a>.
+We are now <a name="exc2"> all set to buid $R_3$</a>.
 
 [5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
@@ -310,35 +310,35 @@ R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
 slope = delta**3
 ```
 
-<!-- #region -->
 As we have built the set of numerical data, we are ready to visualize it. 
 
 The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create the figure explicitely, it will be created implicitely*, but an explicit call to the object allows you to manipulate your plots in a more flexible way.
 
-Let us create the first figure of the course.
-
-
-[4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
-<!-- #endregion -->
-
-```python
-# We create 2 empty figures and assign id
-# numbers to them, they can now be iden-
-# tified by these numbers.
-fig_0 = plt.figure(num=0)
-fig_1 = plt.figure(num=1)
-```
+Figure is just your *blank sheet of paper* (metaphorically) - it is empty from the start. To have a plot, we would need to draw axes.
 
 The most efficient way to add *Matplotlib* axes to a figure is through the methods of figure dedicated to this purpose. These are `add_axes` and `add_subplot` methods - they both return instances of a `matplotlib.axes.Axes` object - *Matplotlib* object which contains all the tools corresponding to the visualization of axes. The difference is that `add_axes` accepts as its arguments the *location* at which you place your axes - location is passed in units of figure sizing; `add_subplot` allows you to divide your figure in parts and you configure the locations of these parts by setting the amount of *rows and columns* in your figures.
 
-As we have created *figure 0* and *figure 1*, we use them to demonstrate each of these two approaches.
+We have create 2 figures - *figure 0* and *figure 1*, - and use them to demonstrate each of these two approaches.
+
+[4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
 
 ```python
-# Get figures by their numbers, so that
-# they are not recreated - we don't want
-# repetitive steps in our code.
-fig_0 = plt.figure(num=0)
-fig_1 = plt.figure(num=1)
+# We create first figures of the course.
+# When creating figure 0, we set tight_layout
+# keyword to False. We do it, because in a
+# style we use it is set to True. tight_layout,
+# when set to True, tries to optimize organi-
+# zation of your plot - how the subplots, labels,
+# legends are placed in a figure. In most cases
+# it is a useful feature, but sometimes you 
+# will face a problem, that it won't know
+# how to optimize your figure just becayse of
+# how you have organized it manually. We disable
+# it for the first figure, so that it doesn't
+# complain about that we INTENTIONALLY overlap
+# one subplot with another.
+fig_0 = plt.figure(tight_layout=False)
+fig_1 = plt.figure()
 
 # Position axes in figure 0 using add_axes.
 # We pass coordinates for our axes in a list
@@ -347,7 +347,7 @@ fig_1 = plt.figure(num=1)
 # is positioned at 0.25 of a figure from the left,
 # 0.1 - from the bottom, and its width=height=0.65.
 ax_0 = fig_0.add_axes([0., 0., 0.5, 0.5])
-ax_1 = fig_0.add_axes([0.25, 0.1, 0.65, 0.65])
+ax_1 = fig_0.add_axes([0.25, 0.1, 0.5, 0.5])
 
 # Add title to figure 0.
 fig_0.suptitle('Random axes',fontsize=18)

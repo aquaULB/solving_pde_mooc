@@ -399,7 +399,7 @@ ax.spines['top'].set_visible(False)
 
 # See, that Python's syntax allows creation
 # of few variables at a time.
-xmin, xmax = -2.2, 2.2
+xmin, xmax = -2.3, 2.3
 ymin, ymax = -2., 2.
 
 ax.set_xlim(xmin ,xmax)
@@ -483,27 +483,53 @@ ax.tick_params(width=2, pad=10)
 
 ### Multi-dimensional example
 
-So far we have only considered a simple one dimensional example in which the unkown function is a scalar. In pratice, many problems are modelled with a series of coupled variables and the corresponding equation is multi-dimensional. Multi-dimensional equations also arise when our starting equations contain higher-order derivatives and need to be converted to a system of first-order equations. For example, let's consider an object in free fall. Its acceleration is constant and equal to minus the gravitational constant $g$. We therefore have:
+So far we have only considered a simple one-dimensional example. In pratice, many problems are modelled with a series of coupled variables, which makes the corresponding equation multi-dimensional. Multi-dimensional equations also arise when the starting equations contain higher-order derivatives. They are converted to a system of first-order differential equations. Consider scalar third-order differential equation for $y=y(x)$:
+
+\begin{equation}
+    \frac{d^3 y(x)}{dx} = f(y, x).
+    \label{eq:high_order_eq}
+\end{equation}
+
+Let us introduce new variables:
+
+\begin{align}
+    & y_0 = y(x), \\
+    & y_1 = \frac{d y(x)}{dx}, \\
+    & y_2 = \frac{d^2 y(x)}{dx}, \\
+    & y_3 = \frac{d^3 y(x)}{dx}.
+\end{align}
+
+\ref{eq:high_order_eq} then transforms into the system of 3 first-order differential equations:
+
+\begin{cases}
+& \displaystyle\frac{d y_0}{dx} = y_1, \\
+& \displaystyle\frac{d y_1}{dx} = y_2, \\
+& \displaystyle\frac{d y_2}{dx} = f(y, x).
+\end{cases}
+
+This has been generic. Consider down-to-earth trivial example of equation of motion for a body in free fall:
 
 \begin{equation}
     \frac{d^2 h}{d t^2}=-g,
 \end{equation}
 
-where $h$ is the height of the object with respect to the ground. In order to solve this equation, we introduce the velocity $v=\frac{dh}{dt}$ of the object and consider the system:
+where $g$ is accelaretion due to gravity, $h$ is the height of the object with respect to the ground.
+
+We introduce new variable $\displaystyle v = \frac{dh}{dt}$, which has physical meaning of velocity, and obtain the system of 2 first-order differential equations:
+
+\begin{cases}
+    & \displaystyle \frac{dh}{dt}=v,\\
+    & \displaystyle \frac{dv}{dt}=-g. 
+\end{cases}
+
+If we apply the forward Euler scheme to this system, we get:
 
 \begin{align}
-    & \frac{dh}{dt}=v,\\
-    & \frac{dv}{dt}=-g. 
+    & h^{n+1}=h^n + v^n dt,\label{eq:grav_first}\\
+    & v^{n+1}=v^n  - g dt.\label{eq:grav_second}
 \end{align}
 
-If we apply the forward Euler scheme to this system we get:
-
-\begin{align}
-    & h^{n+1}=h^n + v^n dt,\\
-    & v^{n+1}=v^n  - g dt 
-\end{align}
-
-Note that on the rhs of the equations, all the quantities are at time $t^n$ and are explicitely known and allow to jump to time $t^{n+1}$. One says that the scheme is *explicit*. We will consider *implicit* scheme further in the course. We can also write the system of equation in matrix form:
+We can also write the system of equation in matrix form:
 
 \begin{align}
 \begin{pmatrix}
@@ -545,60 +571,140 @@ L=
 \end{pmatrix}
 \end{align}
 
-Let's solve this system numerically and use numpy array functionalities to write our solution in a more compact way. As initial condition, we choose $h_0=100\textrm{m}$ and $v_0=0\textrm{m/s}$.
+Let's solve this system numerically and use numpy array functionalities to write our solution in a more compact way. As initial condition, we choose $h_0=100\,\textrm{m}$ and $v_0=0\,\textrm{m/s}$.
 
 ```python
-# parameters
-g = 9.81 # ms^-2, gravitational constant
+g = 9.81  # ms^-2, gravitational constant
 h0 = 100. # initial height
-v0 = 0. # initial speed
+v0 = 0.   # initial velocity
 
-t0 = 0. # initial time
-tf = 4.0
-dt = 0.1
-nt = int((tf-t0) / dt) # number of time steps
-
-# Create a numpy array to contain the intermediate values of y,
-# including those at ti and tf
-y = np.empty((nt+1, 2))
-
-# Store initial condition in y[:,0]
-y[0] = np.array([h0, v0])
-
-# Create vector b
-b = np.array([0, -g])
-
-# Create matrix L
-L = np.array([[0, 1], [0, 0]])
-
-# Perform the time stepping
-for i in range(nt):
-    y[i+1] = y[i] + np.dot(L,y[i])*dt + b*dt
+ti = 0.   # initial time
+tf = 4.0  # final moment of time to seek solution at
+dt = 0.1  # timestep
 ```
 
-BK or Liza: Make a comment here on how numpy arrays make the code so much easier to write compared to manipulating each components.
+```python
+nt = int((tf-ti)/dt)
 
-Let's display our results graphically:
+# We create a numpy array to contain the
+# intermediate values of y, including
+# those at ti and tf.
+# You can see that, instead of passing
+# single integer number to numpy.empty,
+# we have passed a tuple of two integers.
+# This is a way to create 2D numpy array.
+#
+# First integer defines number of rows in
+# array, while the second integer defines
+# number of columns (obvious analogy with
+# matrices, BUT better not to call numpy
+# array matrices, as there are also
+# n u m e r i c a l objects in numpy called
+# matrices. They differ. And to be honest,
+# used quite poorly - numpy developers in-
+# tend to deprecate them.).
+y = np.empty((nt+1, 2))
+
+# Store initial condition h0, v0 in the first
+# row of the array. 
+#
+# Here some words about array indexinf must be
+# said. The right way to index 1D array is, ob-
+# viously, to pass single integer to it. It is
+# a bit more complicated with 2D arrays. Gene-
+# ric way to go, which always works, is to pass
+# 2 integer numbers, first of which denote num-
+# ber of a row, and the second - number of a co-
+# lumn. But numpy developers implemented ways to
+# easen the life of programmers. Below you see
+# one of the examples. When you pass s i n g l e
+# index to the numpy array, it is being interpreted
+# as a row index. In this way you access a l l
+# columns in first row, which spares you the nece-
+# ssity to loop over all of them.
+y[0] = h0, v0
+
+# Create vector b.
+b = np.asarray([0., -g])
+
+# Create matrix L. Note that default type of
+# values in numpy array is float of double
+# precision. So, it does not make principal
+# difference, whether you pass elements as
+# floats (by putting floating point), or as
+# integers. We prefer it like that to be 100%
+# explicit. But after all, it is rather a per-
+# sonal choice.
+L = np.asarray([[0., 1.], [0., 0.]])
+
+# Perform the time stepping. numpy.dot is a
+# very useful function providing various func-
+# tionality. It can do vector product, matrix
+# multiplication, sum product over axes. You
+# will always have to take care of compatibi-
+# lity of the shapes of input data.
+# For more info
+# https://numpy.org/doc/stable/reference/generated/numpy.dot.html
+for i in range(nt):
+    y[i+1] = y[i] + np.dot(L, y[i])*dt + b*dt
+```
+
+Let's now display obtained results graphically. 
+
+We shall also demonstrate an interesting feature of `matplotlib`. We will create multiple subplots and store them all in *one variable*. One could expect that this variable would become then some standard Python sequence (like tuple or list). But in the reality it will have a type of `numpy.ndarray`. Why is this so curious? Because it will be so, **even if `numpy` is not imported**. As `matplotlib` [developers claim][1]:
+
+> If matplotlib were limited to working with lists, it would be fairly useless for numeric processing. Generally, you will use numpy arrays. In fact, all sequences are converted to numpy arrays internally. The example below illustrates plotting several lines with different format styles in one function call using arrays.
+
+Indeed, we already spoke of the fact, that *numpy arrays are faster than lists*. But let's get back to our plot.
+
+[1]: <https://matplotlib.org/tutorials/introductory/pyplot.html> "Internal conversion"
+
+```python
+# Let's create some sample array which
+# will store discrete time data for nt
+# timesteps.
+t = np.arange(nt+1) * dt
+```
 
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-# create an array containing the multiples of dt
-t = np.arange(nt+1) * dt
+# We, of course, now acces different sub-
+# plots as the elements of numpy array.
+ax[0].plot(t, y[:, 1], '-k', lw=0.8)
 
-ax[0].plot(t,y[:,1])
-ax[0].set_xlabel(r'$t$')
-ax[0].set_ylabel(r'$v$')
-ax[0].set_title(r'Speed vs time (m/s)')
+# Here we limit the x-axis strictly to
+# the domain in which t is defined, and
+# demonstrate VERY IMPORTANT FEATURE OF
+# SEQUENCES IN PYTHON. It is the possi-
+# bility of negative indexing, which is 
+# absent in many other programming langu-
+# ages. When the negative indexes are
+# provided to the sequence in Python, then
+# the elemnts are counted from the end 
+# of the array. t[-1] refers to the last
+# element of t. 
+# This is a very useful feature, which
+# spares you the necessity to even care
+# about how many elements your sequence
+# contains.
+#
+# For more info
+# http://wordaligned.org/articles/negative-sequence-indices-in-python
+ax[0].set_xlim(t[0], t[-1])
 
-ax[1].plot(t,y[:,0])
-ax[1].set_xlabel(r'$t$')
-ax[1].set_ylabel(r'$h$')
-ax[1].set_title(r'Height vs time (m)')
+ax[0].set_xlabel('$t$')
+ax[0].set_ylabel('$v$')
+ax[0].set_title('Speed vs time (m/s)')
+
+ax[1].plot(t, y[:, 0], '-k', lw=0.8)
+
+ax[1].set_xlim(t[0], t[-1])
+
+ax[1].set_xlabel('$t$')
+ax[1].set_ylabel('$h$')
+ax[1].set_title('Height vs time (m)')
 ```
-
-In exercise 2 we ask you to compare this numerical solutions to the exact solution.
-
 
 ### Numerical stability of the forward Euler method revisited
 

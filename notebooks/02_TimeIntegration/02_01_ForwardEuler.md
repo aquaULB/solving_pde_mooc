@@ -79,42 +79,43 @@ alpha = 0.25 # Exponential law coeffecient
 ti = 0.0     # Initial time
 tf = 5.0     # Final time
 dt = 0.5     # Time step
-N0 = 100     # Initial condition
+Ni = 100     # Initial condition
 ```
 
 Now we can write a code for the actual numerical procedure.
 
 ```python
 # First, we compute number of steps.
-# Note that te number of steps must
+# Note that the number of steps must
 # be an integer, but the timedata
 # we construct it from is of float type.
 # It is the reason, why we use int() funtion.
 # It attempts conversion of input data to
 # integer. If float is provided as an input,
-# it disregards the decimals.
+# it disregards the decimals. For example,
+# int(5.0/2.0) returns 2.
 nt = int((tf-ti)/dt)
 
 # Create an empty numpy array to contain
 # the intermediate values of N, including
 # those at ti and tf.
 #
-# You can wonder, how piece of numerical
+# You may wonder, how piece of numerical
 # data can be empty or not empty? But here
 # it is rather the conventional term used
 # to indicate that the values have not been
 # initialized - set to 0. It means that they
 # can have any value in a range allowed by
 # numerical precision. Why to do so? Well,
-# initializing data takes time. So, unless,
-# you'll need array of zeros, np.empty is
-# preferable over np.zeros.
+# initializing takes time. So, unless, you'll
+# need array of zeros, np.empty is preferable
+# over np.zeros.
 N = np.empty(nt+1)
 
-# We pass initial condition to the N array.
-N[0] = N0
+# We pass initial condition to the N array,
+N[0] = Ni
 
-# Perform the time stepping.
+# And perform the time stepping.
 for i in range(nt):
     N[i+1] = N[i] - alpha*N[i]*dt
 ```
@@ -128,118 +129,356 @@ Let us compare graphically our numerical values with the exact solution \eqref{e
 
 ```python
 import matplotlib.pyplot as plt
+
 %matplotlib inline
+
 plt.style.use('../styles/mainstyle.use')
-
-# create an array containing the multiples of dt
-t = np.arange(nt+1) * dt
-
-# Compute exact solution
-Nexact = N0*np.exp(-alpha*t)
-
-# plot the exact solution at the different times t
-fig, ax = plt.subplots()
-ax.plot(t, Nexact, linestyle='-', label=r'Exact solution')
-ax.plot(t, N, '^', color='green', label=r'Forward Euler method')
-ax.set_xlabel(r'$t$')
-ax.set_ylabel(r'$N$')
-ax.set_title(r'Radioactive decay')
-ax.legend()
-fig.savefig('../figures/radioactiveDecay.png', dpi=300)
-
-
 ```
 
-The agreement is not terrible but it does not look excellent either. What is going on? The answer of course comes from the error introduced by cutting the Taylor series in the definition of the forward Euler scheme and we know things should improve if we reduce $dt$ but this will come at the expense of increasing the total number of time steps and the computational cost. To get an idea about this, run the previous code with a smaller and smaller time step and see what happens to the curves.
+```python
+# Cell, where we perform computation to
+# build exact solution of differential
+# equation.
+#
+# numpy.arange intends to build a nume-
+# rical sequence. It is similar to the
+# Python's standard range function, BUT,
+# unlike it, it can operate not only the
+# integers, but also floats, and its return
+# type is numpy native array.
+#
+# For more info:
+# https://numpy.org/doc/stable/reference/generated/numpy.arange.html
+t = np.arange(nt+1) * dt
 
-To analyse this from the quantitative point of view, let us redo the computation using several values of $dt$ and compare the error made in estimating $N(t_f)$. In the following piece of code, we only store the value of $N$ at $t_f$.
+# We are all set to build exact solution array.
+Nexact = Ni * np.exp(-alpha*t)
+```
+
+When you're *debugging* - developing, testing and optimizing your code, it is always a good idea to have your imports and setup of *constant parameters* separated from the code you're working on. The same stands for the actual computations and visualization. Imaging, you build your arrays of data in a same cell, as you plot it. You see a plot and you don't like the font, you rerun the cell, and then you think that it might be a good idea to cut the x-axis, you rerun the cell again. In such a way, each time you update your plot, you will recompute absolutely the same numpy array, which is *not catastrophic, but considered to be a poor organization of a code*.
 
 ```python
-# Create a list of different time step (each time step is half of the previous one)
-dt = 0.5
-dt_list = np.asarray([dt/2**k for k in range(0, 5)])
+# Create a figure with a single subplot
+# in it.
+fig, ax = plt.subplots()
 
-# create an array to store the values of N(tf) for the different time steps
+# Plot the exact solution. Set the linestyle.
+# Matplotlib supports multiple line- and
+# marker styles. For the linestyles see
+# https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/linestyles.html
+# For the markers see
+# https://matplotlib.org/3.3.1/api/markers_api.html
+#
+# Note, though, that here we specify linestyle
+# as '-' (equivalent to 'solid') for the infor-
+# mative purposes. Solid linestyle is a default one,
+# so, if you remove the linestyle specification here,
+# the plot won't change.
+#
+# We also assign a label to the curve. Label is
+# a string, which we want to be displayed in a
+# legend.
+ax.plot(t, Nexact, linestyle='-', label='Exact solution')
+
+# Plot the approximate solution. You can see that
+# here we specify the appearance of the markers
+# without using the keyword 'marker'. We let
+# Python figure out which argument we are aiming
+# for by its position. There are POSITIONAL and
+# KEYWORD arguments in Python functions. Posi-
+# tional arguments must obey certain order, so
+# that it is clear, which of the parameters
+# stands for the certain argument. Keyword argu-
+# ments are passed with the keywords. Like here,
+# for example, we specify, that we want color='green',
+# where color is a keyword argument. Sometimes
+# keyword argumets can be passed as positional ones
+# if you follow the order, provided in the implemen-
+# tation of a funtion E X A C T L Y. 
+# For more info
+# https://problemsolvingwithpython.com/07-Functions-and-Modules/07.07-Positional-and-Keyword-Arguments/
+ax.plot(t, N, '^', color='green', label='Forward Euler method')
+
+# We set lables for the axes and title of a subplot.
+ax.set_xlabel('$t$')
+ax.set_ylabel('$N$')
+ax.set_title('Radioactive decay')
+
+# Make the legend visible.
+ax.legend()
+
+# And we save the whole figure to the specified
+# location in png format. Png format is a default
+# one, though. If you don't put .png suffix, it'll
+# still be saved as a png image. Keyword argument
+# dpi defines resolution of your image. It is lite-
+# rally 'dots per image' - 300 is good enough even for
+# the scientific paper, noo need to go to the extremes.
+#
+# Btw, as you've saved your figure once, it is a good
+# idea to comment the line, so that, you don't save
+# the same image over and over. Unless you modify the
+# plot.
+fig.savefig('../figures/radioactiveDecay.png', dpi=300)
+```
+
+The agreement between exact solution and an approximate one is good, but not precise. Moreover, it degrades with time. Why so? The answer, of course, comes from the error introduced by cutting the Taylor series in the definition of the forward Euler scheme, and we know things should improve, if we reduce $dt$ but this will come at the expense of increasing the total number of time steps and the computational cost. To get an idea about this, run the previous code with a smaller and smaller time step and see what happens to the curves.
+
+To analyze this from the quantitative point of view, let us redo the computation using several values of $dt$ and compare the error made in estimating $N(t_f)$. In the following piece of code, we only store the value of $N$ at $t_f$.
+
+```python
+# Create a list containing the set of the
+# timesteps, so that each timestep is a half
+# of a previous one.
+dt_list = np.asarray([0.5/2**k for k in range(5)])
+
+# Create an array to store the values of
+# N(tf) for the different time steps.
+# numpy.empty_like returns the array with
+# values non-initialized, just like numpy.empty,
+# but, unlike numpy.empty, it takes as a para-
+# meter not an integer, but either a sequence,
+# or the numpy array - array-like in the termi-
+# nology of numpy. The output array will have
+# the same shape and type as an input data.
 values = np.empty_like(dt_list)
 
+# Now we want to loop over all values in
+# dt_list. We also want to count our itera-
+# tions, as if we were extracting indices of
+# the elements of dt_list. We could create some
+# variable i=0 (indexing in Python and most of
+# the others programming languages starts with
+# 0), and then increase it by 1 at each iteration, 
+# like this:
+#
+# i = 0
+# for dt in dt_list:
+#    (do something...)
+#    i =+ 1
+#
+# But the moral here is WHY BOTHER. In this case,
+# and in many others, Python developers already
+# have implemented what we need - enumerate fun-
+# ction. It counts elements in an iterable object
+# and returns the counter at each iteration.
+
 for i, dt in enumerate(dt_list):
+    # Copy initial condition into the variable,
+    # which we are going to advance for each size
+    # of dt.
+    N = Ni
     
-    N = N0 # Restore the initial condition
-    nt = int((tf-t0) / dt) # number of time steps
-    
+    nt = int((tf-ti)/dt)
+
+    # Be careful not to shadow the variables of
+    # the exteriour loop - i and dt - with the
+    # variables of the interiour loop. We set it
+    # to be j.
     for j in range(nt):
         N = N - alpha*N*dt
-        
+
+    # Save N final subsequently to the values array
+    # each time it gets computed.
     values[i] = N
 ```
 
-We now plot the difference between the computed $N(t_f)$ and the exact solution in a log-log plot:
+Let's now compute and plot the difference between the computed $N(t_f)$ and the exact solution.
+
+```python
+# We construct the array containg the difference
+# between approximated and exact final solutions
+# for each size of timestep considere in dt_list.
+error = np.abs(values-Ni*np.exp(-alpha*tf))
+```
 
 ```python
 fig, ax = plt.subplots()
 
-# error computation
-error = np.abs(values - N0*np.exp(-alpha*tf)) # numpy can substract the same number to the array of values
-ax.loglog(dt_list, error, '*', label=r'Error')
+# Plot the error in logarifmic scale and see
+# that it grows as timestep increases.
+ax.loglog(dt_list, error, '*', label='Error')
 
-# fit a slope to the previous curve
-slope = dt_list
-ax.loglog(dt_list, slope, color='green', label=r'$dt$')
+# Fit a slope to the previous curve and see
+# that as they are parallel, the error after
+# nt timesteps is propotional to dt (not dt**2).
+ax.loglog(dt_list, dt_list, color='green', label='$dt$')
 
-# set plot options
-ax.set_xlabel(r'$dt$')
-ax.set_ylabel(r'Error')
-ax.set_title(r'Accuracy')
+ax.set_xlabel('$dt$')
+ax.set_ylabel('Error')
+ax.set_title('Accuracy')
+
 ax.legend()
-fig.savefig('../figures/eulerSlope.png', dpi=300)
+
+# fig.savefig('../figures/eulerSlope.png', dpi=300)
 ```
 
-Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after ```nt``` time steps with ```nt = int((tf-t0) / dt```. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that the error made during one time step *accumulates* during the computation.
+Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after $N$ timesteps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
 
 
 ### Numerical stability of the forward Euler method
 
-For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial property of numerical schemes called their stability. 
+For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial property of numerical schemes called *numerical stability*. 
 
-For our radioactive problem, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
+For the problem of radioactive decay, we first observe that, according to equation \eqref{eq:ForwardEuler2}, it is fair that:
 
 \begin{equation}
     N^{n} = (1-\alpha dt)N^{n-1}  = (1-\alpha dt)^2 N^{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
+    \label{eq:demo_stability}
 \end{equation}
 
-This relation implies that $N^n \rightarrow 0$ only if $\vert 1-\alpha dt \vert < 1$. Otherwise, if $\vert 1-\alpha dt \vert > 1$ our numerical solution will *blow up*. In the jargon, one says that the forward Euler scheme is unstable $\vert 1-\alpha dt \vert > 1$. This puts a limit on the time step allowed when performing the numerical integration.
+\ref{eq:demo_stability} implies that $N^n\to \infty$ if $\vert 1-\alpha dt \vert \to \infty$. In such a case numerical scheme is called *unstable* - when solution grows unbounded (blows up in the jargon). On the other hand, in the case when $\vert 1-\alpha dt \vert \le 1$, Euler scheme is considered to be stable. This requirement limits a timestep allowed, when performing the numerical integration.
 
 In many problems, the coefficients of the equations considered are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{equation}
-  \vert 1-\alpha dt \vert < 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 < 1
+  \vert 1-\alpha dt \vert \le 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 \le 1.
+  \label{eq:complex_stability}
 \end{equation}
 
-where $\vert \vert$ is the complex norm.
-
-Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$ where the forward Euler scheme is stable.
+Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$, where the forward Euler scheme is stable. As it is obvious from \ref{eq:complex_stability}, the bounded region of stability *is a circle*.
 
 ```python
-# This graph looks really bad, some better styling is needed. Could it be made similar to the one shown in Moin?
-
-fig, ax = plt.subplots()
-draw_circle = plt.Circle((-1, 0), 1)
-
-ax.set_aspect(1)
-ax.add_artist(draw_circle)
-
-# set plot options
-ax.set_xlim(-2.5,2.5)
-ax.set_ylim(-2.5,2.5)
-ax.set_position([0, 0, 1, 1])
-ax.set_xlabel(r'$\alpha_r dt$')
-ax.set_ylabel(r'$\alpha_i dt$')
-ax.set_title(r'Stability of forward Euler scheme')
-
-fig.savefig('../figures/eulerStabilityMap.png', dpi=300)
+from matplotlib.patches import FancyArrowPatch
 ```
 
-If $dt$ is chosen sufficiently small so that both $\alpha_rdt$ and $\alpha_i dt$ lie in the disk shown in the plot, the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
+```python
+# Let's configure the size of the figure
+# (in inches) to make it a square and bigger.
+fig, ax = plt.subplots(figsize=(6, 6))
+
+# We draw circle and customize it a bit. You
+# can see that because of some reason the fun-
+# ction name here starts with a capital letter -
+# Circle. That's because matplotlib.pyplot.Circle
+# is not really a function. It is an object called
+# c l a s s in Python. We won't dig into classes 
+# at this stage, but what it means for us here?
+# Well, when we call the class by its name, we
+# are actually calling its c o n s t r u c t o r -
+# in-class function (method), which returns the
+# i n s t a n c e of a class.
+# In this way, we have the instance of a class -
+# circle, which we have to add to the subplot
+# somehow. Otherwise, the figure and circle are
+# fully separated of each other, circle s t a n d s
+# a l o n e from the whole drawing.
+#
+# For more info on the Circle class
+# https://matplotlib.org/3.3.1/api/_as_gen/matplotlib.patches.Circle.html
+circle = plt.Circle((-1, 0), 1, ec='k', fc='green', alpha=0.5, hatch='/')
+
+# There is a method of Axes object, which is res-
+# ponsible for exactly what we need - adding
+# Artist object to the plots. Yes, Circle ori-
+# ginate from the other generic object - Artist.
+# Generraly speaking most of drawable object in
+# Matplotlib originate from Artist. So, if we
+# wanted to go exotic, we could have even added
+# our lines through add_artist, instead of doing
+# plot.
+#
+# Consider scheme on
+# https://matplotlib.org/3.1.1/api/artist_api.html#matplotlib.artist.Artist
+ax.add_artist(circle)
+
+# We make sure, that scaling for the x-axis
+# is the same, as for the y_axis.
+# For more info
+# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.set_aspect.html
+ax.set_aspect(1)
+
+# We move the axes drawn on the left and
+# on the bottom of the subplot to the center,
+ax.spines['left'].set_position('center')
+ax.spines['bottom'].set_position('center')
+# And hide the pieces of the subplot's frame
+# which are on the right and on top.
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+# See, that Python's syntax allows creation
+# of few variables at a time.
+xmin, xmax = -2.2, 2.2
+ymin, ymax = -2., 2.
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+# Let's complement our plot with arrows. We won't
+# dig into details of how arrows are configured, as
+# you already have enough knowledge to figure it out
+# yourself. 
+#
+# For more info
+# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.arrow.html
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(ymax-ymin), head_length=1./20.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+# Let's set location for the axes labels, and
+# change rotation rate for the label of the y-
+# axis - by default it is 90.
+ax.set_xlabel(r'$\alpha_r dt$')
+ax.set_ylabel(r'$\alpha_i dt$', rotation=0)
+
+ax.yaxis.set_label_coords(0.6, 0.95)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_title('Stability of forward Euler scheme', y=1.01)
+
+# Let's configure the ticks of the axes. The
+# most straightforward way of doing it is to
+# pass locations of the ticks explicitely.
+#
+# You also can pass the ticklabels you want
+# using set_ticklabels method.
+ax.set_xticks((-2, 2))
+ax.set_yticks((-2, -1, 1, 2))
+
+# Consider these 2 commented lines of code. 
+# When cutomizing axes' ticks, Matplotlib pro-
+# vides Locator and Formatter objects - you
+# can customize the ticks in basically one
+# simple call without accessing the ticklabels
+# data.
+# For more info
+# https://jakevdp.github.io/PythonDataScienceHandbook/04.10-customizing-ticks.html
+#
+# ax.xaxis.set_major_locator(plt.MaxNLocator(2))
+# ax.yaxis.set_major_locator(plt.MaxNLocator(4))
+
+# Though, sometimes, Locator will not be as
+# flexible as you need it to be. For example,
+# imagine that here, on top of hiding some ticks,
+# we also want to hide some specific tick - with
+# a zero label. Consider the following way of
+# doing it - by accessing indices of ticks in
+# a tuple* returned by get_ticklabels function,
+# and checkinf if it satisfies certain condition.
+# Such method is certainly not as graceful as
+# the one which goes with Locators, but it is
+# quite u n i v e r s a l.
+#
+# *tuple in Python is a standard type of a sequence,
+# which, unlike a sequence is unchangable.
+# for i, label in enumerate(ax.yaxis.get_ticklabels()):
+#     if i % 2 != 0 or i == 4:
+#         label.set_visible(False)
+
+# As the width of the axes became twice wider,
+# since we've drawn arrows, let's adjust the width
+# of the ticks.
+ax.tick_params(width=2, pad=10)
+
+# fig.savefig('../figures/eulerStabilityMap.png', dpi=300)
+```
+
+ If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt$ are inside a circle, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
 
 
 ### Multi-dimensional example

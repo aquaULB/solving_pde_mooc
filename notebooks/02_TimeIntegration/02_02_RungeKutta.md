@@ -229,7 +229,7 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
  k_2 & = f(t^n + c_2 dt, y^n + dta_{21}k_1) \nonumber \\
  k_3 & = f(t^n + c_3 dt, y^n + dt(a_{31}k_1+a_{32}k_2)) \nonumber \\
  & \cdots \nonumber \\
- k_s & = f(t^n + c_s dt, y^n + dt(a_{s1}k_1+\cdots + a_{s,s-1}k_{s-1})) \nonumber
+ k_s & = f(t^n + c_s dt, y^n + dt(a_{s1}k_1+\cdots + a_{s,s-1}k_{s-1})) \label{eq:rk_gen_exp}
 \end{align}
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
@@ -416,7 +416,35 @@ ax.set_title('Stability regions', x=0.7, y=1.01)
 # fig.savefig('../figures/stabilityDomains.png', dpi=300)
 ```
 
-We already pointed out that the forward Euler scheme is unstable if one of the eigenvalues of our system is purely imaginery (as in the case of the harmonic oscillator). Although the RK2 scheme has a larger domain of stability, it suffers from the defect. Of all the schemes considered so far, RK4 has a significantly larger domain of stability and more importantly, it does englobe a part of the imaginery axis so it can handle problems with purely imaginery eigenvalues !
+We already pointed out that the forward Euler scheme is unstable if one of the eigenvalues of our system is purely imaginery (as in the case of the harmonic oscillator). Although the RK2 scheme's domain of stability is larger, the scheme has the same property. Of all the schemes considered so far, RK4 has a significantly larger domain of stability and, more importantly, it does englobe a part of the imaginery axis, so, it can handle problems with purely imaginery eigenvalues!
+
+
+## Implicit Runge-Kutta schemes
+
+
+We have discussed, that the explicit Runge-Kutta schemes can be quite complicated, as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher order of accuracy $p$. We will give a very brief introduction into the subject, so that you have an impression.
+
+Generally speaking, RK methods can be defined s follows:
+
+\begin{align}
+& y^{n+1} = y^n + dt\sum_{i}^{s} b_i k_i,\nonumber\\
+& k_i = f(t^n + c_i dt, y^n + dt\sum_{j=1}^h a_{ij} k_j).
+\end{align}
+
+For explicit RK methods $h=s-1$, while for the implicit RK methods $h=s$. It means, that for each $k_i$ we would have to solve equation $k_i=f(k_1, k_2,\dots,k_i)$.
+
+
+Let us consider some relatively simple implicit RK scheme - we went on [Wikipedia][1] and picked one named *Qin and Zhang's two-stage second-order* implicit method. It reads:
+
+\begin{align}
+y^{n+1} &= y^n + \frac{1}{2}(k_1 + k_2),\nonumber \\
+k_1 &= f(t^n+\frac{dt}{4}, y^n+\frac{dt}{4}k_1),\nonumber \\
+k_2 &= f(t^n+\frac{3}{4}dt, y^n+dt(\frac{1}{2}k_1+\frac{1}{4}k_2)).
+\end{align}
+
+Let's implement it for the problem of a body in free fall described by \ref{eq:free_fall}.
+
+[1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 
 ## Exercises

@@ -146,7 +146,7 @@ L=
 \end{pmatrix}.
 \end{align}
 
-If we apply two-stage Runge-Kutta scheme to \ref{eq:free_fall}, we get:
+As $L$ and $b$ are constant, if we apply two-stage Runge-Kutta scheme to \ref{eq:free_fall}, we get:
 1. $\displaystyle y^* = y^n + \frac{dt}{2} (Ly^n+b),$
 2. $\displaystyle y^{n+1} = y^n + dt(Ly^*+b).$
 
@@ -232,12 +232,13 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
  k_s & = f(t^n + c_s dt, y^n + dt(a_{s1}k_1+\cdots + a_{s,s-1}k_{s-1})) \nonumber
 \end{align}
 
-Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One then says that the $s$-stage Runge-Kutta method is of order $p$.
+Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
 
-The construction of higher order Runge-Kutta schemes is in fact quite complicated and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is in fact no systematic way of obtaining order $p$ methods with a minimum number of stages $s$. Up to $p=4$ one can achieve order $p$ with $s=p$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$. "*Above this, very little is know*" \cite{Butcher1996}.
+The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way of obtaining order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+> Above this, very little is known \cite{Butcher1996}.
 
-Here we therefore focus our attention on a general purpose (globally) fourth order Runge-Kutta scheme that is accurate and stable enough for all the problems we consider in the rest of this course (from now on we call it RK4). It was introduced in 1901 by W. Kutta and reads \cite{Kutta1901}:
+Therefore, here we focus our attention on a general purpose **fourth-order Runge-Kutta scheme**, that is accurate and stable enough for all the problems we consider in the rest of this course (from now on we call it **RK4**). It was introduced in 1901 by W. Kutta and reads \cite{Kutta1901}:
 
 \begin{align}
     y^{n+1} & = y^n + \frac16 k_1 + \frac13(k_2 + k_3) + \frac16 k_4 \nonumber \\
@@ -247,51 +248,158 @@ Here we therefore focus our attention on a general purpose (globally) fourth ord
     k_4 & = dtf(t^n+dt,y^n+k_3)
 \end{align}
 
-For an autonomous linear system, it is straightforward to prove that this method is indeed fifth order accurate for one time step. After diagonalisation, we have:
+For an autonomous linear system, it is straightforward to prove that this method is indeed fifth order accurate for one time step. After diagonalization, we have:
 
 \begin{align}
   z^{n+1} & = z^n + \frac16 dt \Lambda z^n + \frac13 dt \Lambda (z^n + \frac12 dt \Lambda z^n ) + \frac13 dt \Lambda (z^n + \frac12 dt \Lambda (z^n + \frac12 dt \Lambda z^n)) \nonumber \\
-  & \;\; \;+\frac16 dt \Lambda (z^n + dt \Lambda (z^n + \frac12 dt \Lambda (z^n + \frac12 dt \Lambda z^n))) \nonumber \\
+   & +\frac16 dt \Lambda (z^n + dt \Lambda (z^n + \frac12 dt \Lambda (z^n + \frac12 dt \Lambda z^n))) \nonumber \\
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth-order.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to the fourth order.
 
-In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
+In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long, as all the eigenvalues of the operator $f$ satisfy,
 
-\begin{align}
+\begin{equation}
     \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} + \frac{\lambda_k^3 dt^3}{6} + \frac{\lambda_k^4 dt^4}{24}\vert < 1.
-\end{align}
+\end{equation}
 
 In the following plot, we compare the regions of stability for the various schemes we have already discussed.
 
 ```python
+# As before, we will refer x-axis to
+# lambda_i*dt and y-axis to lambda_r*dt.
+# We set the resolution along x and y
+# (in points per the whole 1D domain).
 nx = 100
 ny = 100
+```
+
+```python
+# We create numpy arrays, which store the
+# x-points and the y-points.
+# numpy.linspace is another way to create
+# numpy array for the sequence of numbers
+# in some range, alternatively to numpy.arange.
+# We must pass starting and end points to
+# the linspace function. Unlike the arange
+# function, here we set number of points
+# we want to put between, instead of the
+# distance between the points. 
+# Also note that, while numpy.arange does
+# NOT includes the end point you pass into
+# the array, linspace does include it.
+#
+# For more info
+# https://numpy.org/doc/stable/reference/generated/numpy.linspace.html
 x = np.linspace(-3.5, 1.5, nx)
 y = np.linspace(-3.5, 3.5, ny)
+
+# The purpose of numpy.meshgrid can be
+# pretty much assumed from the name of the
+# function. meshgrid creates the ND coor-
+# dinate arrays from the 1D sets of coor-
+# dinates. In more simple words, when you
+# pass, for example, two 1D arrays, repre-
+# senting the coordinates along two axes,
+# meshgrid returns two 2D arrays. The first
+# one contains x-coordinates for each
+# gridline drawn parallel to x-axis, and
+# the second one contains y-coordinates
+# for each gridline drawn parallel to
+# y-axis, respectively.
+#
+# For more info
+# https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html?highlight=meshgrid
 X, Y = np.meshgrid(x, y)
 
+# Go to the space of complex numbers.
 Z = X + 1j*Y
 
-# Euler
+# Terms remaining from Taylor expansion for
+# the Euler scheme.
 sigma1 = 1 + Z
-NORM1 = np.real(sigma1*sigma1.conj())
 
-#RK2
+# We compute the norm of sigma1.
+norm1 = np.real(sigma1*sigma1.conj())
+
+# Terms remaining from Taylor expansion for
+# the RK2.
 sigma2 = 1 + Z + Z**2/2.
-NORM2 = np.real(sigma2*sigma2.conj())
 
-#RK4
+norm2 = np.real(sigma2*sigma2.conj())
+
+# Terms remaining from Taylor expansion for
+# the RK4.
 sigma4 = 1 + Z + Z**2/2. + Z**3/6. + Z**4/24.
-NORM4 = np.real(sigma4*sigma4.conj())
+
+norm4 = np.real(sigma4*sigma4.conj())
 ```
 
 ```python
 fig, ax = plt.subplots(figsize=(8,8))
-CS1 = ax.contour(X, Y, NORM1, levels = [1], colors='r')
-CS2 = ax.contour(X, Y, NORM2, levels = [1], colors='b')
-CS4 = ax.contour(X, Y, NORM4, levels = [1], colors='g')
+
+# We shall now have use of
+# matplotlib.pyplot.contour funtion.
+# As X and Y, we pass the mesh data. Sup-
+# pose now a function f(x, y)=g(x, y) + C,
+# where C is some constant. Imagine now, 
+# we want to plot contour lines for the
+# set of integer values of C=0,-1,-2,-3,...
+# They will be described by equations
+# g(x, y) = 0, g(x, y) = 1, g(x, y) = 2,...
+#
+# That's what the contour function does.
+# For example, if given the equation of
+# circle, contour function will plot the
+# contour lines for (x-a)^2+(y-b)^2=0,1,2,...
+#
+# For more info
+# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contour.html
+#
+# matplotlib.pyplot.contour provides us
+# exactly the tool we want, as out condi-
+# tion ofr stability is given by the expression
+# of the kind f(x, y) < 1. The only thing we 
+# have to do, is to demand from contour fun-
+# ction to display o n l y that contour line
+# which corresponds to C=-1.
+#
+# When passing certain levels to the contour
+# function, the datatype must be either single
+# integer, or the sequence of integers (list,
+# tuple, numpy.ndarray...). When contours at
+# certain levels are of interest, then it must
+# be an array-like.
+ax.contour(X, Y, norm1, levels=[1], colors='r')
+ax.contour(X, Y, norm2, levels=[1], colors='b')
+ax.contour(X, Y, norm4, levels=[1], colors='g')
+
+ax.spines['left'].set_position('zero')
+ax.spines['bottom'].set_position('center')
+
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+xmin, xmax = -3.2, 1.4
+ymin, ymax = -3.4, 3.4
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(ymax-ymin), head_length=1./20.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.yaxis.set_label_coords(0.85, 0.95)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_xticks((-3, -1, 1))
+ax.set_yticks((-2, -1, 1, 2))
 
 # Label contours
 ax.text(-1, 1.1, r'Euler', fontsize=14, horizontalalignment='center')
@@ -299,14 +407,13 @@ ax.text(-1, 1.85, r'RK2', fontsize=14, horizontalalignment='center')
 ax.text(-2.05, 2.05, r'RK4', fontsize=14, horizontalalignment='center')
 
 ax.set_xlabel(r'$\lambda_r dt$')
-ax.set_ylabel(r'$\lambda_i dt$')
+ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
+
 ax.set_aspect(1)
 
-ax.set_title('Stability regions')
+ax.set_title('Stability regions', x=0.7, y=1.01)
 
-fig.savefig('../figures/stabilityDomains.png', dpi=300)
-
-
+# fig.savefig('../figures/stabilityDomains.png', dpi=300)
 ```
 
 We already pointed out that the forward Euler scheme is unstable if one of the eigenvalues of our system is purely imaginery (as in the case of the harmonic oscillator). Although the RK2 scheme has a larger domain of stability, it suffers from the defect. Of all the schemes considered so far, RK4 has a significantly larger domain of stability and more importantly, it does englobe a part of the imaginery axis so it can handle problems with purely imaginery eigenvalues !

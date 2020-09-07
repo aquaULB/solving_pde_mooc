@@ -37,6 +37,7 @@ As an example and toy problem, let us consider radioactive decay. Imagine we hav
 
 \begin{equation}
   \frac{dN(t)}{dt}=-\alpha N(t).
+  \label{eq:decay}
 \end{equation}
 
 where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readilly obtained and reads:
@@ -47,9 +48,9 @@ where $\alpha>0$ is a constant depending on the type of nuclei present in the ma
 
 However, our objective here is to obtain the above time evolution using a numerical scheme.
 
-## The Forward Euler method
+## The forward (explicit) Euler method
 
-The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward Euler method. We will use it to introduce several concepts that will pop up frequently in the rest of course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
+The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the Euler method, which is actualluy a family of the numerical methods for ordinary differential equations. In order to introduce several fundamental concepts that will pop up frequently in the rest of course, we refer to the *forward (or explicit) Euler method*. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
@@ -337,10 +338,6 @@ In many problems, the coefficients of the equations considered are complex (e.g.
 \end{equation}
 
 Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$, where the forward Euler scheme is stable. As it is obvious from \ref{eq:complex_stability}, the bounded region of stability *is a circle*.
-
-```python
-from matplotlib.patches import FancyArrowPatch
-```
 
 ```python
 # Let's configure the size of the figure
@@ -708,10 +705,11 @@ ax[1].set_title('Height vs time (m)')
 
 ### Numerical stability of the forward Euler method revisited
 
-Let's consider another two dimensional example and analyse the motion of an object attached to a spring. The equation of motion reads:
+Let's consider another two dimensional example and analyze the motion of an object attached to a spring. The equation of motion reads:
 
 \begin{equation}
     m\frac{d^2 x}{d t^2}=-kx,
+    \label{eq:spring}
 \end{equation}
 
 where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is the spring constant. Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
@@ -737,7 +735,7 @@ For the forward Euler scheme we have:
 +&
 \begin{pmatrix}
     0 & 1 \\
-    \gamma^2 & 0
+    -\gamma^2 & 0
 \end{pmatrix}
 \begin{pmatrix}
     x^{n} \\
@@ -749,64 +747,81 @@ dt
 It does not seem very different from the previous problem so let's implement this. 
 
 ```python
-# parameters
-k = 2. # spring constant
-m = 1. # object's mass
+k = 2.    # spring constant
+m = 1.    # object's mass
 x0 = 0.75 # initial position
-v0 = 0. # initial velocity
+v0 = 0.   # initial velocity
+ti = 0.   # initial time
+tf = 40.0 # final moment of time at which search for solution
+dt = 0.15  # timestep
+```
 
+```python
+# Let's first compute gamma and number
+# of timesteps.
 gamma = np.sqrt(k/m)
+nt = int((tf-ti)/dt)
 
-t0 = 0. # initial time
-tf = 40.0
-dt = 0.1
-nt = int((tf-t0) / dt) # number of time steps
-
-# Create a numpy array to contain the intermediate values of y,
-# including those at ti and tf
+# Create a numpy array to contain the
+# intermediate values of y, including
+# those at ti and tf.
 y = np.empty((nt+1, 2))
 
-# Store initial condition in y[:,0]
-y[0] = np.array([x0, v0])
+# Store initial condition in a first row
+# of y.
+y[0] = x0, v0
 
-# Create matrix L
-L = np.array([[0, 1], [-gamma**2, 0]])
+# Create matrix L.
+L = np.asarray([[0., 1.], [-gamma**2, 0.]])
 
-# Perform the time stepping
+# Perform the time stepping.
 for i in range(nt):
-    y[i+1] = y[i] + np.dot(L,y[i])*dt
+    y[i+1] = y[i] + np.dot(L, y[i])*dt
+```
+
+```python
+# Store nt timesteps.
+t = np.arange(nt+1) * dt
 ```
 
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-# create an array containing the multiples of dt
-t = np.arange(nt+1) * dt
+ax[0].plot(t, y[:, 1], '-k', lw=0.8)
 
-ax[0].plot(t,y[:,1])
-ax[0].set_xlabel(r'$t$')
-ax[0].set_ylabel(r'$v$')
-ax[0].set_title(r'Speed vs time (m/s)')
+ax[0].set_xlabel('$t$')
+ax[0].set_ylabel('$v$')
+ax[0].set_title('Speed vs time (m/s)')
 
-ax[1].plot(t,y[:,0])
-ax[1].set_xlabel(r'$t$')
-ax[1].set_ylabel(r'$x$')
-ax[1].set_title(r'Position vs time (m)')
+ax[1].plot(t, y[:, 0], '-k', lw=0.8)
+
+ax[1].set_xlabel('$t$')
+ax[1].set_ylabel('$x$')
+ax[1].set_title('Position vs time (m)')
+
+# Here we take advantage of that we
+# store both axes objects in one vari-
+# ables - we don't have to restrict the
+# limits for each of them separately, 
+# as we can iterate over the members
+# of the sequence - makes the code shorter.
+for axis in ax:
+    axis.set_xlim(0, 40.)
 ```
 
-What's going on ? We know a fritionless harmonic oscillator like the one we are considering here should oscillate back and forth with a constant amplitude. Something has to be wrong in our implementation. Or maybe not...
+Don't you see something strange? We know, a fritionless harmonic oscillator, like the one we are considering, must oscillate back and forth with a constant amplitude. So, what exactly went wrong?
 
-Let us first compute the eigenvalues $\lambda_i$ and the eigenvectors $v_i$ of the matrix, 
+Let's inspect forward Euler scheme for stability for the system we are solving. In order to decouple equations for $x^{n+1}$ and $v^{n+1}$, we compute the eigenvalues $\lambda_i$ and eigenvectors $v_i$ of the matrix
 
 \begin{align}
 L=
 \begin{pmatrix}
     0 & 1 \\
     \gamma^2 & 0
-\end{pmatrix}
+\end{pmatrix},
 \end{align}
 
-We get:
+and get:
 
 \begin{align}
 \lambda_1 = i\gamma,\;\; \lambda_2=-i\gamma,\;\;
@@ -814,7 +829,7 @@ v_1 =
 \begin{pmatrix}
     1 \\
     i\gamma
-\end{pmatrix}
+\end{pmatrix},
 \;\;
 v_2 =
 \begin{pmatrix}
@@ -839,7 +854,6 @@ Q=
 \end{pmatrix}.
 \end{align}
 
-
 Using the vector notation $y=(x\;\; v)$, we can then reformulate our time advancement scheme as,
 
 \begin{align}
@@ -854,14 +868,239 @@ In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvec
     & z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
 \end{align}
 
-It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is therefore not adapted to the simulation of a simple harmonic oscillator !
+It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is, therefore, not adapted to the simulation of a simple harmonic oscillator.
+
+
+## The backwards (implicit) Euler method
+
+
+We inspected the usefullness of the explicit Euler method for solving different differential equations, and discovered that while it gives a decent approximation in the certain cases (\ref{eq:decay}), it as absolutely unapplicable in the other cases, since it simply blows up for *any* timestep (\ref{eq:spring}). It urges us to search for different ways to approximate solution. Such as *implicit* Euler method, for example. 
+
+As well as explicit Euler can also be referred as the forward Euler, implicit Euler is being sometimes called the backwards Euler. Generally speaking, the difference between explicit and implicit numerical schemes is that in the first case the solution at latter point of the dependant variable (at the latter moment of time, for example) is built from the solution found at the previous points; in the second case solution is seeked by solving the equation, which involves *both* the solutions at the latter and previous points. Consider schmetic notations:
+
+\begin{align}
+& y^{n+1}(t) = f\Big(y^n(t\Big),\;\; & \hbox{Explicit scheme}, \\
+& g\Big(y^{n+1}(t), y^n(t) \Big) = 0,\;\; & \hbox{Implicit scheme}.
+\end{align}
+
+Time advancement with implicit Euler scheme is as follows:
+\begin{equation}
+y^{n+1} = y^n + dt f(y^{n+1}, t^{n+1}).
+\end{equation}
+
+To investigate the accuracy of implicit Euler against those of explicit Euler, let's go back to \ref{eq:decay}. In this simple case the one-step adavncement is quite trivial to derive, and is given as:
+\begin{equation}
+N^{n+1} = (1+\alpha dt)^{-1}N^n.
+\end{equation}
+
+Let us now estimate the acuracy of explicit scheme against the accuracy of implicit scheme for this model problem.
+
+```python
+# We redefine all the constants. Eventhough,
+# they were defined in the above cell, some
+# got overwritten when solving other problems.
+#
+# We increase the timestep to get noticable
+# decrease in accuracy of the explicit scheme
+# and see, how implicit scheme compares with
+# it. We also increase the time domain to see
+# how solution converges far away from the
+# initial moment of time.
+alpha = 0.25 # Exponential law coeffecient
+ti = 0.0     # Initial time
+tf = 15.0    # Final time
+dt = 1.2     # Time step
+Ni = 100     # Initial condition
+```
+
+```python
+nt = int((tf-ti)/dt)
+
+# Let us also redefine N array, so that we
+# store both the solution predicted by the
+# implicit and explicit schemes in one array
+# - in different columns.
+N = np.empty((nt+1, 2))
+
+# We copy initial condition into both columns.
+N[0] = Ni, Ni
+
+# Define one-timestep advancement coefficient
+# assumed by the implicit Euler outside of the
+# loop, as it is independant of t.
+# If some computation you ought to perform is
+# independant of the iteration index, try to
+# ALWAYS take it out of the loop. Otherwise, 
+# you are performing useless repetitive steps,
+# and simply waste your time.
+coef_imp = (1.+alpha*dt)**(-1)
+
+# Advance solution both with the implicit and
+# explicit schemes.
+for i in range(nt):
+    N[i+1, 0] = N[i, 0] - alpha*N[i, 0]*dt
+    
+    N[i+1, 1] = coef_imp*N[i, 0]
+```
+
+```python
+# t and Nexact have to be recomputed, as we
+# have newly defined tf.
+t = np.arange(nt+1) * dt
+
+Nexact = Ni * np.exp(-alpha*t)
+```
+
+```python
+fig, ax = plt.subplots(figsize=(8, 6))
+
+ax.plot(t, Nexact, linestyle='-', color='k', lw=0.8, label='Exact solution')
+
+ax.plot(t, N[:, 0], '^', color='green', label='Forward Euler method')
+ax.plot(t, N[:, 1], '^', color='blue', label='Backwards Euler method')
+
+ax.set_xlim(-0.1, 14.5)
+
+# We set lables for the axes and title of a subplot.
+ax.set_xlabel('$t$')
+ax.set_ylabel('$N$')
+ax.set_title('Radioactive decay')
+
+# Make the legend visible.
+ax.legend()
+```
+
+We are able to observe from the figure that implicit Euler is more accurate with the same timestep. This is no surprise. Explicit schemes are always easier to implement, but you will surely encounter situations when the timestep, required to achieve high accuracy with explicit scheme, has to be really small. In this way you loose a lot of computational time. Sometimes the small timestep is not even the matter of accuracy, like in the case above, but the matter of *stability*. It takes much less computational time to achieve desired accuracy with the implicit schemes.
+
+But we still advice you against sticking *only* to implicit methods. There are also a lot of real-world problems, for which you are totally good to go with explicit schemes - for example, boundary-layer equation solved for the problem of hydrodynamic stability. So, you have always to be sure, that your reasons to use implicit scheme are solid, and you don't complicate your life for nothing
+
+
+Let's go back now to the equations \ref{eq:spring}. As we have proved, that forward Euler is unstable for this case, it is a natural move to test, what is the outcome of the backwards Euler.
+
+If applied to \ref{eq:spring},
+\begin{align}
+\begin{pmatrix}
+    x^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    x^{n} \\
+    v^{n}
+\end{pmatrix}
++&
+\begin{pmatrix}
+    0 & 1 \\
+    \gamma^2 & 0
+\end{pmatrix}
+\begin{pmatrix}
+    x^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+dt.
+\end{align}
+
+After a little rearrangement:
+\begin{align}
+\begin{pmatrix}
+1 & -dt\\
+-\gamma^2 dt & 1
+\end{pmatrix}
+\begin{pmatrix}
+    x^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+= \begin{pmatrix}
+    x^{n} \\
+    v^{n}
+\end{pmatrix},
+\end{align}
+
+and finally:
+\begin{align}
+\begin{pmatrix}
+    x^{n+1} \\
+    v^{n+1}
+\end{pmatrix}
+= \begin{pmatrix}
+1 & -dt\\
+-\gamma^2 dt & 1
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+    x^{n} \\
+    v^{n}
+\end{pmatrix}.
+\end{align}
+
+You see that things got a little more complicated - we had to make a little effort to express $y^{n+1}=(x^{n+1}\;\; v^{n+1})$ in terms of $y^{n}=(x^{n}\;\; v^{n})$, and we will, obviously, have to implement iverse of a matrix, but at least we are lucky that the right-hand side of \ref{eq:spring} does not contain explicit dependance on $t$.
+
+So, let's implement implicit Euler in a code:
+
+```python
+# We have to redefine time parameters
+# again, as they got overwritten.
+ti = 0.    # initial time
+tf = 40.0  # final moment of time at which search for solution
+dt = 0.15  # timestep
+```
+
+```python
+# Recompute number of timesteps and 
+# the time array.
+nt = int((tf-ti)/dt)
+
+t = np.arange(nt+1) * dt
+```
+
+```python
+y_imp = np.empty((nt+1, 2))
+
+# Store initial condition in a first row
+# of y.
+y_imp[0] = x0, v0
+
+# As matrix which advances the solution
+# does not depend on t, we compute it
+# right away, and find an inverse.
+L_imp = np.linalg.inv(np.asarray([[1., -dt], [gamma**2*dt, 1.]]))
+
+# Perform the time stepping. dt is hidden
+# in L_imp, so, no need to multiply by it.
+for i in range(nt):
+    y_imp[i+1] = np.dot(L_imp, y_imp[i])
+```
+
+```python
+fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+
+ax[0].plot(t, y_imp[:, 1], '-k', lw=0.8, label='Backwards Euler')
+ax[0].plot(t, y[:, 1], '--k', lw=0.8, label='Forward Euler')
+
+ax[0].set_xlabel('$t$')
+ax[0].set_ylabel('$v$')
+ax[0].set_title('Speed vs time (m/s)')
+
+ax[1].plot(t, y_imp[:, 0], '-k', lw=0.8, label='Backwards Euler')
+ax[1].plot(t, y[:, 0], '--k', lw=0.8, label='Forward Euler')
+
+ax[1].set_xlabel('$t$')
+ax[1].set_ylabel('$x$')
+ax[1].set_title('Position vs time (m)')
+
+for axis in ax:
+    axis.set_xlim(0, 15)
+    axis.set_ylim(-10, 10)
+    axis.legend(loc='upper center')
+```
+
+As we see, implicit Euler, obviously, does not blow up, but the solution damps quickly, which is the consequence of the total error being accumulated after $N$ timesteps.
 
 
 ## Summary
 
-In this notebook we have described the foward Euler scheme and how we can discretise an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
+In this notebook we have described the forward and the backwards Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
 
-We have discussed the accuracy of the scheme and its stability. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing the discretized equations.
+We gave the estimates for the accuracies of the forward and backwards Euler for the model problems, and introduced the concept of stability of the numerical scheme. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing the discretized equations.
 
 In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analysing partial differential equations later on in the course.
 
@@ -869,11 +1108,11 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 ## Exercices
 
 
-**Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy.
+**Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy. 
 
-**Exercise 2.** In the case of the body in free fall, compare the solution obtained with the forward Euler scheme to the exact solution. Check again that the method is first order for a finite time interval.
+**Exercise 2.** In the case of the body in free fall, compare the solution obtained with the forward Euler and the backwards schemes to the exact solution. Check again that both methods are of first-order accuracy for a finite time interval.
 
-**Exercise 3.** Check that the forward Euler scheme is unstable for the case of the body in free fall when $dt$ is large enough so that the product $\lambda dt$ lies outside the domain of stability. What is the maximum time step allowed?
+**Exercise 3.** Find and plot the regions of stability for both methods for the problem of a body in free fall.
 
 ```python
 

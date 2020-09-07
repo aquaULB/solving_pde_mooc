@@ -16,19 +16,20 @@ jupyter:
 # Time integration - Part 2
 
 
-For convenience, we start by importing some modules needed below:
+For convenience, we start with importing some modules needed below:
 
 ```python
 import numpy as np
-
 import matplotlib.pyplot as plt
+
 %matplotlib inline
+
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the previous notebook we have considered the forward Euler scheme to time march ordinary differential equations. We have discussed its accuracy and stability with respect to the size of the time step.
+In the previous notebook we have considered the forward and the backwards Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the timestep.
 
-Here we introduce some more accurate methods with larger domains of stability that are therefore applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
+Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
 
 \begin{align}
     y'(t)=f(t,y)
@@ -44,13 +45,13 @@ The forward Euler method is defined through:
     & y^{n+1} \equiv y^n + f(t,y^n) dt & (\textrm{Forward Euler method}) \label{eq:ForwardEuler3},
 \end{align}
 
-with all the intermediate times denoted $t^n = t+ndt$ and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
+with all the intermediate times denoted $t^n = t+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
 
 Graphically, we see that $y^{n+1}$ is evaluated using the value $y^n$ and the slope (derivative) of $y$ at time $t^n$:
 
 <img src="../figures/Euler.png" align="center" width="500">
 
-Runge-Kutta schemes increase the accuracy of the estimated value $y^{n+1}$ by introducing intermediate instants between $t^n$ and $t^{n+1}$ at which the derivative of $y$ is evaluated and by making use of this information.
+Runge-Kutta schemes increase the accuracy of the estimated value $y^{n+1}$ by introducing intermediate instants between $t^n$ and $t^{n+1}$, at which the derivative of $y$ is evaluated and by making use of this information.
 
 The following two stage Runge-Kutta method is the simplest of such schemes. Graphically, this scheme is defined as follows:
 
@@ -64,7 +65,7 @@ so that,
 \end{align}
 
 
-In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we definitely hope to improve these orders of accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
+In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
 
 \begin{align}
  y^{n+1} & = y^n + dt f(t^n+\frac{dt}{2},y^n + \frac{dt}{2}f(t^n, y^n)) \nonumber \\
@@ -72,124 +73,146 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second o
          & = y^n + dt y^{'n} + \frac{dt^2}{2}y^{''n} + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two stage Runge-Kutta method is third-order for one time step and as a consequence it is second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$ and is therefore not of higher order accuracy). 
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves, that the two-stage Runge-Kutta method is third-order for one time step, and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher order accuracy). 
 
 
-Let us now discuss the stability of this two stage Runge-Kutta method for a general autonomous linear system of equations. As usual, we may diagonalize the system defined through the matrix $f$ and write:
+Let us now discuss the stability of this two-stage Runge-Kutta method for a general autonomous linear system of differential equations. As usual, we may diagonalize the system defined through the matrix $f$ and write:
 
-\begin{align}
+\begin{equation}
     z' = \Lambda z,
-\end{align}
+\end{equation}
 
-where $\Lambda$ is the diagonal matrix composed of the eigenvalues $\lambda_k$ of $f$ and $z$ are the coordinates of $y$ in the eigenvectors basis.
+where $\Lambda$ is the diagonal matrix composed of the eigenvalues $\lambda_k$ of $f$, and $z$ are the coordinates of $y$ in the eigenbasis.
 
-Using the two stage Runge-Kutta scheme we then have,
+Using the two-stage Runge-Kutta scheme, we then have,
 
-\begin{align}
+\begin{equation}
     z^{n} = (I+ dt \Lambda + \frac{dt^2}{2}\Lambda^2) z^{n-1} \; \Leftrightarrow \; z^{n} = (I+ dt \Lambda + \frac{dt^2}{2}\Lambda^2)^n z^0.
-\end{align}
+\end{equation}
 
-All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as long as the following relation is satisified for all the eigenvalues $\lambda_k$:
+All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as long, as the following relation is satisified for all the eigenvalues $\lambda_k$:
 
-\begin{align}
+\begin{equation}
     \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} \vert < 1.
-\end{align}
+\end{equation}
 
+<!-- #region -->
+Let us apply the Runge-Kutta scheme to the problem of a body in free fall. We recover the system of differential equations:
 
+\begin{cases}
+    & \displaystyle \frac{dh}{dt}=v,\\
+    & \displaystyle \frac{dv}{dt}=-g. 
+\end{cases}
 
-
-Let us apply this Runge-Kutta scheme to the problem of a body in free fall. We recall that this problem may be written in the following matrix form:
+We rephrase it in a matrix form:
 
 \begin{align}
+\frac{d}{dt}
 \begin{pmatrix}
-    h^{n+1} \\
-    v^{n+1}
+    h \\
+    v
 \end{pmatrix}
 =
-\begin{pmatrix}
-    h^{n} \\
-    v^{n}
-\end{pmatrix}
-+&
-\begin{pmatrix}
+& \begin{pmatrix}
     0 & 1 \\
     0 & 0
 \end{pmatrix}
 \begin{pmatrix}
-    h^{n} \\
-    v^{n}
+    h \\
+    v
 \end{pmatrix}
-dt
 +
 \begin{pmatrix}
     0 \\
     -g
 \end{pmatrix}
-dt \\
-&\Leftrightarrow \nonumber \\
-y^{n+1} &= y^n + Ly^n dt + bdt
+\nonumber
 \end{align}
 
-with $y=(h\;\; v)$, $b=(0\;\; -g)$ and
+\begin{equation}
+\Leftrightarrow
+\frac{dy}{dt} = Ly + b
+\label{eq:free_fall}
+\end{equation}
+
+
+with $y=(h\;\; v)$, $b=(0\;\; -g)$ and, obviously,
 
 \begin{align}
 L=
 \begin{pmatrix}
     0 & 1 \\
     0 & 0
-\end{pmatrix}
+\end{pmatrix}.
 \end{align}
 
+If we apply two-stage Runge-Kutta scheme to \ref{eq:free_fall}, we get:
+1. $\displaystyle y^* = y^n + \frac{dt}{2} (Ly^n+b),$
+2. $\displaystyle y^{n+1} = y^n + dt(Ly^*+b).$
 
-We copy/paste our previous implementation of the solution using the forward Euler scheme and make the necessary changes to obtaining it with our Runge-Kutta scheme:
+Let's implement this procedure.
+<!-- #endregion -->
 
 ```python
-# parameters
-g = 9.81 # ms^-2, gravitational constant
-h0 = 100. # initial height
-v0 = 0. # initial speed
+g = 9.81  # ms^-2, gravitational constant
+h0 = 100. # m, initial height
+v0 = 0.   # ms^-1, initial speed
 
-t0 = 0. # initial time
-tf = 4.0
-dt = 0.1
-nt = int((tf-t0) / dt) # number of time steps
-
-# Create a numpy array to contain the intermediate values of y,
-# including those at ti and tf
-y = np.empty((nt+1, 2))
-
-# Store initial condition in y[:,0]
-y[0] = np.array([h0, v0])
-
-# Create vector b
-b = np.array([0, -g])
-
-# Create matrix L
-L = np.array([[0, 1], [0, 0]])
-
-# Perform the time stepping
-for i in range(nt):
-    y_star = y[i] + 0.5 * (np.dot(L,y[i])*dt + b*dt)
-    y[i+1] = y[i] + np.dot(L,y_star)*dt + b*dt
+ti = 0.   # s, initial time
+tf = 4.0  # s, final time at which to seek the solution
+dt = 0.1  # s, timestep
 ```
 
-Graphically, the solution looks like:
+```python
+nt = int((tf-ti)/dt)
+
+# Create a numpy array to contain the
+# intermediate values of y, including
+# those at ti and tf.
+y = np.empty((nt+1, 2))
+
+# Store initial condition in y[0, :].
+y[0] = h0, v0
+
+# Create vector b.
+b = np.asarray([0., -g])
+
+# Create matrix L.
+L = np.asarray([[0., 1.], [0., 0.]])
+
+# Perform the two-stage time stepping.
+for i in range(nt):
+    y_star = y[i] + 0.5*dt*(np.dot(L, y[i])+b)
+    y[i+1] = y[i] + dt*(np.dot(L, y_star)+b)
+```
+
+```python
+# We store the time interval data in
+# the array.
+t = np.arange(nt+1) * dt
+```
+
+We visualize the solution:
 
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-# create an array containing the multiples of dt
-t = np.arange(nt+1) * dt
+ax[0].plot(t, y[:, 1], '-k', lw=0.8)
 
-ax[0].plot(t,y[:,1])
-ax[0].set_xlabel(r'$t$')
-ax[0].set_ylabel(r'$v$')
-ax[0].set_title(r'Speed vs time (m/s)')
+ax[0].set_xlabel('$t$')
+ax[0].set_ylabel('$v$')
+ax[0].set_title('Speed vs time (m/s)')
 
-ax[1].plot(t,y[:,0])
-ax[1].set_xlabel(r'$t$')
-ax[1].set_ylabel(r'$h$')
-ax[1].set_title(r'Height vs time (m)')
+ax[1].plot(t, y[:, 0], '-k', lw=0.8)
+
+ax[1].set_xlabel('$t$')
+ax[1].set_ylabel('$h$')
+ax[1].set_title('Height vs time (m)')
+
+# Let us bind the axes to the relevant
+# interval.
+for axis in ax:
+    axis.set_xlim(t[0], t[-1])
 ```
 
 In exercise 2, we ask to check the accuracy of your solution.

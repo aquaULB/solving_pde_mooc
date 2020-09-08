@@ -888,28 +888,25 @@ Time advancement with implicit Euler scheme is as follows:
 y^{n+1} = y^n + dt f(y^{n+1}, t^{n+1}).
 \end{equation}
 
-To investigate the accuracy of implicit Euler against those of explicit Euler, let's go back to \ref{eq:decay}. In this simple case the one-step adavncement is quite trivial to derive, and is given as:
+The advantage of implicit schemes over explicit is usually that one reuquires larger timestep to get stable solution. It is useful when dealing with a *stiff* problem. The problem is called stiff if solution rapidly varies in time, so that for certain numerical schemes one would need to make a timestep very small to get a stable solution.
+
+We have found the region of stability of the explicit Euler for the linear autonomous homogeneous problems, like the one of the radiactive decay \ref{eq:decay} or the one of the movement of a bosy attached to a spring \ref{eq:spring}. Let's implement the implicit Euler for both of them.
+
+We first consider a problem of the radioactive decay \ref{eq:decay}. The one-step advancement is quite trivial to derive, and is given as:
 \begin{equation}
 N^{n+1} = (1+\alpha dt)^{-1}N^n.
 \end{equation}
 
-Let us now estimate the acuracy of explicit scheme against the accuracy of implicit scheme for this model problem.
+Let's solve for some input parameters and visualize the solution.
 
 ```python
 # We redefine all the constants. Eventhough,
 # they were defined in the above cell, some
 # got overwritten when solving other problems.
-#
-# We increase the timestep to get noticable
-# decrease in accuracy of the explicit scheme
-# and see, how implicit scheme compares with
-# it. We also increase the time domain to see
-# how solution converges far away from the
-# initial moment of time.
 alpha = 0.25 # Exponential law coeffecient
 ti = 0.0     # Initial time
 tf = 15.0    # Final time
-dt = 1.2     # Time step
+dt = 1.     # Time step
 Ni = 100     # Initial condition
 ```
 
@@ -959,7 +956,7 @@ ax.plot(t, Nexact, linestyle='-', color='k', lw=0.8, label='Exact solution')
 ax.plot(t, N[:, 0], '^', color='green', label='Forward Euler method')
 ax.plot(t, N[:, 1], '^', color='blue', label='Backwards Euler method')
 
-ax.set_xlim(-0.1, 14.5)
+ax.set_xlim(t[0]-0.1, t[-1]+0.1)
 
 # We set lables for the axes and title of a subplot.
 ax.set_xlabel('$t$')
@@ -970,12 +967,57 @@ ax.set_title('Radioactive decay')
 ax.legend()
 ```
 
-We are able to observe from the figure that implicit Euler is more accurate with the same timestep. This is no surprise. Explicit schemes are always easier to implement, but you will surely encounter situations when the timestep, required to achieve high accuracy with explicit scheme, has to be really small. In this way you loose a lot of computational time. Sometimes the small timestep is not even the matter of accuracy, like in the case above, but the matter of *stability*. It takes much less computational time to achieve desired accuracy with the implicit schemes.
+Here we observe something interesting. Solutions predicted by explicit and implicit Euler schemes differ noticably, eventhough, both of the schemes are, obviously, stable and both are of the same order of accuracy, and the solution given by the implicit Euler seems to get closer to the exact one. Why does it happen? Well, let's figure that out.
 
-But we still advice you against sticking *only* to implicit methods. There are also a lot of real-world problems, for which you are totally good to go with explicit schemes - for example, boundary-layer equation solved for the problem of hydrodynamic stability. So, you have always to be sure, that your reasons to use implicit scheme are solid, and you don't complicate your life for nothing
+As we know, the explicit solution computed for one timestep is the following:
+\begin{equation}
+N^{n+1} = N^n e^{-\alpha dt}.
+\end{equation}
+
+If expanded into Taylor series, it reads:
+\begin{equation}
+N^{n+1} = N^n \left[ 1 - \alpha dt + \frac{1}{2}\alpha^2 dt^2 - \frac{1}{6}\alpha^3 dt^3 + \dots \right].
+\label{eq:exact_taylor}
+\end{equation}
+
+By assuming that $dt\to 1$ and $\vert\alpha\vert < C$, where $C$ is some positive finite number, one derives the formula for the explicit Euler:
+\begin{equation}
+N^{n+1} = N^n ( 1 - \alpha dt),
+\label{eq:forw}
+\end{equation}
+
+Now what about the backwards Euler? We know that it assumes that solution is advanced in the following way:
+\begin{equation}
+N^{n+1} = N^n (1+\alpha dt)^{-1}.
+\label{eq:back}
+\end{equation}
+
+\ref{eq:back} can be expanded into Taylor series as follows:
+\begin{equation}
+N^{n+1} = N^n \left[ 1 - \alpha dt + \alpha^2 dt^2 - \alpha^3 dt^3 + \dots \right].
+\label{eq:exact_back}
+\end{equation}
+
+Therefore, we see that the smaller $dt$ we consider, the closer the solutions predicted by explicit and implicit Euler schemes get to each other and to the exact solution. And, obviously, the source of the difference between the two approximations, we observe in a figure above, is that $dt$ we've set in our code is not small enough. 
+
+From \ref{eq:exact_taylor}, \ref{eq:forw} and \ref{eq:exact_back}, we can also estimate quantitavely the errors introduced both by the explicit end implicit solutions.
+
+Let $\bigtriangleup_e$ and $\bigtriangleup_i$ be the errors introduced by the explicit and the implicit solutions in the first timestep, respectively. While $\displaystyle \frac{3}{5} \le \alpha dt \le 6$, 
+we can write:
+\begin{align}
+\bigtriangleup_e & = \vert N^{1}_{exact} - N^{1}_{explicit} \vert \approx N(t_0)(\frac{1}{2}\alpha^2 dt^2 - \frac{1}{6}\alpha^3 dt^3), \\
+\bigtriangleup_i & = \vert N^{1}_{exact} - N^{1}_{implicit} \vert \approx N(t_0)(\frac{1}{2}\alpha^2 dt^2 - \frac{5}{6}\alpha^3 dt^3),
+\end{align}
+which implies that
+ 
+\begin{equation}
+\bigtriangleup_e - \bigtriangleup_i \approx N(t_0)\frac{2}{3}\alpha^3 dt^3 > 0.
+\end{equation}
+
+In such a way, we see that the error introduced by the explicit solution in one timestep is larger than that introduced by the implicit solution by the quantity of order $\mathcal{O}(dt^3)$.
 
 
-Let's go back now to the equations \ref{eq:spring}. As we have proved, that forward Euler is unstable for this case, it is a natural move to test, what is the outcome of the backwards Euler.
+Let us now go back to the equations \ref{eq:spring}. As we have proved, that forward Euler is unstable for this case, it is a natural move to test, what is the outcome of the backwards Euler.
 
 If applied to \ref{eq:spring},
 \begin{align}
@@ -1032,9 +1074,7 @@ and finally:
 \end{pmatrix}.
 \end{align}
 
-You see that things got a little more complicated - we had to make a little effort to express $y^{n+1}=(x^{n+1}\;\; v^{n+1})$ in terms of $y^{n}=(x^{n}\;\; v^{n})$, and we will, obviously, have to implement iverse of a matrix, but at least we are lucky that the right-hand side of \ref{eq:spring} does not contain explicit dependance on $t$.
-
-So, let's implement implicit Euler in a code:
+Let's implement implicit Euler in a code:
 
 ```python
 # We have to redefine time parameters
@@ -1093,26 +1133,62 @@ for axis in ax:
     axis.legend(loc='upper center')
 ```
 
-As we see, implicit Euler, obviously, does not blow up, but the solution damps quickly, which is the consequence of the total error being accumulated after $N$ timesteps.
+As we see, implicit Euler, obviously, does not blow up, but the solution damps quickly, which is the consequence of the numerical error being accumulated after $N$ timesteps.
+
+Though, we've got a proof thatm while explicit Euler is never stable for the given problem, implicit Euler does have a region of stability. Let's define it. 
+
+We are solving the problem, which can be formally written as follows:
+\begin{equation}
+y^{n+1} = \sigma y^{n} = \sigma^n y^{0}.
+\label{eq:generic}
+\end{equation}
+
+In the case of implicit Euler it is obvious that:
+\begin{equation}
+\sigma = (1-\lambda dt)^{-1} = (1-\lambda_r dt - i\lambda_i dt)^{-1}.
+\label{eq:back_stab_sigma}
+\end{equation}
+
+The denominator of \ref{eq:back_stab_sigma} is a complex number, and each complex number can be rewritten in a trigonometric form:
+\begin{equation}
+\sigma = \frac{A}{e^{i\phi}},
+\end{equation}
+
+where $A = 1/r = ((1-\lambda_r dt)^2 + \lambda_i^2 dt^2)^{-1/2}$. 
+
+If we estimate the absolute value of $\sigma$ then, we have:
+\begin{equation}
+\vert \sigma \vert = \frac{A}{\vert e^{i\phi} \vert} = A.
+\end{equation}
+
+Therefore, for stability it is required that
+\begin{equation}
+A \le 1 \Leftrightarrow (1-\lambda_r dt)^2 + \lambda_i^2 dt^2 \ge 1.
+\label{eq:back_stab}
+\end{equation}
+
+Condition \ref{eq:back_stab} implies that the region of stability of implicit Euler is *outside* of a circle of radius 1 with a center at $\lambda_r dt=1$ and $\lambda_r dt=0$, which is, obviously, an infinite domain.
+
+Still, in literature you may encounter the statement that *the implicit Euler scheme is unconditionally stable* for the linear autonomous homogeneous problems, like the one we have considered. You might think that there is a contradiction, but in fact, when stating so, people usually imply that $\lambda_r \le 0$, so that, the equation \ref{eq:generic} only admits decaying solutions.
 
 
 ## Summary
 
-In this notebook we have described the forward and the backwards Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
+In this notebook we have described the forward and the backward Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
 
-We gave the estimates for the accuracies of the forward and backwards Euler for the model problems, and introduced the concept of stability of the numerical scheme. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing the discretized equations.
+We gave the estimated for the accuracy of the Euler method, and introduced the concept of stability of the numerical scheme. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing the discretized equations.
 
-In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analysing partial differential equations later on in the course.
+In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analyzing partial differential equations later on in the course.
 
 
 ## Exercices
 
 
-**Exercise 1.** Write a Python code and perform the corresponding visualisation showing that for one time step, the forward Euler method is indeed of second order accuracy. 
+**Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second order accuracy. 
 
-**Exercise 2.** In the case of the body in free fall, compare the solution obtained with the forward Euler and the backwards schemes to the exact solution. Check again that both methods are of first-order accuracy for a finite time interval.
+**Exercise 2.** For the case of the body in free fall prove graphically, that both explicit and implicit Euler methods are of first-order accuracy for a finite time interval.
 
-**Exercise 3.** Find and plot the regions of stability for both methods for the problem of a body in free fall.
+**Exercise 3.** Display in the same plot regions of stability for the explicit and implicit Euler methods for the problem of a body in fre fall.
 
 ```python
 

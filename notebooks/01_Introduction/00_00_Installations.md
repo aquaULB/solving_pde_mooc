@@ -38,7 +38,7 @@ If you're on **MacOS or Linux**, the .bashrc file on your machine must be update
 
 If you're on **Windows**, then, after opening START menu after installation, you'll be able to see *Anaconda prompt*. This application will start a terminal session with the containings of anaconda3/bin also globally accesible.
 
-In the case if `jupyter notebook` command is not recogmized after installation, refer to the <a name="troubleshooting1"> Troubleshooting section</a>.
+In the case if `jupyter notebook` command is not recogmized after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
 [3]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
 
@@ -86,9 +86,85 @@ In order to quit virtual environment, run:
 [3]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [4]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
+# Installing Git
+
+> [Git][5] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+
+This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know at the moment, is that due to Git, you can easily track the changes made to the project at different stages and compare all of them to each other; you can recover any older version of your project; after all, you can have separate *branches*, each of which stores different version of your project without any conflict between them.
+
+Before digging deeper into the Git toolkit, let's install it.
+
+Download of Git is OS-dependant.
+
+* If you're on Windows, you can download Git from the [official website][6] and install it with graphical installer. If, during installation, you choose all the default options, you will have git available in your Anaconda prompt.
+
+* If you're on MacOS, you have several [options][7]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
+
+  Homebrew package manager is very easy to use, and provides access to the plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
+
+  To install Homebrew, visit [official website][8], and then just run:
+
+      brew install git
+
+  Voilà, you are good to go.
+
+* If you are on Linux, you have even [more options][9]. We propose, you simply run
+
+      apt-get install git
+
+Check that Git is installed by running
+
+    git --version
+
+I am, for example, getting the following output:
+
+    git version 2.24.3 (Apple Git-128)
+
+Yeah, I need to update.
+
+Now let's duscus the basic concepts of Git. For the better understanding we encourage you to create a temporary empty directory. We will make it our first Git project. Let's call it *test_git*.
+
+So, we run:
+
+    mkdir test_git
+    cd test_git
+
+## Git repositories
+
+The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you, having Git installed, simply declare some directory containg your project a Git repository - initialize it. This actions creates a *local* Git repository, meaning that it only exist on your work machine.
+
+In order to initialize existing local directory as a Git repository, run:
+
+    git init
+
+You'll get the following output:
+
+    Initialized empty Git repository in /path/to/test_git/.git/
+
+As it is nicely explained in [here][10], once created, each local Git repo contains three abstract zones:
+
+* Working space
+
+  Includes all the components of your project in a current state.
+
+* Staging area
+
+  Imagine now you've introduced some modification to the state of your project, which is last one you saved. The files, which get modified, go to the staging area.
+
+* Commit area
+
+  Commiting your modification is a way to create a snapshot of the current, newly modified state of your project. Once you've commited your changes, the modified files go to the commit area.
+
+[5]: <https://git-scm.com> "Git"
+[6]: <https://git-scm.com/download/win> "Git Win Download"
+[7]: <https://git-scm.com/download/mac> "Git Mac Download"
+[8]: <https://brew.sh> "Homebrew"
+[9]: <https://git-scm.com/download/linux> "Git Linux Download"
+[10]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
+
 # Troubleshooting
 
-* [`jupyter notebook` command is not recognized](#troubleshooting1)
+* <a name="troubleshooting1"> `jupyter notebook` command is not recognized</a>
 
 It most surely happens, because `jupyter notebook` command is supposed to run binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
 

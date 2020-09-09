@@ -446,21 +446,105 @@ Let's implement it for the problem of a body in free fall described by \ref{eq:f
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
+```python
+g = 9.81  # ms^-2, gravitational constant
+h0 = 100. # m, initial height
+v0 = 0.   # ms^-1, initial speed
+
+ti = 0.   # s, initial time
+tf = 10.0 # s, final time at which to seek the solution
+dt = 0.5  # s, timestep
+```
+
+```python
+nt = int((tf-ti)/dt)
+
+# Create a numpy array to contain the
+# intermediate values of y, including
+# those at ti and tf, for both solution
+# predicted by explicit RK and implicit
+# RK.
+y = np.empty((nt+1, 4))
+
+# Store initial condition in y[0, :].
+y[0] = h0, v0, h0, v0
+
+# Create vector b.
+b = np.asarray([0., -g])
+
+# Create matrix L.
+L = np.asarray([[0., 1.], [0., 0.]])
+
+# Compute constant coefficient we need
+# to implement implicit RK.
+# numpy.eye returns a unity matrix in a
+# case when single int argument is passed.
+# This argument defines shape of a matrix.
+# There is a possibility to shift the dia-
+# gonal of numpy.eye matrix.
+#
+# For more info 
+# https://numpy.org/doc/stable/reference/generated/numpy.eye.html
+coef_k = np.linalg.inv(np.eye(2)-L*dt/4.)
+
+# Perform the time stepping according to
+# both explicit and implicit schemes in
+# on loop.
+for i in range(nt):
+    # Eplicit timestepping first. We advance the section
+    # of y, related to the explicit scheme solution - 
+    # first two columns.
+    y_star = y[i, :2] + 0.5*dt*(np.dot(L, y[i, :2])+b)
+    y[i+1, :2] = y[i, :2] + dt*(np.dot(L, y_star)+b)
+
+    # Implicit scheme timestepping.
+    k_1 = np.dot(coef_k, np.dot(L, y[i, 2:])+b)
+    k_2 = np.dot(coef_k, np.dot(L, (y[i, 2:]+k_1*dt/2.))+b)
+    y[i+1, 2:] = y[i, 2:] + 0.5*dt*(k_1+k_2)
+```
+
+```python
+t = np.arange(nt+1) * dt
+```
+
+```python
+fig, ax = plt.subplots(1, 2, figsize=(9, 4))
+
+ax[0].plot(t, y[:, 1], '--k', lw=0.8)
+ax[0].plot(t, y[:, 3], '-k', lw=0.8)
+
+ax[0].set_xlabel('$t$')
+ax[0].set_ylabel('$v$')
+ax[0].set_title('Speed vs time (m/s)')
+
+ax[1].plot(t, y[:, 0], '--k', lw=0.8)
+ax[1].plot(t, y[:, 2], '-k', lw=0.8)
+
+ax[1].set_xlabel('$t$')
+ax[1].set_ylabel('$h$')
+ax[1].set_title('Height vs time (m)')
+
+# Let us bind the axes to the relevant
+# interval.
+for axis in ax:
+    axis.set_xlim(t[0], t[-1])
+```
 
 ## Exercises
 
 
-**Exercise 1.** Prove analytically that the two stage Runge-Kutta scheme is not fourth-order accurate for one time step.
+**Exercise 1.** Prove analytically that the two stage (explicit) Runge-Kutta scheme is not fourth-order accurate for one time step.
 
 
-**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two stage Runge-Kutta scheme to the exact solution. Check that the method is second order for a finite time interval.
+**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second order for a finite time interval.
 
-**Exercise 3.** Solve the problem of a body in free fall using the RK4 method.
+**Exercise 3.** Solve the problem of a body in free fall using the explicit RK4 method.
 
-**Exercise 4.** Solve again the equation of the harmonic oscillator using the RK4 method and show that the solution is not blowing up (choose an appropraite time step).
+**Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropraite time step).
 
+**Exercise 5.**$^*$ Implement *Pareschi and Russo's two-stage 2nd order Diagonally Implicit Runge-Kutta method*. Relevant coefficients can be found on [Wikipedia][1].
 
-
+[1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 
 # References

@@ -50,7 +50,7 @@ However, our objective here is to obtain the above time evolution using a numeri
 
 ## The forward (explicit) Euler method
 
-The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the Euler method, which is actualluy a family of the numerical methods for ordinary differential equations. In order to introduce several fundamental concepts that will pop up frequently in the rest of course, we refer to the *forward (or explicit) Euler method*. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
+The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the Euler method, which is actualluy a family of the numerical methods for ordinary differential equations. In order to introduce several fundamental concepts that will pop up frequently in the rest of the course, we refer to the *forward (or explicit) Euler method*. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
@@ -1135,7 +1135,7 @@ for axis in ax:
 
 As we see, implicit Euler, obviously, does not blow up, but the solution damps quickly, which is the consequence of the numerical error being accumulated after $N$ timesteps.
 
-Though, we've got a proof thatm while explicit Euler is never stable for the given problem, implicit Euler does have a region of stability. Let's define it. 
+Though, we've got a proof, that while explicit Euler is never stable for the given problem, implicit Euler does have a region of stability. Let's define it. 
 
 We are solving the problem, which can be formally written as follows:
 \begin{equation}
@@ -1163,7 +1163,7 @@ If we estimate the absolute value of $\sigma$ then, we have:
 
 Therefore, for stability it is required that
 \begin{equation}
-A \le 1 \Leftrightarrow (1-\lambda_r dt)^2 + \lambda_i^2 dt^2 \ge 1.
+A \le 1 \Rightarrow (1-\lambda_r dt)^2 + \lambda_i^2 dt^2 \ge 1.
 \label{eq:back_stab}
 \end{equation}
 

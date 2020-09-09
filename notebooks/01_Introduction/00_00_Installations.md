@@ -32,8 +32,13 @@ Installation instructions are provided on the official [website][2], and are qui
 
 After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
 
-First, let's figure out, how we start Jupyter Notebook through terminal. Normally, if you just type
-`jupyter notebook` in command line, Jupyter Notebook should start running. In the case if it doesn't run refer to the [Troubleshooting section](#troubleshooting).
+First, let's figure out, how we start Jupyter Notebook through terminal.
+
+If you're on **MacOS or Linux**, the .bashrc file on your machine must be updated with a path to anaconda3/bin during the installation, so that each time you start new terminal session, all the containings of anaconda3/bin are globally accesible. It means, that if you just type `jupyter notebook` in command line, Jupyter Notebook should start running.
+
+If you're on **Windows**, then, after opening START menu after installation, you'll be able to see *Anaconda prompt*. This application will start a terminal session with the containings of anaconda3/bin also globally accesible.
+
+In the case if `jupyter notebook` command is not recogmized after installation, refer to the <a name="troubleshooting1"> Troubleshooting section</a>.
 
 [3]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
 
@@ -74,12 +79,16 @@ We propose that you create a conda environment for the present course, and start
 
 Now we are ready to go - we have a virtual environment, which includes all necessary Python packages, and we even activated extended support for LaTeX for our notebooks.
 
+In order to quit virtual environment, run:
+
+        conda deactivate
+
 [3]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [4]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
-# <a name="troubleshooting"> Troubleshooting </a>
+# Troubleshooting
 
-* `jupyter notebook` command is not recognized
+* [`jupyter notebook` command is not recognized](#troubleshooting1)
 
 It most surely happens, because `jupyter notebook` command is supposed to run binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
 

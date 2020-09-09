@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the previous notebook we have considered the forward and the backwards Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the timestep.
+In the previous notebook we have considered the forward and the backward Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the time step.
 
 Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
 
@@ -42,7 +42,7 @@ where $y$ and $f$ are vector valued functions.
 The forward Euler method is defined through:
 
 \begin{align}
-    & y^{n+1} \equiv y^n + f(t,y^n) dt & (\textrm{Forward Euler method}) \label{eq:ForwardEuler3},
+    & y^{n+1} \equiv y^n + f(t^n,y^n) dt & (\textrm{Forward Euler method}) \label{eq:ForwardEuler3},
 \end{align}
 
 with all the intermediate times denoted $t^n = t+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
@@ -51,7 +51,7 @@ Graphically, we see that $y^{n+1}$ is evaluated using the value $y^n$ and the sl
 
 <img src="../figures/Euler.png" align="center" width="500">
 
-Runge-Kutta schemes increase the accuracy of the estimated value $y^{n+1}$ by introducing intermediate instants between $t^n$ and $t^{n+1}$, at which the derivative of $y$ is evaluated and by making use of this information.
+Runge-Kutta schemes increase the accuracy of the estimated value $y^{n+1}$ by introducing intermediate times between $t^n$ and $t^{n+1}$, at which the derivative of $y$ is evaluated and by making use of this information.
 
 The following two stage Runge-Kutta method is the simplest of such schemes. Graphically, this scheme is defined as follows:
 
@@ -61,7 +61,7 @@ so that,
 
 \begin{align}
     y^* = y^n +\frac{dt}{2}f(t^n, y^n) \\
-    y^{n+1} = y^n + dt f(t+\frac{dt}{2},y^*) \label{RK2ynp1}
+    y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*) \label{RK2ynp1}
 \end{align}
 
 
@@ -73,7 +73,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second o
          & = y^n + dt y^{'n} + \frac{dt^2}{2}y^{''n} + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves, that the two-stage Runge-Kutta method is third-order for one time step, and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher order accuracy). 
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher order accuracy). 
 
 
 Let us now discuss the stability of this two-stage Runge-Kutta method for a general autonomous linear system of differential equations. As usual, we may diagonalize the system defined through the matrix $f$ and write:
@@ -93,18 +93,18 @@ Using the two-stage Runge-Kutta scheme, we then have,
 All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as long, as the following relation is satisified for all the eigenvalues $\lambda_k$:
 
 \begin{equation}
-    \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} \vert < 1.
+    \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} \vert \leq 1.
 \end{equation}
 
 <!-- #region -->
-Let us apply the Runge-Kutta scheme to the problem of a body in free fall. We recover the system of differential equations:
+Let us apply the Runge-Kutta scheme to the problem of a body in free fall. The system of differential equations reads:
 
 \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
     & \displaystyle \frac{dv}{dt}=-g. 
 \end{cases}
 
-We rephrase it in a matrix form:
+Rephrasing it in matrix form we get:
 
 \begin{align}
 \frac{d}{dt}
@@ -146,7 +146,7 @@ L=
 \end{pmatrix}.
 \end{align}
 
-As $L$ and $b$ are constant, if we apply two-stage Runge-Kutta scheme to \ref{eq:free_fall}, we get:
+As $L$ and $b$ are constant, the two-stage Runge-Kutta scheme applied to \ref{eq:free_fall} becomes:
 1. $\displaystyle y^* = y^n + \frac{dt}{2} (Ly^n+b),$
 2. $\displaystyle y^{n+1} = y^n + dt(Ly^*+b).$
 
@@ -171,7 +171,7 @@ nt = int((tf-ti)/dt)
 # those at ti and tf.
 y = np.empty((nt+1, 2))
 
-# Store initial condition in y[0, :].
+# Store initial condition in y[0].
 y[0] = h0, v0
 
 # Create vector b.
@@ -187,8 +187,7 @@ for i in range(nt):
 ```
 
 ```python
-# We store the time interval data in
-# the array.
+# array for the time interval data
 t = np.arange(nt+1) * dt
 ```
 
@@ -197,13 +196,13 @@ We visualize the solution:
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-ax[0].plot(t, y[:, 1], '-k', lw=0.8)
+ax[0].plot(t, y[:, 1])
 
 ax[0].set_xlabel('$t$')
 ax[0].set_ylabel('$v$')
 ax[0].set_title('Speed vs time (m/s)')
 
-ax[1].plot(t, y[:, 0], '-k', lw=0.8)
+ax[1].plot(t, y[:, 0])
 
 ax[1].set_xlabel('$t$')
 ax[1].set_ylabel('$h$')
@@ -215,7 +214,7 @@ for axis in ax:
     axis.set_xlim(t[0], t[-1])
 ```
 
-In exercise 2, we ask to check the accuracy of your solution.
+In exercise 2, we ask you to check the accuracy of your solution.
 
 
 ## General Runge-Kutta schemes
@@ -235,10 +234,10 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
 
-The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way of obtaining order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
 > Above this, very little is known \cite{Butcher1996}.
 
-Therefore, here we focus our attention on a general purpose **fourth-order Runge-Kutta scheme**, that is accurate and stable enough for all the problems we consider in the rest of this course (from now on we call it **RK4**). It was introduced in 1901 by W. Kutta and reads \cite{Kutta1901}:
+Therefore, we focus here our attention on a general purpose **fourth-order Runge-Kutta scheme**, that is accurate and stable enough for all the problems we consider in the rest of this course (from now on we call it **RK4**). It was introduced in 1901 by W. Kutta and reads \cite{Kutta1901}:
 
 \begin{align}
     y^{n+1} & = y^n + \frac16 k_1 + \frac13(k_2 + k_3) + \frac16 k_4 \nonumber \\
@@ -256,19 +255,19 @@ For an autonomous linear system, it is straightforward to prove that this method
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to the fourth order.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to the fourth order. For a non-linear system, one can also prove that RK4 is fourth-order but it is a tedious task.
 
-In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long, as all the eigenvalues of the operator $f$ satisfy,
+In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
 
 \begin{equation}
-    \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} + \frac{\lambda_k^3 dt^3}{6} + \frac{\lambda_k^4 dt^4}{24}\vert < 1.
+    \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} + \frac{\lambda_k^3 dt^3}{6} + \frac{\lambda_k^4 dt^4}{24}\vert \leq 1.
 \end{equation}
 
 In the following plot, we compare the regions of stability for the various schemes we have already discussed.
 
 ```python
-# As before, we will refer x-axis to
-# lambda_i*dt and y-axis to lambda_r*dt.
+# As before, the x-axis corresponds to
+# lambda_i*dt and the y-axis to lambda_r*dt.
 # We set the resolution along x and y
 # (in points per the whole 1D domain).
 nx = 100
@@ -278,8 +277,8 @@ ny = 100
 ```python
 # We create numpy arrays, which store the
 # x-points and the y-points.
-# numpy.linspace is another way to create
-# numpy array for the sequence of numbers
+# numpy.linspace is another way to create a
+# numpy array for a sequence of numbers
 # in some range, alternatively to numpy.arange.
 # We must pass starting and end points to
 # the linspace function. Unlike the arange
@@ -339,11 +338,11 @@ norm4 = np.real(sigma4*sigma4.conj())
 ```python
 fig, ax = plt.subplots(figsize=(8,8))
 
-# We shall now have use of
+# We shall now use the
 # matplotlib.pyplot.contour funtion.
-# As X and Y, we pass the mesh data. Sup-
-# pose now a function f(x, y)=g(x, y) + C,
-# where C is some constant. Imagine now, 
+# As X and Y, we pass the mesh data. Let 
+# f(x, y)=g(x, y) + C be some function
+# where C is a constant. Imagine
 # we want to plot contour lines for the
 # set of integer values of C=0,-1,-2,-3,...
 # They will be described by equations
@@ -358,19 +357,18 @@ fig, ax = plt.subplots(figsize=(8,8))
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contour.html
 #
 # matplotlib.pyplot.contour provides us
-# exactly the tool we want, as out condi-
-# tion ofr stability is given by the expression
-# of the kind f(x, y) < 1. The only thing we 
-# have to do, is to demand from contour fun-
-# ction to display o n l y that contour line
+# exactly the tool we want, as our condi-
+# tion for stability is given by an expression
+# of the kind f(x, y) <= 1. The only thing we 
+# have to do is to display o n l y that contour line
 # which corresponds to C=-1.
 #
 # When passing certain levels to the contour
-# function, the datatype must be either single
-# integer, or the sequence of integers (list,
+# function, the datatype must be either a single
+# integer, or a sequence of integers (list,
 # tuple, numpy.ndarray...). When contours at
-# certain levels are of interest, then it must
-# be an array-like.
+# certain levels are of interest, then we must
+# use an array-like object.
 ax.contour(X, Y, norm1, levels=[1], colors='r')
 ax.contour(X, Y, norm2, levels=[1], colors='b')
 ax.contour(X, Y, norm4, levels=[1], colors='g')
@@ -422,19 +420,19 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 ## Implicit Runge-Kutta schemes
 
 
-We have discussed, that the explicit Runge-Kutta schemes can be quite complicated, as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher order of accuracy $p$. We will give a very brief introduction into the subject, so that you have an impression.
+We have discussed that explicit Runge-Kutta schemes become quite complicated as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher order of accuracy $p$. We will give a very brief introduction into the subject, so that you get an impression.
 
-Generally speaking, RK methods can be defined s follows:
+Generally speaking, RK methods can be defined as follows:
 
 \begin{align}
 & y^{n+1} = y^n + dt\sum_{i}^{s} b_i k_i,\nonumber\\
 & k_i = f(t^n + c_i dt, y^n + dt\sum_{j=1}^h a_{ij} k_j).
 \end{align}
 
-For explicit RK methods $h=s-1$, while for the implicit RK methods $h=s$. It means, that for each $k_i$ we would have to solve equation $k_i=f(k_1, k_2,\dots,k_i)$.
+For explicit RK methods one has $h=s-1$. This implies that any $k_i$ can be computed explicitely from the knowledge of the previously computed $k_j$ with $j<i$. For implicit RK methods, we have $h=s$. It mean, that for each $k_i$ we have to solve an implicit equation $k_i=f(k_1, k_2,\dots,k_i)$. We pay a price in terms of complexity (we have to invert some matrix or iteratively found a solution to the previous equation). However, implicit RK methods have better stability properties compared to explicit ones and can therefore be used for a larger set of problems.
 
 
-Let us consider some relatively simple implicit RK scheme - we went on [Wikipedia][1] and picked one named *Qin and Zhang's two-stage second-order* implicit method. It reads:
+As an example, let us consider some relatively simple implicit RK scheme - we went on [Wikipedia][1] and picked one named *Qin and Zhang's two-stage second-order* implicit method. It reads:
 
 \begin{align}
 y^{n+1} &= y^n + \frac{1}{2}(k_1 + k_2),\nonumber \\
@@ -442,7 +440,7 @@ k_1 &= f(t^n+\frac{dt}{4}, y^n+\frac{dt}{4}k_1),\nonumber \\
 k_2 &= f(t^n+\frac{3}{4}dt, y^n+dt(\frac{1}{2}k_1+\frac{1}{4}k_2)).
 \end{align}
 
-Let's implement it for the problem of a body in free fall described by \ref{eq:free_fall}.
+Let's implement it for the problem of a body in free fall described by \ref{eq:free_fall}. Make sure you understand the part devoted to the implicit scheme...
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
@@ -459,15 +457,14 @@ dt = 0.5  # s, timestep
 ```python
 nt = int((tf-ti)/dt)
 
-# Create a numpy array to contain the
-# intermediate values of y, including
-# those at ti and tf, for both solution
-# predicted by explicit RK and implicit
-# RK.
-y = np.empty((nt+1, 4))
+# Create numpy arrays to contain the
+# intermediate values of y
+y_exp = np.empty((nt+1, 2)) # Explicit RK2
+y_imp = np.empty((nt+1, 2)) # Implicit RK2
 
 # Store initial condition in y[0, :].
-y[0] = h0, v0, h0, v0
+y_exp[0] = h0, v0
+y_imp[0] = h0, v0
 
 # Create vector b.
 b = np.asarray([0., -g])
@@ -475,32 +472,29 @@ b = np.asarray([0., -g])
 # Create matrix L.
 L = np.asarray([[0., 1.], [0., 0.]])
 
-# Compute constant coefficient we need
-# to implement implicit RK.
-# numpy.eye returns a unity matrix in a
-# case when single int argument is passed.
-# This argument defines shape of a matrix.
+# Compute the constant matrix needed in
+# the implement implicit RK scheme.
+# numpy.eye returns a unity matrix.
+# The argument defines the shape of the matrix.
 # There is a possibility to shift the dia-
-# gonal of numpy.eye matrix.
+# gonal if needed.
 #
 # For more info 
 # https://numpy.org/doc/stable/reference/generated/numpy.eye.html
-coef_k = np.linalg.inv(np.eye(2)-L*dt/4.)
+mat_k = np.linalg.inv(np.eye(2)-L*dt/4.)
 
 # Perform the time stepping according to
 # both explicit and implicit schemes in
-# on loop.
+# one loop.
 for i in range(nt):
-    # Eplicit timestepping first. We advance the section
-    # of y, related to the explicit scheme solution - 
-    # first two columns.
-    y_star = y[i, :2] + 0.5*dt*(np.dot(L, y[i, :2])+b)
-    y[i+1, :2] = y[i, :2] + dt*(np.dot(L, y_star)+b)
+    # Explicit time stepping
+    y_star = y_exp[i] + 0.5*dt*(np.dot(L, y_exp[i])+b)
+    y_exp[i+1] = y_exp[i] + dt*(np.dot(L, y_star)+b)
 
     # Implicit scheme timestepping.
-    k_1 = np.dot(coef_k, np.dot(L, y[i, 2:])+b)
-    k_2 = np.dot(coef_k, np.dot(L, (y[i, 2:]+k_1*dt/2.))+b)
-    y[i+1, 2:] = y[i, 2:] + 0.5*dt*(k_1+k_2)
+    k_1 = np.dot(mat_k, np.dot(L, y_imp[i])+b)
+    k_2 = np.dot(mat_k, np.dot(L, y_imp[i]+k_1*dt/2.)+b)
+    y_imp[i+1] = y_imp[i] + 0.5*dt*(k_1+k_2)
 ```
 
 ```python
@@ -510,15 +504,15 @@ t = np.arange(nt+1) * dt
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-ax[0].plot(t, y[:, 1], '--k', lw=0.8)
-ax[0].plot(t, y[:, 3], '-k', lw=0.8)
+ax[0].plot(t, y_exp[:, 0], '--')
+ax[0].plot(t, y_imp[:, 0], '-')
 
 ax[0].set_xlabel('$t$')
 ax[0].set_ylabel('$v$')
 ax[0].set_title('Speed vs time (m/s)')
 
-ax[1].plot(t, y[:, 0], '--k', lw=0.8)
-ax[1].plot(t, y[:, 2], '-k', lw=0.8)
+ax[1].plot(t, y_exp[:, 1], '--')
+ax[1].plot(t, y_imp[:, 1], '-')
 
 ax[1].set_xlabel('$t$')
 ax[1].set_ylabel('$h$')
@@ -536,13 +530,13 @@ for axis in ax:
 **Exercise 1.** Prove analytically that the two stage (explicit) Runge-Kutta scheme is not fourth-order accurate for one time step.
 
 
-**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second order for a finite time interval.
+**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second order accurate for a finite time interval.
 
 **Exercise 3.** Solve the problem of a body in free fall using the explicit RK4 method.
 
-**Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropraite time step).
+**Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropriate time step).
 
-**Exercise 5.**$^*$ Implement *Pareschi and Russo's two-stage 2nd order Diagonally Implicit Runge-Kutta method*. Relevant coefficients can be found on [Wikipedia][1].
+**Exercise 5.** Implement *Pareschi and Russo's two-stage 2nd order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 

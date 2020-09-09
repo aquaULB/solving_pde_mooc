@@ -6,15 +6,29 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: Python 3
     language: python
     name: python3
 ---
 
-# Installing Anaconda
+# Contents
 
+* [Get to know Anaconda](#GetToKnowAnaconda)
+  * [Installing Anaconda](#InstallingAnaconda)
+  * [Setting conda environment](#SettingEnv)
+* [Get to know Git](#GetToKnowGit)
+  * Installing Git
+  * Basic usage
+    * Git repositories
+      * Creating local Git repository
+      * Creating remote Git repository
+* Troubleshooting
+
+# <a name="GetToKnowAnaconda"> Get to know Anaconda </a>
+
+## <a name="InstallingAnaconda"> Installing Anaconda </a>
 
 > [Anaconda][1] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
@@ -43,7 +57,7 @@ In the case if `jupyter notebook` command is not recogmized after installation, 
 [3]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
 
 
-# Setting conda environment
+## <a name="SettingEnv"> Setting conda environment </a>
 
 
 > A [conda environment][3] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
@@ -86,7 +100,9 @@ In order to quit virtual environment, run:
 [3]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [4]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
-# Installing Git
+# <a name="GetToKnowGit"> Get to know Git </a>
+
+## Installing Git
 
 > [Git][5] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
@@ -94,17 +110,29 @@ This description might be hard to comprehend at the moment, but you will learn b
 
 Before digging deeper into the Git toolkit, let's install it.
 
-Download of Git is OS-dependant.
+Downloading Git is OS-dependant.
 
 * If you're on Windows, you can download Git from the [official website][6] and install it with graphical installer. If, during installation, you choose all the default options, you will have git available in your Anaconda prompt.
 
-* If you're on MacOS, you have several [options][7]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
+* If you're on MacOS
 
-  Homebrew package manager is very easy to use, and provides access to the plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
+    * 10.9 Mavericks or later
 
-  To install Homebrew, visit [official website][8], and then just run:
+      Simply run
 
-      brew install git
+          git --version
+
+      and it will launch the download and installation.
+
+    * Before 10.9 Mavericks
+
+      You have several [options][7]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
+
+        Homebrew package manager is very easy to use, and provides access to the plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
+
+        To install Homebrew, visit [official website][8], and then just run:
+
+            brew install git
 
   Voilà, you are good to go.
 
@@ -120,7 +148,7 @@ I am, for example, getting the following output:
 
     git version 2.24.3 (Apple Git-128)
 
-Yeah, I need to update.
+## Basic usage
 
 Now let's duscus the basic concepts of Git. For the better understanding we encourage you to create a temporary empty directory. We will make it our first Git project. Let's call it *test_git*.
 
@@ -129,9 +157,11 @@ So, we run:
     mkdir test_git
     cd test_git
 
-## Git repositories
+### Git repositories
 
 The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you, having Git installed, simply declare some directory containg your project a Git repository - initialize it. This actions creates a *local* Git repository, meaning that it only exist on your work machine.
+
+#### Creating local Git repository
 
 In order to initialize existing local directory as a Git repository, run:
 
@@ -155,12 +185,45 @@ As it is nicely explained in [here][10], once created, each local Git repo conta
 
   Commiting your modification is a way to create a snapshot of the current, newly modified state of your project. Once you've commited your changes, the modified files go to the commit area.
 
+Let's add a README.md file to our repo. If you're on MacOS/Linux:
+
+    vi README.md
+
+If you're on Windows:
+
+    type nul > README.md
+
+Now let's learn how to create commits. First, you tell what are the files you want to commit:
+
+    git add README.md
+
+If you run
+
+    git add *
+
+then all files, which are in a staging area, will be added for the further commit. It is not a very clean way to go, as you might commit the files, which get updated at each compilation, and don't need to be tracked, like those stored in .ipynb_checkpoints directory, or object files with extension .o, etc.
+
+We are ready to commit. Each commit has to be supplemented with a message:
+
+    git commit -m "First commit"
+
+#### Creating remote Git repository
+
+> To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][11] are versions of your project that are hosted on the Internet or network somewhere.
+
+Another reason to keep your data in a remote repo is for the sake of safety. If your computer gets broken, stolen, you accidentally remove the project's folder, then you loose all the local data. But if you kept it in a remote repo and updated it regularly, then you recover your whole progress from any other machine.
+
+There are different services which allow to create and manage remote Git repository. Throughout the course we will use GitHub.com. It is easy to use and free. Generally speaking, GitHub is a Git repository hosting service. Let's create our first remote repo on GitHub.
+
+If you don't have GitHub account, you will have to go to GitHub.com and create one.
+
 [5]: <https://git-scm.com> "Git"
 [6]: <https://git-scm.com/download/win> "Git Win Download"
 [7]: <https://git-scm.com/download/mac> "Git Mac Download"
 [8]: <https://brew.sh> "Homebrew"
 [9]: <https://git-scm.com/download/linux> "Git Linux Download"
 [10]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
+[11]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
 
 # Troubleshooting
 
@@ -187,3 +250,7 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
+
+```python
+
+```

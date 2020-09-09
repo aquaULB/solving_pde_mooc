@@ -1,3 +1,18 @@
+---
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.2'
+      jupytext_version: 1.5.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
 # Installing Anaconda
 
 
@@ -7,7 +22,7 @@ We will install Anaconda3, as it includes Python 3 - the latest stable version o
 
 This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and is also included in basic Anaconda edition.
 
-[1]: <https://docs.anaconda.com> "Anaconda0"
+[1]: <https://docs.anaconda.com> "Anaconda"
 
 
 Installation instructions are provided on the official [website][2], and are quite detailed. Click on this link and install the distribution on your work machine. This is a prerequisite to follow this course.
@@ -18,31 +33,7 @@ Installation instructions are provided on the official [website][2], and are qui
 After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
 
 First, let's figure out, how we start Jupyter Notebook through terminal. Normally, if you just type
-`jupyter notebook` in command line, Jupyter Notebook should open. But you might get an error like this:
-
-    zsh: command not found: jupyter notebook
-
-It happens, because the above command is supposed to run binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
-
-In order to be able to run Jupyter Notebook from any directory, we have to run the following command:
-
-    export PATH=/path/to/anaconda3/bin:$PATH
-
-But this will make the files from anaconda3/bin accesible only in the active terminal window. Once you terminate it, you will have to rerun above command for each new terminal session. The solution is to add the path to anaconda3/bin to your .bashrc file. 
-
-> The [.bashrc file][3] is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
-
-So that each time you start new terminal session, this commans will execute. To open .bashrc with in-terminal text editor you can type:
-
-    vi .bashrc
-
-Or, if you prefer different text editor, you can use it. 
-
-If .bashrc isn't there, it is possible that it has a different name - .zshrc, for example.
-
-Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
-
-Now `jupyter notebook` command should work.
+`jupyter notebook` in command line, Jupyter Notebook should start running. In the case if it doesn't run refer to the [Troubleshooting section](#troubleshooting).
 
 [3]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
 
@@ -70,13 +61,13 @@ We propose that you create a conda environment for the present course, and start
         conda install -c conda-forge jupytext jupyter_contrib_nbextensions
 
   Here `-c` refers to channel.
-  
+
   > [Conda channels][4] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
 
   conda-forge project provides a remote conda channel distributing conda packages, which you sometimes cannot find in conda `default` channel.
-  
+
   We install `jupytext` package, as it provides a possibility to save Jupyter Notebook as a simple Markdown file, and we also install `jupyter_contrib_nbextensions`, which contains collection of extension for Jupyter Notebook, in particular, support of LaTeX environments.
-  
+
 * Open Jupyter Notebook and activate necessary extensions.
 
 <img src="../figures/jupextensions.png">
@@ -86,6 +77,28 @@ Now we are ready to go - we have a virtual environment, which includes all neces
 [3]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [4]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
-```python
+# <a name="troubleshooting"> Troubleshooting </a>
 
-```
+* `jupyter notebook` command is not recognized
+
+It most surely happens, because `jupyter notebook` command is supposed to run binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
+
+In order to be able to run Jupyter Notebook from any directory, we have to run the following command:
+
+    export PATH=/path/to/anaconda3/bin:$PATH
+
+But this will make the files from anaconda3/bin accesible only in the active terminal window. Once you terminate it, you will have to rerun above command for each new terminal session. The solution is to add the path to anaconda3/bin to your .bashrc file.
+
+> The [.bashrc file][3] is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
+
+So that each time you start new terminal session, this commans will execute. To open .bashrc with in-terminal text editor you can type:
+
+    vi .bashrc
+
+Or, if you prefer different text editor, you can use it.
+
+If .bashrc isn't there, it is possible that it has a different name - .zshrc, for example.
+
+Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
+
+Now `jupyter notebook` command should work.

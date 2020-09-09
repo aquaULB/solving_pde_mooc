@@ -3,22 +3,22 @@
 
 > [Anaconda][1] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
-We will install Anaconda3, as it includes Python 3.7 - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
+We will install Anaconda3, as it includes Python 3 - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
 
-This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and also included in basic Anaconda edition.
+This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and is also included in basic Anaconda edition.
 
 [1]: <https://docs.anaconda.com> "Anaconda0"
 
 
-Installation instructions are provided on the official [website][2], and are quite detailed.
+Installation instructions are provided on the official [website][2], and are quite detailed. Click on this link and install the distribution on your work machine. This is a prerequisite to follow this course.
 
 [2]: <https://docs.anaconda.com/anaconda/install/> "Installation"
 
 
-After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
+After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
 
 First, let's figure out, how we start Jupyter Notebook through terminal. Normally, if you just type
-`jupyter notebook` in command line, Jupyter Notebook should open. But most probably if you try doing it right away, you'll get the similar error:
+`jupyter notebook` in command line, Jupyter Notebook should open. But you might get an error like this:
 
     zsh: command not found: jupyter notebook
 

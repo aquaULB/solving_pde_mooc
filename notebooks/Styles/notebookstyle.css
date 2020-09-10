@@ -2,7 +2,7 @@
 <link href='http://fonts.googleapis.com/css?family=Arvo:400,700,400italic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Nixie+One' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 <style>
 
@@ -57,7 +57,7 @@ div.text_cell_render{
 
 /* Formatting for header cells */
 .text_cell_render h1 {
-    font-family: 'Nixie One', serif;
+    font-family: 'Raleway', sans-serif;
     font-style:regular;
     font-weight: 400;    
     font-size: 36pt;
@@ -69,7 +69,7 @@ div.text_cell_render{
 }
 
 .text_cell_render h2 {
-    font-family: 'Nixie One', serif;
+    font-family: 'Raleway', sans-serif;
     font-weight: 400;
     font-size: 24pt;
     line-height: 100%;
@@ -80,10 +80,10 @@ div.text_cell_render{
 }	
 
 .text_cell_render h3 {
-    font-family: 'Nixie One', serif;
+    font-family: 'Raleway', sans-serif;
     margin-top:16px;
     font-size: 20pt;
-    font-weight: 600;
+    font-weight: 400;
     margin-bottom: 3px;
     font-style: regular;
     color: rgb(102,102,0);

@@ -56,15 +56,6 @@ in this chapter we describe the most intuitive way of computing spatial derivati
 - Fourier transform
 - Chebyshev discretisation
 
-
-
-
-
-## Python and why Python
-
-All the pieces of code written in this course are written in Python. However, we try to make the required prior knowledge of Python as little as possible and the reader is only expected to have a basic knowledge of any programming language and be familiar with concepts like variables, loops, conditional statements, functions etc. In fact, we also design the course in such a way that it can be viewed as a tutorial of Python's numerical tools like numpy, matplotlib, scipy to name of few. Each time we need a new Python functionality, we try to thoroughly document it so that the reader needs no prior knowledge of the different packages but rather learns to use them when progressing through the notebooks.
-
-
 <!-- #endregion -->
 
 ```python

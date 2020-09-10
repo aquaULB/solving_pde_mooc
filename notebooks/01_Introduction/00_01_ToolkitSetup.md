@@ -15,16 +15,22 @@ jupyter:
 
 # Contents
 
-* [Get to know Anaconda](#GetToKnowAnaconda)
-  * [Installing Anaconda](#InstallingAnaconda)
-  * [Setting conda environment](#SettingEnv)
-* [Get to know Git](#GetToKnowGit)
-  * Installing Git
-  * Basic usage
-    * Git repositories
-      * Creating local Git repository
-      * Creating remote Git repository
-* Troubleshooting
+- [Contents](#contents)
+  - [Python and why Python](#python-and-why-python)
+- [<a name="GetToKnowAnaconda"> Get to know Anaconda </a>](#-get-to-know-anaconda-)
+  - [<a name="InstallingAnaconda"> Installing Anaconda </a>](#-installing-anaconda-)
+  - [<a name="SettingEnv"> Setting conda environment </a>](#-setting-conda-environment-)
+- [<a name="GetToKnowGit"> Get to know Git </a>](#-get-to-know-git-)
+  - [Installing Git](#installing-git)
+  - [Basic usage](#basic-usage)
+    - [Git repositories](#git-repositories)
+      - [Creating local Git repository](#creating-local-git-repository)
+      - [Creating remote Git repository](#creating-remote-git-repository)
+- [Troubleshooting](#troubleshooting)
+
+## Python and why Python
+
+All the pieces of code written in this course are written in Python. However, we try to make the required prior knowledge of Python as little as possible and the reader is only expected to have a basic knowledge of any programming language and be familiar with concepts like variables, loops, conditional statements, functions etc. In fact, we also design the course in such a way that it can be viewed as a tutorial of Python's numerical tools like numpy, matplotlib, scipy to name of few. Each time we need a new Python functionality, we try to thoroughly document it so that the reader needs no prior knowledge of the different packages but rather learns to use them when progressing through the notebooks.
 
 # <a name="GetToKnowAnaconda"> Get to know Anaconda </a>
 

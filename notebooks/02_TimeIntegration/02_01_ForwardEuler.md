@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: Python 3
     language: python
@@ -706,7 +706,7 @@ ax[1].set_ylabel('$h$')
 ax[1].set_title('Height vs time (m)')
 ```
 
-In the above plots we have explicitely changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel to edit any style files according to your taste !
+In the above plots we have explicitely changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style files according to your taste !
 
 
 ### Numerical stability of the forward Euler method revisited
@@ -958,7 +958,7 @@ fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot(t, Nexact, label='Exact solution')
 
 ax.plot(t, N[:, 0], '^', color='green', label='Forward Euler method')
-ax.plot(t, N[:, 1], '^', color='blue', label='Backward Euler method')
+ax.plot(t, N[:, 1], '^', color=(1., 0., 0.), label='Backward Euler method')
 
 ax.set_xlim(t[0]-0.1, t[-1]+0.1)
 
@@ -1003,6 +1003,8 @@ N^{n+1} = N^n \left[ 1 - \alpha dt + \alpha^2 dt^2 - \alpha^3 dt^3 + \dots \righ
 \end{equation}
 
 In our example, the difference between the explicit and implicit Euler schemes becomes obvious: as expected for second-order methods, they only match up to $O(dt)$. The visual difference between the two approximations in the above figure results from the use of a large $dt$. 
+
+In Exercise 3, we ask you to compare the error for the explicit Euler scheme and the implicit Euler scheme compared to the exact solution and decide which methid is more accurate in this case.
 
 From \ref{eq:exact_taylor}, \ref{eq:forw} and \ref{eq:exact_back}, we can also estimate quantitavely the errors introduced by the explicit and implicit methods.
 

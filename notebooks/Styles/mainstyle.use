@@ -1,11 +1,8 @@
 # latex
-text.usetex : True
-font.family  : serif
-font.sans-serif: "Computer Modern Roman"
 font.size    : 18.0
 # lines and markers
 lines.markersize : 8
-lines.linewidth : 2
+lines.linewidth : 1
 
 #lines.color     : C0   ## has no affect on plot(); see axes.prop_cycle
 #lines.markerfacecolor : auto  ## the default marker face color

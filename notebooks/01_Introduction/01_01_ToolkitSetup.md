@@ -36,7 +36,17 @@ Why do we choose Python?
 
 > [Python][00] is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java.
 
+Let's talk **pros & cons** of Python.
 
+**Pros:**
+* *Simple and elegant syntax*, making Python easy to learn and Python codes - easy to read.
+* *Interactive mode provided by IPython and Jupyter* makes debugging very easy.
+* *Large standard library* providing diverse functionaluty.
+* *Flexible in terms of integration with other programming languges* (C, C++, Java etc.).
+* *Free and open-source*, where the latest means that it can been freely redistributed.
+* *Availability of packages providing powerfool tools for scientific computatations, such as NumPy and SciPy*, which is of great importance to us.
+
+**Cons:**
 
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 

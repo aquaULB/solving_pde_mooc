@@ -15,6 +15,7 @@ jupyter:
 
 # Contents
 
+* [Python and why Python](#Python)
 * [Get to know Anaconda](#GetToKnowAnaconda)
   * [Installing Anaconda](#InstallingAnaconda)
   * [Setting conda environment](#SettingEnv)
@@ -27,27 +28,27 @@ jupyter:
     * [Git branches](#GitBranch)
 * [Troubleshooting](#Troubleshoot)
 
-## Python and why Python
+## <a name="Python"> Python and why Python </a>
 
-All the pieces of code written in this course are written in Python. However, we try to make the required prior knowledge of Python as little as possible and the reader is only expected to have a basic knowledge of any programming language and be familiar with concepts like variables, loops, conditional statements, functions etc. In fact, we also design the course in such a way that it can be viewed as a tutorial of Python's numerical tools like numpy, matplotlib, scipy to name of few. Each time we need a new Python functionality, we try to thoroughly document it so that the reader needs no prior knowledge of the different packages but rather learns to use them when progressing through the notebooks.
+All the pieces of code written in this course are written in Python 3. However, we try to make the required prior knowledge of Python as little as possible, and the reader is only expected to have a basic knowledge of any programming language and be familiar with concepts like variables, loops, conditional statements, functions etc. In fact, we also design the course in such a way that it can be viewed as a tutorial about Python numerical tools provided by numpy, matplotlib, scipy to name of few. Each time we need a new Python functionality, we try to thoroughly document it, so that the reader needs no prior knowledge of the different packages but rather learns to use them when progressing through the notebooks.
+
+Why do we choose Python?
+
+> [Python][00] is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java.
+
+[00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 
 # <a name="GetToKnowAnaconda"> Get to know Anaconda </a>
 
 ## <a name="InstallingAnaconda"> Installing Anaconda </a>
 
-> [Anaconda][1] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
+> [Anaconda][10] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
 We will install Anaconda3, as it includes Python 3 - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
 
 This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and is also included in basic Anaconda edition.
 
-[1]: <https://docs.anaconda.com> "Anaconda"
-
-
-Installation instructions are provided on the official [website][2], and are quite detailed. Click on this link and install the distribution on your work machine. This is a prerequisite to follow this course.
-
-[2]: <https://docs.anaconda.com/anaconda/install/> "Installation"
-
+Installation instructions are provided on the official [website][11], and are quite detailed. Click on this link and install the distribution on your work machine. This is a prerequisite to follow this course.
 
 After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
 
@@ -59,13 +60,10 @@ If you're on **Windows**, then, after opening START menu after installation, you
 
 In the case if `jupyter notebook` command is not recogmized after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
-[3]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
-
-
 ## <a name="SettingEnv"> Setting conda environment </a>
 
 
-> A [conda environment][3] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
+> A [conda environment][12] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
 We propose that you create a conda environment for the present course, and start with installing an additional component in this environment, so that you'll have all necessary tools in an isolated space, and also learn about conda environments.
 
@@ -86,7 +84,7 @@ We propose that you create a conda environment for the present course, and start
 
   Here `-c` refers to channel.
 
-  > [Conda channels][4] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
+  > [Conda channels][13] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
 
   conda-forge project provides a remote conda channel distributing conda packages, which you sometimes cannot find in conda `default` channel.
 
@@ -102,14 +100,16 @@ In order to quit virtual environment, run:
 
         conda deactivate
 
-[3]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
-[4]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
+[10]: <https://docs.anaconda.com> "Anaconda"
+[11]: <https://docs.anaconda.com/anaconda/install/> "Installation"
+[12]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
+[13]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
 # <a name="GetToKnowGit"> Get to know Git </a>
 
 ## <a name="InstallingGit"> Installing Git </a>
 
-> [Git][5] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+> [Git][20] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
 This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know at the moment, is that due to Git, you can easily track the changes made to the project at different stages and compare all of them to each other; you can recover any older version of your project; after all, you can have separate *branches*, each of which stores different version of your project without any conflict between them.
 
@@ -117,7 +117,7 @@ Before digging deeper into the Git toolkit, let's install it.
 
 Downloading Git is OS-dependant.
 
-* If you're on Windows, you can download Git from the [official website][6] and install it with graphical installer. If, during installation, you choose all the default options, you will have git available in your Anaconda prompt.
+* If you're on Windows, you can download Git from the [official website][21] and install it with graphical installer. If, during installation, you choose all the default options, you will have git available in your Anaconda prompt.
 
 * If you're on MacOS
 
@@ -131,17 +131,17 @@ Downloading Git is OS-dependant.
 
     * Before 10.9 Mavericks
 
-      You have several [options][7]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
+      You have several [options][22]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
 
         Homebrew package manager is very easy to use, and provides access to the plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
 
-        To install Homebrew, visit [official website][8], and then just run:
+        To install Homebrew, visit [official website][23], and then just run:
 
             brew install git
 
   Voilà, you are good to go.
 
-* If you are on Linux, you have even [more options][9]. We propose, you simply run
+* If you are on Linux, you have even [more options][24]. We propose, you simply run
 
       apt-get install git
 
@@ -176,7 +176,7 @@ You'll get the following output:
 
     Initialized empty Git repository in /path/to/test_git/.git/
 
-As it is nicely explained in [here][10], once created, each local Git repo contains three abstract zones:
+As it is nicely explained in [here][25], once created, each local Git repo contains three abstract zones:
 
 * Working space
 
@@ -214,7 +214,7 @@ We are ready to commit. Each commit has to be supplemented with a message:
 
 #### <a name="GitRemRepo"> Creating remote Git repository </a>
 
-> To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][11] are versions of your project that are hosted on the Internet or network somewhere.
+> To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][26] are versions of your project that are hosted on the Internet or network somewhere.
 
 Another reason to keep your data in a remote repo is for the sake of safety. If your computer gets broken, stolen, you accidentally remove the project's folder, then you loose all the local data. But if you kept it in a remote repo and updated it regularly, then you recover your whole progress from any other machine.
 
@@ -269,13 +269,13 @@ Argument `-u` (equivalent to `--set-upstream`) means that we want our local bran
 
 > Git branches are effectively a pointer to a snapshot of your changes. When you want to add a new feature or fix a bug—no matter how big or how small—you spawn a new branch to encapsulate your changes. This makes it harder for unstable code to get merged into the main code base, and it gives you the chance to clean up your future's history before merging it into the main branch.
 
-[5]: <https://git-scm.com> "Git"
-[6]: <https://git-scm.com/download/win> "Git Win Download"
-[7]: <https://git-scm.com/download/mac> "Git Mac Download"
-[8]: <https://brew.sh> "Homebrew"
-[9]: <https://git-scm.com/download/linux> "Git Linux Download"
-[10]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
-[11]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
+[20]: <https://git-scm.com> "Git"
+[21]: <https://git-scm.com/download/win> "Git Win Download"
+[22]: <https://git-scm.com/download/mac> "Git Mac Download"
+[23]: <https://brew.sh> "Homebrew"
+[24]: <https://git-scm.com/download/linux> "Git Linux Download"
+[25]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
+[26]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
 
 # <a name="Troubleshoot"> Troubleshooting </a>
 
@@ -289,7 +289,7 @@ In order to be able to run Jupyter Notebook from any directory, we have to run t
 
 But this will make the files from anaconda3/bin accesible only in the active terminal window. Once you terminate it, you will have to rerun above command for each new terminal session. The solution is to add the path to anaconda3/bin to your .bashrc file.
 
-> The [.bashrc file][3] is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
+> The [.bashrc file][30] is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
 
 So that each time you start new terminal session, this commans will execute. To open .bashrc with in-terminal text editor you can type:
 
@@ -302,3 +302,5 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
+
+[30]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"

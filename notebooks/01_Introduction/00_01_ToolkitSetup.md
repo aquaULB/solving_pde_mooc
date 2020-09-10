@@ -15,18 +15,17 @@ jupyter:
 
 # Contents
 
-- [Contents](#contents)
-  - [Python and why Python](#python-and-why-python)
-- [<a name="GetToKnowAnaconda"> Get to know Anaconda </a>](#-get-to-know-anaconda-)
-  - [<a name="InstallingAnaconda"> Installing Anaconda </a>](#-installing-anaconda-)
-  - [<a name="SettingEnv"> Setting conda environment </a>](#-setting-conda-environment-)
-- [<a name="GetToKnowGit"> Get to know Git </a>](#-get-to-know-git-)
-  - [Installing Git](#installing-git)
-  - [Basic usage](#basic-usage)
-    - [Git repositories](#git-repositories)
-      - [Creating local Git repository](#creating-local-git-repository)
-      - [Creating remote Git repository](#creating-remote-git-repository)
-- [Troubleshooting](#troubleshooting)
+* [Get to know Anaconda](#GetToKnowAnaconda)
+  * [Installing Anaconda](#InstallingAnaconda)
+  * [Setting conda environment](#SettingEnv)
+* [Get to know Git](#GetToKnowGit)
+  * [Installing Git](#InstallingGit)
+  * [Basic usage](#BasicUsage)
+    * [Git repositories](#GitRepo)
+      * [Creating local Git repository](#GitLocRepo)
+      * [Creating remote Git repository](#GitRemRepo)
+    * [Git branches](#GitBranch)
+* [Troubleshooting](#Troubleshoot)
 
 ## Python and why Python
 
@@ -108,7 +107,7 @@ In order to quit virtual environment, run:
 
 # <a name="GetToKnowGit"> Get to know Git </a>
 
-## Installing Git
+## <a name="InstallingGit"> Installing Git </a>
 
 > [Git][5] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
@@ -154,7 +153,7 @@ I am, for example, getting the following output:
 
     git version 2.24.3 (Apple Git-128)
 
-## Basic usage
+## <a name="BasicUsage"> Basic usage </a>
 
 Now let's duscus the basic concepts of Git. For the better understanding we encourage you to create a temporary empty directory. We will make it our first Git project. Let's call it *test_git*.
 
@@ -163,11 +162,11 @@ So, we run:
     mkdir test_git
     cd test_git
 
-### Git repositories
+### <a name="GitRepo"> Git repositories </a>
 
 The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you, having Git installed, simply declare some directory containg your project a Git repository - initialize it. This actions creates a *local* Git repository, meaning that it only exist on your work machine.
 
-#### Creating local Git repository
+#### <a name="GitLocRepo"> Creating local Git repository </a>
 
 In order to initialize existing local directory as a Git repository, run:
 
@@ -213,7 +212,7 @@ We are ready to commit. Each commit has to be supplemented with a message:
 
     git commit -m "First commit"
 
-#### Creating remote Git repository
+#### <a name="GitRemRepo"> Creating remote Git repository </a>
 
 > To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][11] are versions of your project that are hosted on the Internet or network somewhere.
 
@@ -221,7 +220,54 @@ Another reason to keep your data in a remote repo is for the sake of safety. If 
 
 There are different services which allow to create and manage remote Git repository. Throughout the course we will use GitHub.com. It is easy to use and free. Generally speaking, GitHub is a Git repository hosting service. Let's create our first remote repo on GitHub.
 
-If you don't have GitHub account, you will have to go to GitHub.com and create one.
+If you don't have GitHub account, you will have to go to GitHub.com and create one. GitHub has its graphical interface providing you a possibility to download files to the repository, create branches, see changes in the latest commit etc. For some purposes GitHub interface might be quite convenient, but we advice you against uploading files via GitHub. It would make the whole idea of Git meaningless, and ultimately lead you to storing multiple versions of your project at the same time. We suggest you learn, how to update your project over time and keep control over the evolutionary tree of all the changes you make.
+
+In order to create new GitHub repository, click on *New*:
+<img src="../figures/CreateRepo.png">
+
+Choose name for your repository and set some description. You can make it either public - so that anyone will be able to see it - or private - only the ones you invite as collaborators will be able to see it. Click on *Create repository*.
+<img src="../figures/CreateRepoSet.png">
+
+Then you will actually see a small tutorial from GitHub, how you can connect your newly created remote repo to the local one.
+
+To see, what are the current remote repositories tracked from your local repository, run
+
+    git remote
+
+Of course, this command will output nothing, as we have not yet added any remotes.
+
+Copy url of your remote repo. Make sure you've chosen HTTPS format, especially if you have never used SSH.
+<img src="../figures/CopyURL.png">
+
+Now go back to the terminal window and type:
+
+    git remote add origin https://github.com/YelyzavetaV/test_git.git
+
+If you then run
+
+    git remote
+
+It'll output `origin`, which is the name we've assigned to our remote.
+
+Now you should be able to run
+
+    git push -u origin master
+
+The normal output is:
+
+    Enumerating objects: 3, done.
+    Counting objects: 100% (3/3), done.
+    Writing objects: 100% (3/3), 224 bytes | 224.00 KiB/s, done.
+    Total 3 (delta 0), reused 0 (delta 0)
+    To https://github.com/YelyzavetaV/test_git.git
+    * [new branch]      master -> master
+    Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+Argument `-u` (equivalent to `--set-upstream`) means that we want our local branch to track remote branch `master`.
+
+### <a name="GitBranch"> Git branches </a>
+
+> Git branches are effectively a pointer to a snapshot of your changes. When you want to add a new feature or fix a bug—no matter how big or how small—you spawn a new branch to encapsulate your changes. This makes it harder for unstable code to get merged into the main code base, and it gives you the chance to clean up your future's history before merging it into the main branch.
 
 [5]: <https://git-scm.com> "Git"
 [6]: <https://git-scm.com/download/win> "Git Win Download"
@@ -231,7 +277,7 @@ If you don't have GitHub account, you will have to go to GitHub.com and create o
 [10]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
 [11]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
 
-# Troubleshooting
+# <a name="Troubleshoot"> Troubleshooting </a>
 
 * <a name="troubleshooting1"> `jupyter notebook` command is not recognized</a>
 
@@ -256,7 +302,3 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
-
-```python
-
-```

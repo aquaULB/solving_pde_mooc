@@ -36,6 +36,8 @@ Why do we choose Python?
 
 > [Python][00] is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java.
 
+
+
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 
 # <a name="GetToKnowAnaconda"> Get to know Anaconda </a>

@@ -971,56 +971,7 @@ ax.set_title('Radioactive decay')
 ax.legend()
 ```
 
-Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Eventhough they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. Let's further analyse the accuracy of the two methods.
-
-The explicit evolution of the exact solution during one time step is the following:
-\begin{equation}
-N^{n+1} = N^n e^{-\alpha dt}.
-\end{equation}
-
-If expanded into Taylor series, it reads:
-\begin{equation}
-N^{n+1} = N^n \left[ 1 - \alpha dt + \frac{1}{2}\alpha^2 dt^2 - \frac{1}{6}\alpha^3 dt^3 + \dots \right].
-\label{eq:exact_taylor}
-\end{equation}
-
-By definition, the evolution using the explicit Euler method is:
-\begin{equation}
-N^{n+1} = N^n ( 1 - \alpha dt),
-\label{eq:forw}
-\end{equation}
-
-Now what about the backward Euler? We have shown that (by definition), the solution is advanced in the following way:
-\begin{equation}
-N^{n+1} = N^n (1+\alpha dt)^{-1}.
-\label{eq:back}
-\end{equation}
-
-This expression can be expanded into Taylor series as follows:
-\begin{equation}
-N^{n+1} = N^n \left[ 1 - \alpha dt + \alpha^2 dt^2 - \alpha^3 dt^3 + \dots \right].
-\label{eq:exact_back}
-\end{equation}
-
-In our example, the difference between the explicit and implicit Euler schemes becomes obvious: as expected for second-order methods, they only match up to $O(dt)$. The visual difference between the two approximations in the above figure results from the use of a large $dt$. 
-
-In Exercise 3, we ask you to compare the error for the explicit Euler scheme and the implicit Euler scheme compared to the exact solution and decide which methid is more accurate in this case.
-
-From \ref{eq:exact_taylor}, \ref{eq:forw} and \ref{eq:exact_back}, we can also estimate quantitavely the errors introduced by the explicit and implicit methods.
-
-Let $\bigtriangleup_e$ and $\bigtriangleup_i$ be the (absolute) errors introduced by the explicit and the implicit solutions in the first time step, respectively. While $\displaystyle \alpha dt \le \frac{3}{5}$, 
-we can write:
-\begin{align}
-\bigtriangleup_e & = \vert N^{1}_{exact} - N^{1}_{explicit} \vert \approx N(t_0)(\frac{1}{2}\alpha^2 dt^2 - \frac{1}{6}\alpha^3 dt^3), \\
-\bigtriangleup_i & = \vert N^{1}_{exact} - N^{1}_{implicit} \vert \approx N(t_0)(\frac{1}{2}\alpha^2 dt^2 - \frac{5}{6}\alpha^3 dt^3),
-\end{align}
-which implies that
- 
-\begin{equation}
-\bigtriangleup_e - \bigtriangleup_i \approx N(t_0)\frac{2}{3}\alpha^3 dt^3 > 0.
-\end{equation}
-
-We see that the error introduced by the explicit solution in one time step is larger than that introduced by the implicit solution by a quantity of order $\mathcal{O}(dt^3)$.
+Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Eventhough they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.
 
 
 Let us now go back to the equation \ref{eq:spring}. We have proved that the forward Euler method is unstable for this case. Let us now check what happens with the backward Euler method.
@@ -1192,8 +1143,4 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 **Exercise 2.** For the case of the body in free fall prove graphically, that both explicit and implicit Euler methods are first-order accurate for a finite time interval.
 
-**Exercise 3.** Display in the same plot the regions of stability for the explicit and implicit Euler methods for the problem of a body in free fall.
-
-```python
-
-```
+<a name="exc3">**Exercise 3.** </a> For the problem of radioactive decay, given that $\displaystyle \alpha dt \le \frac{3}{5}$, explain why the error for the first timestep attributed to the forward Euler scheme is larger, than that attributed to the backward Euler scheme.

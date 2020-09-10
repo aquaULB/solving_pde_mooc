@@ -14,10 +14,9 @@ jupyter:
 ---
 
 <!-- #region -->
+<h1 style="text-align: center"> Numerical methods for partial differential equations</h1>
 
-<p style="text-align: center; font-size: 24pt;  "> Numerical methods for partial differential equations</p>
-
-<p style="text-align: center; font-size:18pt;  "> Bernard Knaepen & Yelyzaveta Velizhanina</p>
+<h1 style="text-align: center; font-size:18pt;  "> Bernard Knaepen & Yelyzaveta Velizhanina</h1>
 </br>
 </br>
 </br>
@@ -72,7 +71,3 @@ The numerical resolution of PDEs obviously requires the use of a programming lan
 
 
 <!-- #endregion -->
-
-```python
-
-```

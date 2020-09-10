@@ -439,7 +439,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 [8]: <https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str> "Python strings"
 
 
-# Exercises
+## Exercises
 
 
 Some exercises' prefixes are links, click on them to see what part of text they refer to.

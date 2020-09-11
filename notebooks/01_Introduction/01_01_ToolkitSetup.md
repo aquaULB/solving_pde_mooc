@@ -80,9 +80,9 @@ Let's talk **pros & cons** of Python.
   
 While we've named the only disadvantage of Python, it makes Python not-worth-to-use in situations, when the running speed of the program becomes crucial - for example, when doing large-scale simulations. 
 
-So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. It is, in fact, a very important decision to take - does my choice of the programming language applies in this particular case, or not?
+So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. It is, in fact, a very important decision to take - is my choice of the programming language reasonable in this particular case, or not?
 
-But for us Python is a perfect tool. While we are solving *small* problems in terms of computer resources, we are good. Moreover, it is highly probable, that *we are not any slower than we'd be if we've chosen C*, as the development time, when programming, in Python decreases significantly.
+But for us Python is a perfect tool. While we are solving *small* problems in terms of computer resources, we are good. Moreover, it is highly probable, that *we are not any slower than we'd be if we've chosen a C-based language*, as the development time, when programming, in Python decreases significantly.
 
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [01]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
@@ -110,7 +110,6 @@ If you're on **Windows**, then, after opening START menu after installation, you
 In the case if `jupyter notebook` command is not recogmized after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
 ### Setting conda environment
-
 
 > A [conda environment][12] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
@@ -198,7 +197,7 @@ Check that Git is installed by running
 
     git --version
 
-I am, for example, getting the following output:
+Output example:
 
     git version 2.24.3 (Apple Git-128)
 
@@ -302,7 +301,7 @@ Now you should be able to run
 
     git push -u origin master
 
-The normal output is:
+The normal output would look as follows:
 
     Enumerating objects: 3, done.
     Counting objects: 100% (3/3), done.

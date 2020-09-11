@@ -18,15 +18,17 @@ jupyter:
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
 <h1 style="text-align: center">Numerical methods for partial differential equations</h1>
-<h1 style="text-align: center; font-size:18pt;  ">Bernard Knaepen & Yelyzaveta Velizhanina</h1>
+<h1 style="text-align: center; font-size:18pt;  ">by Bernard Knaepen & Yelyzaveta Velizhanina</h1>
 
 
 <h2 class="nocount">Contents</h2>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Philosophy-of-the-course" data-toc-modified-id="Philosophy-of-the-course-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Philosophy of the course</a></span></li><li><span><a href="#Outline" data-toc-modified-id="Outline-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Outline</a></span></li><li><span><a href="#Tools" data-toc-modified-id="Tools-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Tools</a></span></li></ul></div>
+
+1. [Philosophy of the course](#Philosophy-of-the-course)
+2. [Outline](#Outline)
+3. [Tools](#Tools)
 
 
-<h2 id="Introduction">Introduction</h2>
-<h2 id="Philosophy-of-the-course">Philosophy of the course</h2>
+## Philosophy of the course
 
 
 Numerous scientific problems can only be addressed through modeling and computer analysis. This stems from the fact that a lot of these problems are complex and we cannot solve the corresponding models using only pen-and-paper.
@@ -34,7 +36,7 @@ Numerous scientific problems can only be addressed through modeling and computer
 Many models appearing in engineering or physical applications are mathematically described by partial differential equations (PDEs) and the aim of this course is to provide a practical introduction to the relevant tools to solve them using computer algortihms. By practical we mean that we will not develop the theory behind PDEs and also avoid complex mathematical derivations of the numerical methods we describe below. Although these are beautiful subjects, they are often characterized by a steep learning curve and our objective is to get our hands on solving real problems as quickly as possible. In some places we nevertheless provide some mathematical background about the techniques we describe because they cannot be properly understood otherwise. In each case, we try to keep things simple and written in such a way that the corresponding section may be skipped at first reading.
 
 
-<h2 id="Outline">Outline</h2>
+## Outline
 
 
 By the end of the course, the student should have acquired the necessary skills to solve numerically equations such as the heat equation or Schrödinger's equation:  

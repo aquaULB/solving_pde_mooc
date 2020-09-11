@@ -13,22 +13,30 @@ jupyter:
     name: python3
 ---
 
-# Contents
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+<h1 style="text-align: center">Toolkit Setup</h1>
 
-* [Python and why Python](#Python)
-* [Get to know Anaconda](#GetToKnowAnaconda)
-  * [Installing Anaconda](#InstallingAnaconda)
-  * [Setting conda environment](#SettingEnv)
-* [Get to know Git](#GetToKnowGit)
-  * [Installing Git](#InstallingGit)
-  * [Basic usage](#BasicUsage)
-    * [Git repositories](#GitRepo)
-      * [Creating local Git repository](#GitLocRepo)
-      * [Creating remote Git repository](#GitRemRepo)
-    * [Git branches](#GitBranch)
-* [Troubleshooting](#Troubleshoot)
 
-## <a name="Python"> Python and why Python </a>
+<h2 class="nocount">Contents</h2>
+
+1. [Python and why Python](#Python-and-why-Python)
+2. [Get to know Anaconda](#Get-to-know-Anaconda)
+    1. [Installing Anaconda](#Installing-Anaconda)    
+    2. [Setting conda environment](#Setting-conda-environment)
+3. [Get to know Git](#Get-to-know-Git)
+    1. [Installing Git](#Installing-Git)   
+    2. [Basic usage](#Basic-usage)   
+        1. [Git repositories](#Git-repositories)
+            * [Creating local Git repository](#Creating-local-Git-repository)
+            * [Creating remote Git repository](#Creating-remote-Git-repository)
+        2. [Git branches](#Git-branches)
+4. [Troubleshooting](#Troubleshooting)
+
+
+## Python and why Python
 
 All the pieces of code written in this course are written in Python 3. However, we try to make the required prior knowledge of Python as little as possible, and the reader is only expected to have a basic knowledge of any programming language and be familiar with concepts like variables, loops, conditional statements, functions etc. In fact, we also design the course in such a way that it can be viewed as a tutorial about Python numerical tools provided by numpy, matplotlib, scipy to name of few. Each time we need a new Python functionality, we try to thoroughly document it, so that the reader needs no prior knowledge of the different packages but rather learns to use them when progressing through the notebooks.
 
@@ -39,20 +47,49 @@ Why do we choose Python?
 Let's talk **pros & cons** of Python.
 
 **Pros:**
-* *Simple and elegant syntax*, making Python easy to learn and Python codes - easy to read.
-* *Interactive mode provided by IPython and Jupyter* makes debugging very easy.
-* *Large standard library* providing diverse functionaluty.
-* *Flexible in terms of integration with other programming languges* (C, C++, Java etc.).
-* *Free and open-source*, where the latest means that it can been freely redistributed.
-* *Availability of packages providing powerfool tools for scientific computatations, such as NumPy and SciPy*, which is of great importance to us.
+
+* *Simple and elegant syntax*
+
+  Makes Python easy to learn and Python codes - easy to read.
+  
+* *Interactive mode provided by IPython and Jupyter*
+
+  Makes debugging very easy.
+  
+* *Large standard library*
+
+  provides diverse functionality.
+
+* *Flexible...*
+
+  ...in terms of integration with other programming languges (C, C++, Java etc.).
+
+* *Free and open-source*
+
+  It means, that Python can been freely used, modified and redistributed.
+  
+* *Wide range of additional packages* 
+
+  We are particularly interested in those, providing tools for scientific programming (NumPy, SciPy).
 
 **Cons:**
 
+* *Python is speed-limited*
+
+  Python is an [*interpreted*][01] language and cannot compete in speed with [*compiled*][01] languages, such as C.
+  
+While we've named the only disadvantage of Python, it makes Python not-worth-to-use in situations, when the running speed of the program becomes crucial - for example, when doing large-scale simulations. 
+
+So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. It is, in fact, a very important decision to take - does my choice of the programming language applies in this particular case, or not?
+
+But for us Python is a perfect tool. While we are solving *small* problems in terms of computer resources, we are good. Moreover, it is highly probable, that *we are not any slower than we'd be if we've chosen C*, as the development time, when programming, in Python decreases significantly.
+
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
+[01]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
 
-# <a name="GetToKnowAnaconda"> Get to know Anaconda </a>
+## Get to know Anaconda
 
-## <a name="InstallingAnaconda"> Installing Anaconda </a>
+### Installing Anaconda
 
 > [Anaconda][10] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
@@ -72,7 +109,7 @@ If you're on **Windows**, then, after opening START menu after installation, you
 
 In the case if `jupyter notebook` command is not recogmized after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
-## <a name="SettingEnv"> Setting conda environment </a>
+### Setting conda environment
 
 
 > A [conda environment][12] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
@@ -117,9 +154,9 @@ In order to quit virtual environment, run:
 [12]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [13]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 
-# <a name="GetToKnowGit"> Get to know Git </a>
+## Get to know Git
 
-## <a name="InstallingGit"> Installing Git </a>
+### Installing Git
 
 > [Git][20] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
@@ -165,7 +202,7 @@ I am, for example, getting the following output:
 
     git version 2.24.3 (Apple Git-128)
 
-## <a name="BasicUsage"> Basic usage </a>
+### Basic usage
 
 Now let's duscus the basic concepts of Git. For the better understanding we encourage you to create a temporary empty directory. We will make it our first Git project. Let's call it *test_git*.
 
@@ -174,11 +211,11 @@ So, we run:
     mkdir test_git
     cd test_git
 
-### <a name="GitRepo"> Git repositories </a>
+#### Git repositories
 
 The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you, having Git installed, simply declare some directory containg your project a Git repository - initialize it. This actions creates a *local* Git repository, meaning that it only exist on your work machine.
 
-#### <a name="GitLocRepo"> Creating local Git repository </a>
+##### Creating local Git repository
 
 In order to initialize existing local directory as a Git repository, run:
 
@@ -224,7 +261,7 @@ We are ready to commit. Each commit has to be supplemented with a message:
 
     git commit -m "First commit"
 
-#### <a name="GitRemRepo"> Creating remote Git repository </a>
+##### Creating remote Git repository
 
 > To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][26] are versions of your project that are hosted on the Internet or network somewhere.
 
@@ -277,7 +314,7 @@ The normal output is:
 
 Argument `-u` (equivalent to `--set-upstream`) means that we want our local branch to track remote branch `master`.
 
-### <a name="GitBranch"> Git branches </a>
+#### Git branches
 
 > Git branches are effectively a pointer to a snapshot of your changes. When you want to add a new feature or fix a bug—no matter how big or how small—you spawn a new branch to encapsulate your changes. This makes it harder for unstable code to get merged into the main code base, and it gives you the chance to clean up your future's history before merging it into the main branch.
 
@@ -289,7 +326,7 @@ Argument `-u` (equivalent to `--set-upstream`) means that we want our local bran
 [25]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
 [26]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
 
-# <a name="Troubleshoot"> Troubleshooting </a>
+## Troubleshooting
 
 * <a name="troubleshooting1"> `jupyter notebook` command is not recognized</a>
 
@@ -316,3 +353,13 @@ Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To g
 Now `jupyter notebook` command should work.
 
 [30]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
+
+```python
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```
+
+```python
+
+```

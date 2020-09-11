@@ -3,27 +3,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 
-/**
-counter for the headers
-*/
+/**----------------------------------------
+                   COUNTERS
+-----------------------------------------*/
+/*         counter for the headers       */
 body {
-    counter-reset: h2counter;
+    counter-reset: h2counter h3counter h4counter;
 }
 h1 {
-    counter-reset: h2counter;
+    counter-reset: h2counter h3counter h4counter;
+}
+h2 {
+    counter-reset: h3counter;
 }
 h2:before {
-    content: counter(h2counter) ".\0000a0\0000a0";
+    content: counter(h2counter) "\0000a0\0000a0";
     counter-increment: h2counter;
-    counter-reset: h3counter;
 }
 h2.nocount:before {
     content: none;
     counter-increment: none;
 }
+h3 {
+    counter-reset: h4counter;
+}
 h3:before {
-    content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+    content: counter(h2counter) "." counter(h3counter) "\0000a0\0000a0";
     counter-increment: h3counter;
+}
+h4:before {
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) "\0000a0\0000a0";
+    counter-increment: h4counter;
+}
+
+/* counter for the nested numbered lists */
+ol {
+    counter-reset: item;
+}
+
+ol > li {
+    counter-increment: item;
+}
+
+ol ol > li {
+    display: block;
+}
+
+ol ol > li:before {
+    content: counters(item, ".") ". ";
 }
 
 @font-face {
@@ -92,40 +119,41 @@ formatting for header cells
     font-weight: 400;
     font-size: 24pt;
     line-height: 100%;
-    color: rgb(0,51,102);
     margin-bottom: 0.6em;
     margin-top: 0.8em;
+    color: rgb(0,51,102);
     display: block;
 }
 
 .text_cell_render h3 {
     font-family: 'Raleway', sans-serif;
-    margin-top:16px;
-    font-size: 20pt;
     font-weight: 400;
-    margin-bottom: 3px;
-    font-style: regular;
-    color: rgb(102,102,0);
+    font-size: 20pt;
+    line-height: 100%;
+    margin-bottom: 0.4em;
+    margin-top: 0.5em;
+    color: rgb(70, 14, 122);
 }
 
 .text_cell_render h4 {
     font-family: 'Raleway', sans-serif;
-    font-size: 14pt;
-    text-align: center;
-    margin-top: 0em;
-    margin-bottom: 2em;
-    font-style: regular;
+    font-weight: 400;
+    font-size: 18pt;
+    line-height: 100%;
+    margin-bottom: 0.4em;
+    margin-top: 0.5em;
+    color: rgb(151, 35, 180);
 }
 
 .text_cell_render h5 {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     font-size: 16pt;
-    color: rgb(163,0,0);
-    font-style: italic;
-    margin-bottom: .1em;
-    margin-top: 0.8em;
-    display: block;
+    line-height: 100%;
+    margin-bottom: 0.4em;
+    margin-top: 0.5em;
+    color: rgb(163, 29, 85);
+    font-style: normal;
 }
 
 .copyright {
@@ -138,7 +166,7 @@ formatting for header cells
     margin-top: 1px;
 }
 
-.text_cell_render p {
+.text_cell_render p, ol, ul {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     font-size: 12pt;

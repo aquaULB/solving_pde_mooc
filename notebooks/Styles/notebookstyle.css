@@ -128,7 +128,7 @@ formatting for header cells
     display: block;
 }
 
-.text_cell_render h6 {
+.copyright {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 9pt;
@@ -144,8 +144,8 @@ formatting for header cells
     font-size: 12pt;
     line-height: 100%;
     color: rgb(0, 0, 0);
-    margin-bottom: 1px;
-    margin-top: 1px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 /**

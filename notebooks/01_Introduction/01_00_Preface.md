@@ -13,10 +13,10 @@ jupyter:
     name: python3
 ---
 
-<h6 class="copyright" property="vk:rights">&copy;
+<div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
-</h6>
+</div>
 <h1 style="text-align: center">Numerical methods for partial differential equations</h1>
 <h1 style="text-align: center; font-size:18pt;  ">Bernard Knaepen & Yelyzaveta Velizhanina</h1>
 
@@ -37,7 +37,7 @@ Many models appearing in engineering or physical applications are mathematically
 <h2 id="Outline">Outline</h2>
 
 
-By the end of the course, the student should have acquired the necessary skills to solve numerically equations such as the heat equation or Schrödinger's equation:
+By the end of the course, the student should have acquired the necessary skills to solve numerically equations such as the heat equation or Schrödinger's equation:  
 
 \begin{align*}
 \frac{\partial T(\boldsymbol r,t)}{\partial t}  & = \alpha \Delta T(\boldsymbol r,t), &\hbox{Heat equation}\\
@@ -45,6 +45,7 @@ i\hbar \frac{\partial \Psi(\boldsymbol r,t)}{\partial t} & = \left[ \frac{-\hbar
 \end{align*}
 
 We don't further describing those equations here (it's not a problem if you have never heard about them), but we just emphasises that they both contain the laplacian operator
+
 \begin{equation*}
  \Delta = \frac{\partial^2}{\partial x^2}+ \frac{\partial^2}{\partial y^2}+ \frac{\partial^2}{\partial z^2}
 \end{equation*}
@@ -87,4 +88,8 @@ The numerical resolution of PDEs obviously requires the use of a programming lan
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
+```
+
+```python
+
 ```

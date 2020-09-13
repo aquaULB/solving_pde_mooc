@@ -78,7 +78,7 @@ Let's talk **pros & cons** of Python.
 
   Python is an [*interpreted*][01] language and cannot compete in speed with [*compiled*][01] languages, such as C.
   
-While we've named the only disadvantage of Python, it makes Python not-worth-to-use in situations, when the running speed of the program becomes crucial - for example, when doing large-scale simulations. 
+While we've named the only disadvantage of Python, it makes Python not-worth-to-use in situations, when the running speed of the program becomes crucial - for example, when doing large-scale simulations, or developing the core engine of a game.
 
 So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. It is, in fact, a very important decision to take - is my choice of the programming language reasonable in this particular case, or not?
 
@@ -93,7 +93,7 @@ But for us Python is a perfect tool. While we are solving *small* problems in te
 
 > [Anaconda][10] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
-We will install Anaconda3, as it includes Python 3 - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
+We will install Anaconda3, as it includes Python 3.x - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
 
 This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and is also included in basic Anaconda edition.
 
@@ -103,17 +103,17 @@ After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaco
 
 First, let's figure out, how we start Jupyter Notebook through terminal.
 
-If you're on **MacOS or Linux**, the .bashrc file on your machine must be updated with a path to anaconda3/bin during the installation, so that each time you start new terminal session, all the containings of anaconda3/bin are globally accesible. It means, that if you just type `jupyter notebook` in command line, Jupyter Notebook should start running.
+If you're on **MacOS or Linux**, the [.bashrc file][12] on your machine must be updated with a path to anaconda3/bin during the installation, so that each time you start new terminal session, all the containings of anaconda3/bin are globally accesible. It means, that if you just type `jupyter notebook` in command line, Jupyter Notebook should start running.
 
 If you're on **Windows**, then, after opening START menu after installation, you'll be able to see *Anaconda prompt*. This application will start a terminal session with the containings of anaconda3/bin also globally accesible.
 
-In the case if `jupyter notebook` command is not recogmized after installation, refer to the [Troubleshooting section](#troubleshooting1).
+In the case if `jupyter notebook` command is not recognized after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
 ### Setting conda environment
 
-> A [conda environment][12] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
+> A [conda environment][13] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
-We propose that you create a conda environment for the present course, and start with installing an additional component in this environment, so that you'll have all necessary tools in an isolated space, and also learn about conda environments.
+We propose that you create a conda virtual environment for the present course, and start with installing an additional component in this environment, so that you'll have all necessary tools in an isolated space, and also learn about conda environments.
 
 * First, create an environment with a specific version of Python
 
@@ -132,7 +132,7 @@ We propose that you create a conda environment for the present course, and start
 
   Here `-c` refers to channel.
 
-  > [Conda channels][13] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
+  > [Conda channels][14] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
 
   conda-forge project provides a remote conda channel distributing conda packages, which you sometimes cannot find in conda `default` channel.
 
@@ -144,14 +144,19 @@ We propose that you create a conda environment for the present course, and start
 
 Now we are ready to go - we have a virtual environment, which includes all necessary Python packages, and we even activated extended support for LaTeX for our notebooks.
 
+In case you're wondering what is LaTeX,
+> [LaTeX][15] is a high-quality typesetting system; it includes features designed for the production of technical and scientific documentation. LaTeX is the de facto standard for the communication and publication of scientific documents. LaTeX is available as free software.
+
 In order to quit virtual environment, run:
 
         conda deactivate
 
 [10]: <https://docs.anaconda.com> "Anaconda"
 [11]: <https://docs.anaconda.com/anaconda/install/> "Installation"
-[12]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
-[13]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
+[12]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
+[13]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
+[14]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
+[15]: <https://www.latex-project.org> "LaTeX"
 
 ## Get to know Git
 
@@ -159,7 +164,7 @@ In order to quit virtual environment, run:
 
 > [Git][20] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
-This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know at the moment, is that due to Git, you can easily track the changes made to the project at different stages and compare all of them to each other; you can recover any older version of your project; after all, you can have separate *branches*, each of which stores different version of your project without any conflict between them.
+This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know right now, is that due to Git, you can easily track the changes made to the project at different stages and compare all of them to each other; you can recover any older version of your project; after all, you can have separate *branches*, each of which stores different version of your project without any conflict between them.
 
 Before digging deeper into the Git toolkit, let's install it.
 
@@ -317,6 +322,75 @@ Argument `-u` (equivalent to `--set-upstream`) means that we want our local bran
 
 > Git branches are effectively a pointer to a snapshot of your changes. When you want to add a new feature or fix a bug—no matter how big or how small—you spawn a new branch to encapsulate your changes. This makes it harder for unstable code to get merged into the main code base, and it gives you the chance to clean up your future's history before merging it into the main branch.
 
+The very first default branch is called *master*. *Master* treaditionally serves as a branch where you keep latest, cleanest and the most stable version of your project. It is strongly advised, that you *don't ever upload temporal and test changes to your project to master*. The mormal way to go, is to create another branch from *master*, perfect the modifications you want to introduce, while being on the side branch, then *merge* this branch into master, and delete it afterwards. *Master* is something you have to be sure of is working. After all, whenever you want to share your work with other people, they should be confident, they'd access 100% reliable product through the master. 
+
+Let's learn, how we create branches. First, run:
+
+    git branch
+
+You'll get the following output:
+
+    * master
+
+As we said, you're on master. In order to switch between branches you would run `git checkout` with different arguments. Let's create a new one called `other_branch` (or whatever you want). We run:
+
+    git checkout -b other_branch
+
+Which produces the following output:
+
+    Switched to a new branch 'other_branch'
+
+Let us now create our first python script - a file "hello.py" with a following containings:
+
+    print('Hello world!')
+
+As you can guess, this command will output 'Hello world!' string. Ensure it yourself by running the script:
+
+    python3 hello.py
+
+Now we, while being on *other_branch* commit this update to the project and push it to our remote:
+
+    git add hello.py
+    git commit -m "Hello world script"
+    git push
+    
+The last command should output the error message:
+
+    fatal: The current branch other_branch has no upstream branch.
+    To push the current branch and set the remote as upstream, use
+
+        git push --set-upstream origin other_branch
+        
+This is expected. You have realize, there is a difference between local and remote branches. When creating remote repo, we have actually [manually set remote branch *master* to track local branch *master*](#notice)\*. Git hints us that we are supposed to do the same for the *other_branch*, so we run:
+
+    git push -u origin other_branch
+
+Now it worked. If we go back to the master branch, we'll see that our Python script is not there. 
+
+    git checkout master
+
+On Unix:
+
+    ls
+
+On Windows:
+
+    dir
+
+So, we have actually separated two differen versions of our project into two branches. But let's say we are confident, that out *other_branch* has been perfected, and we want to see modifications it introduces on *master*. We merge:
+
+    git merge other_branch
+    
+Check the list of files on *master* now - you'll see 'hello.py' among them. We are free to delete *other_branch*:
+
+    git branch -d other_branch
+
+Kind of the output:
+
+    Deleted branch other_branch (was be3cca2).
+
+We have learnt the very basics of Git, now let's clean up, as we don't need to store remote *test_git anymore*. In the menu for your repo on GitHub.com click on *Settings*, scroll to the very bottom, and click on *Delete this repository*.
+
 [20]: <https://git-scm.com> "Git"
 [21]: <https://git-scm.com/download/win> "Git Win Download"
 [22]: <https://git-scm.com/download/mac> "Git Mac Download"
@@ -324,6 +398,8 @@ Argument `-u` (equivalent to `--set-upstream`) means that we want our local bran
 [24]: <https://git-scm.com/download/linux> "Git Linux Download"
 [25]: <https://www.educative.io/edpresso/what-is-git?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=Cj0KCQjw-uH6BRDQARIsAI3I-UdhHN9Z0GJzbOHJxNHWZH-F4atUOf6VG4914ZYxmiU0gajSGIjUH8QaAlNhEALw_wcB> "Basic Git Tutorial"
 [26]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
+
+<div class="notice">*<a name="notice">We advice, you always set the same names for the remote branch and the local branch, that is tracking this remote, until you're an experienced Git user, as the same name is required for pushing, but not necessary for pulling.</a></div>
 
 ## Troubleshooting
 
@@ -337,7 +413,7 @@ In order to be able to run Jupyter Notebook from any directory, we have to run t
 
 But this will make the files from anaconda3/bin accesible only in the active terminal window. Once you terminate it, you will have to rerun above command for each new terminal session. The solution is to add the path to anaconda3/bin to your .bashrc file.
 
-> The [.bashrc file][30] is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
+> The [.bashrc][12] file is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
 
 So that each time you start new terminal session, this commans will execute. To open .bashrc with in-terminal text editor you can type:
 
@@ -350,8 +426,6 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
-
-[30]: <https://www.journaldev.com/41479/bashrc-file-in-linux> "Bashrc"
 
 ```python
 from IPython.core.display import HTML

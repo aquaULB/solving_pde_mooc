@@ -156,6 +156,16 @@ formatting for header cells
     font-style: normal;
 }
 
+.text_cell_render p, ol, ul {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 12pt;
+    line-height: 100%;
+    color: rgb(0, 0, 0);
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .copyright {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
@@ -166,14 +176,14 @@ formatting for header cells
     margin-top: 1px;
 }
 
-.text_cell_render p, ol, ul {
+.notice {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
-    font-size: 12pt;
+    font-size: 8pt;
     line-height: 100%;
     color: rgb(0, 0, 0);
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 14px;
+    margin-top: 14px;
 }
 
 /**

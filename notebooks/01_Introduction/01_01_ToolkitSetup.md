@@ -416,7 +416,7 @@ We have learnt the very basics of Git, now let's clean up, as we don't need to s
 
 ## Summary
 
-In this notebook we have fully set up the numerical tools we will require to learn how to approximate solutions for the partial differential equations. On top of that, we have learnt the basics of conda virtual environments and Git.
+In this notebook we have fully set up the numerical tools required for the course. On top of that, we have learned the basics of conda virtual environments and Git. We are ready to get started in learning how to numerically solve partial differential equations.
 
 ## Troubleshooting
 

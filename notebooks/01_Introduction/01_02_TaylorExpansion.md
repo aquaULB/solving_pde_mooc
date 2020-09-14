@@ -36,7 +36,7 @@ jupyter:
 
 In general, the resolution of numerical problems require some approximations.
 
-**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. To quantify numerical representation of data, one uses *precision*. Precision is usually measured *in bits or number of decimal digits*. For example, a number in *single precision* usually occupies 32 bits of computer memory. At the same time it is associated with 7 or fewer decimal digits. The number of digits kept is called the precision of the representation. To make a conrete example, in *single precision* and *double precision*, $\pi$ is approximated as follows, correspondingly:
+**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. To quantify the numerical representation of data, one uses *precision*. Precision is usually measured *in bits or number of decimal digits*. For example, a number in *single precision* usually occupies 32 bits of computer memory. At the same time it is associated with 7 or fewer decimal digits. The number of digits kept is called the precision of the representation. To make a conrete example, in *single precision* and *double precision*, $\pi$ is approximated as follows:
 
 \begin{align}
 \pi &= 3.1415927 \quad\quad &\text{(single precision)}\\
@@ -48,7 +48,7 @@ In this course we always use double precision for real numbers, as this is the d
 - https://docs.python.org/3/tutorial/floatingpoint.html
 - https://floating-point-gui.de
 
-In the context of the numerical solution of ordinary or partial diffential equations, **the second more significant approximation** comes from tha the computer resources are limited. From the physical point of view, both time and space are continuous variables, but continious data does not exist in numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using discrete representation.
+In the context of the numerical solution of ordinary or partial diffential equations, **the second more significant approximation** comes from that the computer resources are limited. From the physical point of view, both time and space are continuous variables, but continuous data does not exist in the numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using a discrete representation. For that purpose, we can for example introduce *grid points* at which the functions are evaluated. A small grid spacing results in a higher accuracy, but it comes at a higher computational cost. Some balance always has to be found.
 
 ## Taylor's theorem
 
@@ -228,7 +228,7 @@ Keep in mind, though, that you will encounter situations when it will be more co
 
 Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
 
-Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. Notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
+Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. A notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
 
 [14]: <https://www.markdownguide.org/getting-started/> "Markdown"
 
@@ -438,10 +438,10 @@ ax.loglog(delta, R3, '*', label='$R_3$')
 # More info
 # https://matplotlib.org/3.1.1/tutorials/colors/colors.html
 #
-ax.loglog(delta, slope, color='green', label='$\Delta^{3}$')
+ax.loglog(delta, slope, color='green', label=r'$\Delta^{3}$')
 
 # We set labels of x axis and y axis.
-ax.set_xlabel('$\Delta x$')
+ax.set_xlabel(r'$\Delta x$')
 ax.set_ylabel('$R_3$')
 
 # We set the title, which in this case is only
@@ -490,9 +490,9 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 
 ## Summary
 
-In this notebook we have introduced the concepts of numerical precision and numerical error. We also discussed different approaches to build numerical sequences in Python and learnt about the NumPy arrays - fundamental objects for scientific programming in Python. Using the means of Matplotlib package, we gave a trivial overview on 2D visualization and prooved that the error term in Taylor series is of order $\mathcal{O}(\Delta x)^{n+1}$ when the last expansion term considered is of order $\mathcal{O}(\Delta x)^{n}$.
+In this notebook we have introduced the concepts of numerical precision and numerical error. We also discussed different approaches to build numerical sequences in Python and learned about NumPy arrays - fundamental objects for scientific programming in Python. Using the Matplotlib package, we gave a trivial overview on 2D visualization and illustrated that the error term in Taylor series is of order $\mathcal{O}(\Delta x)^{n+1}$ when the last expansion term considered is of order $\mathcal{O}(\Delta x)^{n}$.
 
-In the next notebook we will introduce the Euler time-advancement schemes - numerical procedures for solving ordinary differential equations, define numerical stability of the time-advancement scheme and the concepts of explicit and implicit time integration methods.
+In the next notebook we will introduce Euler time-advancement schemes - numerical procedures for solving ordinary differential equations -, define numerical stability of the time-advancement scheme and the concepts of explicit and implicit time integration methods.
 
 ## Exercises
 
@@ -520,7 +520,7 @@ For a better understanding of the task consider the following example:
 
 <img src="../figures/TaylorExampleExercise.png">
 
-Find expansion of the example function on [*Wikipedia*][9].
+Source: Find expansion of the example function on [*Wikipedia*][9].
 
 [9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
 <!-- #endregion -->

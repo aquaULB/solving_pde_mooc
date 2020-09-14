@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.6.0
+      jupytext_version: 1.5.2
   kernelspec:
     display_name: Python 3
     language: python
@@ -262,7 +262,7 @@ Now let's learn how to create commits. First, you tell what files to commit:
 
     git add README.md
 
-The changes to README.md are now contained in the staging area.
+The changes to README.md are not contained in the staging area.
 
 If you run
 
@@ -334,9 +334,9 @@ Argument `-u` (equivalent to `--set-upstream`) means that we want our local bran
 
 > Git branches are effectively a pointer to a snapshot of your changes. When you want to add a new feature or fix a bug—no matter how big or how small—you spawn a new branch to encapsulate your changes. This makes it harder for unstable code to get merged into the main code base, and it gives you the chance to clean up your future's history before merging it into the main branch.
 
-The very first default branch is called *master*. *Master* treaditionally serves as a branch where you keep latest, cleanest and the most stable version of your project. It is strongly advised, that you *don't ever upload temporal and test changes to your project to master*. The mormal way to go, is to create another branch from *master*, perfect the modifications you want to introduce, while being on the side branch, then *merge* this branch into master, and delete it afterwards. *Master* is something you have to be sure of is working. After all, whenever you want to share your work with other people, they should be confident, they'd access 100% reliable product through the master. 
+The very first default branch is called *master*. *Master* traditionally serves as a branch where you keep the latest, cleanest and the most stable version of your project. It is strongly advised, that you *don't ever upload temporary and test changes of your project to master*. The best way to go is to create another branch from *master*, make your modifications while being on the side branch, and then *merge* this branch into master (if desired, you may then delete the side branch). You have to be sure that the content of *Master* is working. After all, whenever you want to share your work with external people, they should be confident that they access a 100% reliable product through the master. Of course, very few codes contain no bugs at all. But ideally this is how you should consider your *Master* release.
 
-Let's learn, how we create branches. First, run:
+Let's learn how to create branches. First, run:
 
     git branch
 
@@ -344,7 +344,7 @@ You'll get the following output:
 
     * master
 
-As we said, you're on master. In order to switch between branches you would run `git checkout` with different arguments. Let's create a new one called `other_branch` (or whatever you want). We run:
+As we said, you're on master. In order to switch between branches you would run `git checkout` with different arguments. Let's create a new branch called `other_branch` (or whatever you want). We run:
 
     git checkout -b other_branch
 
@@ -352,11 +352,11 @@ Which produces the following output:
 
     Switched to a new branch 'other_branch'
 
-Let us now create our first python script - a file "hello.py" with a following containings:
+Let us now create our first python script - a file "hello.py" with the following content:
 
     print('Hello world!')
 
-As you can guess, this command will output 'Hello world!' string. Ensure it yourself by running the script:
+As you can guess, this command will output the 'Hello world!' string. Test this by running the script:
 
     python3 hello.py
 
@@ -373,7 +373,7 @@ The last command should output the error message:
 
         git push --set-upstream origin other_branch
         
-This is expected. You have realize, there is a difference between local and remote branches. When creating remote repo, we have actually [manually set remote branch *master* to track local branch *master*](#notice)\*. Git hints us that we are supposed to do the same for the *other_branch*, so we run:
+This is expected. You have realized that there is a difference between local and remote branches. When creating remote repo, we have actually [manually set remote branch *master* to track local branch *master*](#notice)\*. Git hints us that we are supposed to do the same for the *other_branch*, so we run:
 
     git push -u origin other_branch
 
@@ -381,7 +381,7 @@ Now it worked. If we go back to the master branch, we'll see that our Python scr
 
     git checkout master
 
-On Unix:
+On Mac/Unix:
 
     ls
 
@@ -389,7 +389,7 @@ On Windows:
 
     dir
 
-So, we have actually separated two differen versions of our project into two branches. But let's say we are confident, that out *other_branch* has been perfected, and we want to see modifications it introduces on *master*. We merge:
+So, we have actually separated two different versions of our project into two branches. But let's say we are confident, that out *other_branch* has been perfected, and that we want to integrate the modifications in *master*. To `merge` them, we type:
 
     git merge other_branch
     
@@ -397,7 +397,7 @@ Check the list of files on *master* now - you'll see 'hello.py' among them. We a
 
     git branch -d other_branch
 
-Kind of the output:
+The output should look similar to this:
 
     Deleted branch other_branch (was be3cca2).
 
@@ -417,7 +417,7 @@ We have learnt the very basics of Git, now let's clean up, as we don't need to s
 
 * <a name="troubleshooting1"> `jupyter notebook` command is not recognized</a>
 
-It most surely happens, because `jupyter notebook` command is supposed to run binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
+It most surely happens, because `jupyter notebook` command is supposed to run the binary file "jupyter-notebook", which intends to run the program, but this binary file is located in a directory different from the one you are trying to open it.
 
 In order to be able to run Jupyter Notebook from any directory, we have to run the following command:
 
@@ -427,7 +427,7 @@ But this will make the files from anaconda3/bin accesible only in the active ter
 
 > The [.bashrc][12] file is a script file that’s executed when a user logs in. The file itself contains a series of configurations for the terminal session. This includes setting up or enabling: coloring, completion, shell history, command aliases, and more.
 
-So that each time you start new terminal session, this commans will execute. To open .bashrc with in-terminal text editor you can type:
+So that each time you start a new terminal session, this command will be executed. To open .bashrc with in-terminal text editor you can type:
 
     vi .bashrc
 

@@ -161,18 +161,16 @@ or just close the terminal window if you don't need it anymore.
 [14]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 [15]: <https://www.latex-project.org> "LaTeX"
 
-
+<!-- #region -->
 ## Get to know Git
 
 ### Installing Git
 
 > [Git][20] is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
-This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know right now, is that due to Git, you can easily track the changes made to the project at different stages and compare all of them to each other; you can recover any older version of your project; after all, you can have separate *branches*, each of which stores different version of your project without any conflict between them.
+This description might be hard to comprehend at the moment, but you will learn better what is Git while working with it. What you have to know right now, is that thanks to Git, you can easily track the changes made to a project at different stages and compare all of them to each other; you can recover any older version of your project; furthermore, you can have separate *branches*, each of which stores a different version of your project without any conflict between them. Git is also a great tool for people collaborating on a project. It allows several developpers to work independently on different pieces of code and seemingly merge their contributions.
 
 Before digging deeper into the Git toolkit, let's install it.
-
-Downloading Git is OS-dependant.
 
 * If you're on Windows, you can download Git from the [official website][21] and install it with graphical installer. If, during installation, you choose all the default options, you will have git available in your Anaconda prompt.
 
@@ -184,25 +182,28 @@ Downloading Git is OS-dependant.
 
           git --version
 
-      and it will launch the download and installation.
+      and it will launch the installation.
 
     * Before 10.9 Mavericks
 
-      You have several [options][22]. As it is stated, if you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's the most practical way to go, probably.
+      You have several [options][22]. If you already have *Xcode* installed, then you already have git. If not, we propose you to stick to the *Homebrew* option, as it's probably the most practical way to go.
 
-        Homebrew package manager is very easy to use, and provides access to the plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
+        Homebrew package manager is very easy to use, and provides access to plenty of useful stuff - Firefox, GNU compiler, Qt and many many others.
 
-        To install Homebrew, visit [official website][23], and then just run:
+        To install Homebrew, visit the [official website][23], and then just run:
 
             brew install git
+            
+        after the installation.
 
   Voilà, you are good to go.
 
-* If you are on Linux, you have even [more options][24]. We propose, you simply run
+* If you are on Linux, you have even [more options][24]. We propose you simply run
 
       apt-get install git
 
-Check that Git is installed by running
+
+In all cases, check that Git is installed by running
 
     git --version
 
@@ -212,7 +213,7 @@ Output example:
 
 ### Basic usage
 
-Now let's duscus the basic concepts of Git. For the better understanding we encourage you to create a temporary empty directory. We will make it our first Git project. Let's call it *test_git*.
+Now let's discuss the basic concepts of Git. Create a temporary empty directory (choose a convenient place in your computer). We will make it our first Git project. Let's call it *test_git*.
 
 So, we run:
 
@@ -221,11 +222,11 @@ So, we run:
 
 #### Git repositories
 
-The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you, having Git installed, simply declare some directory containg your project a Git repository - initialize it. This actions creates a *local* Git repository, meaning that it only exist on your work machine.
+The whole project with all the history of changes and all the separate branches is stored in so-called *Git repository*. To create a repository, you have to `initialize` git in the directory containing your project. This creates a *local* Git repository, meaning that it currently only exist on your work machine.
 
-##### Creating local Git repository
+##### Creating a local Git repository
 
-In order to initialize existing local directory as a Git repository, run:
+In order to initialize an existing local directory as a Git repository, run:
 
     git init
 
@@ -233,19 +234,19 @@ You'll get the following output:
 
     Initialized empty Git repository in /path/to/test_git/.git/
 
-As it is nicely explained in [here][25], once created, each local Git repo contains three abstract zones:
+As it is nicely explained [here][25], once created, each local Git repo(sitory) contains three abstract zones:
 
 * Working space
 
-  Includes all the components of your project in a current state.
+  Includes all the components of your project in their current states.
 
 * Staging area
 
-  Imagine now you've introduced some modification to the state of your project, which is last one you saved. The files, which get modified, go to the staging area.
+  Imagine now you've introduced some modification to the state of your project, which was the last one you saved. The files, which you want to update as part of your project's history go to the staging area (after committing)
 
 * Commit area
 
-  Commiting your modification is a way to create a snapshot of the current, newly modified state of your project. Once you've commited your changes, the modified files go to the commit area.
+  Commiting your modification is a way to create a snapshot of the current, newly modified state of your project. Once you've commited your changes, the modified files are now saved in the history of your project.
 
 Let's add a README.md file to our repo. If you're on MacOS/Linux:
 
@@ -255,68 +256,75 @@ If you're on Windows:
 
     type nul > README.md
 
-Now let's learn how to create commits. First, you tell what are the files you want to commit:
+Add some content to the README.md file (whathever you want) and save your modifications.
+
+Now let's learn how to create commits. First, you tell what files to commit:
 
     git add README.md
+
+The changes to README.md are now contained in the staging area.
 
 If you run
 
     git add *
 
-then all files, which are in a staging area, will be added for the further commit. It is not a very clean way to go, as you might commit the files, which get updated at each compilation, and don't need to be tracked, like those stored in .ipynb_checkpoints directory, or object files with extension .o, etc.
+then all files which are new or modified will be put in the staging area for potential further commit. It is not a very clean way to go, as you might commit files which get updated at each compilation, and don't need to be tracked, like those stored in .ipynb_checkpoints directory, or object files with extension .o, etc. So always stick to always use the git add function on specific files.
 
 We are ready to commit. Each commit has to be supplemented with a message:
 
     git commit -m "First commit"
 
+You have now recorded in your git history the initial modifications of the README.md file. All the information sits locally on your computer. But we also want to be able to share our work and collaborate on projects (here we also mean being able to send your homeworks to the teaching team !).
+
+
 ##### Creating remote Git repository
 
 > To be able to collaborate on any Git project, you need to know how to manage your remote repositories. [Remote repositories][26] are versions of your project that are hosted on the Internet or network somewhere.
 
-Another reason to keep your data in a remote repo is for the sake of safety. If your computer gets broken, stolen, you accidentally remove the project's folder, then you loose all the local data. But if you kept it in a remote repo and updated it regularly, then you recover your whole progress from any other machine.
+Another reason to keep your data in a remote repo is for the sake of safety. If your computer gets broken, stolen or you accidentally remove the project's folder, then you'll loose all the local data. But if you keep it in a remote repo and update it regularly, then you can recover your whole progress from any other machine.
 
-There are different services which allow to create and manage remote Git repository. Throughout the course we will use GitHub.com. It is easy to use and free. Generally speaking, GitHub is a Git repository hosting service. Let's create our first remote repo on GitHub.
+There are different services which allow to create and manage remote Git repositories. Throughout the course we will use GitHub.com. It is easy to use and free. Generally speaking, GitHub is a Git repository hosting service. Let's create our first remote repo on GitHub.
 
-If you don't have GitHub account, you will have to go to GitHub.com and create one. GitHub has its graphical interface providing you a possibility to download files to the repository, create branches, see changes in the latest commit etc. For some purposes GitHub interface might be quite convenient, but we advice you against uploading files via GitHub. It would make the whole idea of Git meaningless, and ultimately lead you to storing multiple versions of your project at the same time. We suggest you learn, how to update your project over time and keep control over the evolutionary tree of all the changes you make.
+If you don't have GitHub account, you will have to go to GitHub.com and create one. GitHub has a graphical interface allowing you to download files to the repository, create branches, see changes in the latest commit etc. For some purposes, the GitHub interface might be quite convenient, but we advise you against uploading files directly via GitHub. It would make the whole idea of Git meaningless, and ultimately lead you to storing multiple versions of your project at the same time. We suggest that you learn how to update your project over time and keep control over the evolutionary tree of all the changes you make.
 
 In order to create new GitHub repository, click on *New*:
 <img src="../figures/CreateRepo.png">
 
-Choose name for your repository and set some description. You can make it either public - so that anyone will be able to see it - or private - only the ones you invite as collaborators will be able to see it. Click on *Create repository*.
+Choose a name for your repository and set some description. You can make it either public - so that anyone will be able to see it - or private - only the ones you invite as collaborators will be able to see it. Click on *Create repository*.
 <img src="../figures/CreateRepoSet.png">
 
-Then you will actually see a small tutorial from GitHub, how you can connect your newly created remote repo to the local one.
+Let's go through a small tutorial describing how you can connect your newly created remote repo to the local one.
 
-To see, what are the current remote repositories tracked from your local repository, run
+To see, what are the current remote repositories tracked from your local repository, run the following terminal command in your local repository
 
     git remote
 
 Of course, this command will output nothing, as we have not yet added any remotes.
 
-Copy url of your remote repo. Make sure you've chosen HTTPS format, especially if you have never used SSH.
+Copy the url of your remote repo. Make sure you've chosen HTTPS format, especially if you have never used SSH.
 <img src="../figures/CopyURL.png">
 
-Now go back to the terminal window and type:
+Now go back to the terminal window and type (*replace `yourUserName` with your actual Github username*):
 
-    git remote add origin https://github.com/YelyzavetaV/test_git.git
+    git remote add origin https://github.com/yourUserName/test_git.git
 
 If you then run
 
     git remote
 
-It'll output `origin`, which is the name we've assigned to our remote.
+it will output `origin`, which is the name we've assigned to our remote.
 
 Now you should be able to run
 
     git push -u origin master
 
-The normal output would look as follows:
+The normal output should look as follows:
 
     Enumerating objects: 3, done.
     Counting objects: 100% (3/3), done.
     Writing objects: 100% (3/3), 224 bytes | 224.00 KiB/s, done.
     Total 3 (delta 0), reused 0 (delta 0)
-    To https://github.com/YelyzavetaV/test_git.git
+    To https://github.com/yourUserName/test_git.git
     * [new branch]      master -> master
     Branch 'master' set up to track remote branch 'master' from 'origin'.
 
@@ -430,6 +438,7 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
+<!-- #endregion -->
 
 ```python
 from IPython.core.display import HTML

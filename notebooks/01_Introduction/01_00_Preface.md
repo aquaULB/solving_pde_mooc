@@ -66,7 +66,7 @@ This course covers the following topics:
     
 * **Resolution of partial differential equations**
 
-    This part of course combines the concepts discussed in the first two chapters and describes through examples how they can be used to solve PDEs.
+    This part of the course combines the concepts discussed in the first two chapters and describes through examples how they can be used to solve PDEs.
     
 * **Iterative methods**
     
@@ -90,8 +90,4 @@ The numerical resolution of PDEs obviously requires the use of a programming lan
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

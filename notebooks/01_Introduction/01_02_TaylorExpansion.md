@@ -28,7 +28,8 @@ jupyter:
 
     2.1 [Expansion of exponential function](#Expansion-of-exponential-function)
 
-3. [Exercises](#Exercises)
+3. [Summary](#Summary)
+4. [Exercises](#Exercises)
 
 
 ## Introduction
@@ -106,7 +107,7 @@ To make things more concrete and to write our first Python code of the course, l
 e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
 \end{equation}
 
-As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$.
+As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = \mathcal{O}(\Delta x)^3$.
 
 Let's write a Python code to check if this is indeed the case.
 
@@ -486,6 +487,12 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 
 [8]: <https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str> "Python strings"
 
+
+## Summary
+
+In this notebook we have introduced the concepts of numerical precision and numerical error. We also discussed different approaches to build numerical sequences in Python and learnt about the NumPy arrays - fundamental objects for scientific programming in Python. Using the means of Matplotlib package, we gave a trivial overview on 2D visualization and prooved that the error term in Taylor series is of order $\mathcal{O}(\Delta x)^{n+1}$ when the last expansion term considered is of order $\mathcal{O}(\Delta x)^{n}$.
+
+In the next notebook we will introduce the Euler time-advancement schemes - numerical procedures for solving ordinary differential equations, define numerical stability of the time-advancement scheme and the concepts of explicit and implicit time integration methods.
 
 ## Exercises
 

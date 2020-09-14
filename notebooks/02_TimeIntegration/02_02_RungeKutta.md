@@ -6,15 +6,35 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: Python 3
     language: python
     name: python3
 ---
 
-# Time integration - Part 2
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+<h1 style="text-align: center">Time integration II</h1>
 
+
+<h2 class="nocount">Contents</h2>
+
+1. [Introduction](#Introduction)
+2. [A two stage Runge-Kutta scheme](#A-two-stage-Runge-Kutta-scheme)
+
+    2.1 [Numerical stability of a two-stage Runge-Kutta scheme](#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme)
+
+3. [General Runge-Kutta schemes](#General-Runge-Kutta-schemes)
+4. [Implicit Runge-Kutta schemes](#Implicit-Runge-Kutta-schemes)
+5. [Summary](#Summary)
+6. [Exercises](#Exercises)
+7. [References](#References)
+
+
+## Introduction
 
 For convenience, we start with importing some modules needed below:
 
@@ -27,6 +47,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
+<!-- #region -->
 In the previous notebook we have considered the forward and the backward Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the time step.
 
 Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
@@ -64,7 +85,6 @@ so that,
     y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*) \label{RK2ynp1}
 \end{align}
 
-
 In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
 
 \begin{align}
@@ -75,6 +95,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second o
 
 where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher order accuracy). 
 
+### Numerical stability of a two-stage Runge-Kutta scheme
 
 Let us now discuss the stability of this two-stage Runge-Kutta method for a general autonomous linear system of differential equations. As usual, we may diagonalize the system defined through the matrix $f$ and write:
 
@@ -96,7 +117,6 @@ All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as lo
     \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} \vert \leq 1.
 \end{equation}
 
-<!-- #region -->
 Let us apply the Runge-Kutta scheme to the problem of a body in free fall. The system of differential equations reads:
 
 \begin{cases}
@@ -216,9 +236,7 @@ for axis in ax:
 
 In exercise 2, we ask you to check the accuracy of your solution.
 
-
 ## General Runge-Kutta schemes
-
 
 General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
@@ -233,8 +251,8 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
-
 The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+
 > Above this, very little is known \cite{Butcher1996}.
 
 Therefore, we focus here our attention on a general purpose **fourth-order Runge-Kutta scheme**, that is accurate and stable enough for all the problems we consider in the rest of this course (from now on we call it **RK4**). It was introduced in 1901 by W. Kutta and reads \cite{Kutta1901}:
@@ -416,9 +434,7 @@ ax.set_title('Stability regions', x=0.7, y=1.01)
 
 We already pointed out that the forward Euler scheme is unstable if one of the eigenvalues of our system is purely imaginery (as in the case of the harmonic oscillator). Although the RK2 scheme's domain of stability is larger, the scheme has the same property. Of all the schemes considered so far, RK4 has a significantly larger domain of stability and, more importantly, it does englobe a part of the imaginery axis, so, it can handle problems with purely imaginery eigenvalues!
 
-
 ## Implicit Runge-Kutta schemes
-
 
 We have discussed that explicit Runge-Kutta schemes become quite complicated as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher order of accuracy $p$. We will give a very brief introduction into the subject, so that you get an impression.
 
@@ -431,7 +447,6 @@ Generally speaking, RK methods can be defined as follows:
 
 For explicit RK methods one has $h=s-1$. This implies that any $k_i$ can be computed explicitely from the knowledge of the previously computed $k_j$ with $j<i$. For implicit RK methods, we have $h=s$. It mean, that for each $k_i$ we have to solve an implicit equation $k_i=f(k_1, k_2,\dots,k_i)$. We pay a price in terms of complexity (we have to invert some matrix or iteratively found a solution to the previous equation). However, implicit RK methods have better stability properties compared to explicit ones and can therefore be used for a larger set of problems.
 
-
 As an example, let us consider some relatively simple implicit RK scheme - we went on [Wikipedia][1] and picked one named *Qin and Zhang's two-stage second-order* implicit method. It reads:
 
 \begin{align}
@@ -440,7 +455,7 @@ k_1 &= f(t^n+\frac{dt}{4}, y^n+\frac{dt}{4}k_1),\nonumber \\
 k_2 &= f(t^n+\frac{3}{4}dt, y^n+dt(\frac{1}{2}k_1+\frac{1}{4}k_2)).
 \end{align}
 
-Let's implement it for the problem of a body in free fall described by \ref{eq:free_fall}. Make sure you understand the part devoted to the implicit scheme...
+Let's implement it for the problem of a body in free fall described by \ref{eq:free_fall}. Make sure you understand the implementation of the implicit scheme in the code...
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
@@ -497,6 +512,8 @@ for i in range(nt):
     y_imp[i+1] = y_imp[i] + 0.5*dt*(k_1+k_2)
 ```
 
+As you may observe from the code, our implementation is somewhat 'naive', meaning that we don't solve linear equations for $k_i$ numerically, as we have solved them analytically. Though, in the real-world code the better approach would be to think through such design of a code, that coefficients are constructed automatically from the generic Runge-Kuta formulas.
+
 ```python
 t = np.arange(nt+1) * dt
 ```
@@ -524,11 +541,15 @@ for axis in ax:
     axis.set_xlim(t[0], t[-1])
 ```
 
+## Summary
+
+In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While, we won't consider Runge-Kutta schemes of order higher than 4 in a present course, we discussed the complexities one would face trying to construct equations for coefficients $k_i$ for the higher orders. We've also given the insight into implicit Runge-Kutta procedures and demonstrated naive implementation of Qin and Zhang's second-order implicit method.
+
+Thus, we summarize the chapter dedicated to the **Time integration**. In the following chapter we will consider finite difference method, which provides tools to approximate derivatives in partial differential equations converting them into the system of linear equations.
+
 ## Exercises
 
-
 **Exercise 1.** Prove analytically that the two stage (explicit) Runge-Kutta scheme is not fourth-order accurate for one time step.
-
 
 **Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second order accurate for a finite time interval.
 
@@ -541,7 +562,7 @@ for axis in ax:
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 
-# References
+## References
 
 (<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 
@@ -552,3 +573,13 @@ for axis in ax:
 (<a id="cit-Kutta1901" href="#call-Kutta1901">Kutta, 1901</a>) Kutta Wilhelm, ``_Beitrag zur naherungsweisen Integration totaler Differentialgleichungen_'', Z. Math. Phys., vol. 46, number , pp. 435--453,  1901.
 
 
+
+```python
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```
+
+```python
+
+```

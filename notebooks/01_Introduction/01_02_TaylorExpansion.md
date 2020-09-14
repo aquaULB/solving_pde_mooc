@@ -35,7 +35,7 @@ jupyter:
 
 In general, the resolution of numerical problems require some approximations.
 
-**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. The number of digits kept is called the precision of the representation. For example, in *single precision* and *double precision*, $\pi$ is approximated as follows, correspondingly:
+**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. To quantify numerical representation of data, one uses *precision*. Precision is usually measured *in bits or number of decimal digits*. For example, a number in *single precision* usually occupies 32 bits of computer memory. At the same time it is associated with 7 or fewer decimal digits. The number of digits kept is called the precision of the representation. To make a conrete example, in *single precision* and *double precision*, $\pi$ is approximated as follows, correspondingly:
 
 \begin{align}
 \pi &= 3.1415927 \quad\quad &\text{(single precision)}\\
@@ -47,7 +47,7 @@ In this course we always use double precision for real numbers, as this is the d
 - https://docs.python.org/3/tutorial/floatingpoint.html
 - https://floating-point-gui.de
 
-In the context of the numerical discretisation of ordinary or partial diffential equations, **the second more significant limitation** in precision usually comes from the limited computer resources available to solve a problem or the time needed to get the solution. From the physical point of view, both time and space are continuous variables, but continious data does not exist in numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using discrete representation.
+In the context of the numerical solution of ordinary or partial diffential equations, **the second more significant approximation** comes from tha the computer resources are limited. From the physical point of view, both time and space are continuous variables, but continious data does not exist in numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using discrete representation.
 
 ## Taylor's theorem
 

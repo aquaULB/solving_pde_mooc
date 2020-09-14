@@ -27,12 +27,11 @@ jupyter:
 
     2.1 [Numerical stability of a two-stage Runge-Kutta scheme](#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme)
 
-- [\end{pmatrix}](#endpmatrix)
-  - [General Runge-Kutta schemes](#general-runge-kutta-schemes)
-  - [Implicit Runge-Kutta schemes](#implicit-runge-kutta-schemes)
-  - [Summary](#summary)
-  - [Exercises](#exercises)
-  - [References](#references)
+3. [General Runge-Kutta schemes](#General-Runge-Kutta-schemes)
+4. [Implicit Runge-Kutta schemes](#Implicit-Runge-Kutta-schemes)
+5. [Summary](#Summary)
+6. [Exercises](#Exercises)
+7. [References](#References)
 
 
 ## Introduction

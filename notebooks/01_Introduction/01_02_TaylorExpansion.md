@@ -6,36 +6,52 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: Python 3
     language: python
     name: python3
 ---
 
-# Approximations and Taylor expansion
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+<h1 style="text-align: center">Approximations and Taylor expansion</h1>
+
+
+<h2 class="nocount">Contents</h2>
+
+1. [Introduction](#Introduction)
+
+2. [Taylor's theorem](#Taylor's-theorem)
+
+    2.1 [Expansion of exponential function](#Expansion-of-exponential-function)
+
+
+## Introduction
 
 In general, the resolution of numerical problems require some approximations.
 
-The first one is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one therefore needs to cut their representation at some point beyond the decimal point. The number of digits kept is called the precision of the representation. For example, in *single precision* and *double precision*, $\pi$ is given by the following approximations:
+**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. The number of digits kept is called the precision of the representation. For example, in *single precision* and *double precision*, $\pi$ is approximated as follows, correspondingly:
 
 \begin{align}
 \pi &= 3.1415927 \quad\quad &\text{(single precision)}\\
 \pi &= 3.141592653589793 \quad\quad &\text{(double precision)}\\
 \end{align}
 
-In this course, we always use double precision for real numbers as this is the default precision used by Python. Such a precision is large enough for the kind of numerical problems we consider, but the reader should still be aware that rounding off errors can cause some difficulties as they can get amplified when certain operations are performed or when some iterative procedures are used. Two good references to get started on the subject are:
+In this course we always use double precision for real numbers, as this is the default precision used by Python. It provides a good approximation for the kind of numerical problems we consider, but the reader should still be aware that rounding off errors can cause some difficulties, as they can get amplified when certain operations are performed or when some iterative procedures are used. Two good references to get started on the subject are:
 
 - https://docs.python.org/3/tutorial/floatingpoint.html
 - https://floating-point-gui.de
 
-In the context of the numerical discretisation of ordinary or partial diffential equations, the more significant limitation in precision usually comes from the limited computer resources available to solve a problem or the time needed to get the solution. Indeed, from the physical point of view, both time and space are continuous variables.
+In the context of the numerical discretisation of ordinary or partial diffential equations, **the second more significant limitation** in precision usually comes from the limited computer resources available to solve a problem or the time needed to get the solution. From the physical point of view, both time and space are continuous variables, but continious data does not exist in numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using discrete representation.
 
 ## Taylor's theorem
 
-In order to estimate the accuracy of discretized differential operators or time integration schemes, Taylor's theorem provides a valuable tool \cite{arfken2012}.
+Taylor's theorem provides a valuable tool to estimate the accuracy of discretized differential operators or time integration schemes \cite{arfken2012}.
 
-***Theorem.*** *Let $x$ be any point in the interval $[a\ b]$ and $\Delta x$ a small positive real number. Schematically we have*:
+***Theorem.** Let $x$ be any point in the interval $[a\ b]$ and $\Delta x$ a small positive real number. Schematically we have*:
 
 <img src="../figures/taylor.png">
 
@@ -52,7 +68,7 @@ f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k
 R_{k+1} = \frac{f^{(k+1)}(\xi)}{(k+1)!}\Delta x^{k+1}, \quad\quad x\leq \xi \leq x+\Delta x.
 \end{equation}
 
-In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note that at this stage, no approximations have been made. 
+In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note, that at this stage, no approximations have been made. 
 
 Assuming that $\vert f^{(k+1)}\vert$ is bounded by a constant $C$ in $[a\ b]$, read $\vert f^{(k+1)} \vert \leq C$, we can then write:
 
@@ -80,7 +96,7 @@ f(x+\Delta x)\approx f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \fra
 
 is of order $k+1$. Importantly, this implies that the remainder is at least reduced by a factor of $2^{k+1}$ if $\Delta x$ is divided by $2$. This is a very important concept that will be discussed numerous times in this course.
 
-## Expansion of $e^x$
+### Expansion of exponential function
 
 To make things more concrete and to write our first Python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
@@ -475,3 +491,13 @@ Find expansion of a function on [*Wikipedia*][9].
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
 
 
+
+```python
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```
+
+```python
+
+```

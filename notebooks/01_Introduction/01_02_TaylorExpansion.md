@@ -30,6 +30,7 @@ jupyter:
 
 3. [Summary](#Summary)
 4. [Exercises](#Exercises)
+5. [References](#References)
 
 
 ## Introduction
@@ -525,7 +526,7 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 [9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
 <!-- #endregion -->
 
-# References
+## References
 
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
 

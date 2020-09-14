@@ -147,7 +147,6 @@ for i in range(nt):
 
 Done! The last entry in the array N now contains an estimate for $N(t_f)$.
 
-
 ### Numerical accuracy of the forward Euler method
 
 Let us compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
@@ -338,7 +337,6 @@ ax.legend()
 
 Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after $N$ time steps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
 
-
 ### Numerical stability of the forward Euler method
 
 For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial property of numerical schemes called *numerical stability*. 
@@ -498,7 +496,6 @@ ax.tick_params(width=2, pad=10)
 ```
 
  If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt$ are inside a circle, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
-
 
 ### Higher-order example
 
@@ -733,7 +730,6 @@ ax[1].set_title('Height vs time (m)')
 
 In the above plots we have explicitely changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style files according to your taste !
 
-
 ### Numerical stability of the forward Euler method revisited
 
 Let's consider another two dimensional example and analyze the motion of an object attached to a spring. The equation of motion reads:
@@ -901,9 +897,7 @@ In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvec
 
 It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is, therefore, not adapted to the simulation of a simple harmonic oscillator.
 
-
 ## The backward Euler method
-
 
 The explicit Euler method gives a decent approximation in certain cases (\ref{eq:decay}), but it is absolutely inapplicable in others since it blows up for *any* time step (\ref{eq:spring}). It urges us to search for different ways to approximate evolution equations. One of them is the *implicit* Euler method. 
 
@@ -1151,7 +1145,6 @@ Condition \ref{eq:back_stab} implies that the region of stability of the implici
 
 In the literature you will often encounter the statement that *the implicit Euler scheme is unconditionally stable* for linear autonomous homogeneous problems. You might think that this contradicts \ref{eq:back_stab}, but in fact, when stating so, people usually imply that $\lambda_r \le 0$, so that the equation \ref{eq:generic} only admits decaying solutions.
 
-
 ## Summary
 
 In this notebook we have described the forward and the backward Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
@@ -1160,9 +1153,7 @@ We computed the accuracy of the Euler method, and introduced the concept of stab
 
 In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analyzing partial differential equations later on in the course.
 
-
 ## Exercises
-
 
 **Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second order accuracy. 
 

@@ -13,7 +13,32 @@ jupyter:
     name: python3
 ---
 
-# Time integration - Part 1
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+<h1 style="text-align: center">Time integration I</h1>
+
+
+<h2 class="nocount">Contents</h2>
+
+1. [Introduction](#Introduction)
+2. [The forward Euler method](#The-forward-Euler-method)
+
+    2.1 [Numerical accuracy of the forward Euler method](#Numerical-accuracy-of-the-forward-Euler-method)
+    
+    2.2 [Numerical stability of the forward Euler method](#Numerical-stability-of-the-forward-Euler-method)
+    
+    2.3 [Higher-order example](#Higher-order-example)
+    
+    2.4 [Numerical stability of the forward Euler method revisited](#Numerical-stability-of-the-forward-Euler-method-revisited)
+
+3. [The backward Euler method](#The-backward-Euler-method)
+4. [Summary](#Summary)
+5. [Exercises](#Exercises)
+
+
+## Introduction
 
 In this part of the course we discuss how to solve ordinary differential equations (ODE). Although their numerical resolution is not the main subject of this course, their study nevertheless allows to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDEs).
 
@@ -48,7 +73,7 @@ where $\alpha>0$ is a constant depending on the type of nuclei present in the ma
 
 However, our objective here is to obtain the above time evolution using a numerical scheme.
 
-## The forward (explicit) Euler method
+## The forward Euler method
 
 The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward (explicit) Euler method - it is actually member of the Euler family of numerical methods for ordinary differential equations. We use it to introduce several fundamental concepts that will pop up frequently in the rest of the course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
@@ -475,7 +500,7 @@ ax.tick_params(width=2, pad=10)
  If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt$ are inside a circle, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
 
 
-### Multi-dimensional example
+### Higher-order example
 
 So far we have only considered a simple one-dimensional example. In pratice, many problems are modelled  with coupled variables, making the corresponding equation multi-dimensional. Multi-dimensional equations also arise when the starting equations contain higher-order derivatives. They can then be converted to a system of first-order differential equations. Consider the scalar third-order differential equation for $y=y(x)$:
 
@@ -877,7 +902,7 @@ In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvec
 It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is, therefore, not adapted to the simulation of a simple harmonic oscillator.
 
 
-## The backward (implicit) Euler method
+## The backward Euler method
 
 
 The explicit Euler method gives a decent approximation in certain cases (\ref{eq:decay}), but it is absolutely inapplicable in others since it blows up for *any* time step (\ref{eq:spring}). It urges us to search for different ways to approximate evolution equations. One of them is the *implicit* Euler method. 
@@ -1136,7 +1161,7 @@ We computed the accuracy of the Euler method, and introduced the concept of stab
 In the next notebook, we introduce some more efficient time advancement schemes which have both better accuracy and larger domains of stability. They are know as Runge-Kutta schemes and we will use them extensively when analyzing partial differential equations later on in the course.
 
 
-## Exercices
+## Exercises
 
 
 **Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second order accuracy. 
@@ -1144,3 +1169,13 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 **Exercise 2.** For the case of the body in free fall prove graphically, that both explicit and implicit Euler methods are first-order accurate for a finite time interval.
 
 <a name="exc3">**Exercise 3.** </a> For the problem of radioactive decay, given that $\displaystyle \alpha dt \le \frac{3}{5}$, explain why the error for the first timestep attributed to the forward Euler scheme is larger, than that attributed to the backward Euler scheme.
+
+```python
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```
+
+```python
+
+```

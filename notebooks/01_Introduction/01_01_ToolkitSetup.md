@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: Python 3
     language: python
@@ -33,7 +33,8 @@ jupyter:
             * [Creating local Git repository](#Creating-local-Git-repository)
             * [Creating remote Git repository](#Creating-remote-Git-repository)
         2. [Git branches](#Git-branches)
-4. [Troubleshooting](#Troubleshooting)
+4. [Summary](#Summary)
+5. [Troubleshooting](#Troubleshooting)
 
 
 ## Python and why Python
@@ -412,6 +413,10 @@ We have learnt the very basics of Git, now let's clean up, as we don't need to s
 [26]: <https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes>
 
 <div class="notice">*<a name="notice">We advice, you always set the same names for the remote branch and the local branch, that is tracking this remote, until you're an experienced Git user, as the same name is required for pushing, but not necessary for pulling.</a></div>
+
+## Summary
+
+In this notebook we have fully set up the numerical tools we will require to learn how to approximate solutions for the partial differential equations. On top of that, we have learnt the basics of conda virtual environments and Git.
 
 ## Troubleshooting
 

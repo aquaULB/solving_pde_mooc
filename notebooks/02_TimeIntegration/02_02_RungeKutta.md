@@ -27,11 +27,12 @@ jupyter:
 
     2.1 [Numerical stability of a two-stage Runge-Kutta scheme](#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme)
 
-3. [General Runge-Kutta schemes](#General-Runge-Kutta-schemes)
-4. [Implicit Runge-Kutta schemes](#Implicit-Runge-Kutta-schemes)
-5. [Summary](#Summary)
-6. [Exercises](#Exercises)
-7. [References](#References)
+- [\end{pmatrix}](#endpmatrix)
+  - [General Runge-Kutta schemes](#general-runge-kutta-schemes)
+  - [Implicit Runge-Kutta schemes](#implicit-runge-kutta-schemes)
+  - [Summary](#summary)
+  - [Exercises](#exercises)
+  - [References](#references)
 
 
 ## Introduction
@@ -512,7 +513,7 @@ for i in range(nt):
     y_imp[i+1] = y_imp[i] + 0.5*dt*(k_1+k_2)
 ```
 
-As you may observe from the code, our implementation is somewhat 'naive', meaning that we don't solve linear equations for $k_i$ numerically, as we have solved them analytically. Though, in the real-world code the better approach would be to think through such design of a code, that coefficients are constructed automatically from the generic Runge-Kuta formulas.
+As you may observe from the code, our implementation is somewhat 'naive', meaning that we don't solve equations for $k_i$ numerically, as we have solved them analytically. In a production code, a better approach would be to design the code in such a way that the coefficients are computed automatically from the generic Runge-Kutta formulas.
 
 ```python
 t = np.arange(nt+1) * dt
@@ -543,9 +544,9 @@ for axis in ax:
 
 ## Summary
 
-In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While, we won't consider Runge-Kutta schemes of order higher than 4 in a present course, we discussed the complexities one would face trying to construct equations for coefficients $k_i$ for the higher orders. We've also given the insight into implicit Runge-Kutta procedures and demonstrated naive implementation of Qin and Zhang's second-order implicit method.
+In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While, we won't consider Runge-Kutta schemes of order higher than 4 in the course, we discussed the complexities one would face trying to construct equations for the coefficients $k_i$ for higher order schemes. We also gave insight into implicit Runge-Kutta schemes and provided an implementation of Qin and Zhang's second-order implicit method.
 
-Thus, we summarize the chapter dedicated to the **Time integration**. In the following chapter we will consider finite difference method, which provides tools to approximate derivatives in partial differential equations converting them into the system of linear equations.
+With this we conclude the chapter dedicated to **Time integration**. In the following chapter we will consider the finite differences method to approximate derivatives in partial differential equations and convert them into a system of linear equations.
 
 ## Exercises
 

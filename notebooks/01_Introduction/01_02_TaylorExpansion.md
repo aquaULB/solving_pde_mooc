@@ -28,6 +28,8 @@ jupyter:
 
     2.1 [Expansion of exponential function](#Expansion-of-exponential-function)
 
+3. [Exercises](#Exercises)
+
 
 ## Introduction
 
@@ -104,23 +106,37 @@ To make things more concrete and to write our first Python code of the course, l
 e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
 \end{equation}
 
-As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$. Let's check using Python that this is indeed the case.
+As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = O(\Delta x)^3$.
 
-First of all, we need to *import* some Python packages into our code. One Python file can access the content of another by *importing* it. Packages we are interested in at this stage are: 
+Let's write a Python code to check if this is indeed the case.
+
+First of all, we need to *import* some Python packages into our code. One Python file can access the content of another by *importing* it. Packages we are going to be interested in the most throughout the course are: 
 
 * ``NumPy``
 
-    > [NumPy][1] is the fundamental package for scientific computing in Python. It is a Python library that provides a multidimensional array object, various derived objects (such as masked arrays and matrices), and an assortment of routines for fast operations on arrays, including mathematical, logical, shape manipulation, sorting, selecting, I/O, discrete Fourier transforms, basic linear algebra, basic statistical operations, random simulation and much more.
-    
+    > [NumPy][10] is the fundamental package for scientific computing in Python. It is a Python library that provides a multidimensional array object, various derived objects (such as masked arrays and matrices), and an assortment of routines for fast operations on arrays, including mathematical, logical, shape manipulation, sorting, selecting, I/O, discrete Fourier transforms, basic linear algebra, basic statistical operations, random simulation and much more.
+
+* ``SciPy``
+
+    > [SciPy][11] is a collection of mathematical algorithms and convenience functions built on the NumPy extension of Python. It adds significant power to the interactive Python session by providing the user with high-level commands and classes for manipulating and visualizing data. With SciPy, an interactive Python session becomes a data-processing and system-prototyping environment rivaling systems, such as MATLAB, IDL, Octave, R-Lab, and SciLab.
+
 * ``Matplotlib``
-    > [Matplotlib][2] is a comprehensive library for creating static, animated, and interactive visualizations in Python.
+    > [Matplotlib][12] is a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
-[1]: <https://numpy.org/doc/stable/user/whatisnumpy.html> "Why NumPy?"
-[2]: <https://matplotlib.org> "Matplotlib"
+*NumPy*, *SciPy* and *Matplotlib* are fundamental packages for scientific computations in Python. 
 
-These 2 packages form the basis of scientific computations in Python. *NumPy* provides tools to solve huge variety of different mathematical problems, and *Matplotlib* provides tools to visualize any kind of numerical data.
+*NumPy* and *SciPy* are better to be understood together, because *SciPy actually builds on NumPy*.
+
+> [Both NumPy and SciPy][13] are Python libraries used for used mathematical and numerical analysis. NumPy contains array data and basic operations such as sorting, indexing, etc whereas, SciPy consists of all the numerical code. Though NumPy provides a number of functions that can help resolve linear algebra, Fourier transforms, etc, SciPy is the library that actually contains fully-featured versions of these functions along with many others.
+
+*Matplotlib* provides tools to visualize any kind of numerical data.
 
 Imports in Python are performed using `import` statement:
+
+[10]: <https://numpy.org/doc/stable/user/whatisnumpy.html> "Why NumPy?"
+[11]: <https://docs.scipy.org/doc/scipy/reference/tutorial/general.html> "SciPy"
+[12]: <https://matplotlib.org> "Matplotlib"
+[13]: <https://medium.com/edureka/scipy-tutorial-38723361ba4b> "NumPy vs SciPy"
 ```python
 import numpy
 ```
@@ -210,6 +226,10 @@ When we want to define a given quantity at a set of points, we might use *either
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
 Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
+
+Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. Notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
+
+[14]: <https://www.markdownguide.org/getting-started/> "Markdown"
 
 
 1. *Create a Python list in a loop and then transform it into a NumPy array*
@@ -399,17 +419,29 @@ fig, ax = plt.subplots()
 # plot with stars as markers. label argument
 # defines the description for the data, which will
 # be displayed in the legend.
-ax.loglog(delta, R3, '*', label=r'$R_3$')
+ax.loglog(delta, R3, '*', label='$R_3$')
 
 # We plot delta^3 with the same log scaling
 # to show that R3 is of order delta^3. See
 # that you can configure the color of dots and
 # lines you plot with the color argument.
-ax.loglog(delta, slope, color='green', label=r'$\Delta^{3}$')
+#
+# This is one way to set a color of a curve - 
+# by simply passing the name of a color to
+# the function. But this way is limited to only
+# 8 colors. If you need bigger variety, 
+# Matplotlib supports RGBA format. You can either
+# pass a tuple of float values in range [0, 1]
+# as (red, green, blue, alpha), or you can
+# pass an RGBA string.
+# More info
+# https://matplotlib.org/3.1.1/tutorials/colors/colors.html
+#
+ax.loglog(delta, slope, color='green', label='$\Delta^{3}$')
 
 # We set labels of x axis and y axis.
-ax.set_xlabel(r'$\Delta x$')
-ax.set_ylabel(r'$R_3$')
+ax.set_xlabel('$\Delta x$')
+ax.set_ylabel('$R_3$')
 
 # We set the title, which in this case is only
 # related to the subplot referred by ax, but
@@ -460,7 +492,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 
 Some exercises' prefixes are links, click on them to see what part of text they refer to.
 
-[**Exercise 1:**](#exc1) If you were to make a valid estimate of which approach to generate the deltas is the fastest, how would you proceed ? What result do you then get?
+[**Exercise 1:**](#exc1) If you were to make a valid estimate of which approach to generate the deltas is the fastest, how would you proceed? What result do you then get?
 
 
 [**Exercise 2:**](#exc2) In order to see by yourself the advantages of *NumPy*, generate the $R_3$ sequence using *Python's* standard `math` module. For that purpose, only use the `delta_list` object instead of the `delta` numpy array. Time both the referenced cell and your code. *Note* that by design, cell magic commands *must* be at the very top of the cell. In order to import the `math` module, run
@@ -481,7 +513,7 @@ For a better understanding of the task consider the following example:
 
 <img src="../figures/TaylorExampleExercise.png">
 
-Find expansion of a function on [*Wikipedia*][9].
+Find expansion of the example function on [*Wikipedia*][9].
 
 [9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
 <!-- #endregion -->

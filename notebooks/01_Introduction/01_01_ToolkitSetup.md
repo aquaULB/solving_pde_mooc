@@ -25,7 +25,7 @@ jupyter:
 1. [Python and why Python](#Python-and-why-Python)
 2. [Get to know Anaconda](#Get-to-know-Anaconda)
     1. [Installing Anaconda](#Installing-Anaconda)    
-    2. [Setting conda environment](#Setting-conda-environment)
+    2. [Creating a conda environment](#Creating-a-conda-environment)
 3. [Get to know Git](#Get-to-know-Git)
     1. [Installing Git](#Installing-Git)   
     2. [Basic usage](#Basic-usage)   
@@ -44,13 +44,13 @@ Why do we choose Python?
 
 > [Python][00] is a clear and powerful object-oriented programming language, comparable to Perl, Ruby, Scheme, or Java.
 
-Let's talk **pros & cons** of Python.
+Let's describe some of the **pros & cons** of Python.
 
 **Pros:**
 
 * *Simple and elegant syntax*
 
-  Makes Python easy to learn and Python codes - easy to read.
+  Makes Python easy to learn and Python codes easy to read.
   
 * *Interactive mode provided by IPython and Jupyter*
 
@@ -62,30 +62,31 @@ Let's talk **pros & cons** of Python.
 
 * *Flexible...*
 
-  ...in terms of integration with other programming languges (C, C++, Java etc.).
+  ...in terms of integration with other programming languages (C, C++, Java etc.).
 
 * *Free and open-source*
 
-  It means, that Python can been freely used, modified and redistributed.
+  It means that Python can been freely used, modified and redistributed.
   
 * *Wide range of additional packages* 
 
-  We are particularly interested in those, providing tools for scientific programming (NumPy, SciPy).
+  We are particularly interested in those providing tools for scientific programming (NumPy, SciPy...).
 
 **Cons:**
 
-* *Python is speed-limited*
+* *Python is natively speed-limited*
 
   Python is an [*interpreted*][01] language and cannot compete in speed with [*compiled*][01] languages, such as C.
   
-While we've named the only disadvantage of Python, it makes Python not-worth-to-use in situations, when the running speed of the program becomes crucial - for example, when doing large-scale simulations, or developing the core engine of a game.
+While we've named only one disadvantage of Python, it makes Python inadequate in situations when the running speed of the program becomes crucial - for example, when doing large-scale simulations, or developing the core engine of a game.
 
-So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. It is, in fact, a very important decision to take - is my choice of the programming language reasonable in this particular case, or not?
+So, whenever you discover "the disadvantage" of the programming language, keep in mind, that it is very situation-dependant. In fact, you have a very important decision to take - is my choice of programming language reasonable in this particular case, or not?
 
-But for us Python is a perfect tool. While we are solving *small* problems in terms of computer resources, we are good. Moreover, it is highly probable, that *we are not any slower than we'd be if we've chosen a C-based language*, as the development time, when programming, in Python decreases significantly.
+But for us Python is the perfect tool. Since we are solving *small* test problems in terms of computer resources, we are good. Moreover, it is highly probable that overall *we are not any slower than we'd be if we had chosen a C-based language*, as the development time, when programming in Python can be much smaller.
 
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [01]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
+
 
 ## Get to know Anaconda
 
@@ -93,39 +94,39 @@ But for us Python is a perfect tool. While we are solving *small* problems in te
 
 > [Anaconda][10] is a free, easy-to-install package manager, environment manager, and Python distribution with a collection of 1,500+ open source packages with free community support. Anaconda is platform-agnostic, so you can use it whether you are on Windows, macOS, or Linux.
 
-We will install Anaconda3, as it includes Python 3.x - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably all that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anconda repository.
+We will install Anaconda3, as it includes Python 3.x - the latest stable version of Python. Installing Anaconda will automatically install the most useful Python packages - probably including all those that we will require throughout the course. Though, there is always a possibility to install additional packages from the Anaconda repository.
 
-This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for the Python code, and is also included in basic Anaconda edition.
+This installation file has been created in Jupyter Notebook. Jupyter Notebook provides an interactive shell for Python code, and is also included in the Anaconda distribution.
 
-Installation instructions are provided on the official [website][11], and are quite detailed. Click on this link and install the distribution on your work machine. This is a prerequisite to follow this course.
+Installation instructions are provided on the official [website][11], and are quite detailed. Click on this link and install the distribution suitable for your work machine. This is a prerequisite to follow this course.
 
-After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*, which provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc.
+After Anaconda has been installed, we are all set to run Jupyter Notebook. Anaconda comes together with *anaconda-navigator*. This program provides a graphical interface to access Jupyter Notebook, QtConsole, Spyder etc. We recommend you learn how to work with Anaconda using the terminal, as, first, it will improve your skills of using terminal, and second, allow you to easily use conda package manager, create conda environments etc. - *programmers love the terminal*.
 
-First, let's figure out, how we start Jupyter Notebook through terminal.
+First, let's see how we start Jupyter Notebook through the terminal.
 
-If you're on **MacOS or Linux**, the [.bashrc file][12] on your machine must be updated with a path to anaconda3/bin during the installation, so that each time you start new terminal session, all the containings of anaconda3/bin are globally accesible. It means, that if you just type `jupyter notebook` in command line, Jupyter Notebook should start running.
+If you're on **MacOS or Linux**, the [.bashrc file][12] on your machine must be updated with a path to anaconda3/bin during the installation, so that each time you start a new terminal session, all the programs contained in the anaconda3/bin directory are globally accessible. It means, that if you just type `jupyter notebook` in the command line, Jupyter Notebook should start running.
 
-If you're on **Windows**, then, after opening START menu after installation, you'll be able to see *Anaconda prompt*. This application will start a terminal session with the containings of anaconda3/bin also globally accesible.
+If you're on **Windows** you should be you'll be able to see the program *Anaconda prompt* in the START menu just after installation. This application will start a terminal session with the content of anaconda3/bin also globally accessible.
 
-In the case if `jupyter notebook` command is not recognized after installation, refer to the [Troubleshooting section](#troubleshooting1).
+If the `jupyter notebook` command is not recognized in the terminal after installation, refer to the [Troubleshooting section](#troubleshooting1).
 
-### Setting conda environment
+### Creating a conda environment
 
 > A [conda environment][13] is a directory that contains a specific collection of conda packages that you have installed. For example, you may have one environment with NumPy 1.7 and its dependencies, and another environment with NumPy 1.6 for legacy testing. If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
-We propose that you create a conda virtual environment for the present course, and start with installing an additional component in this environment, so that you'll have all necessary tools in an isolated space, and also learn about conda environments.
+We propose that you create a conda virtual environment for the course, and start with installing additional componentq in this environment, so that you'll have all necessary tools in an isolated space, and also learn about conda environments.
 
 * First, create an environment with a specific version of Python
 
         conda create -n course python=3.8.5
 
-  `-n` is an argument for `conda create`, which has to be followed by a name of your environment. You can replace `course` with any name you prefer. We also specify, that we want the version of Python 3.8.5.
+  `-n` is an argument for `conda create`, which has to be followed by the name of your environment. You can replace `course` with any name you prefer. We also specify, that we want the version of Python 3.8.5.
 
 * Next, activate your virtual environment:
 
         conda activate course
 
-* Now, as virtual environment has been activated, you can use conda package manager to install necessary packages without specifying, that you want them in `course`.
+* Now, as virtual environment has been activated, you can use conda package manager to install some additional packages without specifying that you want them in `course`.
 
         conda install numpy scipy matplotlib jupyter
         conda install -c conda-forge jupytext jupyter_contrib_nbextensions
@@ -134,22 +135,24 @@ We propose that you create a conda virtual environment for the present course, a
 
   > [Conda channels][14] are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a default set of channels, and packages are automatically downloaded and updated from https://repo.anaconda.com/pkgs/.
 
-  conda-forge project provides a remote conda channel distributing conda packages, which you sometimes cannot find in conda `default` channel.
+  conda-forge provides a remote conda channel distributing conda packages, which you sometimes cannot find in conda the `default` channel.
 
-  We install `jupytext` package, as it provides a possibility to save Jupyter Notebook as a simple Markdown file, and we also install `jupyter_contrib_nbextensions`, which contains collection of extension for Jupyter Notebook, in particular, support of LaTeX environments.
+  We install the `jupytext` package, as it provides a possibility to save Jupyter notebooks as a simple Markdown file, and we also install `jupyter_contrib_nbextensions`, which contains a collection of extensions for Jupyter Notebook, in particular, support of LaTeX environments.
 
-* Open Jupyter Notebook and activate necessary extensions.
+* Open Jupyter Notebook and activate the necessary extensions (from the Edit menu).
 
 <img src="../figures/jupextensions.png">
 
-Now we are ready to go - we have a virtual environment, which includes all necessary Python packages, and we even activated extended support for LaTeX for our notebooks.
+Now we are ready to go - we have a virtual environment, which includes all necessary Python packages, and we even activated extended support for LaTeX.
 
-In case you're wondering what is LaTeX,
+In case you're wondering what LaTeX is,
 > [LaTeX][15] is a high-quality typesetting system; it includes features designed for the production of technical and scientific documentation. LaTeX is the de facto standard for the communication and publication of scientific documents. LaTeX is available as free software.
 
-In order to quit virtual environment, run:
+In order to quit the virtual environment, run:
 
         conda deactivate
+
+or just close the terminal window if you don't need it anymore.
 
 [10]: <https://docs.anaconda.com> "Anaconda"
 [11]: <https://docs.anaconda.com/anaconda/install/> "Installation"
@@ -157,6 +160,7 @@ In order to quit virtual environment, run:
 [13]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
 [14]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 [15]: <https://www.latex-project.org> "LaTeX"
+
 
 ## Get to know Git
 
@@ -431,6 +435,10 @@ Now `jupyter notebook` command should work.
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
+```
+
+```python
+
 ```
 
 ```python

@@ -255,7 +255,7 @@ Let's add a README.md file to our repo. If you're on MacOS/Linux:
 
 If you're on Windows:
 
-    type nul > README.md
+    notepad README.md
 
 Add some content to the README.md file (whathever you want) and save your modifications.
 

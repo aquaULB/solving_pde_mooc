@@ -534,10 +534,6 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 
 ```python
 from IPython.core.display import HTML
-css_file = '../styles/notebookstyle.css'
+css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

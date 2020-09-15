@@ -576,10 +576,6 @@ With this we conclude the chapter dedicated to **Time integration**. In the foll
 
 ```python
 from IPython.core.display import HTML
-css_file = '../styles/notebookstyle.css'
+css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

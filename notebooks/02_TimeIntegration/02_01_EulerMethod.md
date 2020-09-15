@@ -1163,10 +1163,6 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 ```python
 from IPython.core.display import HTML
-css_file = '../styles/notebookstyle.css'
+css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

@@ -41,16 +41,11 @@ Many models appearing in engineering or physical applications are mathematically
 
 By the end of the course, the student should have acquired the necessary skills to solve numerically equations such as the heat equation or Schrödinger's equation:  
 
-\begin{align*}
-\frac{\partial T(\boldsymbol r,t)}{\partial t}  & = \alpha \Delta T(\boldsymbol r,t), &\hbox{Heat equation}\\
-i\hbar \frac{\partial \Psi(\boldsymbol r,t)}{\partial t} & = \left[ \frac{-\hbar^2}{2m}\Delta + V(\boldsymbol r,t) \right]\Psi(\boldsymbol r,t), &\hbox{Schrödinger equation}
-\end{align*}
+<img style="display: block; margin-left: auto; margin-right: auto;" src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Balign*%7D%0A%5Cfrac%7B%5Cpartial%20T(%5Cboldsymbol%20r%2Ct)%7D%7B%5Cpartial%20t%7D%20%20%26%20%3D%20%5Calpha%20%5CDelta%20T(%5Cboldsymbol%20r%2Ct)%2C%20%26%5Chbox%7BHeat%20equation%7D%5C%5C%0Ai%5Chbar%20%5Cfrac%7B%5Cpartial%20%5CPsi(%5Cboldsymbol%20r%2Ct)%7D%7B%5Cpartial%20t%7D%20%26%20%3D%20%5Cleft%5B%20%5Cfrac%7B-%5Chbar%5E2%7D%7B2m%7D%5CDelta%20%2B%20V(%5Cboldsymbol%20r%2Ct)%20%5Cright%5D%5CPsi(%5Cboldsymbol%20r%2Ct)%2C%20%26%5Chbox%7BSchr%C3%B6dinger%20equation%7D%0A%5Cend%7Balign*%7D">
 
 We don't further describing those equations here (it's not a problem if you have never heard about them), but we just emphasises that they both contain the laplacian operator
 
-\begin{equation*}
- \Delta = \frac{\partial^2}{\partial x^2}+ \frac{\partial^2}{\partial y^2}+ \frac{\partial^2}{\partial z^2}
-\end{equation*}
+<img style="display: block; margin-left: auto; margin-right: auto;" src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Bequation*%7D%0A%20%5CDelta%20%3D%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20x%5E2%7D%2B%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20y%5E2%7D%2B%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20z%5E2%7D%0A%5Cend%7Bequation*%7D%0A">
 
 that makes them partial differential equations. Our main objective is then to formulate such operators numerically and to solve the resulting problems with computer algorithms. This also requires to complement the equations with suitable boundary conditions and to implement them consistently with the differential operators.
 

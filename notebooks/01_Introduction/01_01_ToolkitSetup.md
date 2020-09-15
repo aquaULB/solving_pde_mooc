@@ -447,14 +447,6 @@ Now `jupyter notebook` command should work.
 
 ```python
 from IPython.core.display import HTML
-css_file = '../styles/notebookstyle.css'
+css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
-```
-
-```python
-
 ```

@@ -202,7 +202,7 @@ From now on, whatever we plot will appear inline - in our notebook, right below 
 We then set the style of our plots, which will be universal throughout the whole course. Matplotlib has several predefined styles encoded in files. You, of course, can always create your own style.
 
 ```python
-plt.style.use('../Styles/mainstyle.use')
+plt.style.use('../styles/mainstyle.use')
 ```
 
 Let us now create the first mathematical object that will represent the error term $R_3$ of the approximation of the exponential function (see \ref{eq:residual}).
@@ -534,6 +534,6 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 
 ```python
 from IPython.core.display import HTML
-css_file = '../Styles/notebookstyle.css'
+css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```

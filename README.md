@@ -4,19 +4,36 @@
 
 by Bernard Knaepen & Yelyzaveta Velizhanina
 
-To get the local copy of the *solving_pde_mooc* repository, copy the URL of the remote repo 
+The notebooks contained in this course can be executed on a local machine after installing the required set of Python packages and the distributed version-control system Git. The full set of instructions to complete these two tasks is available by clicking on the following link:
+
+[01_01_ToolkitSetup.md][00]
+
+The reader familiar with installing Python packages and with the usage of Git may skip reading the above instructions and simply install the Python dependencies listed in:
+
+[requirements.txt][01]
+
+Afterwards, to get a local copy of the *solving_pde_mooc* repository, first copy the URL of the remote repo 
 
 <img src="./notebooks/figures/cloneRepo.png" width="500">
 
-and run git clone command as follows:
+On your computer, open a terminal window and navigate to a folder in which you would like to store the course material. In that folder, run the git clone command as follows:
 
     git clone https://github.com/aquaULB/solving_pde_mooc.git
 
-It will create a local directory *solving_pde_mooc* automatically initialized as a local git repository with local branch *master* tracking remote branch *origin/master*.
+This will automatically create and initialize a local git repository *solving_pde_mooc*  with the local branch *master* tracking the remote branch *origin/master*.
 
-To see the content of the notebooks with lessons and to be able to execute the notebook cells, install [jupytext][1]. To install jupytext with conda, run:
+To see the content of a notebook, open a terminal window in the folder *solving_pde_mooc* and type:
 
-    conda install -c conda-forge jupytext
+    jupyter-notebook
 
+This will open a window in your web browser in which you can open any notebook by clicking on its name. If the content of the notebook does not display properly, make sure that you have activated the appropriate Python environment as explained in the instructions.
 
-[1]: <https://jupytext.readthedocs.io/en/latest/> "jupytext"
+The reader not familiar with the usage of jupyter-notebook should read a tutorial such as this one:
+
+[Jupyter Notebook: An Introduction][02]
+
+[00]: https://github.com/aquaULB/solving_pde_mooc/blob/master/notebooks/01_Introduction/01_01_ToolkitSetup.md
+
+[01]: https://github.com/aquaULB/solving_pde_mooc/blob/master/requirements.txt
+
+[02]: https://realpython.com/jupyter-notebook-introduction/

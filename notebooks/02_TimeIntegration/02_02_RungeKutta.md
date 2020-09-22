@@ -195,10 +195,10 @@ y = np.empty((nt+1, 2))
 y[0] = h0, v0
 
 # Create vector b.
-b = np.asarray([0., -g])
+b = np.array([0., -g])
 
 # Create matrix L.
-L = np.asarray([[0., 1.], [0., 0.]])
+L = np.array([[0., 1.], [0., 0.]])
 
 # Perform the two-stage time stepping.
 for i in range(nt):
@@ -482,10 +482,10 @@ y_exp[0] = h0, v0
 y_imp[0] = h0, v0
 
 # Create vector b.
-b = np.asarray([0., -g])
+b = np.array([0., -g])
 
 # Create matrix L.
-L = np.asarray([[0., 1.], [0., 0.]])
+L = np.array([[0., 1.], [0., 0.]])
 
 # Compute the constant matrix needed in
 # the implement implicit RK scheme.

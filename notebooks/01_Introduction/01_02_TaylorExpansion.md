@@ -294,7 +294,7 @@ delta = np.array(delta_list)
 # https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
 delta_list = [2**(-k) for k in range(1, 10)]
 
-delta = np.asarray(delta_list)
+delta = np.array(delta_list)
 ```
 
 3. *Create an empty NumPy array and then fill it with values in a loop*

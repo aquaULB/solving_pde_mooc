@@ -49,7 +49,7 @@ ax.set_axis_off()
 ax.axis('equal')
 
 # edges
-x=np.asarray([0, 10])
+x=np.array([0, 10])
 y = 0.0 * x
 
 # edges
@@ -58,7 +58,7 @@ ax.text(0, 0.5, r'$a$', fontsize=18, horizontalalignment='center')
 ax.text(10, 0.5, r'$b$', fontsize=18, horizontalalignment='center')
 
 # inside
-x=np.asarray([5, 5.8, 7])
+x=np.array([5, 5.8, 7])
 y = 0.0 * x
 
 ax.plot(x, y, linestyle='')

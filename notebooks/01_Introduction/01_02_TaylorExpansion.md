@@ -227,7 +227,7 @@ When we want to define a given quantity at a set of points, we might use *either
 
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
-Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
+Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%timeit`. Double `%` here means that the command is applied to the *whole* cell.
 
 Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. A notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
 
@@ -237,7 +237,7 @@ Note, that the concept of *cell* in Python does not exist - it is unique to Jupy
 1. *Create a Python list in a loop and then transform it into a NumPy array*
 
 ```python
-%%time
+%%timeit
 
 # First create an empty Python list, which
 # will contain values of delta for all k.
@@ -285,7 +285,7 @@ delta = np.array(delta_list)
     This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.  
 
 ```python
-%%time
+%%timeit
 
 # As you can see we managed to shorten our code - 
 # what has been previously accomplished in 3 lines,
@@ -300,7 +300,7 @@ delta = np.array(delta_list)
 3. *Create an empty NumPy array and then fill it with values in a loop*
 
 ```python
-%%time
+%%timeit
 
 delta = np.zeros(9)
 

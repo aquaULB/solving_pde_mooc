@@ -252,7 +252,7 @@ To analyze this from the quantitative point of view, let us redo the computation
 # Create a list containing the set of
 # time steps, so that each time step is one half
 # of the previous one.
-dt_list = np.asarray([0.5/2**k for k in range(5)])
+dt_list = np.array([0.5/2**k for k in range(5)])
 
 # Create an array to store the values of
 # N(tf) for the different time steps.
@@ -644,7 +644,7 @@ y = np.empty((nt+1, 2))
 y[0] = h0, v0
 
 # Create vector b.
-b = np.asarray([0., -g])
+b = np.array([0., -g])
 
 # Create the matrix L. Note that the default type of
 # values in a numpy array is double
@@ -654,7 +654,7 @@ b = np.asarray([0., -g])
 # integers. We prefer it like that to be 100%
 # explicit. But after all, it is rather a per-
 # sonal choice.
-L = np.asarray([[0., 1.], [0., 0.]])
+L = np.array([[0., 1.], [0., 0.]])
 
 # Perform the time stepping. numpy.dot is a
 # very useful function providing various func-
@@ -799,7 +799,7 @@ y = np.empty((nt+1, 2))
 y[0] = x0, v0
 
 # Create matrix L.
-L = np.asarray([[0., 1.], [-gamma**2, 0.]])
+L = np.array([[0., 1.], [-gamma**2, 0.]])
 
 # Perform the time stepping.
 for i in range(nt):
@@ -1081,7 +1081,7 @@ y_imp[0] = x0, v0
 # To do this, we use the linalg.inv function of numpy.
 # For more info
 # https://numpy.org/doc/stable/reference/generated/numpy.linalg.inv.html
-L_imp = np.linalg.inv(np.asarray([[1., -dt], [gamma**2*dt, 1.]]))
+L_imp = np.linalg.inv(np.array([[1., -dt], [gamma**2*dt, 1.]]))
 
 # Perform the time stepping. dt is hidden
 # in L_imp, so it does appear here.

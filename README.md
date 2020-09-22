@@ -8,11 +8,11 @@ The notebooks contained in this course can be executed on a local machine after 
 
 [01_01_ToolkitSetup.md][00]
 
-The reader familiar with installing Python packages and with the usage of Git may skip reading the above instructions and simply install the Python dependencies listed in:
+The reader familiar with Python environment setup, usage of Git and jupyter extensions may skip reading the above instructions and simply install the Python dependencies listed in [requirements.txt][01] using pip:
 
-[requirements.txt][01]
+    pip install -r requirements.txt
 
-Afterwards, to get a local copy of the *solving_pde_mooc* repository, first copy the URL of the remote repo 
+Afterwards, to get a local copy of the *solving_pde_mooc* repository, first copy the URL of the remote repo
 
 <img src="./notebooks/figures/cloneRepo.png" width="500">
 

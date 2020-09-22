@@ -6,9 +6,9 @@ by Bernard Knaepen & Yelyzaveta Velizhanina
 
 The notebooks contained in this course can be executed on a local machine after installing the required set of Python packages and the distributed version-control system Git. The full set of instructions to complete these two tasks is available by clicking on the following link:
 
-[01_01_ToolkitSetup.md][00]
+[01_01_ToolkitSetup.md][0]
 
-The reader familiar with Python environment setup, usage of Git and jupyter extensions may skip reading the above instructions and simply install the Python dependencies listed in [requirements.txt][01] using pip:
+The reader familiar with Python environment setup, usage of Git and jupyter extensions may skip reading the above instructions and simply install the Python dependencies listed in [requirements.txt][1] using pip:
 
     pip install -r requirements.txt
 
@@ -30,10 +30,10 @@ This will open a window in your web browser in which you can open any notebook b
 
 The reader not familiar with the usage of jupyter-notebook should read a tutorial such as this one:
 
-[Jupyter Notebook: An Introduction][02]
+[Jupyter Notebook: An Introduction][2]
 
-[00]: https://github.com/aquaULB/solving_pde_mooc/blob/master/notebooks/01_Introduction/01_01_ToolkitSetup.md
+[0]: https://github.com/aquaULB/solving_pde_mooc/blob/master/notebooks/01_Introduction/01_01_ToolkitSetup.md
 
-[01]: https://github.com/aquaULB/solving_pde_mooc/blob/master/requirements.txt
+[1]: https://github.com/aquaULB/solving_pde_mooc/blob/master/requirements.txt
 
-[02]: https://realpython.com/jupyter-notebook-introduction/
+[2]: https://realpython.com/jupyter-notebook-introduction/

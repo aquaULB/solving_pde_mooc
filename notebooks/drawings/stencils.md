@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: 'Python 3.7.7 64-bit (''course'': conda)'
     language: python
@@ -18,7 +18,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 %matplotlib inline
-plt.style.use('./style.use')
+plt.style.use('../styles/style.use')
 ```
 
 ## Basic sample
@@ -38,7 +38,7 @@ ax.text(2, 0.5, r'$i-1$', fontsize=18, horizontalalignment='center')
 ax.text(4, 0.5, r'$i$', fontsize=18, horizontalalignment='center')
 ax.text(6, 0.5, r'$i+1$', fontsize=18, horizontalalignment='center')
 
-fig.savefig('figures/sample.png', dpi=300)
+fig.savefig('../figures/sample.png', dpi=300)
 ```
 
 ## Taylor's theorem

@@ -50,7 +50,7 @@ plt.style.use('../styles/mainstyle.use')
 <!-- #region -->
 In the previous notebook we have considered the forward and the backward Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the time step.
 
-Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first order differential equations as problems containing higher order derivatives may be reduced to such systems. Our system of equations thus reads,
+Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first-order differential equations as problems containing higher-order derivatives may be reduced to such systems. Our system of equations thus reads,
 
 \begin{align}
     y'(t)=f(t,y)
@@ -85,7 +85,7 @@ so that,
     y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*) \label{RK2ynp1}
 \end{align}
 
-In notebook 1.1, we discussed the fact that the forward Euler method is second order accurate for one time step and first order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
+In notebook 1.1, we discussed the fact that the forward Euler method is second-order accurate for one time step and first-order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
 
 \begin{align}
  y^{n+1} & = y^n + dt f(t^n+\frac{dt}{2},y^n + \frac{dt}{2}f(t^n, y^n)) \nonumber \\
@@ -93,7 +93,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second o
          & = y^n + dt y^{'n} + \frac{dt^2}{2}y^{''n} + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher order accuracy). 
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 
@@ -121,7 +121,7 @@ Let us apply the Runge-Kutta scheme to the problem of a body in free fall. The s
 
 \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
-    & \displaystyle \frac{dv}{dt}=-g. 
+    & \displaystyle \frac{dv}{dt}=-g.
 \end{cases}
 
 Rephrasing it in matrix form we get:
@@ -251,7 +251,7 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
-The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+The construction of higher-order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
 
 > Above this, very little is known \cite{Butcher1996}.
 
@@ -265,7 +265,7 @@ Therefore, we focus here our attention on a general purpose **fourth-order Runge
     k_4 & = dtf(t^n+dt,y^n+k_3)
 \end{align}
 
-For an autonomous linear system, it is straightforward to prove that this method is indeed fifth order accurate for one time step. After diagonalization, we have:
+For an autonomous linear system, it is straightforward to prove that this method is indeed fifth-order accurate for one time step. After diagonalization, we have:
 
 \begin{align}
   z^{n+1} & = z^n + \frac16 dt \Lambda z^n + \frac13 dt \Lambda (z^n + \frac12 dt \Lambda z^n ) + \frac13 dt \Lambda (z^n + \frac12 dt \Lambda (z^n + \frac12 dt \Lambda z^n)) \nonumber \\
@@ -273,7 +273,7 @@ For an autonomous linear system, it is straightforward to prove that this method
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to the fourth order. For a non-linear system, one can also prove that RK4 is fourth-order but it is a tedious task.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth order. For a non-linear system, one can also prove that RK4 is of fourth order but it is a tedious task.
 
 In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
 
@@ -302,7 +302,7 @@ ny = 100
 # the linspace function. Unlike the arange
 # function, here we set number of points
 # we want to put between, instead of the
-# distance between the points. 
+# distance between the points.
 # Also note that, while numpy.arange does
 # NOT includes the end point you pass into
 # the array, linspace does include it.
@@ -358,7 +358,7 @@ fig, ax = plt.subplots(figsize=(8,8))
 
 # We shall now use the
 # matplotlib.pyplot.contour funtion.
-# As X and Y, we pass the mesh data. Let 
+# As X and Y, we pass the mesh data. Let
 # f(x, y)=g(x, y) + C be some function
 # where C is a constant. Imagine
 # we want to plot contour lines for the
@@ -377,7 +377,7 @@ fig, ax = plt.subplots(figsize=(8,8))
 # matplotlib.pyplot.contour provides us
 # exactly the tool we want, as our condi-
 # tion for stability is given by an expression
-# of the kind f(x, y) <= 1. The only thing we 
+# of the kind f(x, y) <= 1. The only thing we
 # have to do is to display o n l y that contour line
 # which corresponds to C=-1.
 #
@@ -436,7 +436,7 @@ We already pointed out that the forward Euler scheme is unstable if one of the e
 
 ## Implicit Runge-Kutta schemes
 
-We have discussed that explicit Runge-Kutta schemes become quite complicated as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher order of accuracy $p$. We will give a very brief introduction into the subject, so that you get an impression.
+We have discussed that explicit Runge-Kutta schemes become quite complicated as the order of accuracy increases. Implicit Runge-Kutta methods might appear to be even more of a headache, especially at higher-order of accuracy $p$. We will give a very brief introduction into the subject, so that you get an impression.
 
 Generally speaking, RK methods can be defined as follows:
 
@@ -494,7 +494,7 @@ L = np.array([[0., 1.], [0., 0.]])
 # There is a possibility to shift the dia-
 # gonal if needed.
 #
-# For more info 
+# For more info
 # https://numpy.org/doc/stable/reference/generated/numpy.eye.html
 mat_k = np.linalg.inv(np.eye(2)-L*dt/4.)
 
@@ -543,7 +543,7 @@ for axis in ax:
 
 ## Summary
 
-In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While, we won't consider Runge-Kutta schemes of order higher than 4 in the course, we discussed the complexities one would face trying to construct equations for the coefficients $k_i$ for higher order schemes. We also gave insight into implicit Runge-Kutta schemes and provided an implementation of Qin and Zhang's second-order implicit method.
+In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While, we won't consider Runge-Kutta schemes of order higher than 4 in the course, we discussed the complexities one would face trying to construct equations for the coefficients $k_i$ for higher-order schemes. We also gave insight into implicit Runge-Kutta schemes and provided an implementation of Qin and Zhang's second-order implicit method.
 
 With this we conclude the chapter dedicated to **Time integration**. In the following chapter we will consider the finite differences method to approximate derivatives in partial differential equations and convert them into a system of linear equations.
 
@@ -551,13 +551,13 @@ With this we conclude the chapter dedicated to **Time integration**. In the foll
 
 **Exercise 1.** Prove analytically that the two stage (explicit) Runge-Kutta scheme is not fourth-order accurate for one time step.
 
-**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second order accurate for a finite time interval.
+**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second-order accurate for a finite time interval.
 
 **Exercise 3.** Solve the problem of a body in free fall using the explicit RK4 method.
 
 **Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropriate time step).
 
-**Exercise 5.** Implement *Pareschi and Russo's two-stage 2nd order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
+**Exercise 5.** Implement *Pareschi and Russo's two-stage second-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 

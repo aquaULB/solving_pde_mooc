@@ -26,11 +26,11 @@ jupyter:
 2. [The forward Euler method](#The-forward-Euler-method)
 
     2.1 [Numerical accuracy of the forward Euler method](#Numerical-accuracy-of-the-forward-Euler-method)
-    
+
     2.2 [Numerical stability of the forward Euler method](#Numerical-stability-of-the-forward-Euler-method)
-    
+
     2.3 [Higher-order example](#Higher-order-example)
-    
+
     2.4 [Numerical stability of the forward Euler method revisited](#Numerical-stability-of-the-forward-Euler-method-revisited)
 
 3. [The backward Euler method](#The-backward-Euler-method)
@@ -48,7 +48,7 @@ The ODEs we consider can be written in the form:
   y^{(n)}=f(t, y, \dots, y^{(n-1)}) \label{eq:ODE},
 \end{equation}
 
-where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-th derivative of $y$ with respect to $t$: 
+where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-th derivative of $y$ with respect to $t$:
 
 \begin{equation}
   y^{(n)}=\frac{d^n y}{dt^n}.
@@ -81,7 +81,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
+From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
@@ -164,11 +164,11 @@ plt.style.use('../styles/mainstyle.use')
 # exact solution of the differential
 # equation.
 #
-# numpy.arange builds a sequence of numbers. It 
-# is similar to the Python's standard 
-# range function, BUT, unlike it, it can 
-# operate not only on integers, but also 
-# floats, and its return type is a numpy 
+# numpy.arange builds a sequence of numbers. It
+# is similar to the Python's standard
+# range function, BUT, unlike it, it can
+# operate not only on integers, but also
+# floats, and its return type is a numpy
 # native array.
 #
 # For more info:
@@ -211,7 +211,7 @@ ax.plot(t, Nexact, linestyle='-', label='Exact solution')
 # KEYWORD arguments in Python functions. Posi-
 # tional arguments must obey a certain order, so
 # that it is clear which of the parameters they
-# stands for. Keyword arguments are passed with the keywords. 
+# stands for. Keyword arguments are passed with the keywords.
 #For example, we can write color='green',
 # where color is a keyword argument. Sometimes
 # keyword arguments can be passed as positional ones
@@ -230,7 +230,7 @@ ax.set_title('Radioactive decay')
 ax.legend()
 
 # And we save the whole figure to the specified
-# location in the default png format. 
+# location in the default png format.
 # If you don't put .png suffix, the plot will
 # still be saved as a png image. The keyword argument
 # dpi defines resolution of your image. It is lite-
@@ -271,7 +271,7 @@ values = np.empty_like(dt_list)
 # the elements of dt_list. We could create some
 # variable i=0 (indexing in Python and most of
 # the others programming languages starts with
-# 0), and then increase it by 1 at each iteration, 
+# 0), and then increase it by 1 at each iteration,
 # like this:
 #
 # i = 0
@@ -290,7 +290,7 @@ for i, dt in enumerate(dt_list):
     # which we are going to advance for each size
     # of dt.
     N = Ni
-    
+
     nt = int((tf-ti)/dt)
 
     # Be careful not to shadow the variables of
@@ -335,11 +335,11 @@ ax.legend()
 # fig.savefig('../figures/eulerSlope.png', dpi=300)
 ```
 
-Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after $N$ time steps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
+Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is of second order for going from $t$ to $t+dt$". Here we are comparing values after $N$ time steps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
 
 ### Numerical stability of the forward Euler method
 
-For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first order accuracy. Let us now focus on another crucial property of numerical schemes called *numerical stability*. 
+For the radioactive decay equation, the forward Euler method does a decent job: when reducing the time step, the solution converges to the exact solution, albeit only with first-order accuracy. Let us now focus on another crucial property of numerical schemes called *numerical stability*.
 
 For the problem of radioactive decay, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
 
@@ -369,7 +369,7 @@ fig, ax = plt.subplots(figsize=(6, 6))
 # ction name here starts with a capital letter -
 # Circle. That's because matplotlib.pyplot.Circle
 # is not really a function. It is an object called a
-# c l a s s in Python. We won't dig into classes 
+# c l a s s in Python. We won't dig into classes
 # at this stage, but what it means for us here?
 # Well, when we call the class by its name, we
 # are actually calling its c o n s t r u c t o r -
@@ -425,7 +425,7 @@ ax.set_ylim(ymin, ymax)
 # Let's complement our plot with arrows. We won't
 # dig into details of how arrows are configured, as
 # you already have enough knowledge to figure it out
-# yourself. 
+# yourself.
 #
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.arrow.html
@@ -457,7 +457,7 @@ ax.set_title('Stability of forward Euler scheme', y=1.01)
 ax.set_xticks((-2, 2))
 ax.set_yticks((-2, -1, 1))
 
-# Consider these 2 commented lines of code. 
+# Consider these 2 commented lines of code.
 # When cutomizing axes' ticks, Matplotlib pro-
 # vides Locator and Formatter objects - you
 # can customize the ticks in basically one
@@ -535,7 +535,7 @@ We introduce the new variable $\displaystyle v = \frac{dh}{dt}$, which has the p
 
 \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
-    & \displaystyle \frac{dv}{dt}=-g. 
+    & \displaystyle \frac{dv}{dt}=-g.
 \end{cases}
 
 If we apply the forward Euler scheme to this system, we get:
@@ -622,10 +622,10 @@ nt = int((tf-ti)/dt)
 y = np.empty((nt+1, 2))
 
 # Store initial the condition h0, v0 in the first
-# row of the array. 
+# row of the array.
 #
 # Here some words about array indexing must be
-# said. The right way to index a 1D array is 
+# said. The right way to index a 1D array is
 # to pass a single integer to it. It is
 # a bit more complicated with 2D arrays. The gene-
 # ric way to go, which always works, is to pass
@@ -668,7 +668,7 @@ for i in range(nt):
     y[i+1] = y[i] + np.dot(L, y[i])*dt + b*dt
 ```
 
-Let's now display our results graphically. 
+Let's now display our results graphically.
 
 We shall also demonstrate an interesting feature of `matplotlib`. We will create multiple subplots and store all of them in *one variable*. One could expect that this variable is some standard Python sequence (like tuple or list). But in the reality it will have the type `numpy.ndarray`. Why is this so curious? Because this happens **even if `numpy` is not imported**. As `matplotlib` [developers claim][1]:
 
@@ -696,11 +696,11 @@ ax[0].plot(t, y[:, 1], '-k', lw=0.8)
 # the domain in which t is defined, and
 # demonstrate a VERY IMPORTANT FEATURE OF
 # SEQUENCES IN PYTHON. It is the possi-
-# bility of negative indexing, which is 
+# bility of negative indexing, which is
 # absent in many other programming langu-
 # ages. When the a negative index is
 # provided to a sequence in Python, then
-# the element returned is 'counted' from the end 
+# the element returned is 'counted' from the end
 # of the array. t[-1] refers to the last
 # element of t. The logic behind this is that
 # t[0] corresponds to the first element of the
@@ -771,7 +771,7 @@ For the forward Euler scheme we have:
 dt
 \end{align}
 
-It does not seem very different from the previous problem so let's implement this. 
+It does not seem very different from the previous problem so let's implement this.
 
 ```python
 k = 2.    # spring constant
@@ -829,7 +829,7 @@ ax[1].set_title('Position vs time (m)')
 # Here we take advantage of that we
 # store both axes objects in one vari-
 # ables - we don't have to restrict the
-# limits for each of them separately, 
+# limits for each of them separately,
 # as we can iterate over the members
 # of the sequence - makes the code shorter.
 for axis in ax:
@@ -869,7 +869,7 @@ The matrix $L$ can then be decomposed as,
 
 \begin{align}
 L=Q\Lambda Q^{-1}\; \hbox{with,} \;\;
-\Lambda = 
+\Lambda =
 \begin{pmatrix}
     i\gamma & 0 \\
     0 & -i\gamma
@@ -899,7 +899,7 @@ It is now clear why the forward Euler scheme displays the diverging behaviour ob
 
 ## The backward Euler method
 
-The explicit Euler method gives a decent approximation in certain cases (\ref{eq:decay}), but it is absolutely inapplicable in others since it blows up for *any* time step (\ref{eq:spring}). It urges us to search for different ways to approximate evolution equations. One of them is the *implicit* Euler method. 
+The explicit Euler method gives a decent approximation in certain cases (\ref{eq:decay}), but it is absolutely inapplicable in others since it blows up for *any* time step (\ref{eq:spring}). It urges us to search for different ways to approximate evolution equations. One of them is the *implicit* Euler method.
 
 Simlarly to the explicit Euler method which is also referred to as the forward Euler method, the implicit Euler method is sometimes called the backward Euler method. Generally speaking, the difference between explicit and implicit numerical schemes is that in the first case the solution at latter point of the dependant variable (at a later time, for example) is built from the solution computed at the previous points; in the second case, the algorithm involves *both* the solution previous points and later points. Schematically we have:
 
@@ -949,8 +949,8 @@ N[0] = Ni, Ni
 # Define one-time step advancement coefficient
 # assumed by the implicit Euler outside of the
 # loop, as it is independant of t.
-# If some computation is independant of the iteration index, 
-# try to ALWAYS take it out of the loop. Otherwise, 
+# If some computation is independant of the iteration index,
+# try to ALWAYS take it out of the loop. Otherwise,
 # you are performing useless repetitive computations,
 # and simply waste time.
 coef_imp = (1.+alpha*dt)**(-1)
@@ -959,7 +959,7 @@ coef_imp = (1.+alpha*dt)**(-1)
 # explicit schemes.
 for i in range(nt):
     N[i+1, 0] = N[i, 0] - alpha*N[i, 0]*dt
-    
+
     N[i+1, 1] = coef_imp*N[i, 0]
 ```
 
@@ -1061,7 +1061,7 @@ dt = 0.15  # time step
 ```
 
 ```python
-# Recompute the number of time steps and 
+# Recompute the number of time steps and
 # the time array.
 nt = int((tf-ti)/dt)
 
@@ -1133,7 +1133,7 @@ We can write the denominator of \ref{eq:back_stab_sigma} in a trigonometric form
 \sigma = Ae^{i\phi},
 \end{equation}
 
-where $A = 1/r = ((1-\lambda_r dt)^2 + \lambda_i^2 dt^2)^{-1/2}$. 
+where $A = 1/r = ((1-\lambda_r dt)^2 + \lambda_i^2 dt^2)^{-1/2}$.
 
 Stability then requires:
 \begin{equation}
@@ -1155,7 +1155,7 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 ## Exercises
 
-**Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second order accuracy. 
+**Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second-order accuracy.
 
 **Exercise 2.** For the case of the body in free fall prove graphically, that both explicit and implicit Euler methods are first-order accurate for a finite time interval.
 

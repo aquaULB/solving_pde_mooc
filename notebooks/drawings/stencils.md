@@ -66,7 +66,56 @@ ax.text(5, 0.5, r'$x$', fontsize=18, horizontalalignment='center')
 ax.text(5.8, 0.5, r'$\xi$', fontsize=18, horizontalalignment='center')
 ax.text(7, 0.5, r'$x+\Delta x$', fontsize=18, horizontalalignment='center')
 
-fig.savefig('figures/taylor.png', dpi=300)
+fig.savefig('../figures/taylor.png', dpi=300)
+```
+
+## Forward first-order diff
+
+```python
+fig, ax = plt.subplots(figsize=(10, 3))
+ax.set_axis_off()
+ax.axis('equal')
+
+x=np.arange(0, 11)
+y = 0.0 * x
+
+ax.plot(x[[0,2,-3,-1]], y[[0,2,-3,-1]])
+
+ax.plot(x[4:8:2], y[4:8:2], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
+
+ax.text(4, -0.6, r'$i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, r'$i+1$', fontsize=18, horizontalalignment='center')
+
+ax.text(4, 1.2, '$f\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.5, r'$f_i$', fontsize=18, horizontalalignment='center')
+ax.text(6, 0.5, r'$f_{i+1}$', fontsize=18, horizontalalignment='center')
+
+fig.savefig('../figures/forwardDiff1.png', dpi=300)
+```
+
+## Centered first-order diff
+
+```python
+fig, ax = plt.subplots(figsize=(10, 3))
+ax.set_axis_off()
+ax.axis('equal')
+
+x=np.arange(0, 11)
+y = 0.0 * x
+
+ax.plot(x[[0,4,-3,-1]], y[[0,4,-3,-1]])
+
+ax.plot(x[[2,6]], y[[2,6]], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
+
+ax.text(4, -0.6, r'$i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, r'$i+1$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, r'$i-1$', fontsize=18, horizontalalignment='center')
+
+ax.text(4, 1.2, '$f\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(2, 0.5, r'$f_i$', fontsize=18, horizontalalignment='center')
+ax.text(6, 0.5, r'$f_{i+1}$', fontsize=18, horizontalalignment='center')
+
+fig.savefig('../figures/centeredDiff1.png', dpi=300)
 ```
 
 ```python

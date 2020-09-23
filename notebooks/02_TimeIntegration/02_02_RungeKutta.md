@@ -93,7 +93,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
          & = y^n + dt y^{'n} + \frac{dt^2}{2}y^{''n} + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy). 
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 
@@ -121,7 +121,7 @@ Let us apply the Runge-Kutta scheme to the problem of a body in free fall. The s
 
 \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
-    & \displaystyle \frac{dv}{dt}=-g. 
+    & \displaystyle \frac{dv}{dt}=-g.
 \end{cases}
 
 Rephrasing it in matrix form we get:
@@ -273,7 +273,7 @@ For an autonomous linear system, it is straightforward to prove that this method
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth order. For a non-linear system, one can also prove that RK4 is fourth order but it is a tedious task.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth order. For a non-linear system, one can also prove that RK4 is of fourth order but it is a tedious task.
 
 In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
 
@@ -302,7 +302,7 @@ ny = 100
 # the linspace function. Unlike the arange
 # function, here we set number of points
 # we want to put between, instead of the
-# distance between the points. 
+# distance between the points.
 # Also note that, while numpy.arange does
 # NOT includes the end point you pass into
 # the array, linspace does include it.
@@ -358,7 +358,7 @@ fig, ax = plt.subplots(figsize=(8,8))
 
 # We shall now use the
 # matplotlib.pyplot.contour funtion.
-# As X and Y, we pass the mesh data. Let 
+# As X and Y, we pass the mesh data. Let
 # f(x, y)=g(x, y) + C be some function
 # where C is a constant. Imagine
 # we want to plot contour lines for the
@@ -377,7 +377,7 @@ fig, ax = plt.subplots(figsize=(8,8))
 # matplotlib.pyplot.contour provides us
 # exactly the tool we want, as our condi-
 # tion for stability is given by an expression
-# of the kind f(x, y) <= 1. The only thing we 
+# of the kind f(x, y) <= 1. The only thing we
 # have to do is to display o n l y that contour line
 # which corresponds to C=-1.
 #
@@ -494,7 +494,7 @@ L = np.array([[0., 1.], [0., 0.]])
 # There is a possibility to shift the dia-
 # gonal if needed.
 #
-# For more info 
+# For more info
 # https://numpy.org/doc/stable/reference/generated/numpy.eye.html
 mat_k = np.linalg.inv(np.eye(2)-L*dt/4.)
 
@@ -557,7 +557,7 @@ With this we conclude the chapter dedicated to **Time integration**. In the foll
 
 **Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropriate time step).
 
-**Exercise 5.** Implement *Pareschi and Russo's two-stage 2nd-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
+**Exercise 5.** Implement *Pareschi and Russo's two-stage second-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 

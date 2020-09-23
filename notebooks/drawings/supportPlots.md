@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.5.2
+      jupytext_version: 1.6.0
   kernelspec:
     display_name: 'Python 3.7.7 64-bit (''course'': conda)'
     language: python
@@ -18,7 +18,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 %matplotlib inline
-plt.style.use('./mainstyle.use')
+plt.style.use('../styles/mainstyle.use')
 ```
 
 ## Forward Euler
@@ -68,7 +68,7 @@ ax.set_ylim(-1,2)
 
 # Save figure. Default format is png.
 # dpi defines the resolution in dots per inch.
-fig.savefig('figures/Euler.png', dpi=300)
+fig.savefig('../figures/Euler.png', dpi=300)
 ```
 
 ## RK2
@@ -120,14 +120,14 @@ ax.text(x[c-11], slope_b[c], r'$y^{n+1}$')
 # Final formatting
 ax.set_xlabel(r'$t$')
 ax.set_ylabel(r'$y$')
-ax.set_title('Runge-Kutta 2nd order')
+ax.set_title('Runge-Kutta 2nd-order')
 
 ax.set_xlim(-0.5,5.5)
 ax.set_ylim(-1,2)
 
 # Save figure. Default format is png.
 # dpi defines the resolution in dots per inch.
-fig.savefig('figures/RK2.png', dpi=300)
+fig.savefig('../figures/RK2.png', dpi=300)
 ```
 
 ```python

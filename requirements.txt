@@ -1,0 +1,8 @@
+python>=3.8.5
+scipy
+numpy
+matplotlib
+jupyter
+
+jupytext 
+jupyter_contrib_nbextensions

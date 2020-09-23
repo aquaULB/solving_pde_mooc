@@ -83,6 +83,6 @@ The numerical resolution of PDEs obviously requires the use of a programming lan
 
 ```python
 from IPython.core.display import HTML
-css_file = '../Styles/notebookstyle.css'
+css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```

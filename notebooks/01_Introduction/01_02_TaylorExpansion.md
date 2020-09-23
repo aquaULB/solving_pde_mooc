@@ -37,7 +37,7 @@ jupyter:
 
 In general, the resolution of numerical problems require some approximations.
 
-**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. To quantify the numerical representation of data, one uses *precision*. Precision is usually measured *in bits or number of decimal digits*. For example, a number in *single precision* usually occupies 32 bits of computer memory. At the same time it is associated with 7 or fewer decimal digits. The number of digits kept is called the precision of the representation. To make a conrete example, in *single precision* and *double precision*, $\pi$ is approximated as follows:
+**The first one** is related to the fact that most real numbers need an infinite numbers of digits after the decimal point to be properly represented. To store these numbers in the memory of a computer one, therefore, needs to cut their representation at some point beyond the decimal point. To quantify the numerical representation of data, one uses *precision*. Precision is usually measured *in bits or number of decimal digits*. For example, a number in *single precision* usually occupies 32 bits of computer memory. At the same time it is associated with 7 or fewer decimal digits. The number of digits kept is called the precision of the representation. To make a concrete example, in *single precision* and *double precision*, $\pi$ is approximated as follows:
 
 \begin{align}
 \pi &= 3.1415927 \quad\quad &\text{(single precision)}\\
@@ -49,7 +49,7 @@ In this course we always use double precision for real numbers, as this is the d
 - https://docs.python.org/3/tutorial/floatingpoint.html
 - https://floating-point-gui.de
 
-In the context of the numerical solution of ordinary or partial diffential equations, **the second more significant approximation** comes from that the computer resources are limited. From the physical point of view, both time and space are continuous variables, but continuous data does not exist in the numerical world, as it would require infinite computer memory. Therefore, continious variables are approximated using a discrete representation. For that purpose, we can for example introduce *grid points* at which the functions are evaluated. A small grid spacing results in a higher accuracy, but it comes at a higher computational cost. Some balance always has to be found.
+In the context of the numerical solution of ordinary or partial diffential equations, **the second more significant approximation** comes from that the computer resources are limited. From the physical point of view, both time and space are continuous variables, but continuous data does not exist in the numerical world, as it would require infinite computer memory. Therefore, continuous variables are approximated using a discrete representation. For that purpose, we can for example introduce *grid points* at which the functions are evaluated. A small grid spacing results in a higher accuracy, but it comes at a higher computational cost. Some balance always has to be found.
 
 ## Taylor's theorem
 
@@ -59,7 +59,7 @@ Taylor's theorem provides a valuable tool to estimate the accuracy of discretize
 
 <img src="../figures/taylor.png">
 
-*Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exist a $\xi$, so that*
+*Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exists a $\xi$, so that*
 
 \begin{equation}
 f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k + R_{k+1}
@@ -105,10 +105,10 @@ is of order $k+1$. Importantly, this implies that the remainder is at least redu
 To make things more concrete and to write our first Python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
 \begin{equation}
-e^{\Delta x} = 1 + \Delta x + \frac{(\Delta x)^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{(\Delta x)^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
+e^{\Delta x} = 1 + \Delta x + \frac{\Delta x^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{\Delta x^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
 \end{equation}
 
-As $e^x$ is monotonously inscreasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{(\Delta x)^3}{3!} = \mathcal{O}(\Delta x)^3$.
+As $e^x$ is monotonously increasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{\Delta x^3}{3!} = \mathcal{O}(\Delta x^3)$.
 
 Let's write a Python code to check if this is indeed the case.
 
@@ -129,7 +129,7 @@ First of all, we need to *import* some Python packages into our code. One Python
 
 *NumPy* and *SciPy* are better to be understood together, because *SciPy actually builds on NumPy*.
 
-> [Both NumPy and SciPy][13] are Python libraries used for used mathematical and numerical analysis. NumPy contains array data and basic operations such as sorting, indexing, etc whereas, SciPy consists of all the numerical code. Though NumPy provides a number of functions that can help resolve linear algebra, Fourier transforms, etc, SciPy is the library that actually contains fully-featured versions of these functions along with many others.
+> [Both NumPy and SciPy][13] are Python libraries used for used mathematical and numerical analysis. NumPy contains array data and basic operations such as sorting, indexing, etc, whereas SciPy consists of all the numerical code. Though NumPy provides a number of functions that can help resolve linear algebra, Fourier transforms, etc, SciPy is the library that actually contains fully-featured versions of these functions along with many others.
 
 *Matplotlib* provides tools to visualize any kind of numerical data.
 
@@ -199,7 +199,7 @@ To use matplotlib in notebooks, a very useful magic command is:
 
 From now on, whatever we plot will appear inline - in our notebook, right below the code which produced graphical output.
 
-We then set the style of our plots, which will be universal througout the whole course. Matplotlib has several predefines styles encoded in files. You, of course, can always create your own style.
+We then set the style of our plots, which will be universal throughout the whole course. Matplotlib has several predefined styles encoded in files. You, of course, can always create your own style.
 
 ```python
 plt.style.use('../styles/mainstyle.use')
@@ -227,7 +227,7 @@ When we want to define a given quantity at a set of points, we might use *either
 
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
-Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%time`. Double `%` here means that the command is applied to the *whole* cell.
+Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%timeit`. Double `%` here means that the command is applied to the *whole* cell.
 
 Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. A notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
 
@@ -237,7 +237,7 @@ Note, that the concept of *cell* in Python does not exist - it is unique to Jupy
 1. *Create a Python list in a loop and then transform it into a NumPy array*
 
 ```python
-%%time
+%%timeit
 
 # First create an empty Python list, which
 # will contain values of delta for all k.
@@ -285,7 +285,7 @@ delta = np.array(delta_list)
     This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.  
 
 ```python
-%%time
+%%timeit
 
 # As you can see we managed to shorten our code - 
 # what has been previously accomplished in 3 lines,
@@ -294,13 +294,13 @@ delta = np.array(delta_list)
 # https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
 delta_list = [2**(-k) for k in range(1, 10)]
 
-delta = np.asarray(delta_list)
+delta = np.array(delta_list)
 ```
 
 3. *Create an empty NumPy array and then fill it with values in a loop*
 
 ```python
-%%time
+%%timeit
 
 delta = np.zeros(9)
 
@@ -336,7 +336,7 @@ slope = delta**3
 
 As we have built the set of numerical data, we are ready to visualize it. 
 
-The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create the figure explicitely, it will be created implicitely*, but an explicit call to the object allows you to manipulate your plots in a more flexible way.
+The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create the figure explicitly, it will be created implicitly*, but an explicit call to the object allows you to manipulate your plots in a more flexible way.
 
 Figure is just your *blank sheet of paper* (metaphorically) - it is empty from the start. To have a plot, we would need to draw axes.
 
@@ -356,7 +356,7 @@ We have create 2 figures - *figure 0* and *figure 1*, - and use them to demonstr
 # legends are placed in a figure. In most cases
 # it is a useful feature, but sometimes you 
 # will face a problem, that it won't know
-# how to optimize your figure just becayse of
+# how to optimize your figure just because of
 # how you have organized it manually. We disable
 # it for the first figure, so that it doesn't
 # complain about that we INTENTIONALLY overlap
@@ -390,9 +390,9 @@ ax_5 = fig_1.add_subplot(224)
 fig_1.suptitle('Subplots', fontsize=18, y=1.05)
 ```
 
-It is mostly a matter of your taste which approach you use, but certainly, in cases where  you want to create multiple subplots in one figure, the approach of using `add_subplots` is more convenient and, therefore, more reasonable.
+It is mostly a matter of your taste which approach you use, but certainly, in cases where you want to create multiple subplots in one figure, the approach of using `add_subplots` is more convenient and, therefore, more reasonable.
 
-Let's now talk even more reasonable. It has already been mentioned how important it is to shorten your code when possible. There is a way to create a figure with multiple subplots in it *in one call* by means of [`matplotlib.pyplot.subplots`][5]. **It is recommended that you stick to it**. While there is nothing one can have against the previously described ways, programmers should take as a habbit to make their code *reasonably short*.
+Let's now talk even more reasonable. It has already been mentioned how important it is to shorten your code when possible. There is a way to create a figure with multiple subplots in it *in one call* by means of [`matplotlib.pyplot.subplots`][5]. **It is recommended that you stick to it**. While there is nothing one can have against the previously described ways, programmers should take as a habit to make their code *reasonably short*.
 
 The logic behind subplotting with `subplots` is very similar to the one of `add_subplots`:
 
@@ -406,7 +406,7 @@ fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3)
 
 But we only need to create one plot at the moment, so we don't provide any arguments to `subplots` - single subplot in a figure is its default. 
 
-We then want to plot $R_3$ as a funtion of $\Delta x$ and use *log scaling* for both $x$ and $y$ axes - there is a function just for that - [`matplotlib.pyplot.loglog`][6]. For the plot with linear scaling refer to [`matplotlib.pyplot.plot`][7], which has the same syntax.
+We then want to plot $R_3$ as a function of $\Delta x$ and use *log scaling* for both $x$ and $y$ axes - there is a function just for that - [`matplotlib.pyplot.loglog`][6]. For the plot with linear scaling refer to [`matplotlib.pyplot.plot`][7], which has the same syntax.
 
 [6]: <https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.loglog.html> "loglog"
 [7]: <https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot> "plot"
@@ -466,7 +466,7 @@ You've seen above textual sequences created as follows:
 
     text_data = 'Hello, world!'
 
-They are called [strings][8]. There are special characters in Python called *escape characters* which are meant for formatting. For example, `\n` would mean, that the line is broken. The following code
+They are called [strings][8]. There are special characters in Python called *escape characters* which are meant for formatting. For example, `\n` would mean that the line is broken. The following code
 
     print('Hello\nworld')
 
@@ -491,7 +491,7 @@ A nice feature of matplotlib is that it can display rendered LaTeX equations in 
 
 ## Summary
 
-In this notebook we have introduced the concepts of numerical precision and numerical error. We also discussed different approaches to build numerical sequences in Python and learned about NumPy arrays - fundamental objects for scientific programming in Python. Using the Matplotlib package, we gave a trivial overview on 2D visualization and illustrated that the error term in Taylor series is of order $\mathcal{O}(\Delta x)^{n+1}$ when the last expansion term considered is of order $\mathcal{O}(\Delta x)^{n}$.
+In this notebook we have introduced the concepts of numerical precision and numerical error. We also discussed different approaches to build numerical sequences in Python and learned about NumPy arrays - fundamental objects for scientific programming in Python. Using the Matplotlib package, we gave a trivial overview on 2D visualization and illustrated that the error term in Taylor series is of order $\mathcal{O}(\Delta x^{n+1})$ when the last expansion term considered is of order $\mathcal{O}(\Delta x^{n})$.
 
 In the next notebook we will introduce Euler time-advancement schemes - numerical procedures for solving ordinary differential equations -, define numerical stability of the time-advancement scheme and the concepts of explicit and implicit time integration methods.
 
@@ -534,6 +534,6 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 
 ```python
 from IPython.core.display import HTML
-css_file = '../Styles/notebookstyle.css'
+css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```

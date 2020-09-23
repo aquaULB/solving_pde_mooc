@@ -93,7 +93,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
          & = y^n + dt y^{'n} + \frac{dt^2}{2}y^{''n} + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy). 
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy). 
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 
@@ -273,7 +273,7 @@ For an autonomous linear system, it is straightforward to prove that this method
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to the fourth-order. For a non-linear system, one can also prove that RK4 is fourth-order but it is a tedious task.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth order. For a non-linear system, one can also prove that RK4 is fourth order but it is a tedious task.
 
 In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
 

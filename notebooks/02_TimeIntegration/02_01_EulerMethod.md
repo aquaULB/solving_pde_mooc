@@ -81,7 +81,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From this equation, we note that the forward Euler method is second-order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
+From this equation, we note that the forward Euler method is second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
@@ -335,7 +335,7 @@ ax.legend()
 # fig.savefig('../figures/eulerSlope.png', dpi=300)
 ```
 
-Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second-order for the forward Euler method but here we observe an accuracy of first-order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second-order for going from $t$ to $t+dt$". Here we are comparing values after $N$ time steps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
+Do you notice something 'surprising' in this plot? Earlier we mentioned an accuracy of second order for the forward Euler method but here we observe an accuracy of first order. In fact, there is a straightforward explanation for this. We said "...that the forward Euler method is second order for going from $t$ to $t+dt$". Here we are comparing values after $N$ time steps with $\displaystyle N=\frac{t_f-t_i}{dt}$. The total error is proportional to the product of the error made at each time step multiplied by the number of steps. As the latter scales as $dt^{-1}$, the total error scales like $dt^2 / dt = dt$. One says that **the error made during one time step accumulates during the computation**.
 
 ### Numerical stability of the forward Euler method
 

@@ -120,7 +120,7 @@ ax.text(x[c-11], slope_b[c], r'$y^{n+1}$')
 # Final formatting
 ax.set_xlabel(r'$t$')
 ax.set_ylabel(r'$y$')
-ax.set_title('Runge-Kutta 2nd-order')
+ax.set_title('Second-order Runge-Kutta')
 
 ax.set_xlim(-0.5,5.5)
 ax.set_ylim(-1,2)

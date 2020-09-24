@@ -329,7 +329,13 @@ We are now <a name="exc2"> all set to build $R_3$</a>.
 # NumPy arrays provide the possibility to avoid
 # looping when applying the same operation
 # on each element.
+
+# Because of a bug in %timeit we need to recreate
+# delta explicitely here
 delta = np.zeros(9)
+
+for i in range(len(delta)):
+    delta[i] = 2**(-i-1)
 
 R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
 
@@ -528,7 +534,7 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 [9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
 <!-- #endregion -->
 
-## References
+# References
 
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
 

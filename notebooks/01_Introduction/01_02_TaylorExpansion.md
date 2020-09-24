@@ -329,6 +329,8 @@ We are now <a name="exc2"> all set to build $R_3$</a>.
 # NumPy arrays provide the possibility to avoid
 # looping when applying the same operation
 # on each element.
+delta = np.zeros(9)
+
 R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
 
 slope = delta**3

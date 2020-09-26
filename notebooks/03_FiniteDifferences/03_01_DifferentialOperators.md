@@ -26,10 +26,21 @@ jupyter:
 2. [Summary](#Summary)
 3. [Exercises](#Exercises)
 
-<!-- #region -->
+
 ## Introduction
 
-In this part of the course we describe how to compute derivatives of functions such as,
+For convenience, we start with importing some modules needed below:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+
+plt.style.use('../styles/mainstyle.use')
+```
+
+In this part of the course we describe how to compute numerically derivatives of functions such as,
 
 $$
 f(x)=e^x sin(x)
@@ -71,9 +82,17 @@ Schematically, we represent this expression through *a stencil* that indicates w
 
 <img width="600px" src="../figures/forwardDiff1.png">
 
-In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression.
+In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. In an identical manner, we can define another first-order estimate for the first-order derivative using a backward finite difference,
 
-Using two grid points, we can actually achieve second-order accuracy. We resort again to Taylor's theorem to write:
+\begin{equation}
+f'(x_i) = \frac{f(x_{i}) - f(x_{i-1})}{\Delta x}, \;\; \hbox{backward finite difference}\label{backwardDiff1}. 
+\end{equation}
+
+It is based on the right derivative of $f$ and its stencil is,
+
+<img width="600px" src="../figures/backwardDiff1.png">
+
+Using two grid points, we can actually do better than first-order accuracy. Resorting again to Taylor's theorem we write:
 
 \begin{equation}
 f(x+\Delta x)= f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+O(\Delta x^3) \\
@@ -96,6 +115,30 @@ This expression is called the centered finite difference first-order derivative 
 
 <img width="600px" src="../figures/centeredDiff1.png">
 
+Using just two grid points, it's not possible to achieve an accuracy of higher order.
+
+```python
+nx = 20
+lx = 2
+dx = lx / (nx-1)
+x = np.linspace(0, lx, nx)
+print(x)
+f = np.exp(x)*np.sin(10*x)
+dfdx = np.exp(x)*(np.sin(10*x) + 10*np.cos(10*x))
+
+fp = np.zeros(nx)
+fp[1: -1]= (f[2:] - f[0:-2])/(2*dx)
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+ax.plot(x, dfdx, '*')
+ax.plot(x, fp, '+')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f,f\'$')
+#ax.set_title('Speed vs time (m/s)')
+
+```
 
 ## Summary
 
@@ -104,7 +147,6 @@ In this notebook we have described...
 ## Exercises
 
 **Exercise 1.** 
-<!-- #endregion -->
 
 ```python
 from IPython.core.display import HTML

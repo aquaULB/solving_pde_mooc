@@ -1,5 +1,7 @@
 # latex
-font.size    : 18.0
+text.usetex : True
+font.family  : sans-serif
+font.sans-serif: "Computer Modern Roman"
 
 # lines and markers
 lines.markersize : 8

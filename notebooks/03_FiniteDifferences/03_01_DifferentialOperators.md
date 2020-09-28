@@ -24,10 +24,9 @@ jupyter:
 
 1. [Introduction](#Introduction)
 2. [First-order derivative](#First-order-derivative)
-3. [Second-order derivative](#Second-order-derivative)
+3. [Numpy array slicing](#Numpy-array-slicing)
 4. [One-sided finite differences](#One-sided-finite-differences)
 5. [Summary](#Summary)
-6. [Exercises](#Exercises)
 
 
 ## Introduction
@@ -152,14 +151,14 @@ ax[1].set_ylim(-200,200)
 The finite difference approximations, one a coarser grid, can then be evaluated as follows.
 
 ```python
-nx = 100 # number of grid points (coarse grid)
+nx = 40 # number of grid points (coarse grid)
 lx = pi # length of invertal
 dx = lx / (nx-1) # grid spacing
 x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
 
 f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
 
-df_forward = np.empty(nx-1) # forward finite difference
+df_forward = np.empty(nx) # forward finite difference
 df_backward = np.empty(nx) # backward finite difference
 df_centered = np.empty(nx) # centered finite difference
 
@@ -174,32 +173,43 @@ for i in range(1, nx-1): # first and last grid points are omitted
 ```
 
 ```python
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(x, dfdx)
-ax.plot(x_c[0: nx-1], df_forward[0: nx-1], '*')
-ax.plot(x_c[1: nx], df_backward[1: nx])
-ax.plot(x_c[1: nx-1], df_centered[1: nx-1])
+fig, ax = plt.subplots(1,3,figsize=(12, 5))
 
-ax.set_xlabel('$x$')
-ax.set_ylabel('$f\'$')
-ax.set_ylim(-200,200)
+ax[0].plot(x, dfdx)
+ax[0].plot(x_c[0: nx-1], df_forward[0: nx-1], '*g')
+ax[0].set_xlabel('$x$')
+ax[0].set_ylabel('$f\'$')
 
+ax[1].plot(x, dfdx)
+ax[1].plot(x_c[1: nx], df_backward[1: nx], '*m')
+ax[1].set_xlabel('$x$')
+ax[1].set_ylabel('$f\'$')
 
+ax[2].plot(x, dfdx)
+ax[2].plot(x_c[1: nx-1], df_centered[1: nx-1], '*c')
+ax[2].set_xlabel('$x$')
+ax[2].set_ylabel('$f\'$')
 ```
 
+What do you think about the agreement? What happens when you increase the number of points in the coarse grid?
+
+In the above cell, we have used the slicing of numpy arrays to extract the relevant entries from our arrays. For example, for the forward finite difference, the expression is not defined at the last grid point. Therefore, the relevant grid coordinates are not the complete `x_c` array but the *slice* `x_c[0: nx-1]`. For the centered finite difference we must exclude the first and last grid points. The appropriate coordinate array slice is then `x_c[1: nx-1]`. This notions of array slicing is described in much more detail in the next section.
+
+
+## Numpy array slicing
+
+
+...
+
+
 ## One-sided finite differences
-
-
-## Summary
-
-In this notebook we have described...
-
-## Exercises
-
-**Exercise 1.** 
 
 ```python
 from IPython.core.display import HTML
 css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
+```
+
+```python
+
 ```

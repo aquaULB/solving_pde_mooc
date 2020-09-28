@@ -23,8 +23,11 @@ jupyter:
 <h2 class="nocount">Contents</h2>
 
 1. [Introduction](#Introduction)
-2. [Summary](#Summary)
-3. [Exercises](#Exercises)
+2. [First-order derivative](#First-order-derivative)
+3. [Second-order derivative](#Second-order-derivative)
+4. [One-sided finite differences](#One-sided-finite-differences)
+5. [Summary](#Summary)
+6. [Exercises](#Exercises)
 
 
 ## Introduction
@@ -43,7 +46,7 @@ plt.style.use('../styles/mainstyle.use')
 In this part of the course we describe how to compute numerically derivatives of functions such as,
 
 $$
-f(x)=e^x sin(x)
+f(x)=e^x \sin(3\pi x) \label{testfunc}
 $$
 
 There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f$ on a basis of functions $T_k(x)$ and computing the derivatives of $f$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
@@ -75,22 +78,26 @@ with the endpoints of the grid located respectively at $x_0$ and $x_n$.
 From eq. \ref{forwardTaylorDiff1} we can then define the following first-oder accurate approximation of the first-order derivative of $f$ at $x_i$:
 
 \begin{equation}
-f'(x_i) = \frac{f(x_{i+1}) - f(x_i)}{\Delta x}, \;\; \hbox{forward finite difference}\label{forwardDiff1}. 
+f'_{\rm f}(x_i) = \frac{f(x_{i+1}) - f(x_i)}{\Delta x}, \;\; \hbox{forward finite difference}\label{forwardDiff1}. 
 \end{equation}
 
 Schematically, we represent this expression through *a stencil* that indicates which grid points are involved in the computation:
 
 <img width="600px" src="../figures/forwardDiff1.png">
 
-In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. In an identical manner, we can define another first-order estimate for the first-order derivative using a backward finite difference,
+In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. The forward finite difference cannot be used at the right boundary node of the grid. In section XX, we discuss how we can handle boundary nodes when we evaluate derviatives using finite differences.
+
+In an identical manner, we can define another first-order estimate for the first-order derivative using a backward finite difference,
 
 \begin{equation}
-f'(x_i) = \frac{f(x_{i}) - f(x_{i-1})}{\Delta x}, \;\; \hbox{backward finite difference}\label{backwardDiff1}. 
+f'_{\rm b}(x_i) = \frac{f(x_{i}) - f(x_{i-1})}{\Delta x}, \;\; \hbox{backward finite difference}\label{backwardDiff1}. 
 \end{equation}
 
 It is based on the right derivative of $f$ and its stencil is,
 
 <img width="600px" src="../figures/backwardDiff1.png">
+
+The backward finite difference cannot be used at the left boundary node of the grid. We also note that $f'_{\rm b}(x_{i+1}) = f'_{\rm f}(x_i)$.
 
 Using two grid points, we can actually do better than first-order accuracy. Resorting again to Taylor's theorem we write:
 
@@ -102,43 +109,86 @@ f(x-\Delta x)= f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2+O(\Delta x^3) \\
 If we substract these two equations, we get:
 
 \begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2) \label{forwardTaylorDiff2}
+f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2) \label{centeredTaylorDiff}
 \end{equation}
 
 We can then define the following second-oder accurate approximation of the first-order derivative of $f$ at $x_i$:
 
 \begin{equation}
-f'(x_i) = \frac{f(x_{i+1}) - f(x_{i-1})}{2\Delta x},\;\; \hbox{centered finite difference} \label{forwardDiff2}.
+f'_{\rm c}(x_i) = \frac{f(x_{i+1}) - f(x_{i-1})}{2\Delta x},\;\; \hbox{centered finite difference} \label{centeredDiff}.
 \end{equation}
 
 This expression is called the centered finite difference first-order derivative and its stencil looks like this:
 
 <img width="600px" src="../figures/centeredDiff1.png">
 
-Using just two grid points, it's not possible to achieve an accuracy of higher order.
+Using just two grid points, it's not possible to achieve an accuracy of higher order. The centered finite difference cannot be used at the left or right boundary nodes of the grid
+
+Let us check that our formulas work. We first create a fine grid to accuratly represent the function \eqref{testfunc} and its derivative in the interval $x\in [O\, \pi]$.
 
 ```python
-nx = 20
-lx = 2
-dx = lx / (nx-1)
-x = np.linspace(0, lx, nx)
-print(x)
-f = np.exp(x)*np.sin(10*x)
-dfdx = np.exp(x)*(np.sin(10*x) + 10*np.cos(10*x))
+pi = np.pi # 3.14...
+nx = 200 # number of grid points (fine grid)
+lx = pi # length of invertal
+dx = lx / (nx-1) # grid spacing
+x = np.linspace(0, lx, nx) # coordinates of points on the fine grid
 
-fp = np.zeros(nx)
-fp[1: -1]= (f[2:] - f[0:-2])/(2*dx)
 
-fig, ax = plt.subplots(figsize=(8, 5))
+f = np.exp(x)*np.sin(3*pi*x)
+dfdx = np.exp(x)*(np.sin(3*pi*x) + 3*pi*np.cos(3*pi*x))
 
-ax.plot(x, dfdx, '*')
-ax.plot(x, fp, '+')
+fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+ax[0].plot(x, f)
+ax[0].set_xlabel('$x$')
+ax[0].set_ylabel('$f$')
+ax[0].set_ylim(-25,25)
+
+ax[1].plot(x, dfdx)
+ax[1].set_xlabel('$x$')
+ax[1].set_ylabel('$f\'$')
+ax[1].set_ylim(-200,200)
+```
+
+The finite difference approximations, one a coarser grid, can then be evaluated as follows.
+
+```python
+nx = 100 # number of grid points (coarse grid)
+lx = pi # length of invertal
+dx = lx / (nx-1) # grid spacing
+x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
+
+f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
+
+df_forward = np.empty(nx-1) # forward finite difference
+df_backward = np.empty(nx) # backward finite difference
+df_centered = np.empty(nx) # centered finite difference
+
+for i in range(0, nx-1): # last grid point is omitted
+    df_forward[i] = (f_c[i+1] - f_c[i]) / dx
+    
+for i in range(1, nx): # first grid point is omitted
+    df_backward[i] = (f_c[i] - f_c[i-1]) / dx
+
+for i in range(1, nx-1): # first and last grid points are omitted
+    df_centered[i] = (f_c[i+1] - f_c[i-1]) / (2*dx)
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(x, dfdx)
+ax.plot(x_c[0: nx-1], df_forward[0: nx-1], '*')
+ax.plot(x_c[1: nx], df_backward[1: nx])
+ax.plot(x_c[1: nx-1], df_centered[1: nx-1])
 
 ax.set_xlabel('$x$')
-ax.set_ylabel('$f,f\'$')
-#ax.set_title('Speed vs time (m/s)')
+ax.set_ylabel('$f\'$')
+ax.set_ylim(-200,200)
+
 
 ```
+
+## One-sided finite differences
+
 
 ## Summary
 

@@ -227,7 +227,7 @@ When we want to define a given quantity at a set of points, we might use *either
 
 Keep in mind, though, that you will encounter situations when it will be more convenient for you to create a list first and then transform it into *NumPy* array.
 
-Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%timeit`. Double `%` here means that the command is applied to the *whole* cell.
+Let us consider <a name="exc1"> a few ways </a> of building a numerical sequence. Assume $\Delta x=f(k)$, where $k$ is an integer number defined in $k=1, 2,...,9$. To demonstrate the advantages of one approach over the others, we will use the *cell* magic command `%%timeit`. Double `%` here means that the command is applied to the *whole* cell. A word of caution is necessary. `%timeit` or `%%timeit` execute the measured code in a *private* scope. This means that they don't affect the values of the variables outside of the cell (or line for %timeit) in which the execution takes places. This also means than any variable defined within the cell (or line for %timeit) cease to exist after the timing operation.
 
 Note, that the concept of *cell* in Python does not exist - it is unique to Jupyter Notebook, just as magic commands are unique to IPython. A notebook in Jupyter Notebook is a sequence of cells, which can be filled with Python code, documentation text written in [Markdown][14], or *raw* text, that is not evaluated by Jupyter Notebook.
 
@@ -330,8 +330,8 @@ We are now <a name="exc2"> all set to build $R_3$</a>.
 # looping when applying the same operation
 # on each element.
 
-# Because of a bug in %timeit we need to recreate
-# delta explicitely here
+# Because %timeit executes all the code in a
+# `private` scope, we need to redefine delta here
 delta = np.zeros(9)
 
 for i in range(len(delta)):

@@ -1157,9 +1157,9 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 **Exercise 1.** Write a Python code and perform the corresponding visualization showing that for one time step, the forward Euler method is indeed of second-order accuracy.
 
-**Exercise 2.** For the case of the body in free fall prove graphically, that both explicit and implicit Euler methods are first-order accurate for a finite time interval.
+**Exercise 2.** For the case of the body in free fall prove graphically that both explicit and implicit Euler methods are first-order accurate for a finite time interval.
 
-<a name="exc3">**Exercise 3.** </a> For the problem of radioactive decay, given that $\displaystyle \alpha dt \le \frac{3}{5}$, explain why the error for the first timestep attributed to the forward Euler scheme is larger, than that attributed to the backward Euler scheme.
+<a name="exc3">**Exercise 3.** </a> For the problem of radioactive decay, given that $\displaystyle \alpha dt \le \frac{3}{5}$, explain why the error for the first timestep attributed to the forward Euler scheme is larger than that attributed to the backward Euler scheme.
 
 ```python
 from IPython.core.display import HTML

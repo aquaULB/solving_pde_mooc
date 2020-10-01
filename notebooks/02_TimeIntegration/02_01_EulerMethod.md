@@ -309,7 +309,7 @@ for i, dt in enumerate(dt_list):
 Let's now compute and plot the difference between all the computed $N(t_f)$ and the exact solution.
 
 ```python
-# We construct the array containg the differences
+# We construct the array containing the differences
 # between approximated and exact final solutions
 # for each size of time step considered in dt_list.
 error = np.abs(values-Ni*np.exp(-alpha*tf))

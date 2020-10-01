@@ -889,8 +889,8 @@ Q=
 Using the vector notation $y=(x\;\; v)$, we can then reformulate our time advancement scheme as,
 
 \begin{align}
-y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n+1} + Q^{-1}Ly^{n}dt \\
-& \Leftrightarrow \;\; z^{n+1} = z^{n+1} + \Lambda z^{n}dt. \label{eq:eigenCoor}
+y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n} + Q^{-1}Ly^{n}dt \\
+& \Leftrightarrow \;\; z^{n+1} = z^{n} + \Lambda z^{n}dt. \label{eq:eigenCoor}
 \end{align}
 
 In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:

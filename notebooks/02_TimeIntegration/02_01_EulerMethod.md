@@ -137,10 +137,10 @@ nt = int((tf-ti)/dt)
 # over np.zeros.
 N = np.empty(nt+1)
 
-# We pass the initial condition to the N array...
+# We pass the initial condition to the N array,
 N[0] = Ni
 
-# ...and perform the time stepping.
+# and perform the time stepping:
 for i in range(nt):
     N[i+1] = N[i] - alpha*N[i]*dt
 ```

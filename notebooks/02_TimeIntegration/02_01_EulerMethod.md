@@ -40,7 +40,7 @@ jupyter:
 
 ## Introduction
 
-In this part of the course we discuss how to solve ordinary differential equations (ODE). Although their numerical resolution is not the main subject of this course, their study nevertheless allows to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDEs).
+In this part of the course we discuss how to solve ordinary differential equations (ODEs). Although their numerical resolution is not the main subject of this course, their study nevertheless allows to introduce very important concepts that are essential in the numerical resolution of partial differential equations (PDEs).
 
 The ODEs we consider can be written in the form:
 
@@ -54,9 +54,9 @@ where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-
   y^{(n)}=\frac{d^n y}{dt^n}.
 \end{equation}
 
-When $f$ does not depend explicitely on time, we qualify the problem as *autonomous*.
+When $f$ does not depend explicitly on time, we qualify the problem as *autonomous*.
 
-Note that we have used $t$ as the variable on which the unkown function $y$ depends and we will usually refer to it as *time*. However, all the methods we describe in this chapter also apply to other problems in which a given function depends on an independant variable and the corresponding ODE has the form \eqref{eq:ODE}.
+Note that we have used $t$ as the variable on which the unknown function $y$ depends and we will usually refer to it as *time*. However, all the methods we describe in this chapter also apply to other problems in which a given function depends on an independant variable and the corresponding ODE has the form \eqref{eq:ODE}.
 
 As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law:
 
@@ -65,7 +65,7 @@ As an example and toy problem, let us consider radioactive decay. Imagine we hav
   \label{eq:decay}
 \end{equation}
 
-where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readilly obtained and reads:
+where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readily obtained and reads:
 
 \begin{equation}
   N(t)=N(t_0)e^{-\alpha t} \label{eq:expDecay}
@@ -81,7 +81,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
    & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
 \end{align}
 
-From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2))$. Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
+From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2)$). Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
@@ -98,10 +98,10 @@ Let's write a Python code for that. First, we perform some imports.
 import numpy as np
 ```
 
-Now let's set some constant parameters for our problem. In a real-world codes, constant parameters are usually separated from the main code. They are either put in a separate module, or set in an inputfile. At this stage, let's just isolate them in a separate cell.
+Now let's set some constant parameters for our problem. In real-world codes, constant parameters are usually separated from the main code. They are either put in a separate module, or set in an inputfile. At this stage, let's just isolate them in a separate cell.
 
 ```python
-alpha = 0.25 # Exponential law coeffecient
+alpha = 0.25 # Exponential law coefficient
 ti = 0.0     # Initial time
 tf = 5.0     # Final time
 dt = 0.5     # Time step
@@ -115,7 +115,7 @@ Now we can write a code for the actual numerical procedure.
 # Note that the number of steps must
 # be an integer, but the time data
 # we construct it from is of float type.
-# We therefore need to use the int() funtion.
+# We therefore need to use the int() function.
 # It converts the input data to an
 # integer. If a float is provided as an input,
 # it disregards the decimals. For example,
@@ -140,7 +140,7 @@ N = np.empty(nt+1)
 # We pass the initial condition to the N array,
 N[0] = Ni
 
-# And perform the time stepping.
+# and perform the time stepping:
 for i in range(nt):
     N[i+1] = N[i] - alpha*N[i]*dt
 ```
@@ -149,7 +149,7 @@ Done! The last entry in the array N now contains an estimate for $N(t_f)$.
 
 ### Numerical accuracy of the forward Euler method
 
-Let us compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we again use the matplotlib package:
+Let us compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we use again the matplotlib package:
 
 ```python
 import matplotlib.pyplot as plt
@@ -179,7 +179,7 @@ t = np.arange(nt+1) * dt
 Nexact = Ni * np.exp(-alpha*t)
 ```
 
-When you're *debugging* - developing, testing and optimizing your code, it is always a good idea to have your imports and setup of *constant parameters* separated from the code you're working on. The same stands for the actual computations and visualization. Imaging, you build your arrays of data in the same cell as you plot it. You see a plot and you don't like the font, you rerun the cell, and then you think that it might be a good idea to cut the x-axis, you rerun the cell again. In such a way, each time you update your plot, you will recompute absolutely the same numpy array. If the array takes a lot of time to compute, you will loose a lot of time. For small examples, this is *not catastrophic, but considered to be a poor organization of a code*.
+When you're *debugging* - developing, testing and optimizing your code, it is always a good idea to have your imports and setup of *constant parameters* separated from the code you're working on. The same stands for the actual computations and visualization. Imaging, you build your arrays of data in the same cell as you plot it. You see a plot and you don't like the font, you rerun the cell, and then you think that it might be a good idea to cut the x-axis, you rerun the cell again. In such a way, each time you update your plot, you will recompute absolutely the same numpy array. If the array takes a lot of time to compute, you will lose a lot of time. For small examples, this is *not catastrophic, but considered to be a poor organization of a code*.
 
 ```python
 # Create a figure with a single subplot
@@ -187,7 +187,7 @@ fig, ax = plt.subplots()
 
 # Plot the exact solution. Set the linestyle.
 # Matplotlib supports multiple line- and
-# marker styles. For the linestyles see
+# markerstyles. For the linestyles see
 # https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/linestyles.html
 # For the markers see
 # https://matplotlib.org/3.3.1/api/markers_api.html
@@ -212,11 +212,12 @@ ax.plot(t, Nexact, linestyle='-', label='Exact solution')
 # tional arguments must obey a certain order, so
 # that it is clear which of the parameters they
 # stands for. Keyword arguments are passed with the keywords.
-#For example, we can write color='green',
+# For example, we can write color='green',
 # where color is a keyword argument. Sometimes
 # keyword arguments can be passed as positional ones
 # if you follow the E X A C T order provided in the implemen-
-# tation of a funtion.
+# tation of a function.
+
 # For more info
 # https://problemsolvingwithpython.com/07-Functions-and-Modules/07.07-Positional-and-Keyword-Arguments/
 ax.plot(t, N, '^', color='green', label='Forward Euler method')
@@ -238,8 +239,8 @@ ax.legend()
 # a scientific paper, no need to go to extremes.
 #
 # Btw, as you've saved your figure once, it is a good
-# idea to comment the line, so that, you don't save
-# the same image over and over. Unless you modify the
+# idea to comment the line, so that you don't save
+# the same image over and over, unless you modify the
 # plot.
 fig.savefig('../figures/radioactiveDecay.png', dpi=300)
 ```
@@ -277,7 +278,7 @@ values = np.empty_like(dt_list)
 # i = 0
 # for dt in dt_list:
 #    (do something...)
-#    i =+ 1
+#    i += 1
 #
 # But the moral here is WHY BOTHER. In this case,
 # and in many others, Python developers already
@@ -294,8 +295,8 @@ for i, dt in enumerate(dt_list):
     nt = int((tf-ti)/dt)
 
     # Be careful not to shadow the variables of
-    # the exteriour loop - i and dt - with the
-    # variables of the interiour loop. We set it
+    # the exterior loop - i and dt - with the
+    # variables of the interior loop. We set it
     # to be j.
     for j in range(nt):
         N = N - alpha*N*dt
@@ -308,7 +309,7 @@ for i, dt in enumerate(dt_list):
 Let's now compute and plot the difference between all the computed $N(t_f)$ and the exact solution.
 
 ```python
-# We construct the array containg the difference
+# We construct the array containing the differences
 # between approximated and exact final solutions
 # for each size of time step considered in dt_list.
 error = np.abs(values-Ni*np.exp(-alpha*tf))
@@ -317,7 +318,7 @@ error = np.abs(values-Ni*np.exp(-alpha*tf))
 ```python
 fig, ax = plt.subplots()
 
-# Plot the error in logarifmic scale and see
+# Plot the error in logarithmic scale and see
 # that it grows as time step increases.
 ax.loglog(dt_list, error, '*', label='Error')
 
@@ -350,7 +351,7 @@ For the problem of radioactive decay, we first observe that according to equatio
 
 Equation \ref{eq:demo_stability} implies that $N^n\to \infty$ if $\vert 1-\alpha dt \vert^n \to \infty$. In such a case the numerical scheme is called *unstable* - i.e when solution grows unbounded (blows up in the jargon). On the other hand, in the case $\vert 1-\alpha dt \vert \le 1$, the Euler scheme is said to be stable. This requirement limits the time step allowed when performing the numerical integration.
 
-In many problems, the coefficients of the equations are complex (e.g. Schrödinger equation). If we generalise our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
+In many problems, the coefficients of the equations are complex (e.g. Schrödinger equation). If we generalize our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{equation}
   \vert 1-\alpha dt \vert \le 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 \le 1.
@@ -364,7 +365,7 @@ Given this, one can then draw a stability diagram indicating the region of the c
 # (in inches) to make it a square and bigger.
 fig, ax = plt.subplots(figsize=(6, 6))
 
-# We draw circle and customize it a bit. You
+# We draw a circle and customize it a bit. You
 # can see that because of some reason the fun-
 # ction name here starts with a capital letter -
 # Circle. That's because matplotlib.pyplot.Circle
@@ -399,8 +400,9 @@ circle = plt.Circle((-1, 0), 1, ec='k', fc='green', alpha=0.5, hatch='/')
 # https://matplotlib.org/3.1.1/api/artist_api.html#matplotlib.artist.Artist
 ax.add_artist(circle)
 
-# We make sure that thescaling for the x-axis
+# We make sure that the scaling for the x-axis
 # is the same as for the y_axis.
+#
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.set_aspect.html
 ax.set_aspect(1)
@@ -450,7 +452,7 @@ ax.set_title('Stability of forward Euler scheme', y=1.01)
 
 # Let's configure the ticks of the axes. The
 # most straightforward way of doing it is to
-# pass locations of the ticks explicitely.
+# pass locations of the ticks explicitly.
 #
 # You also can pass the ticklabels you want
 # using set_ticklabels method.
@@ -463,6 +465,7 @@ ax.set_yticks((-2, -1, 1))
 # can customize the ticks in basically one
 # simple call without accessing the ticklabels
 # data.
+#
 # For more info
 # https://jakevdp.github.io/PythonDataScienceHandbook/04.10-customizing-ticks.html
 #
@@ -482,7 +485,8 @@ ax.set_yticks((-2, -1, 1))
 # quite u n i v e r s a l.
 #
 # *tuple in Python is a standard type of sequence,
-# which, unlike a regular sequence is unchangable.
+# which, unlike a regular sequence, is unchangable.
+
 # for i, label in enumerate(ax.yaxis.get_ticklabels()):
 #     if i % 2 != 0 or i == 4:
 #         label.set_visible(False)
@@ -495,11 +499,11 @@ ax.tick_params(width=2, pad=10)
 # fig.savefig('../figures/eulerStabilityMap.png', dpi=300)
 ```
 
- If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt$ are inside a circle, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
+If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt$ are inside a circle, then the forward Euler scheme will be stable. We see in particular that the forward Euler scheme cannot be made stable if $\alpha$ is purely imaginary, however small we choose the time step (we will consider a consequence of this below).
 
 ### Higher-order example
 
-So far we have only considered a simple one-dimensional example. In pratice, many problems are modelled  with coupled variables, making the corresponding equation multi-dimensional. Multi-dimensional equations also arise when the starting equations contain higher-order derivatives. They can then be converted to a system of first-order differential equations. Consider the scalar third-order differential equation for $y=y(x)$:
+So far we have only considered a simple one-dimensional example. In practice, many problems are modelled with coupled variables, making the corresponding equation multi-dimensional. Multi-dimensional equations also arise when the starting equations contain higher-order derivatives. They can then be converted to a system of first-order differential equations. Consider the scalar third-order differential equation for $y=y(x)$:
 
 \begin{equation}
     \frac{d^3 y(x)}{dx^3} = f(y, x).
@@ -643,7 +647,7 @@ y = np.empty((nt+1, 2))
 # in many different ways).
 y[0] = h0, v0
 
-# Create vector b.
+# Create the vector b.
 b = np.array([0., -g])
 
 # Create the matrix L. Note that the default type of
@@ -662,6 +666,7 @@ L = np.array([[0., 1.], [0., 0.]])
 # multiplication, sum product over axes. You
 # will always have to take care of compatibi-
 # lity of the shapes of input data.
+#
 # For more info
 # https://numpy.org/doc/stable/reference/generated/numpy.dot.html
 for i in range(nt):
@@ -688,7 +693,7 @@ t = np.arange(nt+1) * dt
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
-# We, of course, now acces different sub-
+# We, of course, now access different sub-
 # plots as the elements of a numpy array.
 ax[0].plot(t, y[:, 1], '-k', lw=0.8)
 
@@ -728,7 +733,7 @@ ax[1].set_ylabel('$h$')
 ax[1].set_title('Height vs time (m)')
 ```
 
-In the above plots we have explicitely changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style files according to your taste !
+In the above plots we have explicitly changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style file according to your taste !
 
 ### Numerical stability of the forward Euler method revisited
 
@@ -780,7 +785,7 @@ x0 = 0.75 # initial position
 v0 = 0.   # initial velocity
 ti = 0.   # initial time
 tf = 40.0 # final time at which the solution is computed
-dt = 0.15  # time step
+dt = 0.15 # time step
 ```
 
 ```python
@@ -884,8 +889,8 @@ Q=
 Using the vector notation $y=(x\;\; v)$, we can then reformulate our time advancement scheme as,
 
 \begin{align}
-y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n+1} + Q^{-1}Ly^{n}dt \\
-& \Leftrightarrow \;\; z^{n+1} = z^{n+1} + \Lambda z^{n}dt. \label{eq:eigenCoor}
+y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n} + Q^{-1}Ly^{n}dt \\
+& \Leftrightarrow \;\; z^{n+1} = z^{n} + \Lambda z^{n}dt. \label{eq:eigenCoor}
 \end{align}
 
 In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:
@@ -895,13 +900,13 @@ In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvec
     & z_2^{n+1} = z_2^{n} - i\gamma z_2^{n} dt
 \end{align}
 
-It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lie outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is, therefore, not adapted to the simulation of a simple harmonic oscillator.
+It is now clear why the forward Euler scheme displays the diverging behaviour observed in the plots. The coefficients present in the advancement scheme are both purely imaginery and we have seen above that their product with $dt$ necessarily lies outside of the domain of stability of the scheme. Therefore, we cannot avoid the divergence of our solution by taking even a very small time step. The forward Euler scheme is, therefore, not adapted to the simulation of a simple harmonic oscillator.
 
 ## The backward Euler method
 
 The explicit Euler method gives a decent approximation in certain cases (\ref{eq:decay}), but it is absolutely inapplicable in others since it blows up for *any* time step (\ref{eq:spring}). It urges us to search for different ways to approximate evolution equations. One of them is the *implicit* Euler method.
 
-Simlarly to the explicit Euler method which is also referred to as the forward Euler method, the implicit Euler method is sometimes called the backward Euler method. Generally speaking, the difference between explicit and implicit numerical schemes is that in the first case the solution at latter point of the dependant variable (at a later time, for example) is built from the solution computed at the previous points; in the second case, the algorithm involves *both* the solution previous points and later points. Schematically we have:
+Similarly to the explicit Euler method which is also referred to as the forward Euler method, the implicit Euler method is sometimes called the backward Euler method. Generally speaking, the difference between explicit and implicit numerical schemes is that in the first case the solution at latter point of the dependant variable (at a later time, for example) is built from the solution computed at the previous points; in the second case, the algorithm involves *both* the solution previous points and later points. Schematically we have:
 
 \begin{align}
 & y^{n+1}(t) = f\Big(y^n, y^{n-1}, \ldots, y^0\Big),\;\; & \hbox{Explicit scheme}, \\
@@ -915,7 +920,7 @@ y^{n+1} = y^n + dt f(y^{n+1}, t^{n+1}).
 
 The advantage of implicit schemes over explicit ones is that usually they allow a larger time step to be stable. They are then useful when dealing with a *stiff* problem. The problem is called stiff if its solution varies rapidly in time, so that certain numerical schemes require an extremely small time step for stability.
 
-We computed the region of stability of the explicit Euler for linear autonomous homogeneous problems, like radiactive decay \ref{eq:decay} or the movement of a mass attached to a spring \ref{eq:spring}. Let's compare the situation when using the implicit Euler for both of them.
+We computed the region of stability of the explicit Euler for linear autonomous homogeneous problems, like radioactive decay \ref{eq:decay} or the movement of a mass attached to a spring \ref{eq:spring}. Let's compare the situation when using the implicit Euler for both of them.
 
 We first consider radioactive decay \ref{eq:decay}. The one-step advancement is given by:
 \begin{equation}
@@ -925,7 +930,7 @@ N^{n+1} = (1+\alpha dt)^{-1}N^n.
 Let's solve the equation for some input parameters and visualize the solution.
 
 ```python
-# We redefine all the constants. Eventhough,
+# We redefine all the constants. Even though
 # they were defined in the above cell, some
 # got overwritten when solving other problems.
 alpha = 0.25 # Exponential law coeffecient
@@ -960,7 +965,7 @@ coef_imp = (1.+alpha*dt)**(-1)
 for i in range(nt):
     N[i+1, 0] = N[i, 0] - alpha*N[i, 0]*dt
 
-    N[i+1, 1] = coef_imp*N[i, 0]
+    N[i+1, 1] = coef_imp*N[i, 1]
 ```
 
 ```python
@@ -981,7 +986,7 @@ ax.plot(t, N[:, 1], '^', color=(1., 0., 0.), label='Backward Euler method')
 
 ax.set_xlim(t[0]-0.1, t[-1]+0.1)
 
-# We set lables for the axes and title of a subplot.
+# We set labels for the axes and title of a subplot.
 ax.set_xlabel('$t$')
 ax.set_ylabel('$N$')
 ax.set_title('Radioactive decay')
@@ -990,7 +995,7 @@ ax.set_title('Radioactive decay')
 ax.legend()
 ```
 
-Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Eventhough they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.
+Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Even though they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.
 
 
 Let us now go back to the equation \ref{eq:spring}. We have proved that the forward Euler method is unstable for this case. Let us now check what happens with the backward Euler method.
@@ -1079,6 +1084,7 @@ y_imp[0] = x0, v0
 # does not depend on t, we compute it
 # right away.
 # To do this, we use the linalg.inv function of numpy.
+#
 # For more info
 # https://numpy.org/doc/stable/reference/generated/numpy.linalg.inv.html
 L_imp = np.linalg.inv(np.array([[1., -dt], [gamma**2*dt, 1.]]))
@@ -1112,7 +1118,7 @@ for axis in ax:
     axis.legend(loc='upper center')
 ```
 
-Obivously, the implicit Euler method does not blow up, but the solution is damped quickly. This a consequence of the numerical error being accumulated after $N$ time steps and the large $dt$ used.
+Obviously, the implicit Euler method does not blow up, but the solution is damped quickly. This a consequence of the numerical error being accumulated after $N$ time steps and the large $dt$ used.
 
 Let's compute the region of stability of the implicit Euler scheme.
 
@@ -1147,7 +1153,7 @@ In the literature you will often encounter the statement that *the implicit Eule
 
 ## Summary
 
-In this notebook we have described the forward and the backward Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODE) to compute the time evolution of the physical quantities under consideration.
+In this notebook we have described the forward and the backward Euler schemes, and how we can discretize an ordinary differential equation (or a system of ODEs) to compute the time evolution of the physical quantities under consideration.
 
 We computed the accuracy of the Euler method, and introduced the concept of stability of a numerical scheme. The former results directly from the number of terms retained in the Taylor expansion of the variables, while the latter originates from the structure of the time advancement scheme and the eigenvalues of the rhs linear operator appearing in the discretized equations.
 

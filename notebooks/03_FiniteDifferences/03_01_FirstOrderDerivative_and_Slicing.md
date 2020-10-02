@@ -60,7 +60,7 @@ For simplicity consider a uniform grid in which the $n+1$ grid points are evenly
 
 with the endpoints of the grid located respectively at $x_0$ and $x_n$.
 
-We will refer to continuous representation of the interval $[x_0,x_n]$ with $x$, and to its discrete representation with $x_i$. $x_i$ is called the *grid node*. Value of some function $f(x)$ at the grid node $x_i$ is then approximated by *the nodal value* $f_i$.
+We will refer to defined in continuous representation of the interval $[x_0,x_n]$ by $x$, and to those defined in its discrete representation by $x_i$. $x_i$ is called the *grid node*. Value of some function $f(x)$ at the grid node $x_i$ is then approximated by *the nodal value* $f_i$.
 
 In the nodal notations finite-difference decomposition of derivative is given by generic formula:
 
@@ -95,7 +95,7 @@ This expression is the usual left derivative of $f(x)$.
 Let us now approximate \ref{forwardTaylorDiff1} in the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$. In the nodal notations it reads:
 
 \begin{equation}
-f'_i = \frac{f_{i+1} - f_i}{\Delta x} \label{forwardTaylorDiff1nodal}.
+f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x}\;\; \hbox{forward finite difference} \label{eq:forwardNodal}.
 \end{equation}
 
 \ref{forwardTaylorDiff1nodal} represents first-order accurate finite-difference approximation of $f'(x)$ at $x_i$. The stencil is given by the sequence $[0, 1]$, where 0 stands for the point at which derivative is being evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
@@ -106,19 +106,25 @@ In the following figure we illustrate the stencil points and mark those involved
 
 It is important to highlight that *enumeration of stencil has nothing to do with enumeration of the grid nodes*. Enumeration of grid nodes normally starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. Enumeration of stencil always defined for each particular approximation. Zero stencil point usually refers to that grid node at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right.
 
-In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. The forward finite difference cannot be used at the right boundary node of the grid. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how we can handle boundary nodes when we evaluate derviatives using finite differences.
+In the above stencil, we use two grid points - $x_i$ and $x_{i+1}$ - to obtain a first-order accurate expression for the first-order derivative at $x_i$. It is obvious that the forward finite difference formula \ref{eq:forwardNodal} cannot be used at the right boundary node $x_n$. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how the boundary nodes can be handled when the derivatives are being evaluated using finite differences.
 
-In an identical manner, we can define another first-order estimate for $f'$ using a backward finite difference,
+Let us now define the backward finite-differences scheme in the identical manner. As Taylor's theorem is valid for $x$ in the interval $a < x-\Delta x \le x \le x+\Delta x < b$, we can approximate $f(x-\Delta x)$ as follows:
 
 \begin{equation}
-f'_{\rm b}(x_i) = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}\label{backwardDiff1}. 
+f(x-\Delta x) \approx f(x) - f'(x)\Delta x. 
 \end{equation}
 
-It is based on the right derivative of $f$ and its stencil is,
+As a consequence, we get first-order accurate backward finite-differences formula for the first order derivative of $f(x)$ at $x_i$:
+
+\begin{equation}
+f^{'\rm b}_i = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}\label{eq:backwardNodal}. 
+\end{equation}
+
+It is based on the right derivative $f'(x)$. We indicate the stencil points used to build \ref{eq:backwardNodal} in red:
 
 <img width="600px" src="../figures/backwardDiff1.png">
 
-The backward finite difference cannot be used at the left boundary node of the grid. We also note that $f'_{\rm b}(x_{i+1}) = f'_{\rm f}(x_i)$.
+As the forward finite-difference approximation could not be used at the right boundary node $x_n$, the backward finite-difference approximation cannot be used at the left boundary node $x_0$. We also note that $f^{'\rm b}_{i+1} = f^{'\rm f}_i$.
 
 Using two grid points, we can actually do better than first-order accuracy. Resorting again to Taylor's theorem we write:
 

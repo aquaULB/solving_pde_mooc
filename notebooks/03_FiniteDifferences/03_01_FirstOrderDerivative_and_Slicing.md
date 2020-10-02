@@ -65,70 +65,64 @@ We will refer to the continuous variable defined in $[x_0,x_n]$ by $x$, and to i
 Using these notations, the approximation of a derivative through a finite-difference expression is generically given by:
 
 \begin{equation}
-f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_i,\label{eq:generic}
+f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_{i+j},\label{eq:generic}
 \end{equation}
 
-where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of points used to build the finite-difference approximation - and $c_j$ is the finite-difference coefficient defined at the grid point $j$ of the stencil.
+where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of points used to build the finite-difference approximation - and $c_j$ is the finite-difference coefficient defined at the stencil point of index $j$.
 
 ## First-order derivative
 
-As an example of how the finite-difference approximation for the derivative of particular order can be derived, let us consider first-order derivative of $f(x)$. According to Taylor's theorem, we can approximate $f(x+\Delta x)$ as follows:
+As an example of how the finite-difference approximation for a derivative of a given order can be derived, let us consider the first-order derivative of $f(x)$. According to Taylor's theorem, we can approximate $f(x+\Delta x)$ as follows:
 
 \begin{equation}
 f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2)\label{TaylorSer}.
 \end{equation}
 
-Expression \ref{TaylorSer} is exact. We assume that $\Delta x \to 0$, and cut the terms that are of higher order in $\Delta x$ than $1$:
+Expression \ref{TaylorSer} is exact and allows us to get the following expression for the first-order derivative of $f$ at point $x$:
 
 \begin{equation}
-f(x+\Delta x)= f(x)+f'(x)\Delta x.
-\end{equation}
-
-We can express the first-order derivative of $f(x)$ at point $x$:
-
-\begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x} \label{eq:forwardTaylorDiff1}.
+f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x) \label{eq:forwardTaylorDiff1}
 \end{equation}
 
 This expression is the usual left derivative of $f(x)$.
 
-Let us now approximate \ref{eq:forwardTaylorDiff1} in the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$. In the nodal notations it reads:
+To approximate \ref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$, we define the following first-oder accurate approximation of $f'$ at $x_i$:
 
 \begin{equation}
 f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference} \label{eq:forwardNodal}.
 \end{equation}
 
-\ref{eq:forwardNodal} represents first-order accurate finite-difference approximation of $f'(x)$ at $x_i$. The stencil is given by the sequence $[0, 1]$, where 0 stands for the point at which derivative is being evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
+The stencil for this expression is given by the sequence $[0, 1]$, where 0 stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
 
-In the following figure we illustrate the stencil points and mark those involved in the computation of $f'(x_i)$:
+In the following figure we illustrate the stencil and mark in red the points involved in the computation:
 
 <img width="600px" src="../figures/forwardDiff1.png">
 
-The indices below the grid axis stand for the indices of the grid nodes, and the indices above the grid axis stand for the stencil indices.
+Above the stencil, we display the quantity computed, and below the stencil we display the quantities involved in its computations.
 
-It is important to highlight that *enumeration of stencil has nothing to do with enumeration of the grid nodes*. Enumeration of grid nodes normally starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. Enumeration of stencil always defined for each particular approximation. Zero stencil point usually refers to that grid node at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right.
+It is important to highlight that the *enumeration of a stencil has nothing to do with the enumeration of the grid points*. The enumeration of grid points usually starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. The enumeration of a stencil is charateristic of each particular approximation. The stencil point labelled $0$ corresponds to the grid point at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right. This is why in the above example the stencil is $[0, 1]$.
 
 In the above stencil, we use two grid points - $x_i$ and $x_{i+1}$ - to obtain a first-order accurate expression for the first-order derivative at $x_i$. It is obvious that the forward finite difference formula \ref{eq:forwardNodal} cannot be used at the right boundary node $x_n$. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how the boundary nodes can be handled when the derivatives are being evaluated using finite differences.
 
-Let us now define the backward finite-differences scheme in the identical manner. As Taylor's theorem is valid for $x$ in the interval $a < x-\Delta x \le x \le x+\Delta x < b$, we can approximate $f(x-\Delta x)$ as follows:
+Let us now define the backward finite-differences scheme in an identical manner. As Taylor's theorem is valid for $x$ in the interval $a < x-\Delta x \le x \le x+\Delta x < b$, we can approximate $f(x-\Delta x)$ as follows:
 
 \begin{equation}
 f(x-\Delta x) \approx f(x) - f'(x)\Delta x. 
 \end{equation}
 
-As a consequence, we get first-order accurate backward finite-differences formula for the first order derivative of $f(x)$ at $x_i$:
+We can then define the first-order accurate backward finite-differences formula for the first order derivative of $f(x)$ at $x_i$ as:
 
 \begin{equation}
 f^{'\rm b}_i = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}\label{eq:backwardNodal}. 
 \end{equation}
 
-It is based on the right derivative $f'(x)$. We indicate the stencil points used to build \ref{eq:backwardNodal} in red:
+It is based on the right derivative $f'(x)$. Highlighting in red the stencil points used to build expression \ref{eq:backwardNodal} we have,
 
 <img width="600px" src="../figures/backwardDiff1.png">
 
-As the forward finite-difference approximation could not be used at the right boundary node $x_n$, the backward finite-difference approximation cannot be used at the left boundary node $x_0$. We also note that $f^{'\rm b}_{i+1} = f^{'\rm f}_i$.
+As the forward finite-difference approximation cannot be used at the right boundary node $x_n$, the backward finite-difference approximation cannot be used at the left boundary node $x_0$. We also note that $f^{'\rm b}_{i+1} = f^{'\rm f}_i$.
 
-Let us now derive higher order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
+Let us now derive a higher order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
 
 \begin{align}
 & f(x+\Delta x) \approx f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2\label{eq:leftTaylor2} \\
@@ -138,7 +132,7 @@ Let us now derive higher order accurate approximation for $f'(x)$. Resorting aga
 We substract equations \ref{eq:leftTaylor2} and \ref{eq:rightTaylor2} and get:
 
 \begin{equation}
-f'(x) \approx \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2), \label{eq:centeredTaylorDiff}
+f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2), \label{eq:centeredTaylorDiff}
 \end{equation}
 
 which leads us to the second-oder accurate approximation of $f'(x)$ at $x_i$:
@@ -166,12 +160,12 @@ dx = lx / (nx-1) # grid spacing
 x = np.linspace(0, lx, nx)   # coordinates in the fine grid
 f = np.exp(x)*np.sin(3*pi*x) # function in the fine grid
 
-# Let us build numpy array for the exact repre-
-# sentation of first-order derivative of f(x).
+# Let us build a numpy array for the exact repre-
+# sentation of the first-order derivative of f(x).
 dfdx = np.exp(x)*(np.sin(3*pi*x) + 3*pi*np.cos(3*pi*x))
 ```
 
-We have built the numpy array for the exact expression for the first-order derivative of $f(x)$ from its analytical expression. But what if we worked with a function too compicated to derive analytically, or required expression for the higher order derivatives? It is useful to keep in mind the there is Python package just for that - for symbolic computations - [SymPy][20]. We won't get into details and leave it to you, to explore SymPy. Note that SymPy is not the part of basic distribution of Anaconda, you would have to install it. 
+We have built a numpy array for the exact expression of the first-order derivative of $f(x)$. But what if we worked with a complicated function or required expressions for higher order derivatives? It is useful to keep in mind that there is Python package just for that - for symbolic computations - [SymPy][20]. We won't get into details and leave it to you to explore SymPy. Note that SymPy is not part of the basic distribution of Anaconda, you would have to install it. 
 
 Sympy supports [basic symbolic calculus][21], and provides [tools][22] to transform symbolic data to numerical representation. 
 
@@ -180,7 +174,7 @@ Sympy supports [basic symbolic calculus][21], and provides [tools][22] to transf
 [22]: <https://docs.sympy.org/latest/modules/utilities/lambdify.html?highlight=lambdify> "From symbolic to numerical data"
 
 
-For the lower cost of computations of finite-difference approximations, we build the coarse grid with $80$ points, and evaluated the derivative:
+To experiment with our finite-difference approximations, we build a coarse grid with $80$ points, and evaluate the derivative:
 
 ```python
 # We don't care about overwriting grid variables,
@@ -192,8 +186,8 @@ dx = lx / (nx-1) # grid spacing
 ```
 
 ```python
-x_c = np.linspace(0, lx, nx)       # coordinates in the coarse grid
-f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function in the coarse grid
+x_c = np.linspace(0, lx, nx)       # coordinates of the coarse grid points
+f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
 
 # We create containers for the forward, backward
 # and centered finite difference points.
@@ -214,7 +208,7 @@ for i in range(1, nx-1): # first and last grid points are omitted
     df_centered[i] = (f_c[i+1] - f_c[i-1]) / (2*dx)
 ```
 
-Let us now plot the forward, backward and centered finite-difference approximations of first-order derivative of $f(x)$ against the curve obtained from the exact expression:
+Let us now plot the forward, backward and centered finite-difference approximations of the first-order derivative of $f(x)$ against the curve obtained with the exact expression:
 
 ```python
 fig, ax = plt.subplots(1, 3, figsize=(12, 5), tight_layout=True)

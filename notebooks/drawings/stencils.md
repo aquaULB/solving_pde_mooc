@@ -8,9 +8,9 @@ jupyter:
       format_version: '1.2'
       jupytext_version: 1.6.0
   kernelspec:
-    display_name: Python 3
+    display_name: 'Python 3.7.7 64-bit (''course'': conda)'
     language: python
-    name: python3
+    name: python37764bitcoursecondacf09dcbfbf8b41f7b84691ece6539f67
 ---
 
 ```python
@@ -83,19 +83,9 @@ ax.plot(x[[0,2,-3,-1]], y[[0,2,-3,-1]])
 
 ax.plot(x[4:8:2], y[4:8:2], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
-ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
-ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
-
-ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
-ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
-ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
-ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.5, '$f\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, r'$-f_i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, r'$f_{i+1}$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/forwardDiff1.png', dpi=300)
 ```
@@ -114,19 +104,9 @@ ax.plot(x[[0,6,-3,-1]], y[[0,6,-3,-1]])
 
 ax.plot(x[2:6:2], y[2:6:2], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
-ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
-ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
-
-ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
-ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
-ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
-ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.5, '$f\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, r'$f_i$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, r'$-f_{i-1}$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/backwardDiff1.png', dpi=300)
 ```
@@ -145,19 +125,9 @@ ax.plot(x[[0,4,-3,-1]], y[[0,4,-3,-1]])
 
 ax.plot(x[[2,6]], y[[2,6]], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
-ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
-ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
-
-ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
-ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
-ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
-ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.5, '$f\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, r'$-f_{i-1}$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, r'$f_{i+1}$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/centeredDiff1.png', dpi=300)
 ```
@@ -204,6 +174,10 @@ ax.text(8, -0.6, r'$-2 f_{n-1}$', fontsize=18, horizontalalignment='center')
 ax.text(6, -0.6, r'$\frac12 f_{n-2}$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/onesideDiff1_2.png', dpi=300)
+```
+
+```python
+
 ```
 
 ```python

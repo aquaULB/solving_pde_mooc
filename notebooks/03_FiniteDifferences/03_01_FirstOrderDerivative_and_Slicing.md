@@ -50,7 +50,7 @@ $$
 
 There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
 
-Let $x$ be the continuous variable defined in the interval $x\in[x_0,x_n]$. Though, in any numerical problem, we have to limit the number of points at which we store the values of $f(x)$ because the random access memory (RAM) of our computers is limited. We therefore need to introduce an approximation of our continuous interval - the numerical grid. One-dimensional numerical grid is a set of grid points at which we evaluate all physical quantities (in the case of multi-dimensional grids we would refer to grid cells rather than do grid points). 
+Let $x$ be the continuous variable defined in the interval $x\in[x_0,x_n]$. In any numerical problem, we have to limit the number of points at which we store the values of $f(x)$ because the random access memory (RAM) of our computers is limited. We therefore need to introduce an approximation of our continuous interval - the numerical grid. It is a set of grid points at which we evaluate all physical quantities.
 
 For simplicity consider a uniform grid in which the $n+1$ grid points are evenly distributed. Therefore the coordinates of the grid points are:
 
@@ -60,15 +60,15 @@ For simplicity consider a uniform grid in which the $n+1$ grid points are evenly
 
 with the endpoints of the grid located respectively at $x_0$ and $x_n$.
 
-We will refer to defined in continuous representation of the interval $[x_0,x_n]$ by $x$, and to those defined in its discrete representation by $x_i$. $x_i$ is called the *grid node*. Value of some function $f(x)$ at the grid node $x_i$ is then approximated by *the nodal value* $f_i$.
+We will refer to the continuous variable defined in $[x_0,x_n]$ by $x$, and to its discrete representation by $x_i$. $x_i$ is called a *grid point* or sometimes a *grid node*. The value of some function $f(x)$ at the grid point $x_i$ is then denoted as $f_i$.
 
-In the nodal notations finite-difference decomposition of derivative is given by generic formula:
+Using these notations, the approximation of a derivative through a finite-difference expression is generically given by:
 
 \begin{equation}
 f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_i,\label{eq:generic}
 \end{equation}
 
-where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of nodes used to build finite-difference approximation and $c_j$ is the finite-difference coefficient defined at the node $j$ from the stencil $\mathcal{J}$.
+where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of points used to build the finite-difference approximation - and $c_j$ is the finite-difference coefficient defined at the grid point $j$ of the stencil.
 
 ## First-order derivative
 

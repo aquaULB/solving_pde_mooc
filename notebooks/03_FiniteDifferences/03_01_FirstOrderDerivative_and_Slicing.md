@@ -48,25 +48,11 @@ $$
 f(x)=e^x \sin(3\pi x) \label{testfunc}
 $$
 
-There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f$ on a basis of functions $T_k(x)$ and computing the derivatives of $f$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
+There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
 
-## First-order derivative
+Let $x$ be the continuous variable defined in the interval $x\in[x_0,x_n]$. Though, in any numerical problem, we have to limit the number of points at which we store the values of $f(x)$ because the random access memory (RAM) of our computers is limited. We therefore need to introduce an approximation of our continuous interval - the numerical grid. One-dimensional numerical grid is a set of grid points at which we evaluate all physical quantities (in the case of multi-dimensional grids we would refer to grid cells rather than do grid points). 
 
-We first consider the first-order derivative of $f(x)$. According to Taylor's theorem, we can approximate $f(x+\Delta x)$ as,
-
-\begin{equation}
-f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2)
-\end{equation}
-
-and then get the following expression for the derivative of $f$ at point $x$:
-
-\begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x) \label{forwardTaylorDiff1}
-\end{equation}
-
-This expression is the usual left derivative of $f$. 
-
-In any numerical problem, we have to limit the number of points at which we store the values of $f$ because the random access memory (RAM) of our computers is finite. We therefore need to introduce a grid along with a set of grid points at which we evaluate all physical quantities. For simplicity we consider a uniform grid in which the $n+1$ grid points are evenly distributed. The coordinates of the grid points are therefore,
+For simplicity consider a uniform grid in which the $n+1$ grid points are evenly distributed. Therefore the coordinates of the grid points are:
 
 \begin{equation}
  x_i = i \Delta x, \; \; 0\leq i \leq n
@@ -74,17 +60,53 @@ In any numerical problem, we have to limit the number of points at which we stor
 
 with the endpoints of the grid located respectively at $x_0$ and $x_n$.
 
-From eq. \ref{forwardTaylorDiff1} we can then define the following first-oder accurate approximation of the first-order derivative of $f$ at $x_i$:
+We will refer to continuous representation of the interval $[x_0,x_n]$ with $x$, and to its discrete representation with $x_i$. $x_i$ is called the *grid node*. Value of some function $f(x)$ at the grid node $x_i$ is then approximated by *the nodal value* $f_i$.
+
+In the nodal notations finite-difference decomposition of derivative is given by generic formula:
 
 \begin{equation}
-f'_{\rm f}(x_i) = \frac{f_{i+1} - f_i}{\Delta x}, \;\; \hbox{forward finite difference}\label{forwardDiff1}. 
+f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_i,\label{eq:generic}
 \end{equation}
 
-Schematically, we represent this expression through *a stencil* that indicates which grid points are involved in the computation:
+where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of nodes used to build finite-difference approximation and $c_j$ is the finite-difference coefficient defined at the node $j$ from the stencil $\mathcal{J}$.
+
+## First-order derivative
+
+As an example of how the finite-difference approximation for the derivative of particular order can be derived, let us consider first-order derivative of $f(x)$. According to Taylor's theorem, we can approximate $f(x+\Delta x)$ as follows:
+
+\begin{equation}
+f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2)\label{TaylorSer}.
+\end{equation}
+
+Expression \ref{TaylorSer} is exact. We assume that $\Delta x \to 0$, and cut the terms that are of higher order in $\Delta x$ than $1$:
+
+\begin{equation}
+f(x+\Delta x)= f(x)+f'(x)\Delta x.
+\end{equation}
+
+We can express the first-order derivative of $f(x)$ at point $x$:
+
+\begin{equation}
+f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x} \label{forwardTaylorDiff1}.
+\end{equation}
+
+This expression is the usual left derivative of $f(x)$.
+
+Let us now approximate \ref{forwardTaylorDiff1} in the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$. In the nodal notations it reads:
+
+\begin{equation}
+f'_i = \frac{f_{i+1} - f_i}{\Delta x} \label{forwardTaylorDiff1nodal}.
+\end{equation}
+
+\ref{forwardTaylorDiff1nodal} represents first-order accurate finite-difference approximation of $f'(x)$ at $x_i$. The stencil is given by the sequence $[0, 1]$, where 0 stands for the point at which derivative is being evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
+
+In the following figure we illustrate the stencil points and mark those involved in the computation of $f'(x_i)$:
 
 <img width="600px" src="../figures/forwardDiff1.png">
 
-In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. The forward finite difference cannot be used at the right boundary node of the grid. In section XX, we discuss how we can handle boundary nodes when we evaluate derviatives using finite differences.
+It is important to highlight that *enumeration of stencil has nothing to do with enumeration of the grid nodes*. Enumeration of grid nodes normally starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. Enumeration of stencil always defined for each particular approximation. Zero stencil point usually refers to that grid node at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right.
+
+In the above stencil, we use two grid points - indicated in red - to obtain a first-order accurate expression. The forward finite difference cannot be used at the right boundary node of the grid. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how we can handle boundary nodes when we evaluate derviatives using finite differences.
 
 In an identical manner, we can define another first-order estimate for $f'$ using a backward finite difference,
 

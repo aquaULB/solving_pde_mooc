@@ -24,7 +24,7 @@ jupyter:
 
 1. [Introduction](#Introduction)
 2. [First-order derivative](#First-order-derivative)
-3. [Numpy array slicing](#Numpy-array-slicing)
+3. [Python slicing](#Python-slicing)
 4. [One-sided finite differences](#One-sided-finite-differences)
 5. [Summary](#Summary)
 
@@ -214,38 +214,111 @@ for i in range(1, nx-1): # first and last grid points are omitted
     df_centered[i] = (f_c[i+1] - f_c[i-1]) / (2*dx)
 ```
 
+Let us now plot the forward, backward and centered finite-difference approximations of first-order derivative of $f(x)$ against the curve obtained from the exact expression:
+
 ```python
 fig, ax = plt.subplots(1, 3, figsize=(12, 5), tight_layout=True)
 
+fig.suptitle('Forward, backward and centered finite differences vs exact derivative')
+
 for axis in ax:
     axis.set_xlim(x[0], x[-1])
+    
+    axis.set_xlabel('$x$')
+    axis.set_ylabel("f'")
 
 ax[0].plot(x, dfdx)
-ax[0].plot(x_c[0: nx-1], df_forward[0: nx-1], '^g')
-ax[0].set_xlabel('$x$')
-ax[0].set_ylabel('$f\'$')
+ax[0].plot(x_c[0:nx-1], df_forward[0: nx-1], '^g')
 
 ax[1].plot(x, dfdx)
-ax[1].plot(x_c[1: nx], df_backward[1: nx], '^m')
-ax[1].set_xlabel('$x$')
-ax[1].set_ylabel('$f\'$')
+ax[1].plot(x_c[1:nx], df_backward[1: nx], '^m')
 
 ax[2].plot(x, dfdx)
-ax[2].plot(x_c[1: nx-1], df_centered[1: nx-1], '^c')
-ax[2].set_xlabel('$x$')
-ax[2].set_ylabel('$f\'$')
+ax[2].plot(x_c[1:nx-1], df_centered[1: nx-1], '^c')
 ```
 
 What do you think about the agreement? What happens when you increase the number of points in the coarse grid?
 
-In the above cell, we have used the slicing of numpy arrays to extract the relevant entries from our arrays. For example, for the forward finite difference, the expression is not defined at the last grid point. Therefore, the relevant grid coordinates are not the complete `x_c` array but the *slice* `x_c[0: nx-1]`. For the centered finite difference we must exclude the first and last grid points. The appropriate coordinate array slice is then `x_c[1: nx-1]`. This notion of array slicing is described in much more detail in the next section.
+In the above cell, we have used the slicing of numpy arrays to extract the relevant entries from our arrays. For example, for the forward finite difference, the expression is not defined at the last grid point. Therefore, the relevant grid coordinates are not the complete `x_c` array but the *slice* `x_c[0:nx-1]`. For the centered finite differences we must exclude the first and last grid points. The appropriate coordinate array slice is then `x_c[1:nx-1]`. The notions of slicing of Python sequences are described in much more detail in the next section.
 
 
-## Numpy array slicing
+## Python slicing
 
 
-...
+We already mentioned the powerful tool of Python - negative indexing. When the programmer tries to access elements of the sequence by referring to the negative index, the enumeration of the elements starts from the tail of the sequence. Let's say we have a Python list:
 
+```python
+a = [
+    'first',
+    'second',
+    'third'
+]
+```
+
+And we want to iterate through its elements starting from `a[2]` to `a[0]`. It is a valid and even preferrable approach to do it using the negative indexing:
+
+```python
+for i in range(-1, -4, -1):
+    print(a[i])
+```
+
+Now that we are fully uquipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C][30], so, it's it considerably faster than the respective code implemented with a Python loop.
+
+Syntax for the python slicing is the following `start:stop+step:step`, where `stop` indicates the last element of the sequence you want to "grasp".
+
+Consider the following demo. First, we create large Python list.
+
+[30]: <https://github.com/python/cpython/blob/master/Objects/sliceobject.c> "Slicing source"
+
+```python
+large_sequence = [i for i in range(10**5)]
+```
+
+Suppose we want to extract the sublist with the first element equal to `large_sequence[5]` and the last element equal to `large_sequence[99994]`. We could just create an empty list and fill it in a loop.
+
+```python
+%%timeit
+
+i_was_filled_in_a_loop = []
+
+for i in range(5, 99995):
+    i_was_filled_in_a_loop.append(large_sequence[i])
+```
+
+But the more efficient way is to apply Python slicing:
+
+```python
+%timeit slice_of_it = large_sequence[5:-5]
+```
+
+Python slicing obviously executes faster. Try to avoid Python loops when you can slice instead.
+
+When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-6` stands for `stop`. `Step` is not specified, so it is set to the default value - `1`. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
+
+```python
+# I'll add few elements to the a list for the
+# sake of doing a demo.
+#
+# list.extend method differs from list.append.
+# list.append adds an item as the last element
+# of the list, while list.extend expects a se-
+# quence as an argument and appends all its ele-
+# ments to the list one by one.
+#
+# For more info:
+# https://docs.python.org/3/tutorial/datastructures.html
+a.extend(['fourth', 'fifth', 'sixth'])
+```
+
+* `start` is omitted
+
+```python
+# We pass few arguments to the print function.
+# When they are outputted, they are separated by
+# the value passed to the sep argument with de-
+# fault value set to ' '.
+print(a[:3], a[:5], sep='\n')
+```
 
 ## One-sided finite differences
 

@@ -45,7 +45,7 @@ plt.style.use('../styles/mainstyle.use')
 In this part of the course we describe how to compute numerically derivatives of functions such as,
 
 $$
-f(x)=e^x \sin(3\pi x) \label{testfunc}
+f(x)=e^x \sin(3\pi x) \label{eq:testfunc}
 $$
 
 There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
@@ -87,22 +87,24 @@ f(x+\Delta x)= f(x)+f'(x)\Delta x.
 We can express the first-order derivative of $f(x)$ at point $x$:
 
 \begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x} \label{forwardTaylorDiff1}.
+f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x} \label{eq:forwardTaylorDiff1}.
 \end{equation}
 
 This expression is the usual left derivative of $f(x)$.
 
-Let us now approximate \ref{forwardTaylorDiff1} in the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$. In the nodal notations it reads:
+Let us now approximate \ref{eq:forwardTaylorDiff1} in the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$. In the nodal notations it reads:
 
 \begin{equation}
-f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x}\;\; \hbox{forward finite difference} \label{eq:forwardNodal}.
+f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference} \label{eq:forwardNodal}.
 \end{equation}
 
-\ref{forwardTaylorDiff1nodal} represents first-order accurate finite-difference approximation of $f'(x)$ at $x_i$. The stencil is given by the sequence $[0, 1]$, where 0 stands for the point at which derivative is being evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
+\ref{eq:forwardNodal} represents first-order accurate finite-difference approximation of $f'(x)$ at $x_i$. The stencil is given by the sequence $[0, 1]$, where 0 stands for the point at which derivative is being evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
 
 In the following figure we illustrate the stencil points and mark those involved in the computation of $f'(x_i)$:
 
 <img width="600px" src="../figures/forwardDiff1.png">
+
+The indices below the grid axis stand for the indices of the grid nodes, and the indices above the grid axis stand for the stencil indices.
 
 It is important to highlight that *enumeration of stencil has nothing to do with enumeration of the grid nodes*. Enumeration of grid nodes normally starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. Enumeration of stencil always defined for each particular approximation. Zero stencil point usually refers to that grid node at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right.
 
@@ -126,70 +128,82 @@ It is based on the right derivative $f'(x)$. We indicate the stencil points used
 
 As the forward finite-difference approximation could not be used at the right boundary node $x_n$, the backward finite-difference approximation cannot be used at the left boundary node $x_0$. We also note that $f^{'\rm b}_{i+1} = f^{'\rm f}_i$.
 
-Using two grid points, we can actually do better than first-order accuracy. Resorting again to Taylor's theorem we write:
+Let us now derive higher order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
+
+\begin{align}
+& f(x+\Delta x) \approx f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2\label{eq:leftTaylor2} \\
+& f(x-\Delta x) \approx f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2\label{eq:rightTaylor2}.
+\end{align}
+
+We substract equations \ref{eq:leftTaylor2} and \ref{eq:rightTaylor2} and get:
 
 \begin{equation}
-f(x+\Delta x)= f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+O(\Delta x^3) \\
-f(x-\Delta x)= f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2+O(\Delta x^3) \\
+f'(x) \approx \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2), \label{eq:centeredTaylorDiff}
 \end{equation}
 
-If we substract these two equations, we get:
+which leads us to the second-oder accurate approximation of $f'(x)$ at $x_i$:
 
 \begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2) \label{centeredTaylorDiff}
-\end{equation}
-
-We can then define the following second-oder accurate approximation of $f'$ at $x_i$:
-
-\begin{equation}
-f'_{\rm c}(x_i) = \frac{f_{i+1} - f_{i-1}}{2\Delta x},\;\; \hbox{centered finite difference} \label{centeredDiff}.
+f^{' \rm c}_i = \frac{f_{i+1} - f_{i-1}}{2\Delta x},\;\; \hbox{centered finite difference} \label{eq:centeredDiff}.
 \end{equation}
 
 This expression is called the centered finite difference first-order derivative and its stencil looks like this:
 
 <img width="600px" src="../figures/centeredDiff1.png">
 
-Using just two grid points, it's not possible to achieve an accuracy of higher order. The centered finite difference cannot be used at the left or right boundary nodes of the grid
+Using just two grid points, it's not possible to achieve an accuracy of higher order than $2$. The centered finite-difference scheme cannot be used both at the left or right boundary nodes of the grid.
 
-Let us check that our formulas work. We first create a fine grid to accuratly represent the function \eqref{testfunc} and its derivative in the interval $x\in [O\, \pi]$.
+Let us check that our formulas are correct. We first create a fine grid to accurately represent the function \ref{eq:testfunc} and its derivative in the interval $x\in [O, \pi]$.
 
 ```python
-pi = np.pi # 3.14...
-nx = 200 # number of grid points (fine grid)
-lx = pi # length of invertal
+pi = np.pi       # 3.14...
+nx = 200         # number of grid points (fine grid)
+lx = pi          # length of the invertal
 dx = lx / (nx-1) # grid spacing
-x = np.linspace(0, lx, nx) # coordinates of points on the fine grid
-
-
-f = np.exp(x)*np.sin(3*pi*x)
-dfdx = np.exp(x)*(np.sin(3*pi*x) + 3*pi*np.cos(3*pi*x))
-
-fig, ax = plt.subplots(1, 2, figsize=(10, 5))
-ax[0].plot(x, f)
-ax[0].set_xlabel('$x$')
-ax[0].set_ylabel('$f$')
-ax[0].set_ylim(-25,25)
-
-ax[1].plot(x, dfdx)
-ax[1].set_xlabel('$x$')
-ax[1].set_ylabel('$f\'$')
-ax[1].set_ylim(-200,200)
 ```
 
-The finite difference approximations, one a coarser grid, can then be evaluated as follows.
+```python
+x = np.linspace(0, lx, nx)   # coordinates in the fine grid
+f = np.exp(x)*np.sin(3*pi*x) # function in the fine grid
+
+# Let us build numpy array for the exact repre-
+# sentation of first-order derivative of f(x).
+dfdx = np.exp(x)*(np.sin(3*pi*x) + 3*pi*np.cos(3*pi*x))
+```
+
+We have built the numpy array for the exact expression for the first-order derivative of $f(x)$ from its analytical expression. But what if we worked with a function too compicated to derive analytically, or required expression for the higher order derivatives? It is useful to keep in mind the there is Python package just for that - for symbolic computations - [SymPy][20]. We won't get into details and leave it to you, to explore SymPy. Note that SymPy is not the part of basic distribution of Anaconda, you would have to install it. 
+
+Sympy supports [basic symbolic calculus][21], and provides [tools][22] to transform symbolic data to numerical representation. 
+
+[20]: <https://docs.sympy.org/latest/index.html> "SymPy"
+[21]: <https://docs.sympy.org/latest/tutorial/calculus.html> "Basic calculus"
+[22]: <https://docs.sympy.org/latest/modules/utilities/lambdify.html?highlight=lambdify> "From symbolic to numerical data"
+
+
+For the lower cost of computations of finite-difference approximations, we build the coarse grid with $80$ points, and evaluated the derivative:
 
 ```python
-nx = 80 # number of grid points (coarse grid)
-lx = pi # length of invertal
+# We don't care about overwriting grid variables,
+# as we are not using them further than for con-
+# struction of x and f(x) arrays.
+nx = 80          # number of grid points (coarse grid)
+lx = pi          # length of invertal
 dx = lx / (nx-1) # grid spacing
-x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
+```
 
-f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
+```python
+x_c = np.linspace(0, lx, nx)       # coordinates in the coarse grid
+f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function in the coarse grid
 
-df_forward = np.empty(nx) # forward finite difference
-df_backward = np.empty(nx) # backward finite difference
-df_centered = np.empty(nx) # centered finite difference
+# We create containers for the forward, backward
+# and centered finite difference points.
+df_forward = np.empty(nx)
+df_backward = np.empty(nx)
+df_centered = np.empty(nx)
 
+# We fill arrays in the Python loops, so that
+# you can explicitely see what grid nodes have
+# been taken into account.
 for i in range(0, nx-1): # last grid point is omitted
     df_forward[i] = (f_c[i+1] - f_c[i]) / dx
     
@@ -201,7 +215,10 @@ for i in range(1, nx-1): # first and last grid points are omitted
 ```
 
 ```python
-fig, ax = plt.subplots(1,3,figsize=(12, 5))
+fig, ax = plt.subplots(1, 3, figsize=(12, 5), tight_layout=True)
+
+for axis in ax:
+    axis.set_xlim(x[0], x[-1])
 
 ax[0].plot(x, dfdx)
 ax[0].plot(x_c[0: nx-1], df_forward[0: nx-1], '^g')

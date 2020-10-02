@@ -83,14 +83,19 @@ ax.plot(x[[0,2,-3,-1]], y[[0,2,-3,-1]])
 
 ax.plot(x[4:8:2], y[4:8:2], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(4, 0.6, "$f'(x_i)$", fontsize=18, horizontalalignment='center')
+ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
+ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
+ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
 
-ax.text(0, -0.6, '$-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, '$-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, -0.6, '$0$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, '$1$', fontsize=18, horizontalalignment='center')
-ax.text(8, -0.6, '$2$', fontsize=18, horizontalalignment='center')
-ax.text(10, -0.6, '$3$', fontsize=18, horizontalalignment='center')
+ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
+ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
+ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
+ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/forwardDiff1.png', dpi=300)
 ```
@@ -109,14 +114,19 @@ ax.plot(x[[0,6,-3,-1]], y[[0,6,-3,-1]])
 
 ax.plot(x[2:6:2], y[2:6:2], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(4, 0.6, "$f'(x_i)$", fontsize=18, horizontalalignment='center')
+ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
+ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
+ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
 
-ax.text(0, -0.6, '$-2$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, '$-1$', fontsize=18, horizontalalignment='center')
-ax.text(4, -0.6, '$0$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, '$1$', fontsize=18, horizontalalignment='center')
-ax.text(8, -0.6, '$2$', fontsize=18, horizontalalignment='center')
-ax.text(10, -0.6, '$3$', fontsize=18, horizontalalignment='center')
+ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
+ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
+ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
+ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/backwardDiff1.png', dpi=300)
 ```
@@ -135,9 +145,19 @@ ax.plot(x[[0,4,-3,-1]], y[[0,4,-3,-1]])
 
 ax.plot(x[[2,6]], y[[2,6]], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
-ax.text(4, 0.5, '$f\'_i$', fontsize=18, horizontalalignment='center')
-ax.text(2, -0.6, r'$-f_{i-1}$', fontsize=18, horizontalalignment='center')
-ax.text(6, -0.6, r'$f_{i+1}$', fontsize=18, horizontalalignment='center')
+ax.text(0, -0.6, '$i-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, '$i-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, '$i$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, '$i+1$', fontsize=18, horizontalalignment='center')
+ax.text(8, -0.6, '$i+2$', fontsize=18, horizontalalignment='center')
+ax.text(10, -0.6, '$i+3$', fontsize=18, horizontalalignment='center')
+
+ax.text(0, 0.6, '$-2$', fontsize=18, horizontalalignment='center')
+ax.text(2, 0.6, '$-1$', fontsize=18, horizontalalignment='center')
+ax.text(4, 0.6, '$0$', fontsize=18, horizontalalignment='center')
+ax.text(6, 0.6, '$1$', fontsize=18, horizontalalignment='center')
+ax.text(8, 0.6, '$2$', fontsize=18, horizontalalignment='center')
+ax.text(10, 0.6, '$3$', fontsize=18, horizontalalignment='center')
 
 fig.savefig('../figures/centeredDiff1.png', dpi=300)
 ```

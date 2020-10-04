@@ -93,7 +93,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
          & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two-stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 
@@ -111,7 +111,7 @@ Using the two-stage Runge-Kutta scheme, we then have,
     z^{n} = (I+ dt \Lambda + \frac{dt^2}{2}\Lambda^2) z^{n-1} \; \Leftrightarrow \; z^{n} = (I+ dt \Lambda + \frac{dt^2}{2}\Lambda^2)^n z^0.
 \end{equation}
 
-All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as long as the following relation is satisified for all the eigenvalues $\lambda_k$:
+All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as long as the following relation is satisfied for all the eigenvalues $\lambda_k$:
 
 \begin{equation}
     \vert 1+\lambda_k dt + \frac{\lambda_k^2 dt^2}{2} \vert \leq 1.
@@ -251,7 +251,7 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
-The construction of higher-order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+The construction of higher-order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in-depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
 
 > Above this, very little is known \cite{Butcher1996}.
 
@@ -285,7 +285,7 @@ In the following plot, we compare the regions of stability for the various schem
 
 ```python
 # As before, the x-axis corresponds to
-# lambda_i*dt and the y-axis to lambda_r*dt.
+# lambda_r*dt and the y-axis to lambda_i*dt.
 # We set the resolution along x and y
 # (in points per the whole 1D domain).
 nx = 100
@@ -445,7 +445,7 @@ Generally speaking, RK methods can be defined as follows:
 & k_i = f(t^n + c_i dt, y^n + dt\sum_{j=1}^h a_{ij} k_j).
 \end{align}
 
-For explicit RK methods one has $h=s-1$. This implies that any $k_i$ can be computed explicitly from the knowledge of the previously computed $k_j$ with $j<i$. For implicit RK methods, we have $h=s$. It mean, that for each $k_i$ we have to solve an implicit equation $k_i=f(k_1, k_2,\dots,k_i)$. We pay a price in terms of complexity (we have to invert some matrix or iteratively found a solution to the previous equation). However, implicit RK methods have better stability properties compared to explicit ones and can therefore be used for a larger set of problems.
+For explicit RK methods one has $h=s-1$. This implies that any $k_i$ can be computed explicitly from the knowledge of the previously computed $k_j$ with $j<i$. For implicit RK methods, we have $h=s$. It mean, that for each $k_i$ we have to solve an implicit equation $k_i=f(k_1, k_2,\dots,k_i)$. We pay a price in terms of complexity (we have to invert some matrix or iteratively find a solution to the previous equation). However, implicit RK methods have better stability properties compared to explicit ones and can therefore be used for a larger set of problems.
 
 As an example, let us consider some relatively simple implicit RK scheme - we went on [Wikipedia][1] and picked one named *Qin and Zhang's two-stage second-order* implicit method. It reads:
 
@@ -545,7 +545,7 @@ for axis in ax:
 
 In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While we won't consider Runge-Kutta schemes of order higher than 4 in the course, we discussed the complexities one would face trying to construct equations for the coefficients $k_i$ for higher-order schemes. We also gave insight into implicit Runge-Kutta schemes and provided an implementation of Qin and Zhang's second-order implicit method.
 
-With this we conclude the chapter dedicated to **Time integration**. In the following chapter we will consider the finite differences method to approximate derivatives in partial differential equations and convert them into a system of linear equations.
+With this we conclude the chapter dedicated to **time integration**. In the following chapter we will consider the finite differences method to approximate derivatives in partial differential equations and convert them into a system of linear equations.
 
 ## Exercises
 

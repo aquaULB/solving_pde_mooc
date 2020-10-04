@@ -152,7 +152,7 @@ Let us check that our formulas are correct. We first create a fine grid to accur
 ```python
 pi = np.pi       # 3.14...
 nx = 200         # number of grid points (fine grid)
-lx = pi          # length of the invertal
+lx = pi          # length of the interval
 dx = lx / (nx-1) # grid spacing
 ```
 

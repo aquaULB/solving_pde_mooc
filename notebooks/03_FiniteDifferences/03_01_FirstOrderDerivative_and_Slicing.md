@@ -25,6 +25,8 @@ jupyter:
 1. [Introduction](#Introduction)
 2. [First-order derivative](#First-order-derivative)
 3. [Python slicing](#Python-slicing)
+    1. [Motivation and synatax](#Motivation-and-syntax)
+    2. [Referenced or copied?](#Referenced-or-copied?)
 4. [One-sided finite differences](#One-sided-finite-differences)
 5. [Summary](#Summary)
 
@@ -239,6 +241,9 @@ In the above cell, we have used the slicing of numpy arrays to extract the relev
 ## Python slicing
 
 
+### Motivation and syntax
+
+
 We already mentioned the powerful tool of Python - negative indexing. When the programmer tries to access elements of the sequence by referring to the negative index, the enumeration of the elements starts from the tail of the sequence. Let's say we have a Python list:
 
 ```python
@@ -256,7 +261,7 @@ for i in range(-1, -4, -1):
     print(a[i])
 ```
 
-Now that we are fully uquipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C][30], so, it's it considerably faster than the respective code implemented with a Python loop.
+Now that we are fully equipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C][30], so, it's it considerably faster than the respective code implemented with a Python loop.
 
 Syntax for the python slicing is the following `start:stop+step:step`, where `stop` indicates the last element of the sequence you want to "grasp".
 
@@ -287,10 +292,10 @@ But the more efficient way is to apply Python slicing:
 
 Python slicing obviously executes faster. Try to avoid Python loops when you can slice instead.
 
-When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-6` stands for `stop`. `Step` is not specified, so it is set to the default value - `1`. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
+When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-6` stands for `stop`. `Step` is not specified, so it is set to the default value of `1`. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
 
 ```python
-# I'll add few elements to the a list for the
+# I'm adding few elements to the a list for the
 # sake of doing a demo.
 #
 # list.extend method differs from list.append.
@@ -302,6 +307,7 @@ When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together w
 # For more info:
 # https://docs.python.org/3/tutorial/datastructures.html
 a.extend(['fourth', 'fifth', 'sixth'])
+print(a)
 ```
 
 * `start` is omitted
@@ -309,10 +315,125 @@ a.extend(['fourth', 'fifth', 'sixth'])
 ```python
 # We pass few arguments to the print function.
 # When they are outputted, they are separated by
-# the value passed to the sep argument with de-
-# fault value set to ' '.
+# the value passed to the sep argument (its default
+# value is set to ' ').
 print(a[:3], a[:5], sep='\n')
 ```
+
+The output basically tells us that `start` has a default value and its default is equal to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. Though, it is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
+
+```python
+print(a[:-3:-1])
+```
+
+Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3:-1]` - which is *extracting subsequence of last $n-1$ elements enumerated from the tail of the sequence* for `sequence[:-n:-1]`.
+
+
+* `stop+step` is omitted
+
+```python
+print(a[2::2], a[5:], a[4::-1], sep='\n')
+```
+
+You could have already guessed what would be the output beforehand. `sequence[n::step]` for `step`$>0$ is equivalent to setting `stop+step` to `len(sequence)`, and `sequence[:n:step]` for `step` is equivalent to setting `stop+step` to $-1$.
+
+
+* `start` and `stop+step` are omitted
+
+```python
+print(a[:], a[::2], a[::-1], sep='\n')
+```
+
+Let's summatize our little tests by the exact citations taken from [documentation][31]:
+
+Consider the slice sequence `s` taken as follows: `s[i:j:k]`, then
+
+> If i or j are omitted or None, they become “end” values (which end depends on the sign of k). Note, k cannot be zero. If k is None, it is treated like 1.
+
+That is pretty much what we've onserved so far. We would comment on that `k` cannot be zero. This limitation implies that implementation of this case raises an [exception][32] of type `ValueError`. By default occurance of uncaught exception terminates code executation. We won't get into details of treatment of exceptions, but you can read about it on your own if you are interested.
+
+We would also cite another important piece of documentation on sequences slicing:
+
+> If i or j is greater than len(s), use len(s).
+
+What is so curious about it exactly? Consider the following examples:
+
+[31]: <https://docs.python.org/dev/library/stdtypes.html#sequence-types-list-tuple-range> "Docs on Slicing sequences"
+[32]: <https://docs.python.org/3/tutorial/errors.html> "Errors and Exceptions"
+
+```python
+print(a[:1000], a[350::-1], sep='\n')
+```
+
+Do you see the point now? **Index overflow does not raise exception in Python slicing**.
+
+And another important property of slicing:
+
+> If i is greater than or equal to j, the slice is empty.
+
+Note that this particular statement concerns the case of `step`$>0$. It is fair to say that in the case of `step`$<0$, if `j` is greater than ot equal to `i`, the slice is empty. Consider the demo: 
+
+```python
+print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
+```
+
+### Referenced or copied?
+
+
+The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?*. In other words, *does my old object get modified when I modify the new one?*.
+
+When it comes to slices it is true that
+
+* $n$-level-deep elements of the original sequence for $n=1$ are copied in the slice
+* $n$-level-deep elements of the original sequence for $n>1$ are referenced in the slice
+
+First, let's clarify what is meant by n level depth? Python sequences can have nested sequences, like in the following example:
+
+```python
+i_have_nested_dict = [1, 2, 3, {'hello': 'world'}]
+```
+
+We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and values of the nested dictionary `{'hello': 'world'}` are then two-level-deep. Let us consider the example when there are no nested sequences in the outer sequence:
+
+```python
+# First, we copy sequence a into the new variable
+# to keep a itself in its original state.
+original = a.copy()
+b = original[:]
+print('original sequence:', original, '\nslice:', b)
+
+original[0] = 999
+print('\noriginal sequence:', original, '\nslice:', b)
+
+b[1] = False
+print('\noriginal sequence:', original, '\nslice:', b)
+```
+
+You can see that neither modifications made to the original sequence affect the slice, nor the modifications made to the slice affect the original sequence.
+
+But what if there were a nested sequence?
+
+```python
+i_am_slice = i_have_nested_dict[:]
+print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
+
+i_am_slice[3]['bye'] = 'world'
+print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
+
+i_am_slice[0] = 9999999
+print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
+```
+
+We observe that while we change first-level-deep elements of the slice independently of those of the original sequence (**because they have been copied into different location in memory**), the inner sequence is **rather referenced - the slice just points to the location in memory where the original sequence stores it**.
+
+**Deep** and **shallow** copies are important concepts in Python. 
+
+When you create a shallow copy, you rather copy a structure of the original sequence than its content. The elements of the original sequence that are more than one level deep, get referenced, not copied.
+
+Deep copy copies **everything**. Any level deep elements of the original sequenced are duplicated (stored in the separate place in memory).
+
+When you program you must always be aware which one you are operating.
+
 
 ## One-sided finite differences
 
@@ -362,14 +483,19 @@ and its stencil is:
 We can now construct a second order discretized operator throughout the domain by using the above two expressions at the boundary nodes. Our complete computation of the second-order accurate first-order derivative then looks like (for the sake of completeness, we repeat the whole code here):
 
 ```python
-nx = 80 # number of grid points (coarse grid)
-lx = pi # length of invertal
+nx = 80          # number of grid points (coarse grid)
+lx = np.pi       # length of invertal
 dx = lx / (nx-1) # grid spacing
-x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
+```
 
-f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
+```python
+x_c = np.linspace(0, lx, nx)          # coordinates in the coarse grid
+f_c = np.exp(x_c)*np.sin(3*np.pi*x_c) # function in the coarse grid
 
-df_2 = np.empty(nx) 
+df_2 = np.empty(nx)
+
+# Here we take advantage of Python slicing instead
+# of Python looping.
 df_2[0] = (-3./2*f_c[0] + 2*f_c[1] - 1./2.*f_c[2]) / dx
 df_2[-1] = (3./2*f_c[-1] - 2*f_c[-2] + 1./2.*f_c[-3]) / dx
 df_2[1:-1] = (f_c[2:] - f_c[:-2]) / (2*dx)
@@ -378,23 +504,28 @@ df_2[1:-1] = (f_c[2:] - f_c[:-2]) / (2*dx)
 ```python
 fig, ax = plt.subplots(figsize=(10, 5))
 
-ax.plot(x, dfdx)
-ax.plot(x_c, df_2, '^g')
+# We only display x-axis starting from the minimum
+# of sequence (x[0], x_c[0]) to the maximum of
+# sequence (x[-1], x_c[-1]).
+ax.set_xlim(min(x[0], x_c[0]), max(x[-1], x_c[-1]))
+
+ax.plot(x, dfdx, label='Exact')
+ax.plot(x_c, df_2, '^g', label='Approximated')
 ax.set_xlabel('$x$')
-ax.set_ylabel('$f\'$')
+ax.set_ylabel("$f'$")
+
+ax.legend(loc='upper left')
 ```
 
 ## Summary
 
 
-...
+In this notebook, we have learnt how to approximate derivatives using finite differences. We demonstrated the principle, how the finite-difference formulae can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
+
+Besides that, we've explained the tool of Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we advance our knowledge in finite-difference approximation by considering higher order derivatives.
 
 ```python
 from IPython.core.display import HTML
 css_file = '../Styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

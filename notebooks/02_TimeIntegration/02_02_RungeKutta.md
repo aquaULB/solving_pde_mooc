@@ -93,7 +93,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
          & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3), \label{TaylorRK2}
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third-order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two-stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
+where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two-stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 
@@ -251,7 +251,7 @@ General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.
 
-The construction of higher-order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in-depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
+The construction of higher order Runge-Kutta schemes is in fact quite complicated, and has been the subject of a vast literature (some in-depth review of the Runge-Kutta methods may be found in \cite{Butcher2008} or \cite{Hairer1987}). There is no systematic way to obtain order $p$ methods with a minimum number of stages $s$. One can achieve order $p$ with $s=p$ up to $p=4$. For $p=5$ and $p=6$ one needs at least $s=p+1$ stages. For $p=7$ and $p=8$ the minimum number of stages are respectively $s=9$ and $s=11$.
 
 > Above this, very little is known \cite{Butcher1996}.
 
@@ -273,7 +273,7 @@ For an autonomous linear system, it is straightforward to prove that this method
   & = z^n + dt \Lambda z^n + \frac{dt^2}{2}\Lambda^2 z^n + \frac{dt^3}6 \Lambda^3 z^n + \frac{dt^4}{24} \Lambda^4 z^n
 \end{align}
 
-The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth-order. For a non-linear system, one can also prove that RK4 is of fourth-order but it is a tedious task.
+The last expression coincides with the Taylor expansion of $z^{n+1}$ up to fourth order. For a non-linear system, one can also prove that RK4 is of fourth-order but it is a tedious task.
 
 In terms of stability, we also see that the RK4 method is stable for a general autonomous linear system as long as all the eigenvalues of the operator $f$ satisfy,
 
@@ -562,7 +562,7 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 
-# References
+## References
 
 (<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 

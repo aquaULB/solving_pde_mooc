@@ -189,7 +189,7 @@ ax.text(11, -0.6, r'$/\Delta$', fontsize=18, horizontalalignment='center')
 fig.savefig('../figures/onesideDiff1_2.png', dpi=300)
 ```
 
-## Centered first-order diff
+## Centered second-order diff
 
 ```python
 fig, ax = plt.subplots(figsize=(10, 3))
@@ -212,6 +212,37 @@ ax.text(11, -0.6, r'$/\Delta^2$', fontsize=18, horizontalalignment='center')
 
 
 fig.savefig('../figures/centeredDiff2.png', dpi=300)
+```
+
+## Centered fourth-order diff
+
+```python
+fig, ax = plt.subplots(figsize=(12, 3))
+ax.set_axis_off()
+ax.axis('equal')
+
+x=np.arange(0, 13)
+y = 0.0 * x
+
+ax.plot(x[[0,-1]], y[[0,-1]])
+
+ax.plot(x[[2,4,6,8,10]], y[[2,4,6,8,10]], linestyle='', markeredgecolor='#cc0000', markeredgewidth=2.5)
+
+ax.text(6, 0.5, '$f\'\'\'\'_i$', fontsize=18, horizontalalignment='center')
+ax.text(2, -0.6, r'$f_{i-2}$', fontsize=18, horizontalalignment='center')
+ax.text(4, -0.6, r'$-4f_{i-1}$', fontsize=18, horizontalalignment='center')
+ax.text(6, -0.6, r'$6f_{i}$', fontsize=18, horizontalalignment='center')
+ax.text(8, -0.6, r'$-4f_{i+1}$', fontsize=18, horizontalalignment='center')
+ax.text(10, -0.6, r'$f_{i+2}$', fontsize=18, horizontalalignment='center')
+ax.text(13, -0.6, r'$/\Delta^4$', fontsize=18, horizontalalignment='center')
+
+
+
+fig.savefig('../figures/centeredDiff4.png', dpi=300)
+```
+
+```python
+
 ```
 
 ```python

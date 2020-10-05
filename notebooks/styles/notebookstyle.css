@@ -203,4 +203,19 @@ code {
     color:#666600;
     background:rgb(240,242,229);
 }
+
+.wikitable {
+    # background-color: #f8f9fa;
+    color: #202122;
+    margin: 1em 0;
+    border: 1px solid #a2a9b1;
+    border-collapse:collapse
+}
+
+.wikitable > tr > th, .wikitable > tr > td, .wikitable > * > tr > th, .wikitable > * > tr > td {
+    border: 1px solid #a2a9b1;
+    padding:0.2em 0.4em;
+    font-size: 120%;
+}
+
 </style>

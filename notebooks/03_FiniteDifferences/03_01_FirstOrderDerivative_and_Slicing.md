@@ -392,8 +392,8 @@ The important question to ask when you create one object from another in Python,
 
 When it comes to slices it is true that
 
-* $n$-level-deep elements of the original sequence for $n=1$ are copied in the slice
-* $n$-level-deep elements of the original sequence for $n>1$ are referenced in the slice
+* $n$-level-deep elements of the original sequence for $n=1$ become copies in the slice
+* $n$-level-deep elements of the original sequence for $n>1$ are references in the slice
 
 First, let's clarify what is meant by n level depth? Python sequences can have nested sequences, like in the following example:
 
@@ -401,7 +401,7 @@ First, let's clarify what is meant by n level depth? Python sequences can have n
 i_have_nested_dict = [1, 2, 3, {'hello': 'world'}]
 ```
 
-We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and values of the nested dictionary `{'hello': 'world'}` are then two-level-deep. Let us consider the example when there are no nested sequences in the outer sequence:
+We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and values of the nested dictionary `{'hello': 'world'}` are then two-level-deep. Let's first consider examples when there are no nested sequences in the outer sequence:
 
 ```python
 # First, we copy sequence a into the new variable
@@ -432,7 +432,7 @@ i_am_slice[0] = 9999999
 print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
 ```
 
-We observe that while we change first-level-deep elements of the slice independently of those of the original sequence (**because they have been copied into different location in memory**), the inner sequence is **rather referenced - the slice just points to the location in memory where the original sequence stores it**.
+We observe that while we change first-level-deep elements of the slice independently of those of the original sequence (**because they have been copied into a different location in memory**), the inner sequence is **rather referenced - the slice just points to the location in memory where the original sequence stores it**. In the example shown, we have added a new key-value pair in the dictionary.
 
 **Deep** and **shallow** copies are important concepts in Python. 
 
@@ -440,7 +440,7 @@ When you create a shallow copy, you rather copy a structure of the original sequ
 
 Deep copy copies **everything**. Any level deep elements of the original sequenced are duplicated (stored in the separate place in memory).
 
-When you program you must always be aware which one you are operating.
+When you program you must always be aware with which one you are operating.
 
 
 ## One-sided finite differences

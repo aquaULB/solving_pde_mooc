@@ -25,7 +25,7 @@ jupyter:
 1. [Introduction](#Introduction)
 2. [First-order derivative](#First-order-derivative)
 3. [Python slicing](#Python-slicing)
-    1. [Motivation and synatax](#Motivation-and-syntax)
+    1. [Motivation and syntax](#Motivation-and-syntax)
     2. [Referenced or copied?](#Referenced-or-copied?)
 4. [One-sided finite differences](#One-sided-finite-differences)
 5. [Summary](#Summary)
@@ -244,7 +244,7 @@ In the above cell, we have used the slicing of numpy arrays to extract the relev
 ### Motivation and syntax
 
 
-We already mentioned the powerful tool of Python - negative indexing. When the programmer tries to access elements of the sequence by referring to the negative index, the enumeration of the elements starts from the tail of the sequence. Let's say we have a Python list:
+We already mentioned a powerful tool of Python: negative indexing. When the programmer tries to access elements of the sequence by referring to a negative index, the enumeration of the elements starts from the tail of the sequence. Let's say we have a Python list,
 
 ```python
 a = [
@@ -254,16 +254,18 @@ a = [
 ]
 ```
 
-And we want to iterate through its elements starting from `a[2]` to `a[0]`. It is a valid and even preferrable approach to do it using the negative indexing:
+and we want to iterate through its elements starting from `a[2]` to `a[0]`. It is a valid and even preferrable approach to do it using the negative indexing:
 
 ```python
 for i in range(-1, -4, -1):
-    print(a[i])
+    print(f"index: {i}, value: {a[i]}.")
 ```
 
-Now that we are fully equipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C][30], so, it's it considerably faster than the respective code implemented with a Python loop.
+Now that we are fully equipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C and precompiled][30], so, it's considerably faster than the corresponding code implemented with a Python loop.
 
-Syntax for the python slicing is the following `start:stop+step:step`, where `stop` indicates the last element of the sequence you want to "grasp".
+The syntax for Python slicing is the following `sequence[i:j:k]`. `i` and `j` are respectively the start and the stop indices, while `k` is the step. Therefore, the slice is built from the sequence elements with indices: $i, i+k, i+2k, \dots, i+nk < j$. **Always remember that `sequence[i]` is included in the slice while `sequence[j]` is not.**
+
+Below, we will use the notation `sequence[start:stop:step]` to be explicit about the meaning of the indices.
 
 Consider the following demo. First, we create large Python list.
 
@@ -280,11 +282,17 @@ Suppose we want to extract the sublist with the first element equal to `large_se
 
 i_was_filled_in_a_loop = []
 
-for i in range(5, 99995):
+for i in range(5, 99995): # i ranges from 5 to 99994
     i_was_filled_in_a_loop.append(large_sequence[i])
 ```
 
 But the more efficient way is to apply Python slicing:
+
+```python
+%timeit slice_of_it = large_sequence[5:99995]
+```
+
+or as,
 
 ```python
 %timeit slice_of_it = large_sequence[5:-5]
@@ -292,10 +300,10 @@ But the more efficient way is to apply Python slicing:
 
 Python slicing obviously executes faster. Try to avoid Python loops when you can slice instead.
 
-When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-6` stands for `stop`. `Step` is not specified, so it is set to the default value of `1`. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
+When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-5` stands for `stop`. `step` is not specified, so it is set to `1` implicitly. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
 
 ```python
-# I'm adding few elements to the a list for the
+# We now add a few elements to the a list for the
 # sake of doing a demo.
 #
 # list.extend method differs from list.append.
@@ -310,7 +318,7 @@ a.extend(['fourth', 'fifth', 'sixth'])
 print(a)
 ```
 
-* `start` is omitted
+* Slicing when `start` is omitted
 
 ```python
 # We pass few arguments to the print function.
@@ -329,7 +337,7 @@ print(a[:-3:-1])
 Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3:-1]` - which is *extracting subsequence of last $n-1$ elements enumerated from the tail of the sequence* for `sequence[:-n:-1]`.
 
 
-* `stop+step` is omitted
+* Slicing when `stop+step` is omitted
 
 ```python
 print(a[2::2], a[5:], a[4::-1], sep='\n')
@@ -338,7 +346,7 @@ print(a[2::2], a[5:], a[4::-1], sep='\n')
 You could have already guessed what would be the output beforehand. `sequence[n::step]` for `step`$>0$ is equivalent to setting `stop+step` to `len(sequence)`, and `sequence[:n:step]` for `step` is equivalent to setting `stop+step` to $-1$.
 
 
-* `start` and `stop+step` are omitted
+* Slicing when `start` and `stop+step` are omitted
 
 ```python
 print(a[:], a[::2], a[::-1], sep='\n')

@@ -358,7 +358,7 @@ Consider the slice sequence `s` taken as follows: `s[i:j:k]`, then
 
 > If i or j are omitted or None, they become “end” values (which end depends on the sign of k). Note, k cannot be zero. If k is None, it is treated like 1.
 
-That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurances of uncaught exceptions terminate code executation. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
+That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurances of uncaught exceptions terminate code execution. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
 
 We would also cite another important piece of documentation on sequences slicing:
 
@@ -379,7 +379,7 @@ And another important property of slicing:
 
 > If i is greater than or equal to j, the slice is empty.
 
-Note that this particular statement concerns the case of `step`$>0$. Similarly,in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo: 
+Note that this particular statement concerns the case of `step`$>0$. Similarly, in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo: 
 
 ```python
 print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
@@ -388,11 +388,11 @@ print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
 ### Referenced or copied?
 
 
-The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?*. In other words, *does my old object get modified when I modify the new one?*
+The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?* In other words, *does my old object get modified when I modify the new one?*
 
 When it comes to slices it is true that
 
-* $n$-level-deep elements of the original sequence for $n=1$ become copies in the slice
+* $n$-level-deep elements of the original sequence for $n=1$ become copied in the slice
 * $n$-level-deep elements of the original sequence for $n>1$ are references in the slice
 
 First, let's clarify what is meant by n level depth? Python sequences can have nested sequences, like in the following example:
@@ -401,7 +401,9 @@ First, let's clarify what is meant by n level depth? Python sequences can have n
 i_have_nested_dict = [1, 2, 3, {'hello': 'world'}]
 ```
 
-We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and values of the nested dictionary `{'hello': 'world'}` are then two-level-deep. Let's first consider examples when there are no nested sequences in the outer sequence:
+We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and values of the nested [dictionary][33] `{'hello': 'world'}` are then two-level-deep. Let's first consider examples when there are no nested sequences in the outer sequence:
+
+[33]: <https://docs.python.org/3/tutorial/datastructures.html#dictionaries> "Python dictionaries"
 
 ```python
 # First, we copy sequence a into the new variable
@@ -432,7 +434,7 @@ i_am_slice[0] = 9999999
 print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
 ```
 
-We observe that while we change first-level-deep elements of the slice independently of those of the original sequence (**because they have been copied into a different location in memory**), the inner sequence is **rather referenced - the slice just points to the location in memory where the original sequence stores it**. In the example shown, we have added a new key-value pair in the dictionary.
+We observe that while we change first-level-deep elements of the slice independently of those of the original sequence (**because they have been copied into a different location in memory**), the inner sequence is **referenced - the slice just points to the location in memory where the original sequence stores it**. In the example shown, we have added a new key-value pair in the dictionary.
 
 **Deep** and **shallow** copies are important concepts in Python. 
 

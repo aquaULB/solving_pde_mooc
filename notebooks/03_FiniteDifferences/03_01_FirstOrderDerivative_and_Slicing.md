@@ -300,7 +300,7 @@ or as,
 
 Python slicing obviously executes faster. Try to avoid Python loops when you can slice instead.
 
-When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-5` stands for `stop`. `step` is not specified, so it is set to `1` implicitly. What if we have not specified `start` or `stop`, or if we have even omitted *any* indexing when slicing?
+When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-5` stands for `stop`. `step` is not specified, so it is set to `1` implicitly. What if we do not specify `start` or `stop`, or if we even omit *any* indexing when slicing?
 
 ```python
 # We now add a few elements to the a list for the
@@ -328,25 +328,25 @@ print(a)
 print(a[:3], a[:5], sep='\n')
 ```
 
-The output basically tells us that `start` has a default value and its default is equal to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. Though, it is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
+The output basically tells us that when `start` is omitted it is implictely set to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
 
 ```python
 print(a[:-3:-1])
 ```
 
-Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3:-1]` - which is *extracting subsequence of last $n-1$ elements enumerated from the tail of the sequence* for `sequence[:-n:-1]`.
+Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3:-1]`. More generally, `sequence[:-n:-1]` is *extracting a subsequence consisting of the last $n-1$ elements enumerated from the tail of the sequence*.
 
 
-* Slicing when `stop+step` is omitted
+* Slicing when `stop` is omitted
 
 ```python
 print(a[2::2], a[5:], a[4::-1], sep='\n')
 ```
 
-You could have already guessed what would be the output beforehand. `sequence[n::step]` for `step`$>0$ is equivalent to setting `stop+step` to `len(sequence)`, and `sequence[:n:step]` for `step` is equivalent to setting `stop+step` to $-1$.
+If `stop` is omitted, `sequence[n::step]` for `step`$>0$ extracts the relevant elements from index n up to (and including) the last element of the sequence. If the `step`$<0$, `sequence[n::step]` extracts the relevant elements from index n down to (and including) the first element of the sequence.
 
 
-* Slicing when `start` and `stop+step` are omitted
+* Slicing when `start` and `stop` are omitted
 
 ```python
 print(a[:], a[::2], a[::-1], sep='\n')
@@ -358,7 +358,7 @@ Consider the slice sequence `s` taken as follows: `s[i:j:k]`, then
 
 > If i or j are omitted or None, they become “end” values (which end depends on the sign of k). Note, k cannot be zero. If k is None, it is treated like 1.
 
-That is pretty much what we've onserved so far. We would comment on that `k` cannot be zero. This limitation implies that implementation of this case raises an [exception][32] of type `ValueError`. By default occurance of uncaught exception terminates code executation. We won't get into details of treatment of exceptions, but you can read about it on your own if you are interested.
+That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurances of uncaught exceptions terminate code executation. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
 
 We would also cite another important piece of documentation on sequences slicing:
 
@@ -379,7 +379,7 @@ And another important property of slicing:
 
 > If i is greater than or equal to j, the slice is empty.
 
-Note that this particular statement concerns the case of `step`$>0$. It is fair to say that in the case of `step`$<0$, if `j` is greater than ot equal to `i`, the slice is empty. Consider the demo: 
+Note that this particular statement concerns the case of `step`$>0$. Similarly,in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo: 
 
 ```python
 print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
@@ -388,7 +388,7 @@ print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
 ### Referenced or copied?
 
 
-The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?*. In other words, *does my old object get modified when I modify the new one?*.
+The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?*. In other words, *does my old object get modified when I modify the new one?*
 
 When it comes to slices it is true that
 

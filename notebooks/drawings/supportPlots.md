@@ -37,8 +37,8 @@ a = 30
 c = 80
 
 # Vertical lines
-ax.axvline(x[a], ymin=0.25, ymax=0.9, ls=':', color='#000000')
-ax.axvline(x[c], ymin=0.25, ymax=0.9, ls=':', color='#000000')
+ax.axvline(x[a], ymin=0.25, ymax=0.95, ls=':', color='#000000')
+ax.axvline(x[c], ymin=0.25, ymax=0.95, ls=':', color='#000000')
 
 # Slopes
 slope_a = dy[a]*(x-x[a])+y[a]
@@ -65,7 +65,6 @@ ax.set_title('Forward Euler')
 ax.set_xlim(-0.5,5.5)
 ax.set_ylim(-2., 3.)
 
-
 # Save figure. Default format is png.
 # dpi defines the resolution in dots per inch.
 fig.savefig('../figures/Euler.png', dpi=300)
@@ -88,9 +87,9 @@ b = 55
 c = 80
 
 # Vertical lines
-ax.axvline(x[a], ymin=0.25, ymax=0.9, ls=':', color='#000000')
-ax.axvline(x[b], ymin=0.25, ymax=0.9, ls=':', color='#000000')
-ax.axvline(x[c], ymin=0.25, ymax=0.9, ls=':', color='#000000')
+ax.axvline(x[a], ymin=0.25, ymax=0.95, ls=':', color='#000000')
+ax.axvline(x[b], ymin=0.25, ymax=0.95, ls=':', color='#000000')
+ax.axvline(x[c], ymin=0.25, ymax=0.95, ls=':', color='#000000')
 
 # Slopes
 slope_a = dy[a]*(x-x[a])+y[a]

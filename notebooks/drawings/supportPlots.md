@@ -29,7 +29,7 @@ fig, ax = plt.subplots(figsize=(8,6))
 # Curve
 x = np.linspace(0,5,100)
 y = ((x+5)/3. - 3.)**3+1.0
-dy = 3./3.*((x+5)/3.-3.)**2
+dy = ((x+5)/3.-3.)**2
 ax.plot(x, y, color='#000000')
 
 # Horizontal locations
@@ -45,14 +45,14 @@ slope_a = dy[a]*(x-x[a])+y[a]
 ax.plot(x[a-10: c],slope_a[a-10: c])
 
 # Markers
-ax.plot(x[c], y[c], marker='o', color='#000000', ms=5)
+ax.plot(x[c], y[c], marker='o', color='#000000', markersize=5)
 
 ax.plot(x[a], y[a], marker='o', markeredgecolor='#cc0000', markeredgewidth=2.5)
 ax.plot(x[c], slope_a[c], marker='o', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
 # Text
-ax.text(x[a], -1.2, r'$t^n$', ha='center')
-ax.text(x[c], -1.2, r'$t^{n+1}$', ha='center')
+ax.text(x[a], -1.2, r'$t^n$', horizontalalignment='center')
+ax.text(x[c], -1.2, r'$t^{n+1}$', horizontalalignment='center')
 
 ax.text(x[a-7], slope_a[a], r'$y^n$')
 ax.text(x[c-11]+0.7, slope_a[c], r'$y^{n+1}$')
@@ -78,7 +78,7 @@ fig, ax = plt.subplots(figsize=(8,6))
 # Curve
 x = np.linspace(0,5,100)
 y = ((x+5)/3. - 3.)**3+1.0
-dy = 3./3.*((x+5)/3.-3.)**2
+dy = ((x+5)/3.-3.)**2
 ax.plot(x, y, color='#000000')
 
 # Horizontal locations
@@ -93,7 +93,7 @@ ax.axvline(x[c], ymin=0.25, ymax=0.95, ls=':', color='#000000')
 
 # Slopes
 slope_a = dy[a]*(x-x[a])+y[a]
-ax.plot(x[a-10: b],  slope_a[a-10: b])
+ax.plot(x[a-10: b], slope_a[a-10: b])
 
 slope_b_star = (dy[b]-.08) * (x-x[b]) + slope_a[b]
 ax.plot(x[a: c], slope_b_star[a: c], '--')
@@ -102,20 +102,20 @@ slope_b = (dy[b]-.08) * (x-x[a]) + y[a]
 ax.plot(x[a: c], slope_b[a: c])
 
 # Markers
-ax.plot(x[b], y[b], marker='o', color='#000000', ms=5)
-ax.plot(x[c], y[c], marker='o', color='#000000', ms=5)
+ax.plot(x[b], y[b], marker='o', color='#000000', markersize=5)
+ax.plot(x[c], y[c], marker='o', color='#000000', markersize=5)
 
 ax.plot(x[a], y[a], marker='o', markeredgecolor='#cc0000', markeredgewidth=2.5)
 ax.plot(x[b], slope_a[b], marker='o', markeredgecolor='#cc0000', markeredgewidth=2.5)
 ax.plot(x[c], slope_b[c], marker='o', markeredgecolor='#cc0000', markeredgewidth=2.5)
 
 # Text
-ax.text(x[a], -1.4, r'$t^n$', ha='center')
-ax.text(x[b], -1.4, r'$t^n+\frac{dt}{2}$', ha='center')
-ax.text(x[c], -1.4, r'$t^{n+1}$', ha='center')
+ax.text(x[a], -1.4, r'$t^n$', horizontalalignment='center')
+ax.text(x[b], -1.4, r'$t^n+\frac{dt}{2}$', horizontalalignment='center')
+ax.text(x[c], -1.4, r'$t^{n+1}$', horizontalalignment='center')
 
 ax.text(x[a-7], slope_a[a], r'$y^n$')
-ax.text(x[b-7], slope_a[b], r'$y^*$', va='bottom')
+ax.text(x[b-7], slope_a[b], r'$y^*$', verticalalignment='bottom')
 ax.text(x[c-11]+0.7, slope_b[c], r'$y^{n+1}$')
 
 # Arrow

@@ -32,7 +32,7 @@ y = ((x+5)/3. - 3.)**3+1.0
 dy = 3./3.*((x+5)/3.-3.)**2
 ax.plot(x, y, color='#000000')
 
-# Vertical locations
+# Horizontal locations
 a = 30
 c = 80
 

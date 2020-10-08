@@ -536,6 +536,6 @@ Besides that, we've explained the tool of Python slicing and motivated its usage
 
 ```python
 from IPython.core.display import HTML
-css_file = '../Styles/notebookstyle.css'
+css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```

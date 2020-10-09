@@ -23,10 +23,15 @@ jupyter:
 <h2 class="nocount">Contents</h2>
 
 1. [Introduction](#Introduction)
-2. [Higher order derivative](#Second-order-derivative)
-3. [Functions](#Functions)
-4. [Matrix formulation](#Matrix-formulation)
-5. [Summary](#Summary)
+2. [Heated rod](#Heated-rod)
+
+    2.1 [Homogeneous Dirichlet boundary conditions](#Homogeneous-Dirichlet-boundary-conditions)
+    
+    2.2 [Non-homogeneous Dirichlet boundary conditions](#Non-homogeneous-Dirichlet-boundary-conditions)
+    
+    2.3 [Neumann boundary conditions](#Neumann-boundary-conditions)
+   
+3. [Summary](#Summary)
 
 
 ## Introduction
@@ -186,10 +191,11 @@ So let's now write a Python code to solve the easiest possible case:
 
 ```python
 nx = 41 # number of grid points
-lx = 1 # length of invertal
+lx = 1. # length of invertal
 dx = lx / (nx-1) # grid spacing
 x = np.linspace(0, 1, nx) # coordinates of points on the grid
 b = -1.0*np.ones(nx) # right-side vector at the grid points
+T = np.empty(nx) # array to store the solution vector
 ```
 
 As in the previous notebook, we rely on the `diags`routine to build our matrix.
@@ -249,24 +255,16 @@ Am1 = inv(A) # Compute the inverse of A
 
 # Perform the matrix multiplication of the inverse with the rhs.
 # We only the values of b at the interior nodes
-T = np.dot(Am1, b[1:-1])
+T[1:-1] = np.dot(Am1, b[1:-1])
 
-# The above T corresponds to T[1], ..., T[nx-2]
-# If we want the whole solution, including the boundary values,
-# we can expand the ouput array to include them. We do this by
-# horizontally stacking T with the boundary values using the hstack
-# routine of numpy.
-# # For more info:
-# https://numpy.org/doc/stable/reference/generated/numpy.stack.html
-#
-
-T = np.hstack([[0.], T, [0.]])
+# Manually set the boundary values in the temperature array
+T[0], T[-1] = [0, 0]
 ```
 
 That's it ! If everything went fine, $T$ now contains our solution. We can compare it with the exact solution $T(x)=\frac{1}{2}x(1-x)$ which obviously satisfies the required boundary conditions.
 
 ```python
-T_exact = 0.5*x*(1-x) # notice how we multiply numpy arrays pointwise.
+T_exact = 0.5 * x * (1-x) # notice how we multiply numpy arrays pointwise.
 ```
 
 ```python
@@ -302,15 +300,14 @@ To solve the problem we can re-use everything we computed so far except that we 
 
 ```python
 b[1] = b[1] - 1. / dx**2
-
-T = np.dot(Am1, b[1:-1]) # Perform the matrix multiplication of the inverse with the rhs.
-T = np.hstack([[1.], T, [0.]]) # We stack the boundary values
+T[1:-1] = np.dot(Am1, b[1:-1]) # Perform the matrix multiplication of the inverse with the rhs.
+T[0], T[-1] = [1., 0.] # We set the boundary values
 ```
 
 Let's check the numerical solution against the exact solution corresponding the modified boundary conditions: $T(x)=\frac12(x+2)(1-x)$.
 
 ```python
-T_exact = 0.5*(x+2)*(1-x) # notice how we multiply numpy arrays pointwise.
+T_exact = 0.5 * (x+2) * (1-x) # notice how we multiply numpy arrays pointwise.
 ```
 
 ```python
@@ -325,21 +322,21 @@ ax.set_title('Heat equation - Mixed Dirichlet boundary conditions')
 ax.legend()
 ```
 
-The solution is just as expected !
+The solution looks just as expected !
 
 
 ### Neumann boundary conditions
 
 
-The last version of boundary conditions we consider is the so-called Neumann boundary conditions for which the derivative of the unknown function is specified at one or both ends. Physically this corresponds to specifying the heat flux entering or exiting the rod at the boundaries. Here we are going to set this flux at the left boundary node and assign a specific temperature at the right boundary node:
+The last type of boundary conditions we consider is the so-called Neumann boundary condition for which the derivative of the unknown function is specified at one or both ends. Physically this corresponds to specifying the heat flux entering or exiting the rod at the boundaries. Here we are going to set this flux at the left boundary node and assign a specific temperature at the right boundary node:
 
 \begin{equation}
  T'(0)=2, \; T(1) = 1.
 \end{equation}
 
-The condition at the right boundary node is treated in the same way as in the previous section. For the left boundary node we need something different, although similar.
+The condition at the right boundary node is treated in the same way as in the previous section. For the left boundary node we need something different.
 
-We need to introduce a discrete version of the condition $T'(0)=2$. As we are using a second-order accurate finite difference for the operator $\frac{d^2 }{dx^2}$, we also want a second-order accurate finite difference for $\frac{d }{dx}$. Indeed, in many problems, the loss of accuracy used for the boundary conditions would degrade the accuracy of the solution throughout the domain.
+We have to introduce a discrete version of the condition $T'(0)=2$. As we are using a second-order accurate finite difference for the operator $\frac{d^2 }{dx^2}$, we also want a second-order accurate finite difference for $\frac{d }{dx}$. Indeed, in many problems, the loss of accuracy used for the boundary conditions would degrade the accuracy of the solution throughout the domain.
 
 At the left boundary node we therefore use the (usual) forward second-order accurate finite difference for $T'$ to write:
 
@@ -353,7 +350,72 @@ If we isolate $T_0$ in the preivous expression we have:
     T_0 = \frac43 T_1 - \frac13 T_2 - \frac43 \Delta x.
 \end{equation}
 
-This shows that the Neumann boundary condition can be implemented by eliminating $T_0$ from the unknown variables using the above relation. The heat equation around the 
+This shows that the Neumann boundary condition can be implemented by eliminating $T_0$ from the unknown variables using the above relation. The heat equation around the grid node $1$ is then modified as:
+
+\begin{equation}
+    \frac{(T_0 - 2T_1+T_2)}{\Delta x^2} = b_1 \;\; \rightarrow \;\;
+    \frac{-\frac23 T_1 + \frac 23 T_2}{\Delta x^2} = b_1 + \frac43 \Delta x.
+\end{equation}
+
+The effect of the Neumann boundary condition is two-fold: it modifies the left-hand side matrix coefficients and the right-hand side source term. Around the other grid nodes, there are no further modifications (except around grid node $nx-2$ where we impose the non-homogeneous condition $T(0)=1$.
+
+All the necessary bits of code are now scattered at different places in the notebook. We rewrite some of them to make the algorithm easier to follow:
+
+```python
+nx = 41 # number of grid points
+lx = 1. # length of invertal
+dx = lx / (nx-1) # grid spacing
+x = np.linspace(0, 1, nx) # coordinates of points on the grid
+b = -1.0*np.ones(nx) # right-side vector at the grid points
+T = np.empty(nx) # array to store the solution vector
+
+# We use d2_mat_dirichlet() to create the skeleton of our matrix
+A = d2_mat_dirichlet(nx, dx)
+
+# The first line of A needs to be modified for Neumann boundary condition
+A[0,0:2] = np.array([-2./3., 2./3.]) / dx**2
+
+# Computation of the inverse matrix
+Am1 = inv(A)
+
+# The source term as grid nodes 1 and nx-2 needs to be modified
+b[1] = b[1] + 4./(3.*dx)
+b[-2] = b[-2] - 1. / dx**2
+
+# Computation of the solution using numpy.dot
+T[1:-1] = np.dot(Am1, b[1:-1])
+
+# We set the boundary value at the left boundary node
+# based on Neumann boundary condition
+T[0] = 4./3.*T[1] - 1./3.*T[2] -4./3. * dx
+
+# We set the boundary value at the right boundary node
+# based on non-homogeneous Dirichlet boundary condition
+T[-1] = 1
+```
+
+Let's compare the numerical solution with the exact solution $T_{exact}=-\frac12(x^2-4x+1)$
+
+```python
+T_exact = -0.5 * (x**2 - 4*x + 1.)  # notice how we multiply numpy arrays pointwise.
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 7))
+
+ax.plot(x, T_exact, label='Exact solution')
+ax.plot(x, T, '^g', label='Computed solution')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$T$')
+ax.set_title('Heat equation - Mixed boundary conditions')
+ax.legend()
+```
+
+Once again, the computed solution behaves appropriately !
+
+
+## Summary
 
 ```python
 from IPython.core.display import HTML

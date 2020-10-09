@@ -479,7 +479,7 @@ Mathematically, we denote the action of any linear operator $\cal{A}$ acting on 
 If we discretize this equation on a numerical grid, we need a discretized version of the operator $\cal{A}$ that maps the values of $f$ at the grid points to the values of $h$ at the grid points. As the operation is linear, this mapping is done through the action of a matrix:
 
 \begin{equation}
-    h_i=A_{ij}f_j
+    h_i=A_{ij}f_j\;\;\;\; \hbox{(repeated indices are summed)}
 \end{equation}
 
 Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-order accurate) first-order derivative; as we want to build the operator everywhere in the domain including at the boundary nodes, we use second-order one-sided finite differences at these location:

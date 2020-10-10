@@ -50,7 +50,7 @@ $$
 f(x)=e^x \sin(3\pi x) \label{eq:testfunc}
 $$
 
-There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighbouring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
+There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighboring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
 
 Let $x$ be the continuous variable defined in the interval $x\in[x_0,x_n]$. In any numerical problem, we have to limit the number of points at which we store the values of $f(x)$ because the random access memory (RAM) of our computers is limited. We therefore need to introduce an approximation of our continuous interval - the numerical grid. It is a set of grid points at which we evaluate all physical quantities.
 
@@ -102,7 +102,7 @@ In the following figure we illustrate the stencil and mark in red the points inv
 
 Above the stencil, we display the quantity computed, and below the stencil we display the quantities involved in its computations.
 
-It is important to highlight that the *enumeration of a stencil has nothing to do with the enumeration of the grid points*. The enumeration of grid points usually starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. The enumeration of a stencil is charateristic of each particular approximation. The stencil point labelled $0$ corresponds to the grid point at which the derivative is being approximated. The stencils indices then decrease to the left of this point and increase to its right. This is why in the above example the stencil is $[0, 1]$.
+It is important to highlight that the *enumeration of a stencil has nothing to do with the enumeration of the grid points*. The enumeration of grid points usually starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. The enumeration of a stencil is characteristic of each particular approximation. The stencil point labeled $0$ corresponds to the grid point at which the derivative is being approximated. The stencil indices then decrease to the left of this point and increase to its right. This is why in the above example the stencil is $[0, 1]$.
 
 In the above stencil, we use two grid points - $x_i$ and $x_{i+1}$ - to obtain a first-order accurate expression for the first-order derivative at $x_i$. It is obvious that the forward finite difference formula \ref{eq:forwardNodal} cannot be used at the right boundary node $x_n$. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how the boundary nodes can be handled when the derivatives are being evaluated using finite differences.
 
@@ -261,7 +261,7 @@ for i in range(-1, -4, -1):
     print(f"index: {i}, value: {a[i]}.")
 ```
 
-Now that we are fully equipped in terms of knoweledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the neccessity to loop explicitely, as we would do in C++, for example. Moreover, Python slicing [is implemented in C and precompiled][30], so, it's considerably faster than the corresponding code implemented with a Python loop.
+Now that we are fully equipped in terms of knowledge about Python indexing, let's proceed to the Python slicing. Python slicing provides simple access to subsequences in Python sequences and spares programmers the necessity to loop explicitly, as we would do in C++, for example. Moreover, Python slicing [is implemented in C and precompiled][30], so, it's considerably faster than the corresponding code implemented with a Python loop.
 
 The syntax for Python slicing is the following `sequence[i:j:k]`. `i` and `j` are respectively the start and the stop indices, while `k` is the step. Therefore, the slice is built from the sequence elements with indices: $i, i+k, i+2k, \dots, i+nk < j$. **Always remember that `sequence[i]` is included in the slice while `sequence[j]` is not.**
 
@@ -328,7 +328,7 @@ print(a)
 print(a[:3], a[:5], sep='\n')
 ```
 
-The output basically tells us that when `start` is omitted it is implictely set to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
+The output basically tells us that when `start` is omitted it is implicitly set to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
 
 ```python
 print(a[:-3:-1])
@@ -352,13 +352,13 @@ If `stop` is omitted, `sequence[n::step]` for `step`$>0$ extracts the relevant e
 print(a[:], a[::2], a[::-1], sep='\n')
 ```
 
-Let's summatize our little tests by the exact citations taken from [documentation][31]:
+Let's summarize our little tests by the exact citations taken from [documentation][31]:
 
 Consider the slice sequence `s` taken as follows: `s[i:j:k]`, then
 
 > If i or j are omitted or None, they become “end” values (which end depends on the sign of k). Note, k cannot be zero. If k is None, it is treated like 1.
 
-That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurances of uncaught exceptions terminate code execution. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
+That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurrences of uncaught exceptions terminate code execution. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
 
 We would also cite another important piece of documentation on sequences slicing:
 
@@ -447,7 +447,7 @@ When you program you must always be aware with which one you are operating.
 
 ## One-sided finite differences
 
-In section [First-order derivative](#First-order-derivative) we mentionned that the finite difference expressions provided cannot be applied at all grid points. The centered finite difference formula is not valid at both endpoints of the domain as it requires at those locations extra points not included in the domain. At the left boundary - $x_0$ - we could compute the first order derivative using the forward finite difference formula and at the right boundary - $x_n$ - we could use the backward finite difference formula. Throughout the domain we would then have:
+In section [First-order derivative](#First-order-derivative) we mentioned that the finite difference expressions provided cannot be applied at all grid points. The centered finite difference formula is not valid at both endpoints of the domain as it requires at those locations extra points not included in the domain. At the left boundary - $x_0$ - we could compute the first order derivative using the forward finite difference formula and at the right boundary - $x_n$ - we could use the backward finite difference formula. Throughout the domain we would then have:
 
 \begin{cases}
 & \displaystyle f'(x_0) = \frac{f(x_{1}) - f(x_0)}{\Delta x}, \\
@@ -455,9 +455,9 @@ In section [First-order derivative](#First-order-derivative) we mentionned that 
 & \displaystyle f'(x_n) = \frac{f(x_{n}) - f(x_{n-1})}{\Delta x}.
 \end{cases}
 
-The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first order at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished. We will give an example of this behaviour later on.
+The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first order at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished. We will give an example of this behavior later on.
 
-To improve our discretised operator, we have to find second-order accurate expressions for the boundary nodes and we can use Taylor's theorem to achieve this goal. At the left boundary node we have:
+To improve our discretized operator, we have to find second-order accurate expressions for the boundary nodes and we can use Taylor's theorem to achieve this goal. At the left boundary node we have:
 
 \begin{align*}
 f(x_0 + \Delta) = f(x_0) +f'(x_0)\Delta x+\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)\\
@@ -530,7 +530,7 @@ ax.legend(loc='upper left')
 ## Summary
 
 
-In this notebook, we have learnt how to approximate derivatives using finite differences. We demonstrated the principle, how the finite-difference formulae can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
+In this notebook, we have learned how to approximate derivatives using finite differences. We demonstrated the principle, how the finite-difference formulas can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
 
 Besides that, we've explained the tool of Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we advance our knowledge in finite-difference approximation by considering higher order derivatives.
 

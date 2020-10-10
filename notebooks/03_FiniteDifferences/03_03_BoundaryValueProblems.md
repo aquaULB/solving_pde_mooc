@@ -82,7 +82,7 @@ In this first example, we apply homogeneous Dirichlet boundary conditions at bot
  T(0)=0, \; T(1)=0 \; \; \Leftrightarrow \; \; T_0 =0, \; T_{nx-1} = 0.
 \end{equation}
 
-The usual way of implementing these boundary conditions with finite differences schemes is to realize that $T_0$ and $T_{nx-1}$ are in fact not unkowns: their values are fixed and the numerical method does not need to solve for them. Our real unknows are $T_i$ with $i \in [1, 2, \dots , nx-3, nx-2]$. In the previous notebook we have defined $A_{ij}$ for the centered second-order accurate second-order derivative as:
+The usual way of implementing these boundary conditions with finite differences schemes is to realize that $T_0$ and $T_{nx-1}$ are in fact not unknowns: their values are fixed and the numerical method does not need to solve for them. Our real unknowns are $T_i$ with $i \in [1, 2, \dots , nx-3, nx-2]$. In the previous notebook we have defined $A_{ij}$ for the centered second-order accurate second-order derivative as:
 
 \begin{align}
 \frac{1}{\Delta x^2}
@@ -124,7 +124,7 @@ For this one, there is nothing to change. The next lines of the system also rema
     \frac{T_{nx-4} - 2T_{nx-3} + T_{nx-2}}{\Delta x^2} = b_{nx-3}
 \end{equation}
 
-Taking into accound $T_{nx-1}=0$, the equation around grid node $nx-2$ then becomes:
+Taking into account $T_{nx-1}=0$, the equation around grid node $nx-2$ then becomes:
 
 \begin{equation}
     \frac{T_{nx-3} - 2T_{nx-2}}{\Delta x^2} = b_{nx-2}
@@ -173,13 +173,13 @@ If we collect the above equations back into a matrix system we get:
 \end{pmatrix}
 \end{align}
 
-The above system is completely closed in terms of the *real* unknows $T_1,\dots, T_{nx-2}$. The matrix $\tilde A_{ij}$ on the left-hand side has dimensions $(nx-2)\times(nx-2)$. Implementing the boundary conditions has in practice removed one line and on column from the original matrix. This is to be expected as we now have $nx-2$ unknows. The system can be solved by inverting $\tilde A_{ij}$ to get:
+The above system is completely closed in terms of the *real* unknowns $T_1,\dots, T_{nx-2}$. The matrix $\tilde A_{ij}$ on the left-hand side has dimensions $(nx-2)\times(nx-2)$. Implementing the boundary conditions has in practice removed one line and on column from the original matrix. This is to be expected as we now have $nx-2$ unknowns. The system can be solved by inverting $\tilde A_{ij}$ to get:
 
 \begin{equation}
 T_i = \tilde A^{-1}_{ij} b_j
 \end{equation}
 
-Inverting matrices numerically is time consuming for large-size matrices. In a later chapter of this course we will explain how to obtain approximate inverses for large systems. Here, we will limit our attention to moderatly sized matrices and rely on a `scipy` routine called `inv` (available in the `linalg` submodule). The documentation of this function is available [here][1].
+Inverting matrices numerically is time consuming for large-size matrices. In a later chapter of this course we will explain how to obtain approximate inverses for large systems. Here, we will limit our attention to moderately sized matrices and rely on a `scipy` routine called `inv` (available in the `linalg` submodule). The documentation of this function is available [here][1].
 
 So let's now write a Python code to solve the easiest possible case:
 

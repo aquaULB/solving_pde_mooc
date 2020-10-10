@@ -119,7 +119,7 @@ As the centered formula for $f''$ is not defined at the boundary nodes, these ha
 
 It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][1] page that contains finite difference formulas for all the cases we use in this course, and many more.
 
-To make this notebook sef contained, we list here some of the formulas we will/might need later on.
+To make this notebook self contained, we list here some of the formulas we will/might need later on.
 
 [1]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
 
@@ -444,7 +444,7 @@ Again, you should recognize the one-sided formulas we described in the previous 
 
 ## Functions
 
-Up to now, we have explictly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows:
+Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows:
 
 ```python
 def compute_ddf_c(f):
@@ -468,7 +468,7 @@ ddf_c_from_func = compute_ddf_c(f_c)
 <!-- #region -->
 ## Matrix formulation
 
-At this stage we know how to build Python functions that return the derivatives of functions based on finite difference formulas. Conceptually, we have defined the *action* of differential operators on functions: we pass a function to a Python function and it returns the derivative. This means that we have not explictely constructed the differential operator. For some problems, this is needed and in this section we show how this is done.
+At this stage we know how to build Python functions that return the derivatives of functions based on finite difference formulas. Conceptually, we have defined the *action* of differential operators on functions: we pass a function to a Python function and it returns the derivative. This means that we have not explicitly constructed the differential operator. For some problems, this is needed and in this section we show how this is done.
 
 Mathematically, we denote the action of any linear operator $\cal{A}$ acting on a function $f$ as:
 
@@ -526,7 +526,7 @@ Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-or
 \end{pmatrix}
 \end{align}
 
-By inspection, we see that the matrix $A_{ij}$ exactly produces the desired mapping. We can now define a Python function to create this matrix. Its input parameters are the number of grid points and $\Delta x$. Remember that in the `numpy` terminolgy, a matrix is considered a 2D array (`ndarray`).
+By inspection, we see that the matrix $A_{ij}$ exactly produces the desired mapping. We can now define a Python function to create this matrix. Its input parameters are the number of grid points and $\Delta x$. Remember that in the `numpy` terminology, a matrix is considered a 2D array (`ndarray`).
 
 We use here the Python package `scipy` that we briefly described in the *01_Introduction* notebook because it contains a convenient function, `diags` to create matrices that are essentially diagonal (you should look at its [documentation page][1] for its exact definition). The function `diags` belongs to the `sparse` submodule of `scipy` and you import it using the following command:
 
@@ -632,7 +632,7 @@ Again we obtain the desired result.
 ## Summary
 
 <!-- #region -->
-In this notebook we have explained how to obtain a second-order accurate finite difference formula for the second-order derivative of a function and we have provided recipies to construct many other differential operators - many more can be found on this [Wikipedia][1] page. We also discussed the concept of Python functions to produce re-usable pieces of source code. Fianlly, we have shown how to explicitly construct discrete versions of your differential operators in matrix form. These will be used in the following notebook to solve what are known as boundary value problems.
+In this notebook we have explained how to obtain a second-order accurate finite difference formula for the second-order derivative of a function and we have provided recipes to construct many other differential operators - many more can be found on this [Wikipedia][1] page. We also discussed the concept of Python functions to produce re-usable pieces of source code. Finally, we have shown how to explicitly construct discrete versions of your differential operators in matrix form. These will be used in the following notebook to solve what are known as boundary value problems.
 
 
 

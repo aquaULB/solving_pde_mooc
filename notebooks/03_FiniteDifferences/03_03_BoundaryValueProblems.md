@@ -56,7 +56,7 @@ Let's a consider a rod made of some heat conducting material. Under some simplif
     \partial_t T(x,t) = \alpha \frac{d^2 T}{dx^2}(x,t) + \sigma (x,t)
 \end{equation}
 
-where $\alpha$ is the thermal conductivity of the rod and $\sigma (x,t)$ some heat source present along the rod. To close this equation, some boundary conditions at both ends of the rod need to be specified. If these boundary conditions and $\sigma$ do not depend on time, the temperature within the rod ultimately settles to the solution of the steady-state equation:
+where $\alpha$ is the thermal conductivity of the rod and $\sigma (x,t)$ is some heat source present along the rod. To close this equation, some boundary conditions at both ends of the rod need to be specified. If these boundary conditions and $\sigma$ do not depend on time, the temperature within the rod ultimately settles to the solution of the steady-state equation:
 
 \begin{equation}
  \frac{d^2 T}{dx^2}(x) = b(x), \; \; \; b(x) = -\sigma(x)/\alpha.
@@ -72,7 +72,7 @@ If we denote respectively by $T_i$ and $b_i$ the values of $T$ and $b$ at the gr
     A_{ij} T_j = b_i
 \end{equation}
 
-where $A_{ij}$ is the discrete analogue of $\frac{d^2 }{dx^2}$.
+where $A_{ij}$ is the discrete version of $\frac{d^2 }{dx^2}$.
 
 ### Homogeneous Dirichlet boundary conditions
 
@@ -82,7 +82,9 @@ In this first example, we apply homogeneous Dirichlet boundary conditions at bot
  T(0)=0, \; T(1)=0 \; \; \Leftrightarrow \; \; T_0 =0, \; T_{nx-1} = 0.
 \end{equation}
 
-The usual way of implementing these boundary conditions with finite differences schemes is to realize that $T_0$ and $T_{nx-1}$ are in fact not unknowns: their values are fixed and the numerical method does not need to solve for them. Our real unknowns are $T_i$ with $i \in [1, 2, \dots , nx-3, nx-2]$. In the previous notebook we have defined $A_{ij}$ for the centered second-order accurate second-order derivative as:
+The usual way of implementing these boundary conditions with finite difference schemes is to realize that $T_0$ and $T_{nx-1}$ are in fact not unknowns: their values are fixed and the numerical method does not need to solve for them. Our real unknowns are $T_i$ with $i \in [1, 2, \dots , nx-3, nx-2]$. This implies that we need to find $nx-2$ equations relating these unknowns. 
+
+In the previous notebook we have defined $A_{ij}$ for the centered second-order accurate second-order derivative as:
 
 \begin{align}
 \frac{1}{\Delta x^2}
@@ -118,19 +120,19 @@ The next equation - around grid node 2 - reads:
     \frac{T_1 - 2T_2 + T_3}{\Delta x^2} = b_2
 \end{equation}
 
-For this one, there is nothing to change. The next lines of the system also remain unchanged up to,
+For this one, there is nothing to change. The next lines of the system also remain unchanged up to (and including),
 
 \begin{equation}
     \frac{T_{nx-4} - 2T_{nx-3} + T_{nx-2}}{\Delta x^2} = b_{nx-3}
 \end{equation}
 
-Taking into account $T_{nx-1}=0$, the equation around grid node $nx-2$ then becomes:
+Then, taking into account $T_{nx-1}=0$, the equation around grid node $nx-2$ becomes:
 
 \begin{equation}
     \frac{T_{nx-3} - 2T_{nx-2}}{\Delta x^2} = b_{nx-2}
 \end{equation}
 
-If we collect the above equations back into a matrix system we get:
+If we collect these $nx-2$ equations back into a matrix system we get:
 
 \begin{align}
 \frac{1}{\Delta x^2}
@@ -181,7 +183,7 @@ T_i = \tilde A^{-1}_{ij} b_j
 
 Inverting matrices numerically is time consuming for large-size matrices. In a later chapter of this course we will explain how to obtain approximate inverses for large systems. Here, we will limit our attention to moderately sized matrices and rely on a `scipy` routine called `inv` (available in the `linalg` submodule). The documentation of this function is available [here][1].
 
-So let's now write a Python code to solve the easiest possible case:
+We now write a Python code to solve our problem with a very simple term on the right-hand side:
 
 \begin{equation}
  \frac{d^2 T}{dx^2}(x) = -1, \; \; \; T(0)=T(1)=0.
@@ -191,10 +193,10 @@ So let's now write a Python code to solve the easiest possible case:
 
 ```python
 nx = 41 # number of grid points
-lx = 1. # length of invertal
+lx = 1. # length of interval
 dx = lx / (nx-1) # grid spacing
 x = np.linspace(0, 1, nx) # coordinates of points on the grid
-b = -1.0*np.ones(nx) # right-side vector at the grid points
+b = -1.0*np.ones(nx) # right-hand side vector at the grid points
 T = np.empty(nx) # array to store the solution vector
 ```
 
@@ -209,7 +211,8 @@ To be able to re-use our code later on, we define a routine to create our matrix
 ```python
 def d2_mat_dirichlet(nx, dx):
     """
-    Constructs the centered second-order accurate second-order derivative
+    Constructs the centered second-order accurate second-order derivative for Dirichlet
+    boundary conditions
     
     Parameters
     ----------
@@ -229,6 +232,7 @@ def d2_mat_dirichlet(nx, dx):
     
     # Call to the diags routine; note that diags return a representation of the array;
     # to explicitly obtain its ndarray realisation, the call to .toarray() is needed.
+    # Note how the matrix has dimensions (nx-2)*(nx-2)
     d2mat = diags(diagonals, offsets, shape=(nx-2,nx-2)).toarray()
     
     # Return the final array divided by the grid spacing **2
@@ -242,7 +246,7 @@ A = d2_mat_dirichlet(nx, dx)
 print(A)
 ```
 
-We now import the function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed through the `nump.dot` routine that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][1].
+We now import the function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed through the `numpy.dot` routine that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][1].
 
 [1]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
 
@@ -253,8 +257,8 @@ from scipy.linalg import inv
 ```python
 Am1 = inv(A) # Compute the inverse of A
 
-# Perform the matrix multiplication of the inverse with the rhs.
-# We only the values of b at the interior nodes
+# Perform the matrix multiplication of the inverse with the right-hand side.
+# We only need the values of b at the interior nodes
 T[1:-1] = np.dot(Am1, b[1:-1])
 
 # Manually set the boundary values in the temperature array
@@ -264,7 +268,7 @@ T[0], T[-1] = [0, 0]
 That's it ! If everything went fine, $T$ now contains our solution. We can compare it with the exact solution $T(x)=\frac{1}{2}x(1-x)$ which obviously satisfies the required boundary conditions.
 
 ```python
-T_exact = 0.5 * x * (1-x) # notice how we multiply numpy arrays pointwise.
+T_exact = 0.5*x * (1-x) # notice how we multiply numpy arrays pointwise.
 ```
 
 ```python
@@ -282,7 +286,7 @@ ax.legend()
 ### Non-homogeneous Dirichlet boundary conditions
 
 
-In the above example, we imposed homogeneous Dirichlet boundary conditions at both ends of the domain. What happens if we specify a non-zero value for $T$ at the left and/or right boundary node(s)? We will illustrate this for $T(0)=1$ but all other values or combinations Dirichlet boundary conditions are treated in the same way. If we look back at Eq. \ref{eq:leftBndDC}, we have in full generality:
+In the above example, we imposed homogeneous Dirichlet boundary conditions at both ends of the domain. What happens if we specify a non-zero value for $T$ at the left and/or right boundary node(s)? We will illustrate this for $T(0)=1$ but all other values or combinations of Dirichlet boundary conditions are treated in the same way. If we look back at Eq. \ref{eq:leftBndDC}, we have in full generality:
 
 \begin{equation}
     \frac{(T_0 - 2T_1+T_2)}{\Delta x^2} = b_1
@@ -341,52 +345,52 @@ We have to introduce a discrete version of the condition $T'(0)=2$. As we are us
 At the left boundary node we therefore use the (usual) forward second-order accurate finite difference for $T'$ to write:
 
 \begin{equation}
-    T'_0 = \frac{-\frac32 T_0 + 2T_1 - \frac12 T_2}{\Delta x}=2
+    T'_0 = \frac{-\frac32 T_0 + 2T_1 - \frac12 T_2}{\Delta x}=2.
 \end{equation}
 
-If we isolate $T_0$ in the preivous expression we have:
+If we isolate $T_0$ in the previous expression we have:
 
 \begin{equation}
     T_0 = \frac43 T_1 - \frac13 T_2 - \frac43 \Delta x.
 \end{equation}
 
-This shows that the Neumann boundary condition can be implemented by eliminating $T_0$ from the unknown variables using the above relation. The heat equation around the grid node $1$ is then modified as:
+This shows that the Neumann boundary condition can be implemented by eliminating $T_0$ from the unknown variables using the above relation. The heat equation around grid node $1$ is then modified as:
 
 \begin{equation}
     \frac{(T_0 - 2T_1+T_2)}{\Delta x^2} = b_1 \;\; \rightarrow \;\;
-    \frac{-\frac23 T_1 + \frac 23 T_2}{\Delta x^2} = b_1 + \frac43 \Delta x.
+    \frac{-\frac23 T_1 + \frac 23 T_2}{\Delta x^2} = b_1 + \frac{4}{3 \Delta x}.
 \end{equation}
 
-The effect of the Neumann boundary condition is two-fold: it modifies the left-hand side matrix coefficients and the right-hand side source term. Around the other grid nodes, there are no further modifications (except around grid node $nx-2$ where we impose the non-homogeneous condition $T(0)=1$.
+The effect of the Neumann boundary condition is two-fold: it modifies the left-hand side matrix coefficients and the right-hand side source term. Around the other grid nodes, there are no further modifications (except around grid node $nx-2$ where we impose the non-homogeneous condition $T(0)=1$).
 
-All the necessary bits of code are now scattered at different places in the notebook. We rewrite some of them to make the algorithm easier to follow:
+All the necessary bits of code are now scattered at different places in the notebook. We rewrite  here some of them to make the algorithm easier to follow:
 
 ```python
 nx = 41 # number of grid points
-lx = 1. # length of invertal
+lx = 1. # length of interval
 dx = lx / (nx-1) # grid spacing
 x = np.linspace(0, 1, nx) # coordinates of points on the grid
-b = -1.0*np.ones(nx) # right-side vector at the grid points
+b = -1.0*np.ones(nx) # right-hand side vector at the grid points
 T = np.empty(nx) # array to store the solution vector
 
 # We use d2_mat_dirichlet() to create the skeleton of our matrix
 A = d2_mat_dirichlet(nx, dx)
 
-# The first line of A needs to be modified for Neumann boundary condition
+# The first line of A needs to be modified for the Neumann boundary condition
 A[0,0:2] = np.array([-2./3., 2./3.]) / dx**2
 
 # Computation of the inverse matrix
 Am1 = inv(A)
 
-# The source term as grid nodes 1 and nx-2 needs to be modified
+# The source term at grid nodes 1 and nx-2 needs to be modified
 b[1] = b[1] + 4./(3.*dx)
 b[-2] = b[-2] - 1. / dx**2
 
-# Computation of the solution using numpy.dot
+# Computation of the solution using numpy.dot (boundary nodes not included)
 T[1:-1] = np.dot(Am1, b[1:-1])
 
 # We set the boundary value at the left boundary node
-# based on Neumann boundary condition
+# based on the Neumann boundary condition
 T[0] = 4./3.*T[1] - 1./3.*T[2] -4./3. * dx
 
 # We set the boundary value at the right boundary node
@@ -416,6 +420,9 @@ Once again, the computed solution behaves appropriately !
 
 
 ## Summary
+
+
+In this notebook we have discussed how to use finite difference formulas to solve boundary value problems. We have shown how to modify the original discretized differential system to take into account boundary conditions. Dirichlet boundary conditions result in the modification of the right-hand side of the equation, while Neumann boundary conditions result in the modification of both the left-hand side and the right-side of the equation. We also have briefly discussed the usage of two functions from `scipy` and `numpy` to respectively invert matrices and perform array multiplications. We advocate again the exploration of the documentation of these Python packages as they contain numerous useful tools to perform scientific computations.
 
 ```python
 from IPython.core.display import HTML

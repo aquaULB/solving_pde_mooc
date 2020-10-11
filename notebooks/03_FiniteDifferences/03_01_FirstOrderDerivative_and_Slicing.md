@@ -183,7 +183,7 @@ To experiment with our finite-difference approximations, we build a coarse grid 
 # as we are not using them further than for con-
 # struction of x and f(x) arrays.
 nx = 80          # number of grid points (coarse grid)
-lx = pi          # length of invertal
+lx = pi          # length of interval
 dx = lx / (nx-1) # grid spacing
 ```
 
@@ -494,7 +494,7 @@ We can now construct a second order discretized operator throughout the domain b
 
 ```python
 nx = 80          # number of grid points (coarse grid)
-lx = np.pi       # length of invertal
+lx = np.pi       # length of interval
 dx = lx / (nx-1) # grid spacing
 ```
 

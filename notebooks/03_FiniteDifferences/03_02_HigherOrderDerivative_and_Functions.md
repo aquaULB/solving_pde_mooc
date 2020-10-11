@@ -463,7 +463,80 @@ To compute the second-order derivative of our previously defined (mathematical) 
 ddf_c_from_func = compute_ddf_c(f_c)
 ```
 
-...
+The prototype of a Python function looks like this:
+
+
+```
+def some_function(parameters):
+
+    statements
+    
+    return something
+    
+```
+
+`parameters` is the list of arguments (e.g. variables, objects,...) that are passed to the function when calling it.
+
+`statements` constitute the actual Python commands executed within the function. These can be any legal Python code.
+
+`something` is what the programmer wants to provide as output from the function after execution of all the statements (e.g. the result of some arithmetic operations). The return statement is optional.
+
+To make things less abstract, let's discuss some examples.
+
+```python
+def print_name_and_data(name, age, height, weight):
+    print(f'Hello, {name}. You are {age}, measure {height} m and weigh {weight} kg.')
+```
+
+The `print_name_and_data` function has four input parameters. It simply prints a statement using these four parameters and is called like this:
+
+```python
+print_name_and_data('Luke', 28, 1.75, 72)
+```
+
+The function requires four *positional arguments* and they must be supplied exactly like in its definition. Calling the function like,
+
+```python
+print_name_and_data('Luke', 28, 72, 1.75)
+```
+
+results in an undesired ouput. If you want to specify the arguments in the 'wrong' order, you may pass them as keyword arguments:
+
+```python
+print_name_and_data(age=28, name='Luke', weight=72, height=1.75)
+```
+
+If you omit one or more of the parameters, Python will throw an error:
+
+```python
+print_name_and_data('Luke')
+```
+
+You can mix positional and keyword parameters. The only restriction is that keyword arguments must come after all positional arguments:
+
+```python
+print_name_and_data('Luke', 28, weight=72, height=1.75)
+```
+
+You may also define the function with some default parameters. In that case, they become optional and assume their default values when omitted in the function call. For example let's define a new function:
+
+```python
+def print_name_and_dexterity(name, handedness='right-handed'):
+    print(f'Hello, {name}. You are {handedness}.')
+```
+
+```python
+If you can the function without the se
+```
+
+```python
+print_name_and_dexterity('Luke')
+```
+
+```python
+print_name_and_dexterity('Luke', 'left-handed')
+```
+
 
 <!-- #region -->
 ## Matrix formulation

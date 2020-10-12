@@ -427,50 +427,16 @@ pages also lists a large collections of such **one-sided formulas**. Here we lim
 	</tbody>
 </table>
 
+
+
 Again, you should recognize the one-sided formulas we described in the previous notebook for the first-order derivative.
+
 
 ## Functions
 
+
 Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows (details about how to do this are given below):
 
-```python
-pi = np.pi       # 3.14...
-nx = 200         # number of grid points (fine grid)
-lx = pi          # length of the interval
-dx = lx / (nx-1) # grid spacing
-```
-
-```python
-x = np.linspace(0, lx, nx)   # coordinates for the fine grid
-f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
-
-# Let us build a numpy array for the exact repre-
-# sentation of the second-order derivative of f(x):
-ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
-```
-
-We now build a coarse grid with 80 points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
-
-```python
-nx = 80 # number of grid points (coarse grid)
-lx = pi # length of interval
-dx = lx / (nx-1) # grid spacing
-x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
-
-f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
-
-ddf_c = np.empty(nx)
-ddf_c[1:-1] = (f_c[:-2] -2*f_c[1:-1] +f_c[2:]) / dx**2 # boundary nodes are included
-```
-
-```python
-fig, ax = plt.subplots(figsize=(10, 5))
-
-ax.plot(x[1:-1], ddf[1:-1])
-ax.plot(x_c[1:-1], ddf_c[1:-1], '^g')
-ax.set_xlabel('$x$')
-ax.set_ylabel('$f\'$')
-```
 
 ```python
 def compute_ddf_c(f):
@@ -536,7 +502,7 @@ print_name_and_data(age=28, name='Luke', weight=72, height=1.75)
 If you omit one or more of the parameters, Python will throw an error:
 
 ```python
-#print_name_and_data('Luke')
+print_name_and_data('Luke')
 ```
 
 You can mix positional and keyword parameters. The only restriction is that keyword arguments must come after all positional arguments:
@@ -660,6 +626,7 @@ In the second line of the above cell, we are referencing with `b` the same numbe
 a = [0, 1, 2, 4]
 b = a
 b[0] = 5
+print(a)
 ```
 
 In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are accessing the same location in memory as `a[0]` and this affects the content of the sequence.

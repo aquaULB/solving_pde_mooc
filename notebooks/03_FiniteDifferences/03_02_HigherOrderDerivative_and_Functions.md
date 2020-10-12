@@ -23,8 +23,14 @@ jupyter:
 <h2 class="nocount">Contents</h2>
 
 1. [Introduction](#Introduction)
-2. [Higher order derivatives](#Second-order-derivatives)
+2. [Higher order derivatives](#Higher-order-derivatives)
+    1. [Second-order derivative](#Second-order-derivative)
+    2. [Higher order derivatives and one-side stencils](#Higher-order-derivatives-and-one-side-stencils)
 3. [Functions](#Functions)
+    1. [Parameters](#Parameters)
+    2. [Return statement](#Return-statement)
+    3. [Variable scope](#Variable-scope)
+    4. [Beware passing by object reference in Python!](#Beware-passing-by-object-reference-in-Python!)
 4. [Matrix formulation](#Matrix-formulation)
 5. [Summary](#Summary)
 
@@ -47,7 +53,6 @@ In this notebook we extend the concept of finite differences to higher order der
 ## Higher order derivatives
 
 Using finite differences, we can construct derivatives up to any order. Before we discuss this, we first explicitly describe in detail the second-order derivative that is later used extensively in the course.
-
 
 ### Second-order derivative
 
@@ -72,57 +77,13 @@ The centered second-order derivative cannot be used at the boundary nodes. Some 
 
 Let us write a Python code to check that expression \ref{eq:centeredDiff2} works as expected. We use the same test function as in the previous notebook - $f(x)=e^x \sin(3\pi x)$ - and we first represent it on a fine grid in the interval $x\in [O, \pi]$.
 
-```python
-pi = np.pi       # 3.14...
-nx = 200         # number of grid points (fine grid)
-lx = pi          # length of the interval
-dx = lx / (nx-1) # grid spacing
-```
-
-```python
-x = np.linspace(0, lx, nx)   # coordinates for the fine grid
-f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
-
-# Let us build a numpy array for the exact repre-
-# sentation of the second-order derivative of f(x):
-ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
-```
-
-We now build a coarse grid with 80 points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
-
-```python
-nx = 80 # number of grid points (coarse grid)
-lx = pi # length of interval
-dx = lx / (nx-1) # grid spacing
-x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
-
-f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
-
-ddf_c = np.empty(nx) 
-ddf_c[1:-1] = (f_c[:-2] -2*f_c[1:-1] +f_c[2:]) / dx**2 # boundary nodes are included
-```
-
-```python
-fig, ax = plt.subplots(figsize=(10, 5))
-
-ax.plot(x[1:-1], ddf[1:-1])
-ax.plot(x_c[1:-1], ddf_c[1:-1], '^g')
-ax.set_xlabel('$x$')
-ax.set_ylabel('$f\'$')
-```
-
 As the centered formula for $f''$ is not defined at the boundary nodes, these have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.
-
 
 ### Higher order derivatives and one-side stencils
 
-
-It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][1] page that contains finite difference formulas for all the cases we use in this course, and many more.
+It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][21] page that contains finite difference formulas for all the cases we use in this course, and many more.
 
 To make this notebook self contained, we list here some of the formulas we will/might need later on.
-
-[1]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
-
 
 We begin we some **centered finite difference** expressions:
 
@@ -227,7 +188,6 @@ We begin we some **centered finite difference** expressions:
 	</tbody>
 </table>
 
-
 You should recognize the centered difference stencils we have already discussed for the first- and second-order derivatives. Each lines contains the coefficients $c_j$ to be applied at the corresponding stencil point; to complete the finite difference formula, we also need to divide the finite difference with $\Delta x^k$ where $k$ is the order derivative. For example, the second-order accurate formula for the fourth-order derivative is:
 
 \begin{equation}
@@ -238,18 +198,12 @@ Graphically we have:
 
 <img width="800px" src="../figures/centeredDiff4.png">
 
-<!-- #region -->
-We have seen that centered stencils are usually not applicable at boundary nodes. Thankfully, alternate finite difference formulas can be constructed for these nodes and the [Wikipedia][1]
+We have seen that centered stencils are usually not applicable at boundary nodes. Thankfully, alternate finite difference formulas can be constructed for these nodes and the [Wikipedia][21]
 pages also lists a large collections of such **one-sided formulas**. Here we limit our attention to first- and second-order accurate expressions.
 
+[21]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
 
-
-[1]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
-<!-- #endregion -->
-
-<!-- #region -->
 **Forward one-sided finite difference formulas:**
-
 
 <table class="wikitable" style="text-align:center">
 	<tbody>
@@ -341,8 +295,6 @@ pages also lists a large collections of such **one-sided formulas**. Here we lim
 		</tr>
 	</tbody>
 </table>
-
-<!-- #endregion -->
 
 **Backward one-sided finite difference formulas:**
 
@@ -437,24 +389,59 @@ pages also lists a large collections of such **one-sided formulas**. Here we lim
 	</tbody>
 </table>
 
-
-
 Again, you should recognize the one-sided formulas we described in the previous notebook for the first-order derivative.
 
-
 ## Functions
-
 
 Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows (details about how to do this are given below):
 
 ```python
+pi = np.pi       # 3.14...
+nx = 200         # number of grid points (fine grid)
+lx = pi          # length of the interval
+dx = lx / (nx-1) # grid spacing
+```
+
+```python
+x = np.linspace(0, lx, nx)   # coordinates for the fine grid
+f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
+
+# Let us build a numpy array for the exact repre-
+# sentation of the second-order derivative of f(x):
+ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
+```
+
+We now build a coarse grid with 80 points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
+
+```python
+nx = 80 # number of grid points (coarse grid)
+lx = pi # length of interval
+dx = lx / (nx-1) # grid spacing
+x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
+
+f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
+
+ddf_c = np.empty(nx)
+ddf_c[1:-1] = (f_c[:-2] -2*f_c[1:-1] +f_c[2:]) / dx**2 # boundary nodes are included
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(x[1:-1], ddf[1:-1])
+ax.plot(x_c[1:-1], ddf_c[1:-1], '^g')
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f\'$')
+```
+
+```python
 def compute_ddf_c(f):
-    
-    ddf_c = np.empty_like(f) 
+
+    ddf_c = np.empty_like(f)
     ddf_c[1:-1] = f[:-2] -2*f[1:-1] +f[2:] # boundary nodes are not included
     ddf_c[0] = 2*f[0] - 5*f[1] + 4*f[2] - f[3] # f'' at left boundary node
     ddf_c[-1] = -f[-4] + 4*f[-3] -5*f[-2] + 2*f[-1] # f'' at right boundary node
-    
+
     return ddf_c / dx**2
 ```
 
@@ -466,14 +453,13 @@ ddf_c_from_func = compute_ddf_c(f_c)
 
 The prototype of a Python function looks like this:
 
-<!-- #region -->
 ```python
 def some_function(parameters):
 
     statements
-    
+
     return something
-    
+
 ```
 
 `parameters` is the list of arguments (e.g. variables, objects,...) that are passed to the function when calling it.
@@ -483,7 +469,6 @@ def some_function(parameters):
 `something` is what the programmer wants to provide as output from the function after execution of all the statements (e.g. the result of some arithmetic operations). The return statement is optional.
 
 To make things less abstract, let's discuss some examples.
-<!-- #endregion -->
 
 ### Parameters
 
@@ -513,7 +498,7 @@ print_name_and_data(age=28, name='Luke', weight=72, height=1.75)
 If you omit one or more of the parameters, Python will throw an error:
 
 ```python
-print_name_and_data('Luke')
+#print_name_and_data('Luke')
 ```
 
 You can mix positional and keyword parameters. The only restriction is that keyword arguments must come after all positional arguments:
@@ -550,10 +535,10 @@ The last statement of a function can be a `return` statement with which the prog
 ```python
 def compute_bmi(name, height, weight):
     print(f'Hello, {name}. I am returning your body mass index...')
-    
+
     bmi = weight / height**2
-    
-    return bmi # we could have written directly: return weight / height**2 
+
+    return bmi # we could have written directly: return weight / height**2
 ```
 
 We can then store the return value in any variable like this:
@@ -567,11 +552,11 @@ The function can return any Python object (dictionaries, arrays, numbers, ...) o
 
 ```python
 def compute_avg_diff(number1, number2):
-    
+
     average = 0.5 * (number1+number2)
     difference = number1-number2
-    
-    return average, difference 
+
+    return average, difference
 ```
 
 Note how the two return values are separated by a comma. This function can be called like this:
@@ -619,7 +604,7 @@ Here we get two different outputs. Outside of the function, we have defined the 
 NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
 
 
-### Reference or copied ? - con't
+### Beware passing by object reference in Python!
 
 
 There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied ?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a sequence. We recall here two examples:
@@ -637,10 +622,9 @@ In the second line of the above cell, we are referencing with `b` the same numbe
 a = [0, 1, 2, 4]
 b = a
 b[0] = 5
-print(a)
 ```
 
-In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are accessing the same location in memory as `a[0]` and this affects the content of the sequence. 
+In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are accessing the same location in memory as `a[0]` and this affects the content of the sequence.
 
 Now consider how this can cause possible unwanted behaviors when calling functions:
 
@@ -694,7 +678,6 @@ We prefer this second option as the original sequence is never within reach of t
 
 One more word of caution: here we illustrated the possible outcomes using sequences of numbers. When the sequences contain nested Python objects and you don't want to affect the sequence at all inside of the function, you must use `deepcopy()` instead of `copy()`. But this should not be a source of concern for the type of objects we manipulate in this course.
 
-<!-- #region -->
 ## Matrix formulation
 
 At this stage we know how to build Python functions that return the derivatives of functions based on finite difference formulas. Conceptually, we have defined the *action* of differential operators on functions: we pass a function to a Python function and it returns the derivative. This means that we have not explicitly constructed the differential operator. For some problems, this is needed and in this section we show how this is done.
@@ -712,7 +695,6 @@ If we discretize this equation on a numerical grid, we need a discretized versio
 \end{equation}
 
 Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-order accurate) first-order derivative; as we want to build the operator everywhere in the domain including at the boundary nodes, we use second-order one-sided finite differences at these locations:
-
 
 \begin{align}
 \begin{pmatrix}
@@ -760,7 +742,6 @@ By performing the matrix multiplication, we see that the matrix $A_{ij}$ produce
 We use here the Python package `scipy` that we briefly described in the *01_Introduction* notebook because it contains a convenient function, `diags` to create matrices that are essentially diagonal (you should look at its [documentation page][1] for its exact definition). A matrix is referred to as *sparse* when it contains mostly zeros, except at sparse locations; these are usually concentrated around the diagonal. The function `diags` belongs to the `sparse` submodule of `scipy` and you import it using the following command:
 
 [1]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.diags.html> "documentation for scipy.sparse.diags"
-<!-- #endregion -->
 
 ```python
 from scipy.sparse import diags
@@ -770,14 +751,14 @@ from scipy.sparse import diags
 def d1_mat(nx, dx):
     """
     Constructs the centered second-order accurate first-order derivative
-    
+
     Parameters
     ----------
     nx : integer
         number of grid points
-    dx : float 
+    dx : float
         grid spacing
-    
+
     Returns
     -------
     d1mat : numpy.ndarray
@@ -785,16 +766,16 @@ def d1_mat(nx, dx):
     """
     diagonals = [[-1], [0], [1]] # main diagonal elements
     offsets = [-1, 0, 1] # positions of the diagonal entries relative to the main diagonal
-    
+
     # Call to the diags routine; note that diags returns a *representation* of the array;
     # to explicitly obtain its ndarray realisation, the call to .toarray() is needed.
     d1mat = diags(diagonals, offsets, shape=(nx,nx)).toarray()
-    
+
     # We replace the first and last lines of d1mat with the proper
     # one-sided finite differences
     d1mat[0, :3] = np.array([-3./2., 2, -1./2.]) # first line
     d1mat[-1, -3:] = np.array([1./2., -2, 3./2.]) # second line
-    
+
     # Return the final array divided by the grid spacing
     return d1mat / dx
 ```
@@ -819,14 +800,14 @@ Using exactly the same ideas, the explicit representation of a discrete version 
 def d2_mat(nx, dx):
     """
     Constructs the centered second-order accurate second-order derivative
-    
+
     Parameters
     ----------
     nx : integer
         number of grid points
-    dx : float 
+    dx : float
         grid spacing
-    
+
     Returns
     -------
     d2mat : numpy.ndarray
@@ -834,16 +815,16 @@ def d2_mat(nx, dx):
     """
     diagonals = [[1.], [-2.], [1.]] # main diagonal elements
     offsets = [-1, 0, 1] # positions of the diagonal entries relative to the main diagonal
-    
+
     # Call to the diags routine; note that diags return a representation of the array;
     # to explicitly obtain its ndarray realisation, the call to .toarray() is needed.
     d2mat = diags(diagonals, offsets, shape=(nx,nx)).toarray()
-    
+
     # We replace the first and last lines of d1mat with the proper
     # one-sided finite differences
     d2mat[0, :4] = np.array([2., -5, 4., -1.]) # first line
     d2mat[-1, -4:] = np.array([-1., 4., -5., 2.]) # second line
-    
+
     # Return the final array divided by the grid spacing **2
     return d2mat / dx**2
 ```
@@ -860,13 +841,9 @@ Again we obtain the desired result.
 
 ## Summary
 
-<!-- #region -->
 In this notebook we have explained how to obtain a second-order accurate finite difference formula for the second-order derivative of a function and we have provided recipes to construct many other differential operators - many more can be found on this [Wikipedia][1] page. We also discussed the concept of Python functions to produce re-usable pieces of source code. Finally, we have shown how to explicitly construct discrete versions of differential operators in matrix form. These will be used in the following notebook to solve what are known as boundary value problems.
 
-
-
 [1]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
-<!-- #endregion -->
 
 ```python
 from IPython.core.display import HTML

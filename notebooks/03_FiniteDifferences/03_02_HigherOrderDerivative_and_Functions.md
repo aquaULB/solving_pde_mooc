@@ -444,7 +444,8 @@ Again, you should recognize the one-sided formulas we described in the previous 
 
 ## Functions
 
-Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows:
+
+Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows (details about how to do this are given below):
 
 ```python
 def compute_ddf_c(f):
@@ -465,8 +466,8 @@ ddf_c_from_func = compute_ddf_c(f_c)
 
 The prototype of a Python function looks like this:
 
-
-```
+<!-- #region -->
+```python
 def some_function(parameters):
 
     statements
@@ -482,6 +483,9 @@ def some_function(parameters):
 `something` is what the programmer wants to provide as output from the function after execution of all the statements (e.g. the result of some arithmetic operations). The return statement is optional.
 
 To make things less abstract, let's discuss some examples.
+<!-- #endregion -->
+
+### Parameters
 
 ```python
 def print_name_and_data(name, age, height, weight):
@@ -518,25 +522,177 @@ You can mix positional and keyword parameters. The only restriction is that keyw
 print_name_and_data('Luke', 28, weight=72, height=1.75)
 ```
 
-You may also define the function with some default parameters. In that case, they become optional and assume their default values when omitted in the function call. For example let's define a new function:
+You may also define the function with some default values for the parameters. In that case, they become optional and assume their default values when omitted in the function call. For example let's define a new function:
 
 ```python
-def print_name_and_dexterity(name, handedness='right-handed'):
+def print_name_and_handedness(name, handedness='right-handed'):
     print(f'Hello, {name}. You are {handedness}.')
 ```
 
+If you call the function without passing the second argument, you get:
+
 ```python
-If you can the function without the se
+print_name_and_handedness('Luke')
+```
+
+But you can supply a different value if needed:
+
+```python
+print_name_and_handedness('Luke', 'left-handed')
+```
+
+
+### Return statement
+
+
+The last statement of a function can be a `return` statement with which the programmer can send some information or data produced within the function back to the main program or calling routine. As an example, let's define a function that returns the body mass index of an individual:
+
+```python
+def compute_bmi(name, height, weight):
+    print(f'Hello, {name}. I am returning your body mass index...')
+    
+    bmi = weight / height**2
+    
+    return bmi # we could have written directly: return weight / height**2 
+```
+
+We can then store the return value in any variable like this:
+
+```python
+luke_bmi = compute_bmi('Luke', 1.75, 70)
+print(luke_bmi)
+```
+
+The function can return any Python object (dictionaries, arrays, numbers, ...) or a collection of them. In the example below, we return the average of two numbers and their difference:
+
+```python
+def compute_avg_diff(number1, number2):
+    
+    average = 0.5 * (number1+number2)
+    difference = number1-number2
+    
+    return average, difference 
+```
+
+Note how the two return values are separated by a comma. This function can be called like this:
+
+```python
+avg1, diff1 = compute_avg_diff(10, 8)
+print(f'The average is {avg1} and the difference is {diff1}.')
+```
+
+### Variable scope
+
+
+A very important concept when discussing functions is the so-called *scope* of a variable. There are generally speaking two types of variables: global variables or local variables. Global variables can be accessed anywhere in a program. Local variables can only be accessed within the function in which they are defined. But you may always return their values outside of the function by using a `return` statement.
+
+Let first consider an example involving a global variable:
+
+```python
+def print_a():
+    print(a)
 ```
 
 ```python
-print_name_and_dexterity('Luke')
+a=1
+print_a()
+a=2
+print_a()
+```
+
+The code executed without errors and each time we modify `a` the function prints the correct value because this global variable, defined outside of the function, is accessible within the function. Let's try something else:
+
+```python
+def multiply_a_and_b(a, b):
+    prod = a*b
+    print(f'The product between a and b is {prod}.')
 ```
 
 ```python
-print_name_and_dexterity('Luke', 'left-handed')
+prod = 3
+multiply_a_and_b(3, 6)
+print(f'Here prod is equal to {prod}.')
 ```
 
+Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside of the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
+
+NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
+
+
+### Reference or copied ? - con't
+
+
+There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied ?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a sequence. We recall here two examples:
+
+```python
+a = 1
+b = a
+b = 2
+print(a)
+```
+
+In the second line of the above cell, we are referencing with `b` the same number as `a`. In the third line, we are changing the number to which `b` is referencing and this does not affect `a`. When we manipulate sequences, the situation is different. Let's consider this example:
+
+```python
+a = [0, 1, 2, 4]
+b = a
+b[0] = 5
+print(a)
+```
+
+In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are accessing the same location in memory as `a[0]` and this affects the content of the sequence. 
+
+Now consider how this can cause possible unwanted behaviors when calling functions:
+
+```python
+def test_func(seq1):
+    sequence = seq1
+    sequence[0] = 0
+    print(f'Inside of the function, the sequence is {sequence}.')
+```
+
+```python
+seq = [1, 1, 1, 1]
+test_func(seq)
+
+print(f'Outside of the function, the sequence is {seq}.')
+```
+
+Because we did not make a copy of the original sequence when writing `sequence = seq1` we are changing its content with `sequence[0] = 0`. Therefore, such statements can have an effect outside of the function and you must be really careful if this is intended or not. If you do not want to modify the sequence outside of the function you could write instead:
+
+```python
+def test_func(seq1):
+    sequence = seq1.copy()
+    sequence[0] = 0
+    print(f'Inside of the function, the sequence is {sequence}.')
+```
+
+```python
+seq = [1, 1, 1, 1]
+test_func(seq)
+
+print(f'Outside of the function, the sequence is {seq}.')
+```
+
+Another possibility is:
+
+```python
+def test_func(seq1):
+    sequence = seq1
+    sequence[0] = 0
+    print(f'Inside of the function, the sequence is {sequence}.')
+```
+
+```python
+seq = [1, 1, 1, 1]
+test_func(seq.copy())
+
+print(f'Outside of the function, the sequence is {seq}.')
+```
+
+We prefer this second option as the original sequence is never within reach of the inside of the function as we explicitly call it with a copy of the sequence.
+
+One more word of caution: here we illustrated the possible outcomes using sequences of numbers. When the sequences contain nested Python objects and you don't want to affect the sequence at all inside of the function, you must use `deepcopy()` instead of `copy()`. But this should not be a source of concern for the type of objects we manipulate in this course.
 
 <!-- #region -->
 ## Matrix formulation
@@ -637,7 +793,7 @@ def d1_mat(nx, dx):
     # We replace the first and last lines of d1mat with the proper
     # one-sided finite differences
     d1mat[0, :3] = np.array([-3./2., 2, -1./2.]) # first line
-	d1mat[-1, -3:] = np.array([1./2., -2, 3./2.]) # second line
+    d1mat[-1, -3:] = np.array([1./2., -2, 3./2.]) # second line
     
     # Return the final array divided by the grid spacing
     return d1mat / dx

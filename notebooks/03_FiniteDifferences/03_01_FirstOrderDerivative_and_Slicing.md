@@ -387,10 +387,68 @@ print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
 
 ### Referenced or copied?
 
-
+<!-- #region -->
 The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?* In other words, *does my old object get modified when I modify the new one?*
 
-When it comes to slices it is true that
+This question is deeply rooted in the meaning of the `=` symbol in Python. In Python, the symbol `=` is used to *assign* the value on its right-hand side to the variable on the left-hand side.
+
+When you write this very simple statement,
+
+```python
+a=1
+```
+<!-- #endregion -->
+
+Python does two things:
+
+* it creates an integer objects in memory containing the value 1
+* it attaches (assigns) the name `a` to this location in memory
+
+You have to remember that `a` is just a shortcut or name for the object containing the integer $1$. For numbers, this does not create much confusion. Consider for example the following lines of code:
+
+```python
+a = 1
+b = a
+print(f'Initial value of b: {b}')
+b = 2
+print(f'Value of b after re-assignment: {b}')
+print(f'Value of a after re-assignment: {a}')
+```
+
+Things behave quite intuitively. For sequences or arrays, one needs to pay special attention. Consider another example:
+
+```python
+a = [0, 1, 2, 3]
+b = a
+print(f'Initial value of b: {b}')
+b[0] = 5
+print(f'Value of b after re-assignment: {b}')
+print(f'Value of a after re-assignment: {a}')
+```
+
+Do you notice something intriguing? The content of the sequence `a` has been modified by the statement `b[0]=5`. Let's discuss why this is so.
+
+The first line of code creates 4 integer objects and a sequence object. It gives the name `a` to this sequence. `a[0], a[1], a[2], a[3]` are just names for the integer objects storing the values $0, 1, 2, 3$.
+
+In the second line of code, we give another name to the sequence; we tell the code that `a` and `b` are two different names pointing to the same sequence. `b[0], b[1], b[2], b[3]` are then names pointing to the same integer objects as `a[0], a[1], a[2], a[3]`. For that reason, the initial `print`statement outputs the content of the sequence `a`. 
+
+The statement `b[0]=5` then creates another integer object storing the value $5$ and assigns it the name `b[0]`. The sequence `b` is obviously affected. But the system has been told that `a[0]` and `b[0]` are nicknames for the same object. So `a[0]` now also points to the integer object storing $5$ and this explains the output produced by the last print statement.
+
+If you really want to change the content of the sequence `b` without affecting `a`, you need to create a separate copy of `a` and give that copy the name `b`. This can be done as follows:
+
+```python
+a = [0, 1, 2, 3]
+b = a.copy()
+print(f'Initial value of b: {b}')
+b[0] = 5
+print(f'Value of b after re-assignment: {b}')
+print(f'Value of a after re-assignment: {a}')
+```
+
+Now you see that `b` has been modified while `a` is unchanged. The whole discussion has been done using sequences but the same behavior is true for `numpy.arrays`.
+
+
+When it comes to slices, this translates to:
 
 * $n$-level-deep elements of the original sequence for $n=1$ become copied in the slice
 * $n$-level-deep elements of the original sequence for $n>1$ are references in the slice

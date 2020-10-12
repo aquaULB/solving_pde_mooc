@@ -19,7 +19,6 @@ jupyter:
 </div>
 <h1 style="text-align: center">Finite Differences II</h1>
 
-
 <h2 class="nocount">Contents</h2>
 
 1. [Introduction](#Introduction)
@@ -76,6 +75,45 @@ The stencil for this expression is the sequence $[-1,0,1]$ and we represent it a
 The centered second-order derivative cannot be used at the boundary nodes. Some one-sided formulas are needed at those locations.
 
 Let us write a Python code to check that expression \ref{eq:centeredDiff2} works as expected. We use the same test function as in the previous notebook - $f(x)=e^x \sin(3\pi x)$ - and we first represent it on a fine grid in the interval $x\in [O, \pi]$.
+
+```python
+pi = np.pi       # 3.14...
+nx = 200         # number of grid points (fine grid)
+lx = pi          # length of the interval
+dx = lx / (nx-1) # grid spacing
+```
+
+```python
+x = np.linspace(0, lx, nx)   # coordinates for the fine grid
+f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
+
+# Let us build a numpy array for the exact repre-
+# sentation of the second-order derivative of f(x):
+ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
+```
+
+We now build a coarse grid with 80 points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
+
+```python
+nx = 80 # number of grid points (coarse grid)
+lx = pi # length of interval
+dx = lx / (nx-1) # grid spacing
+x_c = np.linspace(0, lx, nx) # coordinates of points on the coarse grid
+
+f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
+
+ddf_c = np.empty(nx)
+ddf_c[1:-1] = (f_c[:-2] -2*f_c[1:-1] +f_c[2:]) / dx**2 # boundary nodes are included
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(x[1:-1], ddf[1:-1])
+ax.plot(x_c[1:-1], ddf_c[1:-1], '^g')
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f\'$')
+```
 
 As the centered formula for $f''$ is not defined at the boundary nodes, these have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.
 
@@ -849,8 +887,4 @@ In this notebook we have explained how to obtain a second-order accurate finite 
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```python
-
 ```

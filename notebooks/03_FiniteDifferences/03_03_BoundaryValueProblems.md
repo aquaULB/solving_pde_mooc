@@ -82,7 +82,7 @@ In this first example, we apply homogeneous Dirichlet boundary conditions at bot
  T(0)=0, \; T(1)=0 \; \; \Leftrightarrow \; \; T_0 =0, \; T_{nx-1} = 0.
 \end{equation}
 
-To implement these boundary conditions with finite-difference scheme, we have to realize that $T_0$ and $T_{nx-1}$ are in fact not unknowns: their values are fixed and the numerical method does not need to solve for them. Our real unknowns are $T_i$ with $i \in [1, 2,\dots ,nx-3,nx-2]$. This implies that we need to find $nx-2$ equations relating these unknowns.
+To implement these boundary conditions with a finite-difference scheme, we have to realize that $T_0$ and $T_{nx-1}$ are in fact not unknowns: their values are fixed and the numerical method does not need to solve for them. Our real unknowns are $T_i$ with $i \in [1,2,\dots,nx-3,nx-2]$. This implies that we need to find $nx-2$ equations relating these unknowns.
 
 In the previous notebook we have defined $A_{ij}$ for the centered second-order accurate second-order derivative as:
 
@@ -175,13 +175,13 @@ If we collect these $nx-2$ equations back into a matrix system, we get:
 \end{pmatrix}.
 \end{align}
 
-The above system is completely closed in terms of the *actual* unknowns $T_1,\dots,T_{nx-2}$. The matrix $\tilde A_{ij}$ on the left-hand side has dimensions $(nx-2)\times(nx-2)$. Implementation of the boundary conditions has in practice removed one line and one column from the original matrix. This is to be expected, as we now have $nx-2$ unknowns. The system can be solved by inverting $\tilde A_{ij}$ to get:
+The above system is completely closed in terms of the *actual* unknowns $T_1,\dots,T_{nx-2}$. The matrix $\tilde A_{ij}$ on the left-hand side has dimensions $(nx-2)\times(nx-2)$. The implementation of the boundary conditions has in practice removed one line and one column from the original matrix. This is to be expected, as we now have $nx-2$ unknowns. The system can be solved by inverting $\tilde A_{ij}$ to get:
 
 \begin{equation}
 T_i = \tilde A^{-1}_{ij} b_j.
 \end{equation}
 
-Inverting matrices numerically is time consuming for large-size matrices. In a latter chapter of this course we will explain how to obtain approximate inverses for large systems. Here, we will limit our attention to moderately sized matrices and rely on a `scipy` routine for matrix inversion - `inv` (available in the `linalg` submodule). The documentation for this function is available [here][1].
+Inverting matrices numerically is time consuming for large-size matrices. In a later chapter of this course we will explain how to obtain approximate inverses for large systems. Here, we will limit our attention to moderately sized matrices and rely on a `scipy` routine for matrix inversion - `inv` (available in the `linalg` submodule). The documentation for this function is available [here][1].
 
 We now write a Python code to solve our problem with a very simple term on the right-hand side:
 
@@ -229,7 +229,7 @@ def d2_mat_dirichlet(nx, dx):
     """
     # We construct a sequence of main diagonal elements,
     diagonals = [[1.], [-2.], [1.]]
-    # and a sequence of positions of the diagonals entries relative to the main
+    # and a sequence of positions of the diagonal entries relative to the main
     # diagonal.
     offsets = [-1, 0, 1]
 
@@ -249,7 +249,7 @@ A = d2_mat_dirichlet(nx, dx)
 print(A)
 ```
 
-We now import `scipy.linalg.inv` function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][1].
+We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][1].
 
 [1]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
 
@@ -278,7 +278,7 @@ T_exact = 0.5*x * (1-x) # notice how we multiply numpy arrays pointwise.
 fig, ax = plt.subplots(figsize=(10, 7))
 
 ax.plot(x, T_exact, label='Exact solution')
-ax.plot(x, T, '^g', label='Appximate solution')
+ax.plot(x, T, '^g', label='Approximate solution')
 
 ax.set_xlabel('$x$')
 ax.set_ylabel('$T$')
@@ -306,9 +306,9 @@ We observe that compared to our previous setup, the left-hand side has not chang
 To solve the problem we can re-use everything we computed so far except that we need to modify $b_1$:
 
 ```python
-b[1] = b[1] - 1. / dx**2
+b[1] = b[1] - 1./dx**2
 # We perform the matrix multiplication of the inverse with the rhs.
-T[1:-1] = np.dot(A_inv_, b[1:-1])
+T[1:-1] = np.dot(A_inv, b[1:-1])
 # We set the boundary values.
 T[0], T[-1] = [1., 0.]
 ```

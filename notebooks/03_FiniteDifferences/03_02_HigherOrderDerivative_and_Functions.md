@@ -603,7 +603,7 @@ multiply_a_and_b(3, 6)
 print(f'Here prod is equal to {prod}.')
 ```
 
-Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside of the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
+Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
 
 NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
 
@@ -637,7 +637,7 @@ Now consider how this can cause possible unwanted behaviors when calling functio
 def test_func(seq1):
     sequence = seq1
     sequence[0] = 0
-    print(f'Inside of the function, the sequence is {sequence}.')
+    print(f'Inside the function, the sequence is {sequence}.')
 ```
 
 ```python
@@ -653,7 +653,7 @@ Because we did not make a copy of the original sequence when writing `sequence =
 def test_func(seq1):
     sequence = seq1.copy()
     sequence[0] = 0
-    print(f'Inside of the function, the sequence is {sequence}.')
+    print(f'Inside the function, the sequence is {sequence}.')
 ```
 
 ```python
@@ -669,7 +669,7 @@ Another possibility is:
 def test_func(seq1):
     sequence = seq1
     sequence[0] = 0
-    print(f'Inside of the function, the sequence is {sequence}.')
+    print(f'Inside the function, the sequence is {sequence}.')
 ```
 
 ```python
@@ -679,9 +679,9 @@ test_func(seq.copy())
 print(f'Outside of the function, the sequence is {seq}.')
 ```
 
-We prefer this second option, as the original sequence is never within reach of the inside of the function. We explicitly call it with a copy of the sequence.
+We prefer this second option, as the original sequence is never within reach of the inside the function. We explicitly call it with a copy of the sequence.
 
-One more word of caution: here we illustrated the possible outcomes using sequences of numbers. When the sequences contain nested Python objects and you don't want to affect the sequence at all inside of the function, you must use `deepcopy()` instead of `copy()`. But this should not be a source of concern for the type of objects we manipulate in this course.
+One more word of caution: here we illustrated the possible outcomes using sequences of numbers. When the sequences contain nested Python objects and you don't want to affect the sequence at all inside the function, you must use `deepcopy()` instead of `copy()`. But this should not be a source of concern for the type of objects we manipulate in this course.
 
 ## Matrix formulation
 

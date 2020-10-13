@@ -590,9 +590,9 @@ ax.legend(loc='upper left')
 ## Summary
 
 
-In this notebook, we have learned how to approximate derivatives using finite differences. We demonstrated the principle how the finite-difference formulas can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
+In this notebook, we learned how to approximate derivatives using finite differences. We illustrated how finite-difference formulas can be derived and showed how to treat boundary nodes in the numerical grid.
 
-Besides that, we've explained the tool of Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we advance our knowledge in finite-difference approximation by considering higher order derivatives.
+Besides that, we've explained the Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we extend our knowledge on finite differences by considering higher order derivatives.
 
 ```python
 from IPython.core.display import HTML

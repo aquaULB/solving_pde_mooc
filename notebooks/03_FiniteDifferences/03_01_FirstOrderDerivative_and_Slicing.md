@@ -50,7 +50,7 @@ $$
 f(x)=e^x \sin(3\pi x) \label{eq:testfunc}
 $$
 
-There as several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighboring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
+There are several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighboring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
 
 Let $x$ be the continuous variable defined in the interval $x\in[x_0,x_n]$. In any numerical problem, we have to limit the number of points at which we store the values of $f(x)$ because the random access memory (RAM) of our computers is limited. We therefore need to introduce an approximation of our continuous interval - the numerical grid. It is a set of grid points at which we evaluate all physical quantities.
 
@@ -515,7 +515,7 @@ In section [First-order derivative](#First-order-derivative) we mentioned that t
 & \displaystyle f'(x_n) = \frac{f(x_{n}) - f(x_{n-1})}{\Delta x}.
 \end{cases}
 
-The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first order at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished. We will give an example of this behavior later on.
+The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first-order accurate at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished. We will give an example of this behavior later on.
 
 To improve our discretized operator, we have to find second-order accurate expressions for the boundary nodes and we can use Taylor's theorem to achieve this goal. At the left boundary node we have:
 
@@ -524,7 +524,7 @@ f(x_0 + \Delta) = f(x_0) +f'(x_0)\Delta x+\frac12 f''(x_0)\Delta x^2+O(\Delta x^
 f(x_0 + 2\Delta) = f(x_0) +2f'(x_0)\Delta x+4\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)
 \end{align*}
 
-If we multiply the first equation by two and then substract the second one we get:
+If we multiply the first equation by two and then substract the second one, we get:
 
 \begin{equation*}
 4 f(x_0 + \Delta) - f(x_0 + 2\Delta) = 3 f(x_0) + 2f'(x_0)\Delta x + O(\Delta x^3)
@@ -550,7 +550,7 @@ and its stencil is:
 
 <img width="600px" src="../figures/onesideDiff1_2.png">
 
-We can now construct a second order discretized operator throughout the domain by using the above two expressions at the boundary nodes. Our complete computation of the second-order accurate first-order derivative then looks like (for the sake of completeness, we repeat the whole code here):
+We can now construct a second-order discretized operator throughout the domain by using the above two expressions at the boundary nodes. Our complete computation of the second-order accurate first-order derivative then looks like (for the sake of completeness, we repeat the whole code here):
 
 ```python
 nx = 80          # number of grid points (coarse grid)
@@ -590,7 +590,7 @@ ax.legend(loc='upper left')
 ## Summary
 
 
-In this notebook, we have learned how to approximate derivatives using finite differences. We demonstrated the principle, how the finite-difference formulas can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
+In this notebook, we have learned how to approximate derivatives using finite differences. We demonstrated the principle how the finite-difference formulas can be derived for the $n$-th order of accuracy, and showed how to treat boundary and central points in the numerical grid.
 
 Besides that, we've explained the tool of Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we advance our knowledge in finite-difference approximation by considering higher order derivatives.
 

@@ -611,7 +611,7 @@ NB: there is a way to freely use global variables within the scope of a function
 ### Beware passing by object reference in Python!
 
 
-There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied ?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a sequence. We recall here two examples:
+There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied ?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a list. We recall here two examples:
 
 ```python
 a = 1
@@ -620,7 +620,7 @@ b = 2
 print(a)
 ```
 
-In the second line of the above cell, we are referencing with `b` the same number as `a`. In the third line, we are changing the number to which `b` is referencing and this does not affect `a`. When we manipulate sequences, the situation is different. Let's consider this example:
+In the second line of the above cell, we are referencing with `b` the same number as `a`. In the third line, we are changing the number to which `b` is referencing and this does not affect `a`. When we manipulate lists, the situation is different. Let's consider this example:
 
 ```python
 a = [0, 1, 2, 4]
@@ -629,7 +629,7 @@ b[0] = 5
 print(a)
 ```
 
-In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are accessing the same location in memory as `a[0]` and this affects the content of the sequence.
+In the second line of the cell, we are referencing with `b` the same sequence as `a` and we are not copying this sequence to another location in memory. So when we write `b[0] = 5` we are affecting the same list as if we had written `a[0] = 5`.
 
 Now consider how this can cause possible unwanted behaviors when calling functions:
 

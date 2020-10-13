@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In this notebook we extend the concept of finite differences to higher order derivatives. We also discuss the use of Python `functions` and finally we describe how to construct matrices corresponding to the finite-difference operators. The latter is very useful when solving boundary value problems or eigenvalue problems.
+In this notebook we extend the concept of finite differences to higher order derivatives. We also discuss the use of Python `functions` and finally we describe how to construct matrices corresponding to the finite-difference operators. This is very useful when solving boundary value problems or eigenvalue problems.
 
 ## Higher order derivatives
 
@@ -435,7 +435,7 @@ Again, you should recognize the one-sided formulas we described in the previous 
 ## Functions
 
 
-Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Don't confuse functions as the concept in programming languages and mathematical functions. This section is devoted to the Python functions. Further in the course we will try to be explicit about what is meant but you can normally figure it out from the context. Before digging into more detail, let's consider an example. Say we want to create a (Python) function that computes the centered second-order derivative of some (mathematical) function. We may implement this function as follows (details about how to do this are given below):
+Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Don't confuse the concept of functions in programming languages and mathematical functions. This section is devoted to Python functions. Further in the course we will try to be explicit about what is meant but you can normally figure it out from the context. Before digging into more detail, let's consider an example. Say we want to create a (Python) function that computes the centered second-order derivative of some (mathematical) function. We may implement this function as follows (details about how to do this are given below):
 
 
 ```python
@@ -603,7 +603,7 @@ multiply_a_and_b(3, 6)
 print(f'Here prod is equal to {prod}.')
 ```
 
-Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
+Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside of the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
 
 NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
 

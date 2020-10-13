@@ -415,7 +415,7 @@ print(f'Value of b after re-assignment: {b}')
 print(f'Value of a after re-assignment: {a}')
 ```
 
-Things behave quite intuitively. For sequences or arrays, one needs to pay special attention. Consider another example:
+Things behave quite intuitively. For lists or arrays, one needs to pay special attention. Consider another example:
 
 ```python
 a = [0, 1, 2, 3]
@@ -426,15 +426,15 @@ print(f'Value of b after re-assignment: {b}')
 print(f'Value of a after re-assignment: {a}')
 ```
 
-Do you notice something intriguing? The content of the sequence `a` has been modified by the statement `b[0]=5`. Let's discuss why this is so.
+Do you notice something intriguing? The content of the list `a` has been modified by the statement `b[0]=5`. Let's discuss why this is so.
 
-The first line of code creates 4 integer objects and a sequence object. It gives the name `a` to this sequence. `a[0], a[1], a[2], a[3]` are just names for the integer objects storing the values $0, 1, 2, 3$.
+The first line of code creates 4 integer objects and a list object. It gives the name `a` to this list. `a[0], a[1], a[2], a[3]` are just shortcuts for the integer objects storing the values $0, 1, 2, 3$.
 
-In the second line of code, we give another name to the sequence; we tell the code that `a` and `b` are two different names pointing to the same sequence. `b[0], b[1], b[2], b[3]` are then names pointing to the same integer objects as `a[0], a[1], a[2], a[3]`. For that reason, the initial `print`statement outputs the content of the sequence `a`. 
+In the second line of code, we give another name to the list; we tell the code that `a` and `b` are two different names pointing to the same list. `b[0], b[1], b[2], b[3]` are then names pointing to the same integer objects as `a[0], a[1], a[2], a[3]`. For that reason, the initial `print`statement outputs the content of the list `a`. 
 
-The statement `b[0]=5` then creates another integer object storing the value $5$ and assigns it the name `b[0]`. The sequence `b` is obviously affected. But the system has been told that `a[0]` and `b[0]` are nicknames for the same object. So `a[0]` now also points to the integer object storing $5$ and this explains the output produced by the last print statement.
+The statement `b[0]=5` then creates another integer object storing the value $5$ and `b[0]` becomes a shortcut to this new object. The list `b` is obviously affected. But the system has been told that `a` and `b` are nicknames for the same list. Note that we have not re-assigned `b` to another list, we have only changed the content of the list; this is allowed as a list in Python is mutable (you can change its content). So `a[0]` now also points to the integer object storing $5$ and this explains the output produced by the last print statement.
 
-If you really want to change the content of the sequence `b` without affecting `a`, you need to create a separate copy of `a` and give that copy the name `b`. This can be done as follows:
+If you really want to change the content of the list `b` without affecting `a`, you need to create a separate copy of `a` and give that copy the name `b`. This can be done as follows:
 
 ```python
 a = [0, 1, 2, 3]
@@ -445,7 +445,9 @@ print(f'Value of b after re-assignment: {b}')
 print(f'Value of a after re-assignment: {a}')
 ```
 
-Now you see that `b` has been modified while `a` is unchanged. The whole discussion has been done using sequences but the same behavior is true for `numpy.arrays`.
+Now you see that `b` has been modified while `a` is unchanged. 
+
+The whole discussion has been done using lists but the same behavior is true for `numpy.arrays`.
 
 
 When it comes to slices, this translates to:

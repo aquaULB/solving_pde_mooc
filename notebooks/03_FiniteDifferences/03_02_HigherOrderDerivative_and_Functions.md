@@ -24,7 +24,7 @@ jupyter:
 1. [Introduction](#Introduction)
 2. [Higher order derivatives](#Higher-order-derivatives)
     1. [Second-order derivative](#Second-order-derivative)
-    2. [Higher order derivatives and one-side stencils](#Higher-order-derivatives-and-one-side-stencils)
+    2. [Higher order derivatives and one-sided stencils](#Higher-order-derivatives-and-one-sided-stencils)
 3. [Functions](#Functions)
     1. [Parameters](#Parameters)
     2. [Return statement](#Return-statement)
@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In this notebook we extend the concept of finite differences to higher order derivatives. We also discuss the use of `functions` and finally we describe how to construct matrices corresponding to the finite difference operators. The latter are very useful when solving boundary value problems or eigenvalue problems.
+In this notebook we extend the concept of finite differences to higher order derivatives. We also discuss the use of Python `functions` and finally we describe how to construct matrices corresponding to the finite-difference operators. The latter is very useful when solving boundary value problems or eigenvalue problems.
 
 ## Higher order derivatives
 
@@ -65,7 +65,7 @@ Using Taylor's theorem we can write:
 If we add these two equations, we can define a centered second-order accurate formula for $f''$ at grid point $x_i$:
 
 \begin{equation}
-f''_i=\frac{f_{i-1}-2f_i+f_{i+1}}{\Delta x^2}\label{eq:centeredDiff2}
+f''_i=\frac{f_{i-1}-2f_i+f_{i+1}}{\Delta x^2}\label{eq:centeredDiff2}.
 \end{equation}
 
 The stencil for this expression is the sequence $[-1,0,1]$ and we represent it as:
@@ -92,7 +92,7 @@ f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
 ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
 ```
 
-We now build a coarse grid with 80 points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
+We now build a coarse grid with $80$ points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
 
 ```python
 nx = 80 # number of grid points (coarse grid)
@@ -115,11 +115,11 @@ ax.set_xlabel('$x$')
 ax.set_ylabel('$f\'$')
 ```
 
-As the centered formula for $f''$ is not defined at the boundary nodes, these have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.
+As the centered formula for $f''$ is not defined at the boundary nodes, they have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.
 
-### Higher order derivatives and one-side stencils
+### Higher order derivatives and one-sided stencils
 
-It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][21] page that contains finite difference formulas for all the cases we use in this course, and many more.
+It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places, so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][21] page that contains finite difference formulas for all the cases we use in this course, and many more.
 
 To make this notebook self contained, we list here some of the formulas we will/might need later on.
 
@@ -226,18 +226,18 @@ We begin we some **centered finite difference** expressions:
 	</tbody>
 </table>
 
-You should recognize the centered difference stencils we have already discussed for the first- and second-order derivatives. Each lines contains the coefficients $c_j$ to be applied at the corresponding stencil point; to complete the finite difference formula, we also need to divide the finite difference with $\Delta x^k$ where $k$ is the order derivative. For example, the second-order accurate formula for the fourth-order derivative is:
+You should recognize the centered difference stencils we have already discussed for the first- and second-order derivatives. Each line contains the coefficients $c_j$ to be applied at the corresponding stencil point; to complete the finite difference formula, we also need to divide the finite difference by $\Delta x^k$ where $k$ is the order of derivative. For example, the second-order accurate formula for the fourth-order derivative is:
 
 \begin{equation}
-f''''_i = \frac{f_{i-2}-4f_{i-1}+6f_{i}-4f_{i+1}+f_{i+2}}{\Delta x^4}
+f''''_i = \frac{f_{i-2}-4f_{i-1}+6f_{i}-4f_{i+1}+f_{i+2}}{\Delta x^4}.
 \end{equation}
 
 Graphically we have:
 
 <img width="800px" src="../figures/centeredDiff4.png">
 
-We have seen that centered stencils are usually not applicable at boundary nodes. Thankfully, alternate finite difference formulas can be constructed for these nodes and the [Wikipedia][21]
-pages also lists a large collections of such **one-sided formulas**. Here we limit our attention to first- and second-order accurate expressions.
+We have seen that centered stencils are not applicable at boundary nodes. Thankfully, alternate finite difference formulas can be constructed for these nodes and the [Wikipedia][21]
+page also lists a large collections of such **one-sided formulas**. Here we limit our attention to first- and second-order accurate expressions.
 
 [21]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
 
@@ -435,7 +435,7 @@ Again, you should recognize the one-sided formulas we described in the previous 
 ## Functions
 
 
-Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Before digging into more detail, let's consider an example. Say we want to create a function that computes the centered second-order derivative of a function. We may implement this function as follows (details about how to do this are given below):
+Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Don't confuse functions as the concept in programming languages and mathematical functions. This section is devoted to the Python functions. Further in the course we will try to be explicit about what is meant but you can normally figure it out from the context. Before digging into more detail, let's consider an example. Say we want to create a (Python) function that computes the centered second-order derivative of some (mathematical) function. We may implement this function as follows (details about how to do this are given below):
 
 
 ```python
@@ -449,7 +449,7 @@ def compute_ddf_c(f):
     return ddf_c / dx**2
 ```
 
-To compute the second-order derivative of our previously defined (mathematical) function `f_c` we call the (Python) function like this:
+To compute the second-order derivative of our previously defined (mathematical) function `f_c`, we call the (Python) function like this:
 
 ```python
 ddf_c_from_func = compute_ddf_c(f_c)
@@ -487,13 +487,13 @@ The `print_name_and_data` function has four input parameters. It simply prints a
 print_name_and_data('Luke', 28, 1.75, 72)
 ```
 
-The function requires four *positional arguments* and they must be supplied exactly like in its definition. Calling the function like,
+The function requires four *positional arguments* and they must be supplied exactly like in its definition. The term "positional arguments" speaks for itself. Their position must be respected when you pass them to the function - the order must be the same as in the definition of a function. Calling the function like,
 
 ```python
 print_name_and_data('Luke', 28, 72, 1.75)
 ```
 
-results in an undesired ouput. If you want to specify the arguments in the 'wrong' order, you may pass them as keyword arguments:
+results in an undesired ouput. If you want to specify the arguments in the 'wrong' order, you may pass them as *keyword arguments:*
 
 ```python
 print_name_and_data(age=28, name='Luke', weight=72, height=1.75)
@@ -534,7 +534,7 @@ print_name_and_handedness('Luke', 'left-handed')
 ### Return statement
 
 
-The last statement of a function can be a `return` statement with which the programmer can send some information or data produced within the function back to the main program or calling routine. As an example, let's define a function that returns the body mass index of an individual:
+The last statement of a function can be a `return` statement, with which the programmer can send some information or data produced within the function back to the main program or calling routine. As an example, let's define a function that returns the body mass index of an individual:
 
 ```python
 def compute_bmi(name, height, weight):
@@ -573,7 +573,7 @@ print(f'The average is {avg1} and the difference is {diff1}.')
 ### Variable scope
 
 
-A very important concept when discussing functions is the so-called *scope* of a variable. There are generally speaking two types of variables: global variables or local variables. Global variables can be accessed anywhere in a program. Local variables can only be accessed within the function in which they are defined. But you may always return their values outside of the function by using a `return` statement.
+A very important concept when discussing functions is the so-called *scope* of a variable. There are generally speaking two types of variables: **global** variables or **local** variables. Global variables can be accessed anywhere in a program. Local variables can only be accessed within the function, in which they are defined. But you may always return their values outside of the function by using a `return` statement.
 
 Let first consider an example involving a global variable:
 
@@ -603,7 +603,7 @@ multiply_a_and_b(3, 6)
 print(f'Here prod is equal to {prod}.')
 ```
 
-Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside of the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
+Here we get two different outputs. Outside of the function, we have defined the global variable `prod` and assigned it the value $3$. But inside of the function, we re-use the name `prod` to store the product of `a` and `b`. By doing so, we are creating a new variable `prod` that is qualified as a *local variable*. This variable only exists inside the function and when it is addressed by name in the function, it has *priority* over the global variable. The global variable will therefore not be changed by any statement in the function. You must be very careful with the usage of global variables, it's very easy to be confused about what you are doing if you or another programmer later introduces a local variable with the same name in a function. Usually, it is recommended to avoid using global variables or to really keep their numbers to a strict minimum.
 
 NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
 
@@ -611,7 +611,7 @@ NB: there is a way to freely use global variables within the scope of a function
 ### Beware passing by object reference in Python!
 
 
-There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied ?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a list. We recall here two examples:
+There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a list. We recall here two examples:
 
 ```python
 a = 1
@@ -647,7 +647,7 @@ test_func(seq)
 print(f'Outside of the function, the sequence is {seq}.')
 ```
 
-Because we did not make a copy of the original sequence when writing `sequence = seq1` we are changing its content with `sequence[0] = 0`. Therefore, such statements can have an effect outside of the function and you must be really careful if this is intended or not. If you do not want to modify the sequence outside of the function you could write instead:
+Because we did not make a copy of the original sequence when writing `sequence = seq1` we are changing its content with `sequence[0] = 0`. Therefore, such statements can have an effect outside of the function and you must be really careful depending on whether it is intended or not. If you do not want to modify the sequence outside of the function, you could write instead:
 
 ```python
 def test_func(seq1):
@@ -679,7 +679,7 @@ test_func(seq.copy())
 print(f'Outside of the function, the sequence is {seq}.')
 ```
 
-We prefer this second option as the original sequence is never within reach of the inside of the function as we explicitly call it with a copy of the sequence.
+We prefer this second option, as the original sequence is never within reach of the inside of the function. We explicitly call it with a copy of the sequence.
 
 One more word of caution: here we illustrated the possible outcomes using sequences of numbers. When the sequences contain nested Python objects and you don't want to affect the sequence at all inside of the function, you must use `deepcopy()` instead of `copy()`. But this should not be a source of concern for the type of objects we manipulate in this course.
 
@@ -699,7 +699,7 @@ If we discretize this equation on a numerical grid, we need a discretized versio
     h_i=A_{ij}f_j\;\;\;\; \hbox{(repeated indices are summed)}
 \end{equation}
 
-Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-order accurate) first-order derivative; as we want to build the operator everywhere in the domain including at the boundary nodes, we use second-order one-sided finite differences at these locations:
+Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-order accurate) first-order derivative; as we want to build the operator everywhere in the domain including the boundary nodes, we use second-order one-sided finite differences at these locations:
 
 \begin{align}
 \begin{pmatrix}
@@ -744,9 +744,9 @@ Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-or
 
 By performing the matrix multiplication, we see that the matrix $A_{ij}$ produces exactly the desired mapping. We can now define a Python function to create this matrix. Its input parameters are the number of grid points and $\Delta x$. Remember that in the `numpy` terminology, a matrix is considered a 2D array (`ndarray`).
 
-We use here the Python package `scipy` that we briefly described in the *01_Introduction* notebook because it contains a convenient function, `diags` to create matrices that are essentially diagonal (you should look at its [documentation page][1] for its exact definition). A matrix is referred to as *sparse* when it contains mostly zeros, except at sparse locations; these are usually concentrated around the diagonal. The function `diags` belongs to the `sparse` submodule of `scipy` and you import it using the following command:
+We use here the Python package `scipy` that we briefly described in the *01_Introduction* notebook. It contains a useful function, `diags` to create matrices that are essentially diagonal (you should look at its [documentation page][31] for its exact definition). A matrix is referred to as *sparse* when it contains mostly zeros, except at sparse locations; these are usually concentrated around the diagonal. The function `diags` belongs to the `sparse` submodule of `scipy` and you import it using the following command:
 
-[1]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.diags.html> "documentation for scipy.sparse.diags"
+[31]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.diags.html> "documentation for scipy.sparse.diags"
 
 ```python
 from scipy.sparse import diags
@@ -797,7 +797,7 @@ d1mat = d1_mat(nx, dx)
 print(d1mat)
 ```
 
-Looks good !
+Looks good!
 
 Using exactly the same ideas, the explicit representation of a discrete version of the second-order derivative can be constructed. Here is a Python function that returns the matrix corresponding to the centered second-order accurate finite difference formula:
 

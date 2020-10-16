@@ -100,12 +100,11 @@ u[0] = u0.copy()
 
 ```python
 for n in range(nt):
-    t=t+dt
     u[n+1] = euler_step(u[n], rhs, dt, dx, c)
 ```
 
 ```python
-fig, ax = plt.subplots(figsize=(10, 7))
+fig, ax = plt.subplots(figsize=(10, 5))
 
 ax.plot(x, u[0], label='Initial condition')
 ax.plot(x, u[int(0.12 / dt)], lw=1.5, color='green', label='t=0.12')
@@ -114,7 +113,30 @@ ax.plot(x, u[int(0.38 / dt)], lw=1.5, color='brown', label='t=0.38')
 
 ax.set_xlabel('$x$')
 ax.set_ylabel('$u$')
-ax.set_title('Initial condition for the first order wave equation')
+ax.set_title('Advection with forward Euler scheme')
+ax.legend()
+```
+
+```python
+from steppers import rk4_step
+```
+
+```python
+for n in range(nt):
+    u[n+1] = rk4_step(u[n], rhs, dt, dx, c)
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(x, u[0], label='Initial condition')
+ax.plot(x, u[int(0.12 / dt)], lw=1.5, color='green', label='t=0.12')
+ax.plot(x, u[int(0.25 / dt)], lw=1.5, color='indigo', label='t=0.25')
+ax.plot(x, u[int(0.38 / dt)], lw=1.5, color='brown', label='t=0.38')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$u$')
+ax.set_title('Advection with fourth-order Runge-Kutta scheme')
 ax.legend()
 ```
 

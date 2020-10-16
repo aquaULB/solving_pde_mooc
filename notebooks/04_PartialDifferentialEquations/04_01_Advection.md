@@ -15,7 +15,7 @@ jupyter:
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#First-order-derivative" data-toc-modified-id="First-order-derivative-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>First-order derivative</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 <!-- #endregion -->
 
 <h1 style="text-align: center">Partial differential Equation I</h1>
@@ -56,11 +56,73 @@ But before we start digging into the theory, we begin this chapter by introducin
 
 ## Advection equation
 
-...
+```python
+import sys
+sys.path.insert(0, '../modules')
+```
 
+```python
+from steppers import euler_step
+```
+
+```python
+def rhs(u, dx, c):
+    
+    nx = u.shape[0]
+    f = np.empty(nx)
+    f[1:-1] = -c*(u[2:]-u[:-2]) / (2*dx)
+    f[0] = 0
+    f[-1] = 0
+    
+    return f
+```
+
+```python
+t_final = 0.4
+dt = 0.01
+nt = int(t_final / dt)
+c = 1.
+nx = 101
+lx = 1.
+dx = lx / (nx-1)
+x = np.linspace(0., 1., nx)
+```
+
+```python
+# create the initial condition and plot it
+u0 = np.exp(-200 * (x-0.25)**2)
+```
+
+```python
+u = np.empty((nt+1, nx))
+u[0] = u0.copy()
+```
+
+```python
+for n in range(nt):
+    t=t+dt
+    u[n+1] = euler_step(u[n], rhs, dt, dx, c)
+```
+
+```python
+fig, ax = plt.subplots(figsize=(10, 7))
+
+ax.plot(x, u[0], label='Initial condition')
+ax.plot(x, u[int(0.12 / dt)], lw=1.5, color='green', label='t=0.12')
+ax.plot(x, u[int(0.25 / dt)], lw=1.5, color='indigo', label='t=0.25')
+ax.plot(x, u[int(0.38 / dt)], lw=1.5, color='brown', label='t=0.38')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$u$')
+ax.set_title('Initial condition for the first order wave equation')
+ax.legend()
+```
+
+<!-- #region cell_style="center" -->
 ## Summary
 
 ...
+<!-- #endregion -->
 
 ```python
 from IPython.core.display import HTML

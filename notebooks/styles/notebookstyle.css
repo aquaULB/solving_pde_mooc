@@ -168,6 +168,10 @@ code {
     font-size: 90%;
 }
 
+.cm-s-ipython.language-python {
+    font-size: 90%;
+}
+
 .alert-box {
     padding:10px 10px 10px 36px;
     margin:5px;

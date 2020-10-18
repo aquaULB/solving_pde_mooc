@@ -17,7 +17,7 @@ jupyter:
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Finite Differences II</h1>
+<h1 style="text-align: center">Finite Differences II<span class="tocSkip"></span></h1>
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
@@ -844,4 +844,8 @@ In this notebook we have explained how to obtain a second-order accurate finite 
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
+```
+
+```python
+
 ```

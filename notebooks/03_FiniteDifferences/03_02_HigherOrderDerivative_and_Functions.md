@@ -19,20 +19,10 @@ jupyter:
 </div>
 <h1 style="text-align: center">Finite Differences II</h1>
 
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-2. [Higher order derivatives](#Higher-order-derivatives)
-    1. [Second-order derivative](#Second-order-derivative)
-    2. [Higher order derivatives and one-sided stencils](#Higher-order-derivatives-and-one-sided-stencils)
-3. [Functions](#Functions)
-    1. [Parameters](#Parameters)
-    2. [Return statement](#Return-statement)
-    3. [Variable scope](#Variable-scope)
-    4. [Beware passing by object reference in Python!](#Beware-passing-by-object-reference-in-Python!)
-4. [Matrix formulation](#Matrix-formulation)
-5. [Summary](#Summary)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-order-derivatives" data-toc-modified-id="Higher-order-derivatives-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher order derivatives</a></span><ul class="toc-item"><li><span><a href="#Second-order-derivative" data-toc-modified-id="Second-order-derivative-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Second-order derivative</a></span></li><li><span><a href="#Higher-order-derivatives-and-one-sided-stencils" data-toc-modified-id="Higher-order-derivatives-and-one-sided-stencils-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Higher order derivatives and one-sided stencils</a></span></li></ul></li><li><span><a href="#Functions" data-toc-modified-id="Functions-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Functions</a></span><ul class="toc-item"><li><span><a href="#Parameters" data-toc-modified-id="Parameters-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Parameters</a></span></li><li><span><a href="#Return-statement" data-toc-modified-id="Return-statement-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Return statement</a></span></li><li><span><a href="#Variable-scope" data-toc-modified-id="Variable-scope-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Variable scope</a></span></li><li><span><a href="#Beware-passing-by-object-reference-in-Python!" data-toc-modified-id="Beware-passing-by-object-reference-in-Python!-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Beware passing by object reference in Python!</a></span></li></ul></li><li><span><a href="#Matrix-formulation" data-toc-modified-id="Matrix-formulation-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Matrix formulation</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

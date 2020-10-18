@@ -19,20 +19,10 @@ jupyter:
 </div>
 <h1 style="text-align: center">Finite Differences III</h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-2. [Heated rod](#Heated-rod)
-
-    2.1 [Homogeneous Dirichlet boundary conditions](#Homogeneous-Dirichlet-boundary-conditions)
-
-    2.2 [Non-homogeneous Dirichlet boundary conditions](#Non-homogeneous-Dirichlet-boundary-conditions)
-
-    2.3 [Neumann boundary conditions](#Neumann-boundary-conditions)
-
-3. [Summary](#Summary)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Heated-rod" data-toc-modified-id="Heated-rod-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Heated rod</a></span><ul class="toc-item"><li><span><a href="#Homogeneous-Dirichlet-boundary-conditions" data-toc-modified-id="Homogeneous-Dirichlet-boundary-conditions-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Homogeneous Dirichlet boundary conditions</a></span></li><li><span><a href="#Non-homogeneous-Dirichlet-boundary-conditions" data-toc-modified-id="Non-homogeneous-Dirichlet-boundary-conditions-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Non-homogeneous Dirichlet boundary conditions</a></span></li><li><span><a href="#Neumann-boundary-conditions" data-toc-modified-id="Neumann-boundary-conditions-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Neumann boundary conditions</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

@@ -3,56 +3,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 
-/**----------------------------------------
-                   COUNTERS
------------------------------------------*/
-/*         counter for the headers       */
-body {
-    counter-reset: h2counter h3counter h4counter;
-}
-h1 {
-    counter-reset: h2counter h3counter h4counter;
-}
-h2 {
-    counter-reset: h3counter;
-}
-h2:before {
-    content: counter(h2counter) "\0000a0\0000a0";
-    counter-increment: h2counter;
-}
-h2.nocount:before {
-    content: none;
-    counter-increment: none;
-}
-h3 {
-    counter-reset: h4counter;
-}
-h3:before {
-    content: counter(h2counter) "." counter(h3counter) "\0000a0\0000a0";
-    counter-increment: h3counter;
-}
-h4:before {
-    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) "\0000a0\0000a0";
-    counter-increment: h4counter;
-}
-
-/* counter for the nested numbered lists */
-ol {
-    counter-reset: item;
-}
-
-ol > li {
-    counter-increment: item;
-}
-
-ol ol > li {
-    display: block;
-}
-
-ol ol > li:before {
-    content: counters(item, ".") ". ";
-}
-
 @font-face {
     font-family: "Computer Modern";
     src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
@@ -112,6 +62,10 @@ formatting for header cells
     margin-bottom: 1.0em;
     margin-top: 1.0em;
     display: block;
+}
+
+#Table-of-Contents {
+    font-size: 24pt;
 }
 
 .text_cell_render h2 {

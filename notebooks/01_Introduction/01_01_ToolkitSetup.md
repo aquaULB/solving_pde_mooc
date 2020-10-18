@@ -19,23 +19,10 @@ jupyter:
 </div>
 <h1 style="text-align: center">Toolkit Setup</h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Python and why Python](#Python-and-why-Python)
-2. [Get to know Anaconda](#Get-to-know-Anaconda)
-    1. [Installing Anaconda](#Installing-Anaconda)    
-    2. [Creating a conda environment](#Creating-a-conda-environment)
-3. [Get to know Git](#Get-to-know-Git)
-    1. [Installing Git](#Installing-Git)   
-    2. [Basic usage](#Basic-usage)   
-        1. [Git repositories](#Git-repositories)
-            * [Creating local Git repository](#Creating-local-Git-repository)
-            * [Creating remote Git repository](#Creating-remote-Git-repository)
-        2. [Git branches](#Git-branches)
-4. [Summary](#Summary)
-5. [Troubleshooting](#Troubleshooting)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Python-and-why-Python" data-toc-modified-id="Python-and-why-Python-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Python and why Python</a></span></li><li><span><a href="#Get-to-know-Anaconda" data-toc-modified-id="Get-to-know-Anaconda-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Get to know Anaconda</a></span><ul class="toc-item"><li><span><a href="#Installing-Anaconda" data-toc-modified-id="Installing-Anaconda-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Installing Anaconda</a></span></li><li><span><a href="#Creating-a-conda-environment" data-toc-modified-id="Creating-a-conda-environment-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Creating a conda environment</a></span></li></ul></li><li><span><a href="#Get-to-know-Git" data-toc-modified-id="Get-to-know-Git-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Get to know Git</a></span><ul class="toc-item"><li><span><a href="#Installing-Git" data-toc-modified-id="Installing-Git-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Installing Git</a></span></li><li><span><a href="#Basic-usage" data-toc-modified-id="Basic-usage-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Basic usage</a></span><ul class="toc-item"><li><span><a href="#Git-repositories" data-toc-modified-id="Git-repositories-3.2.1"><span class="toc-item-num">3.2.1&nbsp;&nbsp;</span>Git repositories</a></span><ul class="toc-item"><li><span><a href="#Creating-a-local-Git-repository" data-toc-modified-id="Creating-a-local-Git-repository-3.2.1.1"><span class="toc-item-num">3.2.1.1&nbsp;&nbsp;</span>Creating a local Git repository</a></span></li><li><span><a href="#Creating-remote-Git-repository" data-toc-modified-id="Creating-remote-Git-repository-3.2.1.2"><span class="toc-item-num">3.2.1.2&nbsp;&nbsp;</span>Creating remote Git repository</a></span></li></ul></li><li><span><a href="#Git-branches" data-toc-modified-id="Git-branches-3.2.2"><span class="toc-item-num">3.2.2&nbsp;&nbsp;</span>Git branches</a></span></li></ul></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Troubleshooting" data-toc-modified-id="Troubleshooting-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Troubleshooting</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Python and why Python
 
@@ -449,4 +436,8 @@ Now `jupyter notebook` command should work.
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
+```
+
+```python
+
 ```

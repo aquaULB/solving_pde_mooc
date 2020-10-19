@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,6 +12,18 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;

@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,25 +12,30 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Finite Differences I</h1>
+<h1 style="text-align: center">Finite Differences I<span class="tocSkip"></span></h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-2. [First-order derivative](#First-order-derivative)
-3. [Python slicing](#Python-slicing)
-    1. [Motivation and syntax](#Motivation-and-syntax)
-    2. [Referenced or copied?](#Referenced-or-copied?)
-4. [One-sided finite differences](#One-sided-finite-differences)
-5. [Summary](#Summary)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#First-order-derivative" data-toc-modified-id="First-order-derivative-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>First-order derivative</a></span></li><li><span><a href="#Python-slicing" data-toc-modified-id="Python-slicing-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python slicing</a></span><ul class="toc-item"><li><span><a href="#Motivation-and-syntax" data-toc-modified-id="Motivation-and-syntax-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Motivation and syntax</a></span></li><li><span><a href="#Referenced-or-copied?" data-toc-modified-id="Referenced-or-copied?-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Referenced or copied?</a></span></li></ul></li><li><span><a href="#One-sided-finite-differences" data-toc-modified-id="One-sided-finite-differences-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>One-sided finite differences</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

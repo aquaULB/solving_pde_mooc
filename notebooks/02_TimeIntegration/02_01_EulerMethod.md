@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,32 +12,30 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Time integration I</h1>
+<h1 style="text-align: center">Time integration I<span class="tocSkip"></span></h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-2. [The forward Euler method](#The-forward-Euler-method)
-
-    2.1 [Numerical accuracy of the forward Euler method](#Numerical-accuracy-of-the-forward-Euler-method)
-
-    2.2 [Numerical stability of the forward Euler method](#Numerical-stability-of-the-forward-Euler-method)
-
-    2.3 [Higher-order example](#Higher-order-example)
-
-    2.4 [Numerical stability of the forward Euler method revisited](#Numerical-stability-of-the-forward-Euler-method-revisited)
-
-3. [The backward Euler method](#The-backward-Euler-method)
-4. [Summary](#Summary)
-5. [Exercises](#Exercises)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#The-forward-Euler-method" data-toc-modified-id="The-forward-Euler-method-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>The forward Euler method</a></span><ul class="toc-item"><li><span><a href="#Numerical-accuracy-of-the-forward-Euler-method" data-toc-modified-id="Numerical-accuracy-of-the-forward-Euler-method-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical accuracy of the forward Euler method</a></span></li><li><span><a href="#Numerical-stability-of-the-forward-Euler-method" data-toc-modified-id="Numerical-stability-of-the-forward-Euler-method-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Numerical stability of the forward Euler method</a></span></li><li><span><a href="#Higher-order-example" data-toc-modified-id="Higher-order-example-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Higher-order example</a></span></li><li><span><a href="#Numerical-stability-of-the-forward-Euler-method-revisited" data-toc-modified-id="Numerical-stability-of-the-forward-Euler-method-revisited-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Numerical stability of the forward Euler method revisited</a></span></li></ul></li><li><span><a href="#The-backward-Euler-method" data-toc-modified-id="The-backward-Euler-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>The backward Euler method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

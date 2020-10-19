@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,22 +12,31 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Numerical methods for partial differential equations</h1>
-<h1 style="text-align: center; font-size:18pt;  ">by Bernard Knaepen & Yelyzaveta Velizhanina</h1>
+<h1 style="text-align: center">Numerical methods for partial differential equations<span class="tocSkip"></span></h1>
+<h1 style="text-align: center; font-size:18pt;  ">by Bernard Knaepen & Yelyzaveta Velizhanina<span class="tocSkip"></span></h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Philosophy of the course](#Philosophy-of-the-course)
-2. [Outline](#Outline)
-3. [Tools](#Tools)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Philosophy-of-the-course" data-toc-modified-id="Philosophy-of-the-course-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Philosophy of the course</a></span></li><li><span><a href="#Outline" data-toc-modified-id="Outline-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Outline</a></span></li><li><span><a href="#Tools" data-toc-modified-id="Tools-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Tools</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Philosophy of the course
 

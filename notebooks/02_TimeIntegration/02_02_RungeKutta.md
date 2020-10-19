@@ -69,7 +69,7 @@ The forward Euler method is defined through:
     & y^{n+1} \equiv y^n + f(t^n,y^n) dt & (\textrm{Forward Euler method}) \label{eq:ForwardEuler3},
 \end{align}
 
-with all the intermediate times denoted $t^n = t+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
+with all the intermediate times denoted $t^n = t_0+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
 
 Graphically, we see that $y^{n+1}$ is evaluated using the value $y^n$ and the slope (derivative) of $y$ at time $t^n$:
 
@@ -183,7 +183,7 @@ v0 = 0.   # ms^-1, initial speed
 
 ti = 0.   # s, initial time
 tf = 4.0  # s, final time at which to seek the solution
-dt = 0.1  # s, timestep
+dt = 0.1  # s, time step
 ```
 
 ```python
@@ -469,7 +469,7 @@ v0 = 0.   # ms^-1, initial speed
 
 ti = 0.   # s, initial time
 tf = 10.0 # s, final time at which to seek the solution
-dt = 0.5  # s, timestep
+dt = 0.5  # s, time step
 ```
 
 ```python
@@ -509,7 +509,7 @@ for i in range(nt):
     y_star = y_exp[i] + 0.5*dt*(np.dot(L, y_exp[i])+b)
     y_exp[i+1] = y_exp[i] + dt*(np.dot(L, y_star)+b)
 
-    # Implicit scheme timestepping.
+    # Implicit scheme time stepping.
     k_1 = np.dot(mat_k, np.dot(L, y_imp[i])+b)
     k_2 = np.dot(mat_k, np.dot(L, y_imp[i]+k_1*dt/2.)+b)
     y_imp[i+1] = y_imp[i] + 0.5*dt*(k_1+k_2)

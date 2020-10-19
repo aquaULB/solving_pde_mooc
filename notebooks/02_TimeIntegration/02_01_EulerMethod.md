@@ -85,7 +85,7 @@ From this equation, we note that the forward Euler method is of second order for
 
 Schematically, we therefore start the time marching procedure at the initial time $t_0$ and make a number of steps (called time steps) of size $dt$ until we reach the final desired time $t_f$. In order to do this, we need $n_t = (t_f - t_i)/dt$ steps.
 
-By convention, we denote the different intermediate times as $t^n = t+ndt$ and the corresponding values of $N$ as $N^n = N(t+ndt)$ so that $N^n = N(t^n)$.
+By convention, we denote the different intermediate times as $t^n = t_0+ndt$ and the corresponding values of $N$ as $N^n = N(t_0+ndt)$ so that $N^n = N(t^n)$.
 
 The forward Euler scheme is then alternatively written as:
 

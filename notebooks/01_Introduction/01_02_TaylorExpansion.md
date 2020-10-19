@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,27 +12,30 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Approximations and Taylor expansion</h1>
+<h1 style="text-align: center">Approximations and Taylor expansion<span class="tocSkip"></span></h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-
-2. [Taylor's theorem](#Taylor's-theorem)
-
-    2.1 [Expansion of exponential function](#Expansion-of-exponential-function)
-
-3. [Summary](#Summary)
-4. [Exercises](#Exercises)
-5. [References](#References)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Taylor's-theorem" data-toc-modified-id="Taylor's-theorem-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Taylor's theorem</a></span><ul class="toc-item"><li><span><a href="#Expansion-of-exponential-function" data-toc-modified-id="Expansion-of-exponential-function-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Expansion of exponential function</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

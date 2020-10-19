@@ -3,30 +3,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 
-/**----------------------------------------
-                   COUNTERS
------------------------------------------*/
-/*         counter for the headers       */
-body {
-    counter-reset: h2counter h3counter h4counter;
-}
-/* counter for the nested numbered lists */
-ol {
-    counter-reset: item;
-}
-
-ol > li {
-    counter-increment: item;
-}
-
-ol ol > li {
-    display: block;
-}
-
-ol ol > li:before {
-    content: counters(item, ".") ". ";
-}
-
 @font-face {
     font-family: "Computer Modern";
     src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
@@ -88,6 +64,10 @@ formatting for header cells
     display: block;
 }
 
+#Table-of-Contents {
+    font-size: 24pt;
+}
+
 .text_cell_render h2 {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
@@ -105,8 +85,8 @@ formatting for header cells
     font-size: 20pt;
     line-height: 100%;
     margin-bottom: 0.4em;
-    margin-top: 0.5em;
-    color: rgb(70, 14, 122);
+    margin-top: 0.7em;
+    color: rgb(0,51,102);
 }
 
 .text_cell_render h4 {
@@ -115,8 +95,8 @@ formatting for header cells
     font-size: 18pt;
     line-height: 100%;
     margin-bottom: 0.4em;
-    margin-top: 0.5em;
-    color: rgb(151, 35, 180);
+    margin-top: 0.7em;
+    color: rgb(0,51,102);
 }
 
 .text_cell_render h5 {
@@ -125,8 +105,8 @@ formatting for header cells
     font-size: 16pt;
     line-height: 100%;
     margin-bottom: 0.4em;
-    margin-top: 0.5em;
-    color: rgb(163, 29, 85);
+    margin-top: 0.7em;
+    color: rgb(0,51,102);
     font-style: normal;
 }
 

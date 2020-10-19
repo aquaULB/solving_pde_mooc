@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,28 +12,30 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Time integration II</h1>
+<h1 style="text-align: center">Time integration II<span class="tocSkip"></span></h1>
 
-
-<h2 class="nocount">Contents</h2>
-
-1. [Introduction](#Introduction)
-2. [A two stage Runge-Kutta scheme](#A-two-stage-Runge-Kutta-scheme)
-
-    2.1 [Numerical stability of a two-stage Runge-Kutta scheme](#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme)
-
-3. [General Runge-Kutta schemes](#General-Runge-Kutta-schemes)
-4. [Implicit Runge-Kutta schemes](#Implicit-Runge-Kutta-schemes)
-5. [Summary](#Summary)
-6. [Exercises](#Exercises)
-7. [References](#References)
-
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#A-two-stage-Runge-Kutta-scheme" data-toc-modified-id="A-two-stage-Runge-Kutta-scheme-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>A two-stage Runge-Kutta scheme</a></span><ul class="toc-item"><li><span><a href="#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme" data-toc-modified-id="Numerical-stability-of-a-two-stage-Runge-Kutta-scheme-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical stability of a two-stage Runge-Kutta scheme</a></span></li></ul></li><li><span><a href="#General-Runge-Kutta-schemes" data-toc-modified-id="General-Runge-Kutta-schemes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>General Runge-Kutta schemes</a></span></li><li><span><a href="#Implicit-Runge-Kutta-schemes" data-toc-modified-id="Implicit-Runge-Kutta-schemes-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Implicit Runge-Kutta schemes</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li><li><span><a href="#References" data-toc-modified-id="References-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<!-- #endregion -->
 
 ## Introduction
 

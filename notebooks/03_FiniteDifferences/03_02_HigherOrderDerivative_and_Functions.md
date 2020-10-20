@@ -721,14 +721,14 @@ Let's first lay out the matrix $A_{ij}$ corresponding to the centered (second-or
 \frac{1}{\Delta x}
 \begin{pmatrix}
 -3/2 & 2 & -1/2 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
--1 & 0 & 1 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
-0 & -1 & 0 & 1 & 0 & \dots & 0 & 0 & 0 & 0 \\
-0 & 0 & -1 & 0 & 1 & \dots & 0 & 0 & 0 & 0 \\
+-1/2 & 0 & 1/2 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
+0 & -1/2 & 0 & 1/2 & 0 & \dots & 0 & 0 & 0 & 0 \\
+0 & 0 & -1/2 & 0 & 1/2 & \dots & 0 & 0 & 0 & 0 \\
 0 & \dots & \dots & \dots & \dots & \dots & \dots & \dots & \dots & 0 \\
 0 & \dots & \dots & \dots & \dots & \dots & \dots & \dots & \dots & 0 \\
-0 & 0 & 0 & 0  & \dots & -1 & 0 & 1 & 0 & 0 \\
-0 & 0 & 0 & 0 & \dots & 0 & -1 & 0 & 1 & 0 \\
-0 & 0 & 0 & 0 & \dots & 0 & 0 & -1 & 0 & 1 \\
+0 & 0 & 0 & 0  & \dots & -1/2 & 0 & 1/2 & 0 & 0 \\
+0 & 0 & 0 & 0 & \dots & 0 & -1/2 & 0 & 1/2 & 0 \\
+0 & 0 & 0 & 0 & \dots & 0 & 0 & -1/2 & 0 & 1/2 \\
 0 & 0 & 0 & 0 & \dots & 0 & 0 & 1/2 & -2 & 3/2
 \end{pmatrix}
 \begin{pmatrix}
@@ -772,7 +772,7 @@ def d1_mat(nx, dx):
     d1mat : numpy.ndarray
         matrix to compute the centered second-order accurate first-order derivative
     """
-    diagonals = [[-1], [0], [1]] # main diagonal elements
+    diagonals = [[-1./2.], [0], [1./2.]] # main diagonal elements
     offsets = [-1, 0, 1] # positions of the diagonal entries relative to the main diagonal
 
     # Call to the diags routine; note that diags returns a *representation* of the array;

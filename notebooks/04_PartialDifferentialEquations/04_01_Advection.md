@@ -2,6 +2,7 @@
 jupyter:
   jupytext:
     formats: ipynb,md
+    notebook_metadata_filter: toc
     text_representation:
       extension: .md
       format_name: markdown
@@ -11,6 +12,18 @@ jupyter:
     display_name: Python 3
     language: python
     name: python3
+  toc:
+    base_numbering: 1
+    nav_menu: {}
+    number_sections: true
+    sideBar: true
+    skip_h1_title: true
+    title_cell: Table of Contents
+    title_sidebar: Contents
+    toc_cell: true
+    toc_position: {}
+    toc_section_display: true
+    toc_window_display: false
 ---
 
 <h1 style="text-align: center">Partial differential Equation I</h1>
@@ -47,7 +60,35 @@ $$
    \partial_t T(x,t) = \alpha \frac{d^2 T} {dx^2}(x,t) + \sigma (x,t).
 $$
 
-But before we start digging into the theory, we introduce below the concept of Python modules.
+To solve these equations we will transform them into systems of coupled ordinary differential equations using a semi-discretization technique. In that framework, our model equations are approximated as,
+
+\begin{equation}
+    \frac{du_i}{dt}=f_i (u_0, u_1, \ldots, u_{n-1}), \; \; i=0,\ldots, nx-1 \label{eq:semiDiscrete}
+\end{equation}
+
+To achieve this, we need to choose a time integration scheme for the left-hand side *and* a spatial discretization scheme for the right-hand side. The combination of these two choices determines the success or failure of the whole numerical method. 
+
+As usual, we need to introduce a grid and grid points at which we evaluate our physical quantities. We consider again a uniform grid consisting of $nx$ grid points with coordinates,
+
+\begin{equation}
+ x_i = i \Delta x, \; \; 0\leq i \leq nx-1
+\end{equation}
+
+where $\Delta x$ is the grid spacing.
+
+For the time integration scheme we use a constant time step $dt$ so that all the intermediate times at which we compute our variables are,
+
+\begin{equation}
+ t^n = t_0 + n dt, \; \; 0\leq n \leq nt.
+\end{equation}
+
+The discrete quantities we want to evaluate are therefore,
+
+\begin{align}
+u^n_i = u(x_i, t^n).
+\end{align}
+
+But before we start digging into the theory and show some examples, we introduce below the concept of Python modules.
 
 <!-- #region -->
 ## Python modules
@@ -198,29 +239,6 @@ $$
 
 where $u_0(x) = u(x,0)$ is the initial condition. At time $t$, the mathematical solution to the problem is therefore the initial condition shifted by an mount $ct$. To obtain this solution we don't need a computer, so why bother trying to solve it numerically? It turns out that it constitutes a rich and interesting laboratory for developing general methods and analyze their shortcomings.
 
-
-To solve the equation numerically, we need to choose a time integration scheme *and* a spatial discretization scheme for the derivative. The combination of these two choices determines the success or failure of the whole numerical method. As usual, we need to introduce a grid and grid points at which we evaluate our physical quantities. We consider again a uniform grid consisting of $nx+1$ grid points with coordinates,
-
-\begin{equation}
- x_i = i \Delta x, \; \; 0\leq i \leq nx
-\end{equation}
-
-where $\Delta x$ is the grid spacing.
-
-For the time integration scheme we use a constant time step $dt$ so that all the intermediate times at which we compute our variables are,
-
-\begin{equation}
- t^n = t_0 + n dt, \; \; 0\leq n \leq nt.
-\end{equation}
-
-The discrete quantities we want to evaluate are therefore,
-
-\begin{align}
-u^n_i = u(x_i, t^n).
-\end{align}
-
-
-
 <!-- #region -->
 ### Forward Euler, forward finite difference
 
@@ -228,14 +246,15 @@ For our first attempt at solving equation \eqref{eq:advection}, we choose the fo
 
 
 The discretization then proceeds as follows:
-<!-- #endregion -->
 
 \begin{align}
-\frac{\partial u}{\partial t}(x_i, t^n) &\approx \frac{u^{n+1}_i - u^n_i}{dt}, \; \; \; \frac{\partial u}{\partial x}(x_i, t^n) \approx \frac{u^n_{i+1} - u^n_i}{\Delta x} \\
+\frac{d u^n_i}{dt} &\approx \frac{u^{n+1}_i - u^n_i}{dt}, \; \; \; \frac{\partial u}{\partial x}(x_i, t^n) \approx \frac{u^n_{i+1} - u^n_i}{\Delta x} \\
 & \Rightarrow \;
 u^{n+1}_i = u^n_i -cdt \frac{u^n_{i+1} - u^n_i}{\Delta x}
 \end{align}
 
+Note that this discretization is explicit as $u^{n+1}_i$ is directly expressed in terms of quantities known at the previous time step.
+<!-- #endregion -->
 
 For the sake of the example, we solve this equation in the interval $x\in [0, 1]$ with the following initial condition:
 
@@ -269,7 +288,9 @@ where $f$ is any function supplied as an argument. If $f$ contains specific para
 f_i = -c \frac{u^n_{i+1} - u^n_i}{\Delta x}
 \end{align}
 
-We still need to choose our boundary conditions. Here the initial condition is nearly equal to zero at the boundaries. As we wont let the wave reach the right boundary (we choose a positive value for $c$), we can safely maintain the conditions $u(x_0,t)=u(x_n,t)=0$ for all times. This can be achieved by setting $f[0]=f[-1]=0$.
+We still need to choose our boundary conditions. Here the initial condition is nearly equal to zero at the boundaries. As we wont let the wave reach the right boundary (we choose a positive value for $c$), we can safely maintain the conditions $u(x_0,t)=u(x_n,t)=0$ for all times. This can be achieved by setting $f[0]=f[-1]=0$ or by limiting our unkowns to `u[1:-1]`. Here we choose the former option. 
+
+We thus impose Dirichlet boundary conditions, even at the right boundary node where a boundary condition is in principle not required in the original partial differential equation. This is a feature we need to introduce in our numerical solution because we cannot afford a semi-infinite domain.
 
 The desired function $f$ can then be numerically implemented as follows:
 
@@ -424,7 +445,7 @@ ax.legend()
 
 This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. This will also be explained in the next notebook. You should however rerun this version of the discretization with a lager time step, for example $dt=0.05$. What happens in that case?
 
-Before digging more on the stability and accuracy of the numerical schemes used so far, we introduce two other topics: one theoretical - periodic boundary condition - and one computational - how to create animations to visualize our simulation results - .
+Before digging more on the stability and accuracy of the numerical schemes used so far, we introduce two other topics: one theoretical (on periodic boundary condition) and one computational (on how to create animations to visualize our simulation results).
 
 ```python
 import matplotlib.animation as animation

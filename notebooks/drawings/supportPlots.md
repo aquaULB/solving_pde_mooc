@@ -136,6 +136,65 @@ ax.set_ylim(-2., 2.)
 fig.savefig('../figures/RK2.png', dpi=300)
 ```
 
+## Stability map for forward Euler - centered FD
+
+```python
+# Let's configure the size of the figure
+# (in inches) to make it a square and bigger.
+fig, ax = plt.subplots(figsize=(8, 8))
+
+circle = plt.Circle((-1, 0), 1, ec='k', fc='green', alpha=0.5, hatch='/')
+
+ax.add_artist(circle)
+
+ax.set_aspect(1)
+
+ax.spines['left'].set_position('center')
+ax.spines['bottom'].set_position('center')
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+xmin, xmax = -2.3, 2.3
+ymin, ymax = -2.2, 2.2
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(ymax-ymin), head_length=1./20.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.set_xlabel(r'$\lambda_r\, \frac{cdt}{2dx}$', horizontalalignment='right')
+ax.set_ylabel(r'$\lambda_i\, \frac{cdt}{2dx}$', rotation=0)
+
+ax.yaxis.set_label_coords(0.6, 0.95)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_title('Stability domain - Forward Euler - Centered FD', y=1.05)
+
+
+ax.set_xticks((-2, 1))
+ax.set_yticks((-2, -1, 1))
+
+
+ax.tick_params(width=2, pad=10)
+
+
+# Now add the eigenvalues for forward Euler - Centered FD
+m = 10
+k = np.arange(1,m+1)
+x = np.zeros(m)
+y = 2*np.cos(np.pi*k/(m+1))
+
+ax.plot(x,y,'o', color='blue')
+fig.savefig('../figures/PDEStabilityMap.png', dpi=300)
+```
+
 ```python
 
 ```

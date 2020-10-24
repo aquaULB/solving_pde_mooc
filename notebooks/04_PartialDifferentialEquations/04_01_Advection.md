@@ -1,43 +1,44 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <h1 style="text-align: center">Partial differential Equation I</h1>
 
-<!-- #region toc=true -->
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-difference" data-toc-modified-id="Forward-Euler,-forward-finite-difference-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite difference</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
 For convenience, we start with importing some modules needed below:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -90,7 +91,8 @@ u^n_i = u(x_i, t^n).
 
 But before we start digging into the theory and show some examples, we introduce below the concept of Python modules.
 
-<!-- #region -->
++++
+
 ## Python modules
 
 Up to now, we have always written all the necessary Python code parts for our examples and test cases inside each notebooks. This has the advantage of making all the necessary statements and steps visible to the reader. But in the long run, this approach also has its limitations. For example, if we need a function to compute the first order derivative, we need to define it in each notebook and this is a repetitive task. Gladly, Python allows to overcome this through the use of *modules*.
@@ -145,19 +147,20 @@ def twos(shape):
 ```
 
 [21]: <https://docs.python.org/3/tutorial/modules.html> "Modules documentation"
-<!-- #endregion -->
+
++++
 
 It contains the definition of two functions. Notice how we import `numpy` at the beginning of the file. Without this import, the second function would not work.
 
 To use the function `triangle_area` in the current notebook, we need to import it using:
 
-```python
+```{code-cell} ipython3
 from test_module import triangle_area
 ```
 
 The function can then be called as usual:
 
-```python
+```{code-cell} ipython3
 area = triangle_area(4, 3)
 
 print(f'The area of the triangle is: {area}.')
@@ -165,20 +168,20 @@ print(f'The area of the triangle is: {area}.')
 
 At this stage we may not yet use the function `two` because it has not been imported. If it's needed, we may type
 
-```python
+```{code-cell} ipython3
 from test_module import twos
 ```
 
 and use it afterwards:
 
-```python
+```{code-cell} ipython3
 a = twos(4)
 print(a)
 ```
 
 When more than one item of a module are needed, we can import several or all of them at the same time. Here are different ways to do this:
 
-```python
+```{code-cell} ipython3
 # Imports the functions separated by a comma
 from test_module import triangle_area, twos
 
@@ -204,7 +207,8 @@ The choice between the different ways of loading modules is somewhat a matter of
 
 - For our own modules, we use the `from module import item1, item2, ...` construct to be explicit about what we want to import.
 
-<!-- #region -->
++++
+
 If the module file is located in the same folder as your notebook or main program, all the commands described above will work. If not, the module file needs to be located in one of the default search paths of your Python distribution. These paths can be listed by executing the following commands:
 
 ```python
@@ -212,13 +216,13 @@ import sys
 print(path.sys)
 ```
 
-<!-- #endregion -->
++++
 
 In a specific notebook, module or program, you may add extra search paths to locate your modules. For this course, we store our custom modules in a folder called *modules*. It is located in the *notebooks* folder. Therefore, its relative path to any notebook is `../modules` (the `..` represents the parent directory). Look now in your local repository and you should see this folder.
 
 To add this path to the default search path, you may run the following cell:
 
-```python
+```{code-cell} ipython3
 import sys
 sys.path.insert(0, '../modules')
 ```
@@ -227,9 +231,11 @@ Remember that you need to add these lines in all the notebooks in which you want
 
 Now that we know how to create and use modules, let's return to the main topic of this chapter: partial differential equations.
 
++++
 
 ## Advection equation
 
++++
 
 We first consider advection with a constant velocity $c$. This process is described by equation \eqref{eq:advection}. If $u$ is our unknown, the solution to the equation is:
 
@@ -239,7 +245,8 @@ $$
 
 where $u_0(x) = u(x,0)$ is the initial condition. At time $t$, the mathematical solution to the problem is therefore the initial condition shifted by an mount $ct$. To obtain this solution we don't need a computer, so why bother trying to solve it numerically? It turns out that it constitutes a rich and interesting laboratory for developing general methods and analyze their shortcomings.
 
-<!-- #region -->
++++
+
 ### Forward Euler, forward finite difference
 
 For our first attempt at solving equation \eqref{eq:advection}, we choose the forward Euler method for the time integration and the first-order accurate forward finite difference formula for the derivative.
@@ -254,7 +261,8 @@ u^{n+1}_i = u^n_i -cdt \frac{u^n_{i+1} - u^n_i}{\Delta x}
 \end{align}
 
 Note that this discretization is explicit as $u^{n+1}_i$ is directly expressed in terms of quantities known at the previous time step.
-<!-- #endregion -->
+
++++
 
 For the sake of the example, we solve this equation in the interval $x\in [0, 1]$ with the following initial condition:
 
@@ -262,17 +270,17 @@ For the sake of the example, we solve this equation in the interval $x\in [0, 1]
 u(x,0) = e^{-200 (x-0.25)^2}
 \end{equation}
 
-
++++
 
 Let us now write a Python code to compute the solution. We first import a function we have defined in our custom module named `steppers`:
 
-```python
+```{code-cell} ipython3
 from steppers import euler_step
 ```
 
 You should now look at the definition of this function and understand what it is doing. You may obtain its documentation by typing:
 
-```python
+```{code-cell} ipython3
 %pinfo euler_step
 ```
 
@@ -294,7 +302,7 @@ We thus impose Dirichlet boundary conditions, even at the right boundary node wh
 
 The desired function $f$ can then be numerically implemented as follows:
 
-```python
+```{code-cell} ipython3
 def rhs_forward(u, dx, c):
     """Returns the right-hand side of the wave
     equation based on forward finite differences
@@ -326,13 +334,13 @@ def rhs_forward(u, dx, c):
 
 Parameters for the simulation:
 
-```python
+```{code-cell} ipython3
 c=1.          # wave or advection speed
 lx = 1.       # length of the computational domain
 t_final = 0.2 # final time of for the computation (assuming t0=0)
 ```
 
-```python
+```{code-cell} ipython3
 dt = 0.005                   # time step
 nt = int(t_final / dt)       # number of time steps
 
@@ -341,26 +349,26 @@ dx = lx / (nx-1)             # grid spacing
 x = np.linspace(0., lx, nx)  # coordinates of grid points
 ```
 
-```python
+```{code-cell} ipython3
 # initial condition
 u0 = np.exp(-200 * (x-0.25)**2)
 ```
 
-```python
+```{code-cell} ipython3
 # create an array to store the solution
 u = np.empty((nt+1, nx))
 # copy the initial condition in the solution array
 u[0] = u0.copy()
 ```
 
-```python
+```{code-cell} ipython3
 # perform nt time steps using the forward Euler method
 # with first-order forward finite difference
 for n in range(nt):
     u[n+1] = euler_step(u[n], rhs_forward, dt, dx, c)
 ```
 
-```python
+```{code-cell} ipython3
 # plot the solution at several times
 fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -377,12 +385,13 @@ ax.legend()
 
 What is happening ? The solution rapidly deteriorates; it is not peacefully translated at constant wave speed $c$: the maximum increases and some wiggles appear at the trailing edge. If you were to run the simulation just a bit longer, the solution would completely blow up. Try it !
 
++++
 
 We have already observed such behaviors when discussing integration schemes. We saw that some of them have a limited domain of stability and we should suspect that a similar limitation appears here. We will discuss this point thoroughly in the next notebook. 
 
 Here we just try a few other things to see what happens. Let us begin by replacing the forward finite difference scheme with the backward finite difference scheme. The only change we need to make is in the discretization of the right-hand side of the equation. We replace it with the following function (make sure you understand the change):
 
-```python
+```{code-cell} ipython3
 def rhs_backward(u, dx, c):
     """Returns the right-hand side of the wave
     equation based on backward finite differences
@@ -414,21 +423,21 @@ def rhs_backward(u, dx, c):
 
 We can now rerun our simulation with the same parameters.
 
-```python
+```{code-cell} ipython3
 # create an array to store the solution
 u = np.empty((nt+1, nx))
 # copy the initial condition in the solution array
 u[0] = u0.copy()
 ```
 
-```python
+```{code-cell} ipython3
 # perform nt time steps using the forward Euler method
 # with first-order backward finite difference
 for n in range(nt):
     u[n+1] = euler_step(u[n], rhs_backward, dt, dx, c)
 ```
 
-```python
+```{code-cell} ipython3
 # plot the solution at several times
 fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -447,7 +456,7 @@ This time, the solution does not seem to be unstable, but it's still not what we
 
 Before digging more on the stability and accuracy of the numerical schemes used so far, we introduce two other topics: one theoretical (on periodic boundary condition) and one computational (on how to create animations to visualize our simulation results).
 
-```python
+```{code-cell} ipython3
 import matplotlib.animation as animation
 from IPython.display import HTML
 
@@ -470,18 +479,16 @@ ani = animation.FuncAnimation(
 
 
 HTML(ani.to_jshtml())
-
 ```
 
-<!-- #region cell_style="center" -->
++++ {"cell_style": "center"}
+
 ## Summary
 
 ...
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```
-

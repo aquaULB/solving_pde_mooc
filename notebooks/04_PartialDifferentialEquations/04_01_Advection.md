@@ -30,7 +30,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-difference" data-toc-modified-id="Forward-Euler,-forward-finite-difference-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite difference</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-difference" data-toc-modified-id="Forward-Euler,-forward-finite-difference-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite difference</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span><ul class="toc-item"><li><span><a href="#Sample-usages" data-toc-modified-id="Sample-usages-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Sample usages</a></span></li><li><span><a href="#Advection-in-a-1D-periodic-domain" data-toc-modified-id="Advection-in-a-1D-periodic-domain-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Advection in a 1D periodic domain</a></span></li></ul></li><li><span><a href="#Matplotlib-animations" data-toc-modified-id="Matplotlib-animations-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Matplotlib animations</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -452,7 +452,7 @@ ax.set_title('Advection with forward Euler scheme - backward finite differences'
 ax.legend()
 ```
 
-This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. This will also be explained in the next notebook. You should however rerun this version of the discretization with a lager time step, for example $dt=0.05$. What happens in that case?
+This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. By reducing the time step and grid spacing we can however reduce this phenomenon. You should however rerun this version of the discretization with a lager time step, for example $dt=0.05$. What happens in that case?
 
 Before digging more on the stability and accuracy of the numerical schemes used so far, we introduce two other topics: one theoretical (on periodic boundary condition) and one computational (on how to create animations to visualize our simulation results).
 
@@ -460,13 +460,16 @@ Before digging more on the stability and accuracy of the numerical schemes used 
 
 ## Periodic boundary conditions
 
-The so-called periodic boundary conditions are used in several types of numerical simulations. Before showing how to implement them for our advection problem, we briefly describe a couple of them.
+
+### Sample usages
+
+The so-called periodic boundary conditions are used in several types of numerical simulations. Before showing how to implement them for our advection problem, we briefly describe a couple of scenarios.
 
 1) In many physical systems, events occurring in one place only influence what is happening in their vicinity. The distance over which this influence is exerted is called the correlation length. Regions of space separated by a distance much larger than the correlation length are largely independent of each other. Let's take an example. Imagine you want to analyze the dynamics of a spiral arm located in the top-middle galaxy shown in this image:
 
 <figure>
     <img src='../figures/superspirals.jpg' width="500"/>
-    <figcaption style='text-align: center'>https://phys.org/news/2019-10-dark-massive-spiral-galaxies-breakneck.html</figcaption>
+    <figcaption style='text-align: center'><a href="https://phys.org/news/2019-10-dark-massive-spiral-galaxies-breakneck.html">phys.org: massive spiral galaxies</a></figcaption>
 </figure>
 
 Of course, this is a photomontage but we use it to illustrate the discussion. This galaxy is surrounded by other galaxies but they are well separated. If the time scale of interest is short enough compared to the time needed for the galaxies to interact through gravity, what is happening in the spiral arm is not affected by the surrounding galaxies. Therefore, if we simulate the following system instead, the dynamics of the spiral arm should be virtually identical:
@@ -474,6 +477,132 @@ Of course, this is a photomontage but we use it to illustrate the discussion. Th
 <img src="../figures/superspiralsPeriodic.jpg" align="center" width="500">
 
 From the computational point of view, this constitutes a huge advantage. Instead of using a grid that contains the whole system of galaxies, we can focus on one galaxy and artificially extend the grid periodically in all directions. This allows to significantly reduce the number of grid points and make use of efficient algorithms relying on the spatial periodicity of the grid.
+
+2) Certain geometries are intrinsically periodic in some directions. Consider for example the prototype [fusion reactor ITER][40]:
+
+<figure>
+    <img src='../figures/iterTorus.png' width="500"/>
+    <figcaption style='text-align: center'>Left: ITER fusion reactor.    Right: toroidal geometry </figcaption>
+</figure>
+
+The plasma is confined in a toroidal chamber at very high temperature. When modeling this vessel as a torus, two periodic directions naturally appear along the angular directions $\theta$ and $\varphi$. The number of grid points is not reduced by the presence of these periodic directions but one still has the opportunity to discretize them with more efficient numerical algorithms.
+
+3) The final example we mention is of direct interest for the discussion of the wave equation. If we want to track the wave for a long time interval, we need a very long spatial domain. Using a fine numerical grid, this requires a very larger number of grid points. This is costly and inefficient as the wave packet only occupies a fraction of the domain at once. One way around this difficulty is to wrap the domain of propagation around itself. It then becomes a circle and the wave goes round and round around this circle. This is fine as long its circumference is large enough compared to length of the wave packet under consideration. In this setup, the direction of propagation is then periodic.  
+
+[40]: <https://www.iter.org> "ITER official website"
+
++++
+
+### Advection in a 1D periodic domain
+
++++
+
+In this section we show how to simulate the first order wave equation in a periodic domain. If the propagation direction is denoted $x$ and $L$ is the domain length:
+
+\begin{equation}
+    u(x+L) = u(x),\; u'(x+L) = u'(x), \; u''(x+L) = u''(x), \; \hbox{etc.} 
+\end{equation}
+
+As explained above, we must make sure that $L$ is large enough to accommodate the wave packet with enough margin.
+
+Away from the boundaries, we use the backward finite difference scheme for the discretization of the derivative operator and couple it to the forward Euler time integration scheme (we have seen that this combination is stable with an appropriate choice of time step).
+
+In fact, we can also use backward finite differentiation at the right boundary node. Using negative indexing, we may write:
+
+`u^{n+1}[-1] = u^n_i[-1] -cdt (u^n[-1] - u^n[-2])/dx`
+
+At the left boundary node we cannot use this formula directly as there is no point available to the left of this point. However, thanks to the periodicity of the domain, this missing *ghost* point can be associated with the point `x[-2]` as shown in this diagram:
+
+<img width="600px" src="../figures/backwardDiff1periodic.png">
+
++++
+
+Therefore we may write the derivative at the left boundary node like:
+
+`u^{n+1}[0] = u^n_i[0] -cdt (u^n[0] - u^n[-2])/dx`
+
+As `u[0]=u[-1]` this expression is also equal to the value of $u'$ at the right boundary node. This is expected as the derivative should be periodic.
+
+We are now ready to modify the right-hand side of our discretization and implement the periodic boundary conditions. The definition of the function reads:
+
+```{code-cell} ipython3
+def rhs_backward_periodic(u, dx, c):
+    """Returns the right-hand side of the wave
+    equation based on backward finite differences
+    
+    Parameters
+    ----------
+    u : array of float
+        solution at the current time-step.
+    dx : float
+        grid spacing
+    c : float
+        advection velocity
+    
+    Returns
+    -------
+    f : array of float
+        right-hand side of the wave equation with
+        boundary conditions implemented (periodic
+        boundary conditions)
+    """
+    nx = u.shape[0]
+    f = np.empty(nx)
+    f[1:] = -c*(u[1:]-u[0:-1]) / dx
+    f[0] = f[-1] # alternatively: f[0] = -c*(u[0]-u[-2]) / dx
+    
+    return f
+```
+
+We now perform the time stepping. We use the same initial condition as above, but increase the grid resolution to improve the accuracy and limit the diffusion of the wave packet. Also note that we have reduced the time step. The reason for this will become made clear in the next notebook.
+
+```{code-cell} ipython3
+t_final = 2. # final time of for the computation (assuming t0=0)
+dt = 0.002                   # time step
+nt = int(t_final / dt)       # number of time steps
+
+nx = 401                     # number of grid points 
+dx = lx / (nx-1)             # grid spacing
+x = np.linspace(0., lx, nx)  # coordinates of grid points
+```
+
+```{code-cell} ipython3
+# initial condition
+u0 = np.exp(-200 * (x-0.25)**2)
+
+# create an array to store the solution
+u = np.empty((nt+1, nx))
+# copy the initial condition in the solution array
+u[0] = u0.copy()
+```
+
+```{code-cell} ipython3
+# perform nt time steps using the forward Euler method
+# with first-order backward finite difference
+for n in range(nt):
+    u[n+1] = euler_step(u[n], rhs_backward_periodic, dt, dx, c)
+```
+
+Let us plot the solution at a time when the wave crossed the right boundary and re-enters the domain through the left boundary:
+
+```{code-cell} ipython3
+# plot the solution at several times
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(x, u[0], label='Initial condition')
+ax.plot(x, u[int(0.68 / dt)], lw=1.5, color='green', label='t=0.68')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$u$')
+ax.set_title('Advection with periodic boundary conditions')
+ax.legend()
+```
+
+Quite satisfactorily, the algorithm works as expected !
+
++++
+
+## Matplotlib animations
 
 ```{code-cell} ipython3
 import matplotlib.animation as animation
@@ -488,12 +617,12 @@ line, = ax.plot(x, u0)
 
 
 def animate(i):
-    line.set_ydata(u[i])  # update the data.
+    line.set_ydata(u[i*10])  # update the data.
     return line,
 
 
 ani = animation.FuncAnimation(
-    fig, animate, interval=100, frames=40, blit=True)
+    fig, animate, interval=100, frames=100, blit=True)
 
 
 

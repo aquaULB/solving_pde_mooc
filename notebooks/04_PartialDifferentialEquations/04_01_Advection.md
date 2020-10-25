@@ -30,7 +30,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-difference" data-toc-modified-id="Forward-Euler,-forward-finite-difference-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite difference</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span><ul class="toc-item"><li><span><a href="#Sample-usages" data-toc-modified-id="Sample-usages-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Sample usages</a></span></li><li><span><a href="#Advection-in-a-1D-periodic-domain" data-toc-modified-id="Advection-in-a-1D-periodic-domain-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Advection in a 1D periodic domain</a></span></li></ul></li><li><span><a href="#Matplotlib-animations" data-toc-modified-id="Matplotlib-animations-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Matplotlib animations</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-differentiation" data-toc-modified-id="Forward-Euler,-forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite differentiation</a></span></li><li><span><a href="#Forward-Euler,-backward-finite-difference-differentiation" data-toc-modified-id="Forward-Euler,-backward-finite-difference-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Forward Euler, backward finite difference differentiation</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span><ul class="toc-item"><li><span><a href="#Sample-usages" data-toc-modified-id="Sample-usages-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Sample usages</a></span></li><li><span><a href="#Advection-in-a-1D-periodic-domain" data-toc-modified-id="Advection-in-a-1D-periodic-domain-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Advection in a 1D periodic domain</a></span></li></ul></li><li><span><a href="#Matplotlib-animations" data-toc-modified-id="Matplotlib-animations-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Matplotlib animations</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -247,7 +247,7 @@ where $u_0(x) = u(x,0)$ is the initial condition. At time $t$, the mathematical 
 
 +++
 
-### Forward Euler, forward finite difference
+### Forward Euler, forward finite differentiation
 
 For our first attempt at solving equation \eqref{eq:advection}, we choose the forward Euler method for the time integration and the first-order accurate forward finite difference formula for the derivative.
 
@@ -387,9 +387,15 @@ What is happening ? The solution rapidly deteriorates; it is not peacefully tran
 
 +++
 
-We have already observed such behaviors when discussing integration schemes. We saw that some of them have a limited domain of stability and we should suspect that a similar limitation appears here. We will discuss this point thoroughly in the next notebook. 
+We have already observed such behaviors when discussing integration schemes. We saw that some of them have a limited domain of stability and we should suspect that a similar limitation applies here. We will discuss this point thoroughly in the next notebook. 
 
-Here we just try a few other things to see what happens. Let us begin by replacing the forward finite difference scheme with the backward finite difference scheme. The only change we need to make is in the discretization of the right-hand side of the equation. We replace it with the following function (make sure you understand the change):
+Here we just try another numerical scheme to see what happens. 
+
++++
+
+### Forward Euler, backward finite difference differentiation
+
+In this section we replace the forward finite difference scheme with the backward finite difference scheme. The only change we need to make is in the discretization of the right-hand side of the equation. We replace it with the following function (make sure you understand the change):
 
 ```{code-cell} ipython3
 def rhs_backward(u, dx, c):
@@ -583,7 +589,7 @@ for n in range(nt):
     u[n+1] = euler_step(u[n], rhs_backward_periodic, dt, dx, c)
 ```
 
-Let us plot the solution at a time when the wave crossed the right boundary and re-enters the domain through the left boundary:
+To check our results, let us plot the solution at a time when the wave crosses the right boundary and re-enters the domain through the left boundary:
 
 ```{code-cell} ipython3
 # plot the solution at several times
@@ -604,36 +610,130 @@ Quite satisfactorily, the algorithm works as expected !
 
 ## Matplotlib animations
 
++++
+
+Static plots are very useful to display the results of computations. They are used throughout many scientific disciplines. But when the problems considered contain time dependent data, we can often obtain extra insight into the results by creating animations.
+
+Matplotlib contains a (sub-)module designed to do exactly that. It can be imported using the command:
+
 ```{code-cell} ipython3
 import matplotlib.animation as animation
 from IPython.display import HTML
+```
 
-fig, ax = plt.subplots()
+Note that we have also imported the `HTML`module from `IPython.display`. This module is required to display the animations in Jupyter notebooks.
 
-plt.close()
+There are two standard ways to create animations. They rely on:
 
+> [matplotlib.animation.FuncAnimation][50] to create an animation by repeatedly calling a function,
+
+or
+
+> [matplotlib.animation.ArtistAnimation][51] to create an animation using a fixed set of Artist objects.
+
+In this notebook we illustrate the usage of `FuncAnimation`. This class is well suited for animating the kind of plots we have been producing so far. By repeatedly calling a function, it updates the content of the plot and stores the successive rendered frames in the animation. We use it below to create an animation of our traveling wave packet. For this course, `ArtistAnimation` is more useful to display simulations results coming out of simulations performed in two dimensions. These typically can be visualized by producing a sequence of images that can then be stitched together to produce the animation. We will document `ArtistAnimation` in a later notebook. 
+
+[50]: <https://matplotlib.org/3.3.2/api/_as_gen/matplotlib.animation.ArtistAnimation.html> "FuncAnimation documentation page"
+
+[51]: <https://matplotlib.org/3.3.2/api/_as_gen/matplotlib.animation.ArtistAnimation.html> "ArtistAnimation documentation page"
+
++++
+
+To use `FuncAnimation` we first create a plot that contains the data and the elements we want to show in our animation. The main element of this initial frame is the initial condition `u0`:
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(figsize=(10, 5))
+
+# Plot the initial condition as a function of x
+# and indicate the initial time. Note how we store 
+# the returned objects in variables. This is essential 
+# to later modify those parts of the plot in the
+# animation
 line, = ax.plot(x, u0)
+time_text = ax.text(0.05, 0.9, 't=0')
 
+ax.set_xlabel('$x$')
+ax.set_ylabel('$u$')
+ax.set_title('Advection with periodic boundary conditions')
+```
 
+Now that we have created our template plot, we need to define a function to tell `FuncAnimation` how to modify it for each frame added to the animation. Here we call this function `animate` but you may give it whatever valid name you want. At minimum, it should contain one argument to indicate the value of an iterator.
 
-def animate(i):
-    line.set_ydata(u[i*10])  # update the data.
-    return line,
+Our `animate` function does two things. It updates the line in the plot to show the wave at a given time, and it also changes the text indicating the corresponding time:
 
+```{code-cell} ipython3
+def animate(time):
+    """Modifies the line representing u and
+    the text indicating the corresponding time
+    
+    Parameters
+    ----------
+    time : float
+        time at which to plot u
+    
+    Returns
+    -------
+    line : updated line
+    time_text : update text indicating time
+    """
+    
+    # array index corresponding to time
+    j = int(time/dt)
+    
+    # update the line.
+    line.set_ydata(u[j])
+    
+    # update the time text.
+    # j*dt is displayed with two digits
+    # after the decimal point
+    time_text.set_text(f't={time:.2f}')
+    
+    # return the updated data to FuncAnimation
+    return line, time_text
+```
 
+Creating animations can be computationally expensive. Our solution of the wave equation currently contains the profile $u(x)$ at 1001 time steps (including the initial condition). On a Macbook Pro - 2,9 GHz Quad-Core Intel Core i7 - creating an animation that displays all these time steps takes about one minute. When the time needed becomes prohibitively high, it is useful to only include a subset of time steps. Here we want to include every other ten time steps in the animation. To that end, we create a sequence containing the desired time steps: 
+
+```{code-cell} ipython3
+step = 10 # warning: nt should be a multiple of step
+times = np.arange(0, nt+step, step)*dt
+```
+
+We now have all needed ingredients to call `FuncAnimation`. There are many ways to provide the necessary arguments. You should look up the documentation to learn more. Here we pass:
+
+1. the plot to update (fig)
+2. the function to call at each frame (animate)
+3. the interval in milliseconds  during which each frame should be displayed (interval)
+4. an iteratable - frames - containing all the times at which we want to display the velocity
+5. a boolean - repeat - specifying that we don't want the animation to loop
+
+```{code-cell} ipython3
+# create the animation object
 ani = animation.FuncAnimation(
-    fig, animate, interval=100, frames=100, blit=True)
+    fig, animate, interval=100, frames=times, repeat=False)
+```
 
+The final step is to display the animation in the notebook. This is done by calling:
 
-
+```{code-cell} ipython3
 HTML(ani.to_jshtml())
 ```
+
+Isn't this nice? We observe that our wave packet loops exactly as expected through the periodic domain.
 
 +++ {"cell_style": "center"}
 
 ## Summary
 
-...
+In this notebook we have started to discuss the discretization of partial differential equations and introduced the concept of Python modules. 
+
+We took the example of the first order wave equation and using the technique of semi-discretization, we simulated it using the forward Euler method with both forward and backward finite differentiation. The first algorithm proved to be unstable while the second one remained stable for the parameters used.
+
+We also introduced the notion of periodic boundary conditions and discussed some of the situations in which they are useful. 
+
+Finally, we showed how to create animations using `matplotlib.animation.FuncAnimatio` to visualize results of time dependent problems.
+
+In the next notebook, we discuss in detail how to determine the stability of the numerical algorithms obtained through semi-discretization.
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

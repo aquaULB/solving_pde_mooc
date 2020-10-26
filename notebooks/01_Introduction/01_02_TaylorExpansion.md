@@ -1,41 +1,43 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Approximations and Taylor expansion<span class="tocSkip"></span></h1>
 
-<!-- #region toc=true -->
+# Approximations and Taylor expansion
+
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Taylor's-theorem" data-toc-modified-id="Taylor's-theorem-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Taylor's theorem</a></span><ul class="toc-item"><li><span><a href="#Expansion-of-exponential-function" data-toc-modified-id="Expansion-of-exponential-function-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Expansion of exponential function</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
@@ -143,19 +145,20 @@ Imports in Python are performed using `import` statement:
 [11]: <https://docs.scipy.org/doc/scipy/reference/tutorial/general.html> "SciPy"
 [12]: <https://matplotlib.org> "Matplotlib"
 [13]: <https://medium.com/edureka/scipy-tutorial-38723361ba4b> "NumPy vs SciPy"
-```python
+
+```{code-cell} ipython3
 import numpy
 ```
 
 In order to access the tools of a module (unit of Python code), we put the name of this module in front of the name of a given object:
 
-```python
+```{code-cell} ipython3
 print(numpy.pi)
 ```
 
 Another option is to create a **shortcut** for the module name using the `as` keyword:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 
 print(np.pi)
@@ -163,7 +166,7 @@ print(np.pi)
 
 In some cases it will even make more sense to import **only** the object you require from module:
 
-```python
+```{code-cell} ipython3
 from numpy import cos
 ```
 
@@ -171,7 +174,7 @@ Imports are usually performed at the beginning of the Python file before any oth
 
 In order to create comments in Python (text in your code which will be ignored by Python), put `#` in front of the text.
 
-```python
+```{code-cell} ipython3
 # Note that numpy has already been imported above.
 # Here it is imported repeatedly for the sake of
 # demonstrating what your code should look like.
@@ -191,13 +194,13 @@ Magic commands have `%` in front of them.
 
 A simple example of the usefulness of a magic command can be made with `%pinfo`. It outputs the documentation of an object, which is useful both for beginners and for the advanced programmers, and spares you the need to 'google' it. We've already used the `print` function above to output the value of $\pi$ - run the following cell to see documentation of `print`:
 
-```python
+```{code-cell} ipython3
 %pinfo print
 ```
 
 To use matplotlib in notebooks, a very useful magic command is:
 
-```python
+```{code-cell} ipython3
 %matplotlib inline
 ```
 
@@ -205,7 +208,7 @@ From now on, whatever we plot will appear inline - in our notebook, right below 
 
 We then set the style of our plots, which will be universal throughout the whole course. Matplotlib has several predefined styles encoded in files. You, of course, can always create your own style.
 
-```python
+```{code-cell} ipython3
 plt.style.use('../styles/mainstyle.use')
 ```
 
@@ -237,10 +240,11 @@ Note, that the concept of *cell* in Python does not exist - it is unique to Jupy
 
 [14]: <https://www.markdownguide.org/getting-started/> "Markdown"
 
++++
 
 1. *Create a Python list in a loop and then transform it into a NumPy array*
 
-```python
+```{code-cell} ipython3
 %%timeit
 
 # First create an empty Python list, which
@@ -286,9 +290,9 @@ delta = np.array(delta_list)
 
 2. *Create a Python list using a list comprehension and then convert it to a NumPy array*
 
-    This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.  
+    This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.
 
-```python
+```{code-cell} ipython3
 %%timeit
 
 # As you can see we managed to shorten our code - 
@@ -303,7 +307,7 @@ delta = np.array(delta_list)
 
 3. *Create an empty NumPy array and then fill it with values in a loop*
 
-```python
+```{code-cell} ipython3
 %%timeit
 
 delta = np.zeros(9)
@@ -318,7 +322,7 @@ We are now <a name="exc2"> all set to build $R_3$</a>.
 
 [5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
-```python
+```{code-cell} ipython3
 # Here you can clearly see the advantage of
 # NumPy over built-in tools of Python. 
 #
@@ -358,7 +362,7 @@ We have create 2 figures - *figure 0* and *figure 1*, - and use them to demonstr
 
 [4]: <https://matplotlib.org/3.3.0/api/_as_gen/matplotlib.pyplot.figure.html> "Matplotlib figure"
 
-```python
+```{code-cell} ipython3
 # We create first figures of the course.
 # When creating figure 0, we set tight_layout
 # keyword to False. We do it, because in a
@@ -410,7 +414,7 @@ The logic behind subplotting with `subplots` is very similar to the one of `add_
 
 [5]: <https://matplotlib.org/api/_as_gen/matplotlib.pyplot.subplots.html> "Subplots"
 
-```python
+```{code-cell} ipython3
 # Assume I want 3 subplots per row
 # and 1 - per column.
 fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3)
@@ -423,7 +427,7 @@ We then want to plot $R_3$ as a function of $\Delta x$ and use *log scaling* for
 [6]: <https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.loglog.html> "loglog"
 [7]: <https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot> "plot"
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots()
 
 # Create a plot with log scaling.
@@ -473,7 +477,6 @@ ax.legend()
 fig.savefig('../figures/taylorSlope', dpi=300)
 ```
 
-<!-- #region -->
 You've seen above textual sequences created as follows:
 
     text_data = 'Hello, world!'
@@ -536,15 +539,15 @@ For a better understanding of the task consider the following example:
 Source: Find expansion of the example function on [*Wikipedia*][9].
 
 [9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
-<!-- #endregion -->
+
++++
 
 ## References
 
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
 
 
-
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

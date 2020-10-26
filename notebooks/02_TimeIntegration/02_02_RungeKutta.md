@@ -1,47 +1,49 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Time integration II<span class="tocSkip"></span></h1>
 
-<!-- #region toc=true -->
+# Time integration II
+
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#A-two-stage-Runge-Kutta-scheme" data-toc-modified-id="A-two-stage-Runge-Kutta-scheme-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>A two-stage Runge-Kutta scheme</a></span><ul class="toc-item"><li><span><a href="#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme" data-toc-modified-id="Numerical-stability-of-a-two-stage-Runge-Kutta-scheme-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical stability of a two-stage Runge-Kutta scheme</a></span></li></ul></li><li><span><a href="#General-Runge-Kutta-schemes" data-toc-modified-id="General-Runge-Kutta-schemes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>General Runge-Kutta schemes</a></span></li><li><span><a href="#Implicit-Runge-Kutta-schemes" data-toc-modified-id="Implicit-Runge-Kutta-schemes-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Implicit Runge-Kutta schemes</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li><li><span><a href="#References" data-toc-modified-id="References-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>References</a></span></li></ul></div>
-<!-- #endregion -->
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#A-two-stage-Runge-Kutta-scheme" data-toc-modified-id="A-two-stage-Runge-Kutta-scheme-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>A two-stage Runge-Kutta scheme</a></span><ul class="toc-item"><li><span><a href="#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme" data-toc-modified-id="Numerical-stability-of-a-two-stage-Runge-Kutta-scheme-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical stability of a two-stage Runge-Kutta scheme</a></span></li></ul></li><li><span><a href="#General-Runge-Kutta-schemes" data-toc-modified-id="General-Runge-Kutta-schemes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>General Runge-Kutta schemes</a></span></li><li><span><a href="#Implicit-Runge-Kutta-schemes" data-toc-modified-id="Implicit-Runge-Kutta-schemes-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Implicit Runge-Kutta schemes</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+
++++
 
 ## Introduction
 
 For convenience, we start with importing some modules needed below:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -50,7 +52,6 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-<!-- #region -->
 In the previous notebook we have considered the forward and the backward Euler schemes to time march ordinary differential equations. We have discussed the concept of stability and estimated the accuracy of numerical schemes with respect to the size of the time step.
 
 Here we introduce some more accurate methods with larger domains of stability, that are, therefore, applicable in more complex situations. We only consider systems of first-order differential equations as problems containing higher-order derivatives may be reduced to such systems. Our system of equations thus reads,
@@ -174,9 +175,8 @@ As $L$ and $b$ are constant, the two-stage Runge-Kutta scheme applied to \ref{eq
 2. $\displaystyle y^{n+1} = y^n + dt(Ly^*+b).$
 
 Let's implement this procedure.
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 g = 9.81  # ms^-2, gravitational constant
 h0 = 100. # m, initial height
 v0 = 0.   # ms^-1, initial speed
@@ -186,7 +186,7 @@ tf = 4.0  # s, final time at which to seek the solution
 dt = 0.1  # s, time step
 ```
 
-```python
+```{code-cell} ipython3
 nt = int((tf-ti)/dt)
 
 # Create a numpy array to contain the
@@ -209,14 +209,14 @@ for i in range(nt):
     y[i+1] = y[i] + dt*(np.dot(L, y_star)+b)
 ```
 
-```python
+```{code-cell} ipython3
 # array for the time interval data
 t = np.arange(nt+1) * dt
 ```
 
 We visualize the solution:
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
 ax[0].plot(t, y[:, 1])
@@ -286,7 +286,7 @@ In terms of stability, we also see that the RK4 method is stable for a general a
 
 In the following plot, we compare the regions of stability for the various schemes we have already discussed.
 
-```python
+```{code-cell} ipython3
 # As before, the x-axis corresponds to
 # lambda_r*dt and the y-axis to lambda_i*dt.
 # We set the resolution along x and y
@@ -295,7 +295,7 @@ nx = 100
 ny = 100
 ```
 
-```python
+```{code-cell} ipython3
 # We create numpy arrays, which store the
 # x-points and the y-points.
 # numpy.linspace is another way to create a
@@ -356,7 +356,7 @@ sigma4 = 1 + Z + Z**2/2. + Z**3/6. + Z**4/24.
 norm4 = np.real(sigma4*sigma4.conj())
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(8,8))
 
 # We shall now use the
@@ -425,6 +425,18 @@ ax.text(-1, 1.1, r'Euler', fontsize=14, horizontalalignment='center')
 ax.text(-1, 1.85, r'RK2', fontsize=14, horizontalalignment='center')
 ax.text(-2.05, 2.05, r'RK4', fontsize=14, horizontalalignment='center')
 
+# Notable points
+ax.arrow(0.5, 2.63, -0.5, 0.2, fc='k', ec='k', lw=0.5,
+         head_width=1./80.*(ymax-ymin), head_length=1./50.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+ax.text(0.75, 2.55, r'2.83', fontsize=14, horizontalalignment='center')
+
+ax.arrow(-3.05, 0.4, 0.26, -0.4, fc='k', ec='k', lw=0.5,
+         head_width=1./80.*(ymax-ymin), head_length=1./50.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+ax.text(-3.17, 0.49, r'-2.79', fontsize=14, horizontalalignment='center')
+
+# Axis labels
 ax.set_xlabel(r'$\lambda_r dt$')
 ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
 
@@ -462,7 +474,7 @@ Let's implement it for the problem of a body in free fall described by \ref{eq:f
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
-```python
+```{code-cell} ipython3
 g = 9.81  # ms^-2, gravitational constant
 h0 = 100. # m, initial height
 v0 = 0.   # ms^-1, initial speed
@@ -472,7 +484,7 @@ tf = 10.0 # s, final time at which to seek the solution
 dt = 0.5  # s, time step
 ```
 
-```python
+```{code-cell} ipython3
 nt = int((tf-ti)/dt)
 
 # Create numpy arrays to contain the
@@ -517,11 +529,11 @@ for i in range(nt):
 
 As you may observe from the code, our implementation is somewhat 'naive', meaning that we don't solve equations for $k_i$ numerically, as we have solved them analytically. In a production code, a better approach would be to design the code in such a way that the coefficients are computed automatically from the generic Runge-Kutta formulas.
 
-```python
+```{code-cell} ipython3
 t = np.arange(nt+1) * dt
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
 ax[0].plot(t, y_exp[:, 0], '--')
@@ -564,8 +576,9 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 
 [1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
++++
 
-## References
+# References
 
 (<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 
@@ -576,8 +589,7 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 (<a id="cit-Kutta1901" href="#call-Kutta1901">Kutta, 1901</a>) Kutta Wilhelm, ``_Beitrag zur naherungsweisen Integration totaler Differentialgleichungen_'', Z. Math. Phys., vol. 46, number , pp. 435--453,  1901.
 
 
-
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

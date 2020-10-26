@@ -1,47 +1,49 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Finite Differences II<span class="tocSkip"></span></h1>
 
-<!-- #region toc=true -->
+# Finite Differences II
+
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-order-derivatives" data-toc-modified-id="Higher-order-derivatives-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher order derivatives</a></span><ul class="toc-item"><li><span><a href="#Second-order-derivative" data-toc-modified-id="Second-order-derivative-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Second-order derivative</a></span></li><li><span><a href="#Higher-order-derivatives-and-one-sided-stencils" data-toc-modified-id="Higher-order-derivatives-and-one-sided-stencils-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Higher order derivatives and one-sided stencils</a></span></li></ul></li><li><span><a href="#Functions" data-toc-modified-id="Functions-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Functions</a></span><ul class="toc-item"><li><span><a href="#Parameters" data-toc-modified-id="Parameters-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Parameters</a></span></li><li><span><a href="#Return-statement" data-toc-modified-id="Return-statement-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Return statement</a></span></li><li><span><a href="#Variable-scope" data-toc-modified-id="Variable-scope-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Variable scope</a></span></li><li><span><a href="#Beware-passing-by-object-reference-in-Python!" data-toc-modified-id="Beware-passing-by-object-reference-in-Python!-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Beware passing by object reference in Python!</a></span></li></ul></li><li><span><a href="#Matrix-formulation" data-toc-modified-id="Matrix-formulation-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Matrix formulation</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
 For convenience, we start with importing some modules needed below:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -79,14 +81,14 @@ The centered second-order derivative cannot be used at the boundary nodes. Some 
 
 Let us write a Python code to check that expression \ref{eq:centeredDiff2} works as expected. We use the same test function as in the previous notebook - $f(x)=e^x \sin(3\pi x)$ - and we first represent it on a fine grid in the interval $x\in [O, \pi]$.
 
-```python
+```{code-cell} ipython3
 pi = np.pi       # 3.14...
 nx = 200         # number of grid points (fine grid)
 lx = pi          # length of the interval
 dx = lx / (nx-1) # grid spacing
 ```
 
-```python
+```{code-cell} ipython3
 x = np.linspace(0, lx, nx)   # coordinates for the fine grid
 f = np.exp(x)*np.sin(3*pi*x) # function on the fine grid
 
@@ -97,7 +99,7 @@ ddf = np.exp(x)*(np.sin(3*pi*x) + 6*pi*np.cos(3*pi*x)-9*pi**2*np.sin(3*pi*x))
 
 We now build a coarse grid with $80$ points, and evaluate the second-order derivative using the centered finite difference formula; note how we use the slicing technique we described in the previous notebook.
 
-```python
+```{code-cell} ipython3
 nx = 80 # number of grid points (coarse grid)
 lx = pi # length of interval
 dx = lx / (nx-1) # grid spacing
@@ -109,7 +111,7 @@ ddf_c = np.empty(nx)
 ddf_c[1:-1] = (f_c[:-2] -2*f_c[1:-1] +f_c[2:]) / dx**2 # boundary nodes are included
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 5))
 
 ax.plot(x[1:-1], ddf[1:-1])
@@ -430,18 +432,19 @@ page also lists a large collections of such **one-sided formulas**. Here we limi
 	</tbody>
 </table>
 
-
++++
 
 Again, you should recognize the one-sided formulas we described in the previous notebook for the first-order derivative.
 
++++
 
 ## Functions
 
++++
 
 Up to now, we have explicitly written new Python code whenever we implemented a particular concept. In the long term, this is not convenient as we often need to re-use the same pieces of code over and over again. Fortunately, most programming languages - including Python - make this task easy to achieve through the use of *functions*. Don't confuse the concept of functions in programming languages and mathematical functions. This section is devoted to Python functions. Further in the course we will try to be explicit about what is meant but you can normally figure it out from the context. Before digging into more detail, let's consider an example. Say we want to create a (Python) function that computes the centered second-order derivative of some (mathematical) function. We may implement this function as follows (details about how to do this are given below):
 
-
-```python
+```{code-cell} ipython3
 def compute_ddf_c(f):
 
     ddf_c = np.empty_like(f)
@@ -454,19 +457,18 @@ def compute_ddf_c(f):
 
 To compute the second-order derivative of our previously defined (mathematical) function `f_c`, we call the (Python) function like this:
 
-```python
+```{code-cell} ipython3
 ddf_c_from_func = compute_ddf_c(f_c)
 ```
 
 The prototype of a Python function looks like this:
 
-```python
+```{code-cell} ipython3
 def some_function(parameters):
 
     statements
 
     return something
-
 ```
 
 `parameters` is the list of arguments (e.g. variables, objects,...) that are passed to the function when calling it.
@@ -479,67 +481,67 @@ To make things less abstract, let's discuss some examples.
 
 ### Parameters
 
-```python
+```{code-cell} ipython3
 def print_name_and_data(name, age, height, weight):
     print(f'Hello, {name}. You are {age}, measure {height} m and weigh {weight} kg.')
 ```
 
 The `print_name_and_data` function has four input parameters. It simply prints a statement using these four parameters and is called like this:
 
-```python
+```{code-cell} ipython3
 print_name_and_data('Luke', 28, 1.75, 72)
 ```
 
 The function requires four *positional arguments* and they must be supplied exactly like in its definition. The term "positional arguments" speaks for itself. Their position must be respected when you pass them to the function - the order must be the same as in the definition of a function. Calling the function like,
 
-```python
+```{code-cell} ipython3
 print_name_and_data('Luke', 28, 72, 1.75)
 ```
 
 results in an undesired ouput. If you want to specify the arguments in the 'wrong' order, you may pass them as *keyword arguments:*
 
-```python
+```{code-cell} ipython3
 print_name_and_data(age=28, name='Luke', weight=72, height=1.75)
 ```
 
 If you omit one or more of the parameters, Python will throw an error:
 
-```python
+```{code-cell} ipython3
 print_name_and_data('Luke')
 ```
 
 You can mix positional and keyword parameters. The only restriction is that keyword arguments must come after all positional arguments:
 
-```python
+```{code-cell} ipython3
 print_name_and_data('Luke', 28, weight=72, height=1.75)
 ```
 
 You may also define the function with some default values for the parameters. In that case, they become optional and assume their default values when omitted in the function call. For example let's define a new function:
 
-```python
+```{code-cell} ipython3
 def print_name_and_handedness(name, handedness='right-handed'):
     print(f'Hello, {name}. You are {handedness}.')
 ```
 
 If you call the function without passing the second argument, you get:
 
-```python
+```{code-cell} ipython3
 print_name_and_handedness('Luke')
 ```
 
 But you can supply a different value if needed:
 
-```python
+```{code-cell} ipython3
 print_name_and_handedness('Luke', 'left-handed')
 ```
 
-
 ### Return statement
 
++++
 
 The last statement of a function can be a `return` statement, with which the programmer can send some information or data produced within the function back to the main program or calling routine. As an example, let's define a function that returns the body mass index of an individual:
 
-```python
+```{code-cell} ipython3
 def compute_bmi(name, height, weight):
     print(f'Hello, {name}. I am returning your body mass index...')
 
@@ -550,14 +552,14 @@ def compute_bmi(name, height, weight):
 
 We can then store the return value in any variable like this:
 
-```python
+```{code-cell} ipython3
 luke_bmi = compute_bmi('Luke', 1.75, 70)
 print(luke_bmi)
 ```
 
 The function can return any Python object (dictionaries, arrays, numbers, ...) or a collection of them. In the example below, we return the average of two numbers and their difference:
 
-```python
+```{code-cell} ipython3
 def compute_avg_diff(number1, number2):
 
     average = 0.5 * (number1+number2)
@@ -568,24 +570,25 @@ def compute_avg_diff(number1, number2):
 
 Note how the two return values are separated by a comma. This function can be called like this:
 
-```python
+```{code-cell} ipython3
 avg1, diff1 = compute_avg_diff(10, 8)
 print(f'The average is {avg1} and the difference is {diff1}.')
 ```
 
 ### Variable scope
 
++++
 
 A very important concept when discussing functions is the so-called *scope* of a variable. There are generally speaking two types of variables: **global** variables or **local** variables. Global variables can be accessed anywhere in a program. Local variables can only be accessed within the function, in which they are defined. But you may always return their values outside of the function by using a `return` statement.
 
 Let first consider an example involving a global variable:
 
-```python
+```{code-cell} ipython3
 def print_a():
     print(a)
 ```
 
-```python
+```{code-cell} ipython3
 a=1
 print_a()
 a=2
@@ -594,13 +597,13 @@ print_a()
 
 The code executed without errors and each time we modify `a` the function prints the correct value because this global variable, defined outside of the function, is accessible within the function. Let's try something else:
 
-```python
+```{code-cell} ipython3
 def multiply_a_and_b(a, b):
     prod = a*b
     print(f'The product between a and b is {prod}.')
 ```
 
-```python
+```{code-cell} ipython3
 prod = 3
 multiply_a_and_b(3, 6)
 print(f'Here prod is equal to {prod}.')
@@ -610,13 +613,15 @@ Here we get two different outputs. Outside of the function, we have defined the 
 
 NB: there is a way to freely use global variables within the scope of a function; it requires the usage of the `global` keyword associated with a variable. But we won't document this feature as we discourage you to use it in the context of this course.
 
++++
 
 ### Beware passing by object reference in Python!
 
++++
 
 There is another common source of errors when manipulating sequences (or numpy arrays) as arguments of functions. Remember what we discussed in the section "Referenced or copied?" of the previous notebook. We observed a fundamental difference when assigning a new name to a variable depending on whether it was a number or a list. We recall here two examples:
 
-```python
+```{code-cell} ipython3
 a = 1
 b = a
 b = 2
@@ -625,7 +630,7 @@ print(a)
 
 In the second line of the above cell, we are referencing with `b` the same number as `a`. In the third line, we are changing the number to which `b` is referencing and this does not affect `a`. When we manipulate lists, the situation is different. Let's consider this example:
 
-```python
+```{code-cell} ipython3
 a = [0, 1, 2, 4]
 b = a
 b[0] = 5
@@ -636,14 +641,14 @@ In the second line of the cell, we are referencing with `b` the same sequence as
 
 Now consider how this can cause possible unwanted behaviors when calling functions:
 
-```python
+```{code-cell} ipython3
 def test_func(seq1):
     sequence = seq1
     sequence[0] = 0
     print(f'Inside the function, the sequence is {sequence}.')
 ```
 
-```python
+```{code-cell} ipython3
 seq = [1, 1, 1, 1]
 test_func(seq)
 
@@ -652,14 +657,14 @@ print(f'Outside of the function, the sequence is {seq}.')
 
 Because we did not make a copy of the original sequence when writing `sequence = seq1` we are changing its content with `sequence[0] = 0`. Therefore, such statements can have an effect outside of the function and you must be really careful depending on whether it is intended or not. If you do not want to modify the sequence outside of the function, you could write instead:
 
-```python
+```{code-cell} ipython3
 def test_func(seq1):
     sequence = seq1.copy()
     sequence[0] = 0
     print(f'Inside the function, the sequence is {sequence}.')
 ```
 
-```python
+```{code-cell} ipython3
 seq = [1, 1, 1, 1]
 test_func(seq)
 
@@ -668,14 +673,14 @@ print(f'Outside of the function, the sequence is {seq}.')
 
 Another possibility is:
 
-```python
+```{code-cell} ipython3
 def test_func(seq1):
     sequence = seq1
     sequence[0] = 0
     print(f'Inside the function, the sequence is {sequence}.')
 ```
 
-```python
+```{code-cell} ipython3
 seq = [1, 1, 1, 1]
 test_func(seq.copy())
 
@@ -751,11 +756,11 @@ We use here the Python package `scipy` that we briefly described in the *01_Intr
 
 [31]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.diags.html> "documentation for scipy.sparse.diags"
 
-```python
+```{code-cell} ipython3
 from scipy.sparse import diags
 ```
 
-```python
+```{code-cell} ipython3
 def d1_mat(nx, dx):
     """
     Constructs the centered second-order accurate first-order derivative
@@ -790,12 +795,12 @@ def d1_mat(nx, dx):
 
 We can then obtain an instance of the array by calling `d1_mat`. As an example and to make sure the coefficients are properly set, we call it with a value of $\Delta x=1$ and output the result:
 
-```python
+```{code-cell} ipython3
 nx = 10 # number of grid points for the example
 dx = 1 # grid spacing
 ```
 
-```python
+```{code-cell} ipython3
 d1mat = d1_mat(nx, dx)
 print(d1mat)
 ```
@@ -804,7 +809,7 @@ Looks good!
 
 Using exactly the same ideas, the explicit representation of a discrete version of the second-order derivative can be constructed. Here is a Python function that returns the matrix corresponding to the centered second-order accurate finite difference formula:
 
-```python
+```{code-cell} ipython3
 def d2_mat(nx, dx):
     """
     Constructs the centered second-order accurate second-order derivative
@@ -839,13 +844,14 @@ def d2_mat(nx, dx):
 
 Let's check again that everything works as expected:
 
-```python
+```{code-cell} ipython3
 d2mat = d2_mat(nx, dx)
 print(d2mat)
 ```
 
 Again we obtain the desired result.
 
++++
 
 ## Summary
 
@@ -853,7 +859,7 @@ In this notebook we have explained how to obtain a second-order accurate finite 
 
 [1]: <https://en.wikipedia.org/wiki/Finite_difference_coefficient> "list of finite difference formulas"
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

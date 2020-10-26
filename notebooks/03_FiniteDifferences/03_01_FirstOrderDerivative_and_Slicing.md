@@ -1,47 +1,49 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Finite Differences I<span class="tocSkip"></span></h1>
 
-<!-- #region toc=true -->
+# Finite Differences I
+
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#First-order-derivative" data-toc-modified-id="First-order-derivative-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>First-order derivative</a></span></li><li><span><a href="#Python-slicing" data-toc-modified-id="Python-slicing-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python slicing</a></span><ul class="toc-item"><li><span><a href="#Motivation-and-syntax" data-toc-modified-id="Motivation-and-syntax-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Motivation and syntax</a></span></li><li><span><a href="#Referenced-or-copied?" data-toc-modified-id="Referenced-or-copied?-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Referenced or copied?</a></span></li></ul></li><li><span><a href="#One-sided-finite-differences" data-toc-modified-id="One-sided-finite-differences-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>One-sided finite differences</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
 For convenience, we start with importing some modules needed below:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -157,14 +159,14 @@ Using just two grid points, it's not possible to achieve an accuracy of higher o
 
 Let us check that our formulas are correct. We first create a fine grid to accurately represent the function \ref{eq:testfunc} and its derivative in the interval $x\in [O, \pi]$.
 
-```python
+```{code-cell} ipython3
 pi = np.pi       # 3.14...
 nx = 200         # number of grid points (fine grid)
 lx = pi          # length of the interval
 dx = lx / (nx-1) # grid spacing
 ```
 
-```python
+```{code-cell} ipython3
 x = np.linspace(0, lx, nx)   # coordinates in the fine grid
 f = np.exp(x)*np.sin(3*pi*x) # function in the fine grid
 
@@ -181,10 +183,11 @@ Sympy supports [basic symbolic calculus][21], and provides [tools][22] to transf
 [21]: <https://docs.sympy.org/latest/tutorial/calculus.html> "Basic calculus"
 [22]: <https://docs.sympy.org/latest/modules/utilities/lambdify.html?highlight=lambdify> "From symbolic to numerical data"
 
++++
 
 To experiment with our finite-difference approximations, we build a coarse grid with $80$ points, and evaluate the derivative:
 
-```python
+```{code-cell} ipython3
 # We don't care about overwriting grid variables,
 # as we are not using them further than for con-
 # struction of x and f(x) arrays.
@@ -193,7 +196,7 @@ lx = pi          # length of interval
 dx = lx / (nx-1) # grid spacing
 ```
 
-```python
+```{code-cell} ipython3
 x_c = np.linspace(0, lx, nx)       # coordinates of the coarse grid points
 f_c = np.exp(x_c)*np.sin(3*pi*x_c) # function on the coarse grid
 
@@ -218,7 +221,7 @@ for i in range(1, nx-1): # first and last grid points are omitted
 
 Let us now plot the forward, backward and centered finite-difference approximations of the first-order derivative of $f(x)$ against the curve obtained with the exact expression:
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 3, figsize=(12, 5), tight_layout=True)
 
 fig.suptitle('Forward, backward and centered finite differences vs exact derivative')
@@ -243,16 +246,19 @@ What do you think about the agreement? What happens when you increase the number
 
 In the above cell, we have used the slicing of numpy arrays to extract the relevant entries from our arrays. For example, for the forward finite difference, the expression is not defined at the last grid point. Therefore, the relevant grid coordinates are not the complete `x_c` array but the *slice* `x_c[0:nx-1]`. For the centered finite differences we must exclude the first and last grid points. The appropriate coordinate array slice is then `x_c[1:nx-1]`. The notions of slicing of Python sequences are described in much more detail in the next section.
 
++++
 
 ## Python slicing
 
++++
 
 ### Motivation and syntax
 
++++
 
 We already mentioned a powerful tool of Python: negative indexing. When the programmer tries to access elements of the sequence by referring to a negative index, the enumeration of the elements starts from the tail of the sequence. Let's say we have a Python list,
 
-```python
+```{code-cell} ipython3
 a = [
     'first',
     'second',
@@ -262,7 +268,7 @@ a = [
 
 and we want to iterate through its elements starting from `a[2]` to `a[0]`. It is a valid and even preferrable approach to do it using the negative indexing:
 
-```python
+```{code-cell} ipython3
 for i in range(-1, -4, -1):
     print(f"index: {i}, value: {a[i]}.")
 ```
@@ -277,13 +283,13 @@ Consider the following demo. First, we create large Python list.
 
 [30]: <https://github.com/python/cpython/blob/master/Objects/sliceobject.c> "Slicing source"
 
-```python
+```{code-cell} ipython3
 large_sequence = [i for i in range(10**5)]
 ```
 
 Suppose we want to extract the sublist with the first element equal to `large_sequence[5]` and the last element equal to `large_sequence[99994]`. We could just create an empty list and fill it in a loop.
 
-```python
+```{code-cell} ipython3
 %%timeit
 
 i_was_filled_in_a_loop = []
@@ -294,13 +300,13 @@ for i in range(5, 99995): # i ranges from 5 to 99994
 
 But the more efficient way is to apply Python slicing:
 
-```python
+```{code-cell} ipython3
 %timeit slice_of_it = large_sequence[5:99995]
 ```
 
 or as,
 
-```python
+```{code-cell} ipython3
 %timeit slice_of_it = large_sequence[5:-5]
 ```
 
@@ -308,7 +314,7 @@ Python slicing obviously executes faster. Try to avoid Python loops when you can
 
 When slicing as we did: `large_sequence[5:-5]`, we use Python slicing together with negative indexing. `5` stands for `start` and `-5` stands for `stop`. `step` is not specified, so it is set to `1` implicitly. What if we do not specify `start` or `stop`, or if we even omit *any* indexing when slicing?
 
-```python
+```{code-cell} ipython3
 # We now add a few elements to the a list for the
 # sake of doing a demo.
 #
@@ -326,7 +332,7 @@ print(a)
 
 * Slicing when `start` is omitted
 
-```python
+```{code-cell} ipython3
 # We pass few arguments to the print function.
 # When they are outputted, they are separated by
 # the value passed to the sep argument (its default
@@ -336,25 +342,27 @@ print(a[:3], a[:5], sep='\n')
 
 The output basically tells us that when `start` is omitted it is implicitly set to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
 
-```python
+```{code-cell} ipython3
 print(a[:-3:-1])
 ```
 
 Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3:-1]`. More generally, `sequence[:-n:-1]` is *extracting a subsequence consisting of the last $n-1$ elements enumerated from the tail of the sequence*.
 
++++
 
 * Slicing when `stop` is omitted
 
-```python
+```{code-cell} ipython3
 print(a[2::2], a[5:], a[4::-1], sep='\n')
 ```
 
 If `stop` is omitted, `sequence[n::step]` for `step`$>0$ extracts the relevant elements from index n up to (and including) the last element of the sequence. If the `step`$<0$, `sequence[n::step]` extracts the relevant elements from index n down to (and including) the first element of the sequence.
 
++++
 
 * Slicing when `start` and `stop` are omitted
 
-```python
+```{code-cell} ipython3
 print(a[:], a[::2], a[::-1], sep='\n')
 ```
 
@@ -375,7 +383,7 @@ What is so curious about it exactly? Consider the following examples:
 [31]: <https://docs.python.org/dev/library/stdtypes.html#sequence-types-list-tuple-range> "Docs on Slicing sequences"
 [32]: <https://docs.python.org/3/tutorial/errors.html> "Errors and Exceptions"
 
-```python
+```{code-cell} ipython3
 print(a[:1000], a[350::-1], sep='\n')
 ```
 
@@ -387,13 +395,14 @@ And another important property of slicing:
 
 Note that this particular statement concerns the case of `step`$>0$. Similarly, in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo: 
 
-```python
+```{code-cell} ipython3
 print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
 ```
 
 ### Referenced or copied?
 
-<!-- #region -->
++++
+
 The important question to ask when you create one object from another in Python, is *whether I am copying or referencing it?* In other words, *does my old object get modified when I modify the new one?*
 
 This question is deeply rooted in the meaning of the `=` symbol in Python. In Python, the symbol `=` is used to *assign* the value on its right-hand side to the variable on the left-hand side.
@@ -403,7 +412,8 @@ When you write this very simple statement,
 ```python
 a=1
 ```
-<!-- #endregion -->
+
++++
 
 Python does two things:
 
@@ -412,7 +422,7 @@ Python does two things:
 
 You have to remember that `a` is just a shortcut or name for the object containing the integer $1$. For numbers, this does not create much confusion. Consider for example the following lines of code:
 
-```python
+```{code-cell} ipython3
 a = 1
 b = a
 print(f'Initial value of b: {b}')
@@ -423,7 +433,7 @@ print(f'Value of a after re-assignment: {a}')
 
 Things behave quite intuitively. For lists or arrays, one needs to pay special attention. Consider another example:
 
-```python
+```{code-cell} ipython3
 a = [0, 1, 2, 3]
 b = a
 print(f'Initial value of b: {b}')
@@ -442,7 +452,7 @@ The statement `b[0]=5` then creates another integer object storing the value $5$
 
 If you really want to change the content of the list `b` without affecting `a`, you need to create a separate copy of `a` and give that copy the name `b`. This can be done as follows:
 
-```python
+```{code-cell} ipython3
 a = [0, 1, 2, 3]
 b = a.copy()
 print(f'Initial value of b: {b}')
@@ -455,6 +465,7 @@ Now you see that `b` has been modified while `a` is unchanged.
 
 The whole discussion has been done using lists but the same behavior is true for `numpy.arrays`.
 
++++
 
 When it comes to slices, this translates to:
 
@@ -463,7 +474,7 @@ When it comes to slices, this translates to:
 
 First, let's clarify what is meant by n level depth? Python sequences can have nested sequences, like in the following example:
 
-```python
+```{code-cell} ipython3
 i_have_nested_dict = [1, 2, 3, {'hello': 'world'}]
 ```
 
@@ -471,7 +482,7 @@ We say that integers $1, 2$ and $3$ are one-level-deep in the sequence, keys and
 
 [33]: <https://docs.python.org/3/tutorial/datastructures.html#dictionaries> "Python dictionaries"
 
-```python
+```{code-cell} ipython3
 # First, we copy sequence a into the new variable
 # to keep a itself in its original state.
 original = a.copy()
@@ -489,7 +500,7 @@ You can see that neither modifications made to the original sequence affect the 
 
 But what if there were a nested sequence?
 
-```python
+```{code-cell} ipython3
 i_am_slice = i_have_nested_dict[:]
 print('\noriginal sequence:', i_have_nested_dict, '\nslice:', i_am_slice)
 
@@ -510,6 +521,7 @@ Deep copy copies **everything**. Any level deep elements of the original sequenc
 
 When you program you must always be aware with which one you are operating.
 
++++
 
 ## One-sided finite differences
 
@@ -558,13 +570,13 @@ and its stencil is:
 
 We can now construct a second-order discretized operator throughout the domain by using the above two expressions at the boundary nodes. Our complete computation of the second-order accurate first-order derivative then looks like (for the sake of completeness, we repeat the whole code here):
 
-```python
+```{code-cell} ipython3
 nx = 80          # number of grid points (coarse grid)
 lx = np.pi       # length of interval
 dx = lx / (nx-1) # grid spacing
 ```
 
-```python
+```{code-cell} ipython3
 x_c = np.linspace(0, lx, nx)          # coordinates in the coarse grid
 f_c = np.exp(x_c)*np.sin(3*np.pi*x_c) # function in the coarse grid
 
@@ -577,7 +589,7 @@ df_2[-1] = (3./2*f_c[-1] - 2*f_c[-2] + 1./2.*f_c[-3]) / dx
 df_2[1:-1] = (f_c[2:] - f_c[:-2]) / (2*dx)
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 5))
 
 # We only display x-axis starting from the minimum
@@ -595,12 +607,13 @@ ax.legend(loc='upper left')
 
 ## Summary
 
++++
 
 In this notebook, we learned how to approximate derivatives using finite differences. We illustrated how finite-difference formulas can be derived and showed how to treat boundary nodes in the numerical grid.
 
 Besides that, we've explained the Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we extend our knowledge on finite differences by considering higher order derivatives.
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

@@ -1,41 +1,43 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Toolkit Setup<span class="tocSkip"></span></h1>
 
-<!-- #region toc=true -->
+# Toolkit Setup
+
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Python-and-why-Python" data-toc-modified-id="Python-and-why-Python-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Python and why Python</a></span></li><li><span><a href="#Get-to-know-Anaconda" data-toc-modified-id="Get-to-know-Anaconda-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Get to know Anaconda</a></span><ul class="toc-item"><li><span><a href="#Installing-Anaconda" data-toc-modified-id="Installing-Anaconda-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Installing Anaconda</a></span></li><li><span><a href="#Creating-a-conda-environment" data-toc-modified-id="Creating-a-conda-environment-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Creating a conda environment</a></span></li></ul></li><li><span><a href="#Get-to-know-Git" data-toc-modified-id="Get-to-know-Git-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Get to know Git</a></span><ul class="toc-item"><li><span><a href="#Installing-Git" data-toc-modified-id="Installing-Git-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Installing Git</a></span></li><li><span><a href="#Basic-usage" data-toc-modified-id="Basic-usage-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Basic usage</a></span><ul class="toc-item"><li><span><a href="#Git-repositories" data-toc-modified-id="Git-repositories-3.2.1"><span class="toc-item-num">3.2.1&nbsp;&nbsp;</span>Git repositories</a></span><ul class="toc-item"><li><span><a href="#Creating-a-local-Git-repository" data-toc-modified-id="Creating-a-local-Git-repository-3.2.1.1"><span class="toc-item-num">3.2.1.1&nbsp;&nbsp;</span>Creating a local Git repository</a></span></li><li><span><a href="#Creating-remote-Git-repository" data-toc-modified-id="Creating-remote-Git-repository-3.2.1.2"><span class="toc-item-num">3.2.1.2&nbsp;&nbsp;</span>Creating remote Git repository</a></span></li></ul></li><li><span><a href="#Git-branches" data-toc-modified-id="Git-branches-3.2.2"><span class="toc-item-num">3.2.2&nbsp;&nbsp;</span>Git branches</a></span></li></ul></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Troubleshooting" data-toc-modified-id="Troubleshooting-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Troubleshooting</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Python and why Python
 
@@ -88,6 +90,7 @@ But for us Python is the perfect tool. Since we are solving *small* test problem
 [00]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [01]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
 
++++
 
 ## Get to know Anaconda
 
@@ -162,7 +165,8 @@ or just close the terminal window if you don't need it anymore.
 [14]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/channels.html> "conda channels"
 [15]: <https://www.latex-project.org> "LaTeX"
 
-<!-- #region -->
++++
+
 ## Get to know Git
 
 ### Installing Git
@@ -443,9 +447,8 @@ If .bashrc isn't there, it is possible that it has a different name - .zshrc, fo
 Add `export PATH=/path/to/anaconda3/bin:$PATH` to your .bashrc and save it. To get it working either open new terminal window, or run `source .bashrc` in the one, which is opened.
 
 Now `jupyter notebook` command should work.
-<!-- #endregion -->
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

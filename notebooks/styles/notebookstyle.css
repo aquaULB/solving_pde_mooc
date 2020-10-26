@@ -57,6 +57,7 @@ formatting for header cells
     font-style:regular;
     font-weight: 400;
     font-size: 36pt;
+    text-align: center;
     line-height: 100%;
     color: rgb(0,51,102);
     margin-bottom: 1.0em;
@@ -66,6 +67,7 @@ formatting for header cells
 
 #Table-of-Contents {
     font-size: 24pt;
+    text-align: left;
 }
 
 .text_cell_render h2 {

@@ -425,6 +425,18 @@ ax.text(-1, 1.1, r'Euler', fontsize=14, horizontalalignment='center')
 ax.text(-1, 1.85, r'RK2', fontsize=14, horizontalalignment='center')
 ax.text(-2.05, 2.05, r'RK4', fontsize=14, horizontalalignment='center')
 
+# Notable points
+ax.arrow(0.5, 2.63, -0.5, 0.2, fc='k', ec='k', lw=0.5,
+         head_width=1./80.*(ymax-ymin), head_length=1./50.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+ax.text(0.75, 2.55, r'2.83', fontsize=14, horizontalalignment='center')
+
+ax.arrow(-3.05, 0.4, 0.26, -0.4, fc='k', ec='k', lw=0.5,
+         head_width=1./80.*(ymax-ymin), head_length=1./50.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+ax.text(-3.17, 0.49, r'-2.79', fontsize=14, horizontalalignment='center')
+
+# Axis labels
 ax.set_xlabel(r'$\lambda_r dt$')
 ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
 

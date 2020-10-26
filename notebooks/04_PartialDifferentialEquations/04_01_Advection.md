@@ -25,7 +25,7 @@ toc:
   toc_window_display: false
 ---
 
-<h1 style="text-align: center">The first order wave equation</h1>
+# The first order wave equation
 
 +++ {"toc": true}
 
@@ -389,7 +389,7 @@ What is happening ? The solution rapidly deteriorates; it is not peacefully tran
 
 We have already observed such behaviors when discussing integration schemes. We saw that some of them have a limited domain of stability and we should suspect that a similar limitation applies here. We will discuss this point thoroughly in the next notebook. 
 
-Here we just try another numerical scheme to see what happens. 
+Here we just try another numerical scheme to see what happens.
 
 +++
 
@@ -692,7 +692,7 @@ def animate(time):
     return line, time_text
 ```
 
-Creating animations can be computationally expensive. Our solution of the wave equation currently contains the profile $u(x)$ at 1001 time steps (including the initial condition). On a Macbook Pro - 2,9 GHz Quad-Core Intel Core i7 - creating an animation that displays all these time steps takes about one minute. When the time needed becomes prohibitively high, it is useful to only include a subset of time steps. Here we want to include every other ten time steps in the animation. To that end, we create a sequence containing the desired time steps: 
+Creating animations can be computationally expensive. Our solution of the wave equation currently contains the profile $u(x)$ at 1001 time steps (including the initial condition). On a Macbook Pro - 2,9 GHz Quad-Core Intel Core i7 - creating an animation that displays all these time steps takes about one minute. When the time needed becomes prohibitively high, it is useful to only include a subset of time steps. Here we want to include every other ten time steps in the animation. To that end, we create a sequence containing the desired time steps:
 
 ```{code-cell} ipython3
 step = 10 # warning: nt should be a multiple of step

@@ -30,7 +30,8 @@ jupyter:
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Finite Differences II<span class="tocSkip"></span></h1>
+
+# Finite Differences II
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>

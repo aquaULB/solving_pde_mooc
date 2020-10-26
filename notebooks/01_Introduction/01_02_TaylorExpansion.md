@@ -30,7 +30,8 @@ jupyter:
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
-<h1 style="text-align: center">Approximations and Taylor expansion<span class="tocSkip"></span></h1>
+
+# Approximations and Taylor expansion
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>

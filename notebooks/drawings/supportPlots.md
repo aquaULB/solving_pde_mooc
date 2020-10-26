@@ -13,6 +13,11 @@ jupyter:
     name: python3
 ---
 
+<!-- #region toc=true -->
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li></ul></div>
+<!-- #endregion -->
+
 ```python
 import numpy as np
 
@@ -169,8 +174,8 @@ ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
          head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
          overhang = 0.3, length_includes_head= True, clip_on = False)
 
-ax.set_xlabel(r'$\lambda_r\, \frac{cdt}{2dx}$', horizontalalignment='right')
-ax.set_ylabel(r'$\lambda_i\, \frac{cdt}{2dx}$', rotation=0)
+ax.set_xlabel(r'$\lambda_r\, \frac{cdt}{dx}$', horizontalalignment='right')
+ax.set_ylabel(r'$\lambda_i\, \frac{cdt}{dx}$', rotation=0)
 
 ax.yaxis.set_label_coords(0.6, 0.95)
 ax.xaxis.set_label_coords(1.05, 0.475)
@@ -189,10 +194,152 @@ ax.tick_params(width=2, pad=10)
 m = 10
 k = np.arange(1,m+1)
 x = np.zeros(m)
-y = 2*np.cos(np.pi*k/(m+1))
+y = -np.cos(np.pi*k/(m+1))
 
 ax.plot(x,y,'o', color='blue')
 fig.savefig('../figures/PDEStabilityMap.png', dpi=300)
+```
+
+## Modified wave number
+
+```python
+# Let's configure the size of the figure
+# (in inches) to make it a square and bigger.
+fig, ax = plt.subplots(figsize=(8, 8))
+
+circle = plt.Circle((-1, 0), 1, ec='k', fc='green', alpha=0.5, hatch='/')
+
+ax.add_artist(circle)
+
+ax.set_aspect(1)
+
+ax.spines['left'].set_position('center')
+ax.spines['bottom'].set_position('center')
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+xmin, xmax = -2.3, 2.3
+ymin, ymax = -2.2, 2.2
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(ymax-ymin), head_length=1./20.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.set_xlabel(r'$\lambda_r\, \frac{cdt}{dx}$', horizontalalignment='right')
+ax.set_ylabel(r'$\lambda_i\, \frac{cdt}{dx}$', rotation=0)
+
+ax.yaxis.set_label_coords(0.6, 0.95)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_title('Stability domain - Forward Euler - Centered FD', y=1.05)
+
+
+ax.set_xticks((-2, 1))
+ax.set_yticks((-1, 1))
+
+
+ax.tick_params(width=2, pad=10)
+
+
+# Eigenvalues
+L = 1.
+nx = 10
+dx = L/(nx-1)
+
+m = 10
+k = 2*np.pi/L * np.arange(0,m)
+
+# Forward Euler - Centered FD
+x = np.zeros(m)
+y = -np.sin(k*dx)
+
+ax.plot(x,y,'o', color='blue')
+
+# Forward Euler - Forward FD
+lam = 1.-np.exp(1j*k*dx) 
+ax.plot(lam.real, lam.imag,'o', color='red')
+
+# Forward Euler - Backward FD
+lam = np.exp(-1j*k*dx)-1.
+ax.plot(lam.real, lam.imag,'o', color='black')
+
+fig.savefig('../figures/modified_k.png', dpi=300)
+```
+
+## Logo
+
+```python
+# Let's configure the size of the figure
+# (in inches) to make it a square and bigger.
+fig, ax = plt.subplots(figsize=(8, 8))
+
+circle = plt.Circle((-1, 0), 1, ec='k', fc='green', alpha=0.5, hatch='/')
+
+ax.add_artist(circle)
+
+ax.set_aspect(1)
+
+ax.spines['left'].set_position('center')
+ax.spines['bottom'].set_position('center')
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+xmin, xmax = -2.3, 2.3
+ymin, ymax = -2.2, 2.2
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./40.*(ymax-ymin), head_length=1./40.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin+0.2*(ymax-ymin), 0., 0.65*(ymax-ymin), fc='k', ec='k', lw=0.5,
+         head_width=1./40.*(xmax-xmin), head_length=1./40.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.yaxis.set_label_coords(0.6, 0.95)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_xticks((-2, 1))
+ax.set_yticks((-1, 1))
+ax.set_axis_off()
+
+ax.tick_params(width=0, pad=10)
+
+
+# Eigenvalues
+L = 1.
+nx = 10
+dx = L/(nx-1)
+
+m = 10
+k = 2*np.pi/L * np.arange(0,m)
+
+# Forward Euler - Centered FD
+x = np.zeros(m)
+y = -np.sin(k*dx)
+
+ax.plot(x,y,'o', color='blue')
+
+# Forward Euler - Forward FD
+lam = 1.-np.exp(1j*k*dx) 
+ax.plot(lam.real, lam.imag,'o', color='red')
+
+# Forward Euler - Backward FD
+lam = np.exp(-1j*k*dx)-1.
+ax.plot(lam.real, lam.imag,'o', color='black')
+
+fig.savefig('../figures/logo.png', dpi=300)
 ```
 
 ```python

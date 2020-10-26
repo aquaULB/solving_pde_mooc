@@ -1,29 +1,28 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
@@ -33,16 +32,18 @@ jupyter:
 
 # Finite Differences III
 
-<!-- #region toc=true -->
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Heated-rod" data-toc-modified-id="Heated-rod-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Heated rod</a></span><ul class="toc-item"><li><span><a href="#Homogeneous-Dirichlet-boundary-conditions" data-toc-modified-id="Homogeneous-Dirichlet-boundary-conditions-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Homogeneous Dirichlet boundary conditions</a></span></li><li><span><a href="#Non-homogeneous-Dirichlet-boundary-conditions" data-toc-modified-id="Non-homogeneous-Dirichlet-boundary-conditions-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Non-homogeneous Dirichlet boundary conditions</a></span></li><li><span><a href="#Neumann-boundary-conditions" data-toc-modified-id="Neumann-boundary-conditions-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Neumann boundary conditions</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
 For convenience, we start with importing some modules needed below:
 
-```python
+```{code-cell} ipython3
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -53,6 +54,7 @@ plt.style.use('../styles/mainstyle.use')
 
 ## Heated rod
 
++++
 
 Let's consider a rod made of heat conducting material. Under some simplifications, the temperature $T(x,t)$ along the rod can be determined by solving the following heat equation based on Fourier's law,
 
@@ -195,7 +197,7 @@ We now write a Python code to solve our problem with a very simple term on the r
 
 [1]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.inv.html> "documentation for scipy.linalg.inv"
 
-```python
+```{code-cell} ipython3
 nx = 41                   # number of grid points
 lx = 1.                   # length of interval
 dx = lx / (nx-1)          # grid spacing
@@ -206,13 +208,13 @@ T = np.empty(nx)          # array to store the solution vector
 
 As in the previous notebook, we rely on the `diags` routine to build our matrix.
 
-```python
+```{code-cell} ipython3
 from scipy.sparse import diags
 ```
 
 To be able to re-use our code later on, we define a routine to create our matrix modified with the proper boundary conditions:
 
-```python
+```{code-cell} ipython3
 def d2_mat_dirichlet(nx, dx):
     """
     Constructs the centered second-order accurate second-order derivative for
@@ -248,7 +250,7 @@ def d2_mat_dirichlet(nx, dx):
 
 Let's compute our matrix and check that its entries are what we expect:
 
-```python
+```{code-cell} ipython3
 A = d2_mat_dirichlet(nx, dx)
 print(A)
 ```
@@ -257,11 +259,11 @@ We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat`a
 
 [1]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
 
-```python
+```{code-cell} ipython3
 from scipy.linalg import inv
 ```
 
-```python
+```{code-cell} ipython3
 A_inv = inv(A)
 
 # Perform the matrix multiplication of the inverse with the right-hand side.
@@ -274,11 +276,11 @@ T[0], T[-1] = [0, 0]
 
 That's it! If everything went how we expected, $T$ now contains the approximate solution. We can compare it with the exact solution $T(x)=\displaystyle\frac{1}{2}x(1-x)$, which obviously satisfies the required boundary conditions.
 
-```python
+```{code-cell} ipython3
 T_exact = 0.5*x * (1-x) # notice how we multiply numpy arrays pointwise.
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 7))
 
 ax.plot(x, T_exact, label='Exact solution')
@@ -292,6 +294,7 @@ ax.legend()
 
 ### Non-homogeneous Dirichlet boundary conditions
 
++++
 
 In the above example, we imposed homogeneous Dirichlet boundary conditions at both ends of the domain. What if we specify a non-zero value for $T$ at the left and/or right boundary node(s)? We will illustrate this for $T(0)=1$. Note that all other values or combinations of values for inhomogeneous Dirichlet boundary conditions are treated in the same way. If we look back at equation \ref{eq:leftBndDC}, we have in full generality:
 
@@ -309,7 +312,7 @@ We observe that compared to our previous setup, the left-hand side has not chang
 
 To solve the problem we can re-use everything we computed so far except that we need to modify $b_1$:
 
-```python
+```{code-cell} ipython3
 b[1] = b[1] - 1./dx**2
 # We perform the matrix multiplication of the inverse with the rhs.
 T[1:-1] = np.dot(A_inv, b[1:-1])
@@ -319,11 +322,11 @@ T[0], T[-1] = [1., 0.]
 
 Let's check the numerical solution against the exact solution corresponding the modified boundary conditions: $T(x)=\displaystyle\frac12(x+2)(1-x)$.
 
-```python
+```{code-cell} ipython3
 T_exact = 0.5 * (x+2) * (1-x) # notice how we multiply numpy arrays pointwise.
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 7))
 
 ax.plot(x, T_exact, label='Exact solution')
@@ -337,9 +340,11 @@ ax.legend()
 
 The solution looks just as expected!
 
++++
 
 ### Neumann boundary conditions
 
++++
 
 The last type of boundary conditions we consider is the so-called Neumann boundary condition for which the derivative of the unknown function is specified at one or both ends. Physically this corresponds to specifying the heat flux entering or exiting the rod at the boundaries. Here we are going to set this flux at the left boundary node and assign a specific temperature at the right boundary node:
 
@@ -374,7 +379,7 @@ The effect of the Neumann boundary condition is two-fold: it modifies the left-h
 
 All the necessary bits of code are now scattered at different places in the notebook. We rewrite here some of them to make the algorithm easier to follow:
 
-```python
+```{code-cell} ipython3
 nx = 41                   # number of grid points
 lx = 1.                   # length of interval
 dx = lx / (nx-1)          # grid spacing
@@ -383,7 +388,7 @@ b = -1.0*np.ones(nx)      # right-hand side vector at the grid points
 T = np.empty(nx)          # array to store the solution vector
 ```
 
-```python
+```{code-cell} ipython3
 # We use d2_mat_dirichlet() to create the skeleton of our matrix.
 A = d2_mat_dirichlet(nx, dx)
 
@@ -411,11 +416,11 @@ T[-1] = 1
 
 Let's compare the numerical solution with the exact solution $\displaystyle T_{exact}=-\frac12(x^2-4x+1)$.
 
-```python
+```{code-cell} ipython3
 T_exact = -0.5 * (x**2-4*x+1.)  # notice how we multiply numpy arrays pointwise.
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10, 7))
 
 ax.plot(x, T_exact, label='Exact solution')
@@ -429,13 +434,15 @@ ax.legend()
 
 Once again, the computed solution behaves appropriately!
 
++++
 
 ## Summary
 
++++
 
 In this notebook we have discussed how to use finite-difference formulas to solve boundary value problems. We have shown how to modify the original discretized differential system to take into account boundary conditions. Dirichlet boundary conditions result in the modification of the right-hand side of the equation, while Neumann boundary conditions result into the modification of both the left-hand side and the right-side of the equation. We also have briefly discussed the usage of two functions from `scipy` and `numpy` to respectively invert matrices and perform array multiplications. We advocate again the exploration of the documentation of these Python packages as they contain numerous useful tools to perform scientific computations.
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

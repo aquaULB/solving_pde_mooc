@@ -1,29 +1,28 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    notebook_metadata_filter: toc
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
-  kernelspec:
-    display_name: Python 3
-    language: python
-    name: python3
-  toc:
-    base_numbering: 1
-    nav_menu: {}
-    number_sections: true
-    sideBar: true
-    skip_h1_title: true
-    title_cell: Table of Contents
-    title_sidebar: Contents
-    toc_cell: true
-    toc_position: {}
-    toc_section_display: true
-    toc_window_display: false
+jupytext:
+  formats: ipynb,md:myst
+  notebook_metadata_filter: toc
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.6.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+toc:
+  base_numbering: 1
+  nav_menu: {}
+  number_sections: true
+  sideBar: true
+  skip_h1_title: true
+  title_cell: Table of Contents
+  title_sidebar: Contents
+  toc_cell: true
+  toc_position: {}
+  toc_section_display: true
+  toc_window_display: false
 ---
 
 <div class="copyright" property="vk:rights">&copy;
@@ -33,10 +32,12 @@ jupyter:
 
 # Time integration I
 
-<!-- #region toc=true -->
++++ {"toc": true}
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#The-forward-Euler-method" data-toc-modified-id="The-forward-Euler-method-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>The forward Euler method</a></span><ul class="toc-item"><li><span><a href="#Numerical-accuracy-of-the-forward-Euler-method" data-toc-modified-id="Numerical-accuracy-of-the-forward-Euler-method-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical accuracy of the forward Euler method</a></span></li><li><span><a href="#Numerical-stability-of-the-forward-Euler-method" data-toc-modified-id="Numerical-stability-of-the-forward-Euler-method-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Numerical stability of the forward Euler method</a></span></li><li><span><a href="#Higher-order-example" data-toc-modified-id="Higher-order-example-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Higher-order example</a></span></li><li><span><a href="#Numerical-stability-of-the-forward-Euler-method-revisited" data-toc-modified-id="Numerical-stability-of-the-forward-Euler-method-revisited-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Numerical stability of the forward Euler method revisited</a></span></li></ul></li><li><span><a href="#The-backward-Euler-method" data-toc-modified-id="The-backward-Euler-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>The backward Euler method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
-<!-- #endregion -->
+
++++
 
 ## Introduction
 
@@ -94,13 +95,14 @@ The forward Euler scheme is then alternatively written as:
 \end{align}
 
 Let's write a Python code for that. First, we perform some imports.
-```python
+
+```{code-cell} ipython3
 import numpy as np
 ```
 
 Now let's set some constant parameters for our problem. In real-world codes, constant parameters are usually separated from the main code. They are either put in a separate module, or set in an inputfile. At this stage, let's just isolate them in a separate cell.
 
-```python
+```{code-cell} ipython3
 alpha = 0.25 # Exponential law coefficient
 ti = 0.0     # Initial time
 tf = 5.0     # Final time
@@ -110,7 +112,7 @@ Ni = 100     # Initial condition
 
 Now we can write a code for the actual numerical procedure.
 
-```python
+```{code-cell} ipython3
 # First, we compute the number of steps.
 # Note that the number of steps must
 # be an integer, but the time data
@@ -151,7 +153,7 @@ Done! The last entry in the array N now contains an estimate for $N(t_f)$.
 
 Let us compare graphically our numerical values with the exact solution \eqref{eq:expDecay}. For that purpose we use again the matplotlib package:
 
-```python
+```{code-cell} ipython3
 import matplotlib.pyplot as plt
 
 %matplotlib inline
@@ -159,7 +161,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-```python
+```{code-cell} ipython3
 # In this cell, we compute the
 # exact solution of the differential
 # equation.
@@ -181,7 +183,7 @@ Nexact = Ni * np.exp(-alpha*t)
 
 When you're *debugging* - developing, testing and optimizing your code, it is always a good idea to have your imports and setup of *constant parameters* separated from the code you're working on. The same stands for the actual computations and visualization. Imaging, you build your arrays of data in the same cell as you plot it. You see a plot and you don't like the font, you rerun the cell, and then you think that it might be a good idea to cut the x-axis, you rerun the cell again. In such a way, each time you update your plot, you will recompute absolutely the same numpy array. If the array takes a lot of time to compute, you will lose a lot of time. For small examples, this is *not catastrophic, but considered to be a poor organization of a code*.
 
-```python
+```{code-cell} ipython3
 # Create a figure with a single subplot
 fig, ax = plt.subplots()
 
@@ -249,7 +251,7 @@ The agreement between the exact solution and the approximate one is rather good.
 
 To analyze this from the quantitative point of view, let us redo the computation using several values of $dt$ and compare the error made in estimating $N(t_f)$. In the following piece of code, we only store the value of $N$ at $t_f$.
 
-```python
+```{code-cell} ipython3
 # Create a list containing the set of
 # time steps, so that each time step is one half
 # of the previous one.
@@ -308,14 +310,14 @@ for i, dt in enumerate(dt_list):
 
 Let's now compute and plot the difference between all the computed $N(t_f)$ and the exact solution.
 
-```python
+```{code-cell} ipython3
 # We construct the array containing the differences
 # between approximated and exact final solutions
 # for each size of time step considered in dt_list.
 error = np.abs(values-Ni*np.exp(-alpha*tf))
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots()
 
 # Plot the error in logarithmic scale and see
@@ -360,7 +362,7 @@ In many problems, the coefficients of the equations are complex (e.g. Schröding
 
 Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$, where the forward Euler scheme is stable. As it is obvious from \ref{eq:complex_stability}, the bounded region of stability *is a circle*.
 
-```python
+```{code-cell} ipython3
 # Let's configure the size of the figure
 # (in inches) to make it a square and bigger.
 fig, ax = plt.subplots(figsize=(6, 6))
@@ -593,7 +595,7 @@ L=
 
 Let's solve this system numerically and use numpy array functionalities to write our solution in a more compact way. As initial condition, we choose $h_0=100\,\textrm{m}$ and $v_0=0\,\textrm{m/s}$.
 
-```python
+```{code-cell} ipython3
 g = 9.81  # ms^-2, gravitational constant
 h0 = 100. # initial height
 v0 = 0.   # initial velocity
@@ -603,7 +605,7 @@ tf = 4.0  # final time at which to seek the solution
 dt = 0.1  # time step
 ```
 
-```python
+```{code-cell} ipython3
 nt = int((tf-ti)/dt)
 
 # We create a numpy array to contain the
@@ -683,14 +685,14 @@ Indeed, we already spoke of the fact that *numpy arrays are faster than lists*. 
 
 [1]: <https://matplotlib.org/tutorials/introductory/pyplot.html> "Internal conversion"
 
-```python
+```{code-cell} ipython3
 # Let's create some sample array which
 # will store the discrete time data for nt
 # time steps.
 t = np.arange(nt+1) * dt
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
 # We, of course, now access different sub-
@@ -778,7 +780,7 @@ dt
 
 It does not seem very different from the previous problem so let's implement this.
 
-```python
+```{code-cell} ipython3
 k = 2.    # spring constant
 m = 1.    # object's mass
 x0 = 0.75 # initial position
@@ -788,7 +790,7 @@ tf = 40.0 # final time at which the solution is computed
 dt = 0.15 # time step
 ```
 
-```python
+```{code-cell} ipython3
 # Let's first compute gamma and the number
 # of time steps.
 gamma = np.sqrt(k/m)
@@ -811,12 +813,12 @@ for i in range(nt):
     y[i+1] = y[i] + np.dot(L, y[i])*dt
 ```
 
-```python
+```{code-cell} ipython3
 # Store nt time steps.
 t = np.arange(nt+1) * dt
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 2, figsize=(9, 4))
 
 ax[0].plot(t, y[:, 1])
@@ -929,7 +931,7 @@ N^{n+1} = (1+\alpha dt)^{-1}N^n.
 
 Let's solve the equation for some input parameters and visualize the solution.
 
-```python
+```{code-cell} ipython3
 # We redefine all the constants. Even though
 # they were defined in the above cell, some
 # got overwritten when solving other problems.
@@ -940,7 +942,7 @@ dt = 1.      # Time step
 Ni = 100     # Initial condition
 ```
 
-```python
+```{code-cell} ipython3
 nt = int((tf-ti)/dt)
 
 # Let us also redefine the array storing N, so that it contains
@@ -968,7 +970,7 @@ for i in range(nt):
     N[i+1, 1] = coef_imp*N[i, 1]
 ```
 
-```python
+```{code-cell} ipython3
 # t and Nexact have to be recomputed, as we
 # have a newly defined tf.
 t = np.arange(nt+1) * dt
@@ -976,7 +978,7 @@ t = np.arange(nt+1) * dt
 Nexact = Ni * np.exp(-alpha*t)
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(8, 6))
 
 ax.plot(t, Nexact, label='Exact solution')
@@ -997,6 +999,7 @@ ax.legend()
 
 Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Even though they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.
 
++++
 
 Let us now go back to the equation \ref{eq:spring}. We have proved that the forward Euler method is unstable for this case. Let us now check what happens with the backward Euler method.
 
@@ -1057,7 +1060,7 @@ and finally:
 
 Let's implement this method in a code:
 
-```python
+```{code-cell} ipython3
 # We have to redefine time parameters
 # again, as they got overwritten.
 ti = 0.    # initial time
@@ -1065,7 +1068,7 @@ tf = 40.0  # final time at which the solution is computed
 dt = 0.15  # time step
 ```
 
-```python
+```{code-cell} ipython3
 # Recompute the number of time steps and
 # the time array.
 nt = int((tf-ti)/dt)
@@ -1073,7 +1076,7 @@ nt = int((tf-ti)/dt)
 t = np.arange(nt+1) * dt
 ```
 
-```python
+```{code-cell} ipython3
 y_imp = np.empty((nt+1, 2))
 
 # Store initial condition in the first row
@@ -1095,7 +1098,7 @@ for i in range(nt):
     y_imp[i+1] = np.dot(L_imp, y_imp[i])
 ```
 
-```python
+```{code-cell} ipython3
 fig, ax = plt.subplots(1, 2, figsize=(12, 6))
 
 ax[0].plot(t, y_imp[:, 1], label='Backward Euler')
@@ -1167,7 +1170,7 @@ In the next notebook, we introduce some more efficient time advancement schemes 
 
 <a name="exc3">**Exercise 3.** </a> For the problem of radioactive decay, given that $\displaystyle \alpha dt \le \frac{3}{5}$, explain why the error for the first timestep attributed to the forward Euler scheme is larger than that attributed to the backward Euler scheme.
 
-```python
+```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())

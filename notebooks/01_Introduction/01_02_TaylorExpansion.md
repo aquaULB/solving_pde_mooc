@@ -290,7 +290,7 @@ delta = np.array(delta_list)
 
 2. *Create a Python list using a list comprehension and then convert it to a NumPy array*
 
-    This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.  
+    This method is conceptually equivalent to the one described above, except for that we use a *list comprehension* for the list creation - it is a shortened way to generate lists in Python. Such an approach is the preferred one when possible.
 
 ```{code-cell} ipython3
 %%timeit
@@ -542,7 +542,7 @@ Source: Find expansion of the example function on [*Wikipedia*][9].
 
 +++
 
-# References
+## References
 
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide . Waltham_'',  2012.
 

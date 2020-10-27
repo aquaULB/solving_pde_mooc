@@ -25,7 +25,7 @@ toc:
   toc_window_display: false
 ---
 
-# The first order wave equation
+# The first-order wave equation
 
 +++ {"toc": true}
 
@@ -49,7 +49,7 @@ plt.style.use('../styles/mainstyle.use')
 
 In Chapter 2 and 3 of this course, we described respectively the time integration of ordinary differential equations and the discretization of differential operators using finite difference formulas.
 
-Here we combine these tools to address the numerical solution of partial differential equations. We mainly focus on the first order wave equation (all symbols are properly defined in the corresponding sections of the notebooks),
+Here we combine these tools to address the numerical solution of partial differential equations. We mainly focus on the first-order wave equation (all symbols are properly defined in the corresponding sections of the notebooks),
 
 $$
    \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,\label{eq:advection}
@@ -95,7 +95,7 @@ But before we start digging into the theory and show some examples, we introduce
 
 ## Python modules
 
-Up to now, we have always written all the necessary Python code parts for our examples and test cases inside each notebooks. This has the advantage of making all the necessary statements and steps visible to the reader. But in the long run, this approach also has its limitations. For example, if we need a function to compute the first order derivative, we need to define it in each notebook and this is a repetitive task. Gladly, Python allows to overcome this through the use of *modules*.
+Up to now, we have always written all the necessary Python code parts for our examples and test cases inside each notebooks. This has the advantage of making all the necessary statements and steps visible to the reader. But in the long run, this approach also has its limitations. For example, if we need a function to compute the first-order derivative, we need to define it in each notebook and this is a repetitive task. Gladly, Python allows to overcome this through the use of *modules*.
 
 From the official Python documentation: 
 
@@ -503,7 +503,7 @@ The plasma is confined in a toroidal chamber at very high temperature. When mode
 
 +++
 
-In this section we show how to simulate the first order wave equation in a periodic domain. If the propagation direction is denoted $x$ and $L$ is the domain length:
+In this section we show how to simulate the first-order wave equation in a periodic domain. If the propagation direction is denoted $x$ and $L$ is the domain length:
 
 \begin{equation}
     u(x+L) = u(x),\; u'(x+L) = u'(x), \; u''(x+L) = u''(x), \; \hbox{etc.} 
@@ -727,11 +727,11 @@ Isn't this nice? We observe that our wave packet loops exactly as expected throu
 
 In this notebook we have started to discuss the discretization of partial differential equations and introduced the concept of Python modules. 
 
-We took the example of the first order wave equation and using the technique of semi-discretization, we simulated it using the forward Euler method with both forward and backward finite differentiation. The first algorithm proved to be unstable while the second one remained stable for the parameters used.
+We took the example of the first-order wave equation and using the technique of semi-discretization we simulated it using the forward Euler method with both forward and backward finite differentiation. The first algorithm proved to be unstable while the second one remained stable for the parameters used.
 
 We also introduced the notion of periodic boundary conditions and discussed some of the situations in which they are useful. 
 
-Finally, we showed how to create animations using `matplotlib.animation.FuncAnimatio` to visualize results of time dependent problems.
+Finally, we showed how to create animations using `matplotlib.animation.FuncAnimation` to visualize results of time dependent problems.
 
 In the next notebook, we discuss in detail how to determine the stability of the numerical algorithms obtained through semi-discretization.
 

@@ -15,7 +15,7 @@ jupyter:
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li></ul></div>
 <!-- #endregion -->
 
 ```python
@@ -233,13 +233,13 @@ ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
          head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
          overhang = 0.3, length_includes_head= True, clip_on = False)
 
-ax.set_xlabel(r'$\lambda_r\, \frac{cdt}{dx}$', horizontalalignment='right')
-ax.set_ylabel(r'$\lambda_i\, \frac{cdt}{dx}$', rotation=0)
+ax.set_xlabel(r'$\lambda_r\, dt$', horizontalalignment='right')
+ax.set_ylabel(r'$\lambda_i\, dt$', rotation=0)
 
 ax.yaxis.set_label_coords(0.6, 0.95)
 ax.xaxis.set_label_coords(1.05, 0.475)
 
-ax.set_title('Stability domain - Forward Euler - Centered FD', y=1.05)
+ax.set_title('Stability domain - Coefficients $\lambda_m$ ', y=1.05)
 
 
 ax.set_xticks((-2, 1))
@@ -259,17 +259,19 @@ k = 2*np.pi/L * np.arange(0,m)
 
 # Forward Euler - Centered FD
 x = np.zeros(m)
-y = -np.sin(k*dx)
+y = -0.8*np.sin(k*dx)
 
-ax.plot(x,y,'o', color='blue')
+ax.plot(x,y,'o', color='blue', label='Centered')
 
 # Forward Euler - Forward FD
-lam = 1.-np.exp(1j*k*dx) 
-ax.plot(lam.real, lam.imag,'o', color='red')
+lam = 0.8*(1.-np.exp(1j*k*dx))
+ax.plot(lam.real, lam.imag,'o', color='red', label='Forward')
 
 # Forward Euler - Backward FD
-lam = np.exp(-1j*k*dx)-1.
-ax.plot(lam.real, lam.imag,'o', color='black')
+lam = 0.8*(np.exp(-1j*k*dx)-1.)
+ax.plot(lam.real, lam.imag,'o', color='black', label='Backward')
+
+ax.legend()
 
 fig.savefig('../figures/modified_k.png', dpi=300)
 ```
@@ -327,16 +329,16 @@ k = 2*np.pi/L * np.arange(0,m)
 
 # Forward Euler - Centered FD
 x = np.zeros(m)
-y = -np.sin(k*dx)
+y = -0.8*np.sin(k*dx)
 
 ax.plot(x,y,'o', color='blue')
 
 # Forward Euler - Forward FD
-lam = 1.-np.exp(1j*k*dx) 
+lam = 0.8*(1.-np.exp(1j*k*dx))
 ax.plot(lam.real, lam.imag,'o', color='red')
 
 # Forward Euler - Backward FD
-lam = np.exp(-1j*k*dx)-1.
+lam = 0.8*(np.exp(-1j*k*dx)-1.)
 ax.plot(lam.real, lam.imag,'o', color='black')
 
 fig.savefig('../figures/logo.png', dpi=300)

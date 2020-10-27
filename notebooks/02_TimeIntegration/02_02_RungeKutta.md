@@ -578,7 +578,7 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 
 +++
 
-# References
+## References
 
 (<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 

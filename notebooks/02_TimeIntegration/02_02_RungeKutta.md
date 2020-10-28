@@ -123,10 +123,12 @@ All the components of $z^{n}$ will remain finite for $n\rightarrow \infty$ as lo
 
 Let us apply the Runge-Kutta scheme to the problem of a body in free fall. The system of differential equations reads:
 
-\begin{cases}
+\begin{equation}
+    \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
     & \displaystyle \frac{dv}{dt}=-g.
-\end{cases}
+    \end{cases}
+\end{equation}
 
 Rephrasing it in matrix form we get:
 

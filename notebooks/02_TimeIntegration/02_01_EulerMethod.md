@@ -523,11 +523,13 @@ Let us introduce new variables:
 
 Equation \ref{eq:high_order_eq} then transforms into a system of 3 first-order differential equations:
 
-\begin{cases}
-& \displaystyle\frac{d y_0}{dx} = y_1, \\
-& \displaystyle\frac{d y_1}{dx} = y_2, \\
-& \displaystyle\frac{d y_2}{dx} = f(y, x).
-\end{cases}
+\begin{equation}
+    \begin{cases}
+    & \displaystyle\frac{d y_0}{dx} = y_1, \\
+    & \displaystyle\frac{d y_1}{dx} = y_2, \\
+    & \displaystyle\frac{d y_2}{dx} = f(y, x).
+    \end{cases}
+\end{equation}
 
 This procedure is generic. Consider the down-to-earth example of the equation of motion for a body in free fall:
 
@@ -539,10 +541,12 @@ where $g$ is the acceleration due to gravity and $h$ is the height of the object
 
 We introduce the new variable $\displaystyle v = \frac{dh}{dt}$, which has the physical meaning of velocity, and obtain a system of 2 first-order differential equations:
 
-\begin{cases}
+\begin{equation}
+    \begin{cases}
     & \displaystyle \frac{dh}{dt}=v,\\
     & \displaystyle \frac{dv}{dt}=-g.
-\end{cases}
+    \end{cases}
+\end{equation}
 
 If we apply the forward Euler scheme to this system, we get:
 

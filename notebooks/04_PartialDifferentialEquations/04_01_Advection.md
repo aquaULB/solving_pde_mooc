@@ -471,12 +471,9 @@ Before digging more on the stability and accuracy of the numerical schemes used 
 
 The so-called periodic boundary conditions are used in several types of numerical simulations. Before showing how to implement them for our advection problem, we briefly describe a couple of scenarios.
 
-1) In many physical systems, events occurring in one place only influence what is happening in their vicinity. The distance over which this influence is exerted is called the correlation length. Regions of space separated by a distance much larger than the correlation length are largely independent of each other. Let's take an example. Imagine you want to analyze the dynamics of a spiral arm located in the top-middle galaxy shown in this image:
+a) In many physical systems, events occurring in one place only influence what is happening in their vicinity. The distance over which this influence is exerted is called the correlation length. Regions of space separated by a distance much larger than the correlation length are largely independent of each other. Let's take an example. Imagine you want to analyze the dynamics of a spiral arm located in the top-middle galaxy shown in [this image][40]:
 
-<figure>
-    <img src='../figures/superspirals.jpg' width="500"/>
-    <figcaption style='text-align: center'><a href="https://phys.org/news/2019-10-dark-massive-spiral-galaxies-breakneck.html">phys.org: massive spiral galaxies</a></figcaption>
-</figure>
+<img src='../figures/superspirals.jpg' width="500"/>
 
 Of course, this is a photomontage but we use it to illustrate the discussion. This galaxy is surrounded by other galaxies but they are well separated. If the time scale of interest is short enough compared to the time needed for the galaxies to interact through gravity, what is happening in the spiral arm is not affected by the surrounding galaxies. Therefore, if we simulate the following system instead, the dynamics of the spiral arm should be virtually identical:
 
@@ -484,18 +481,16 @@ Of course, this is a photomontage but we use it to illustrate the discussion. Th
 
 From the computational point of view, this constitutes a huge advantage. Instead of using a grid that contains the whole system of galaxies, we can focus on one galaxy and artificially extend the grid periodically in all directions. This allows to significantly reduce the number of grid points and make use of efficient algorithms relying on the spatial periodicity of the grid.
 
-2) Certain geometries are intrinsically periodic in some directions. Consider for example the prototype [fusion reactor ITER][40]:
+b) Certain geometries are intrinsically periodic in some directions. Consider for example the prototype [fusion reactor ITER][41]:
 
-<figure>
-    <img src='../figures/iterTorus.png' width="500"/>
-    <figcaption style='text-align: center'>Left: ITER fusion reactor.    Right: toroidal geometry </figcaption>
-</figure>
+<img src='../figures/iterTorus.png' width="500"/>
 
 The plasma is confined in a toroidal chamber at very high temperature. When modeling this vessel as a torus, two periodic directions naturally appear along the angular directions $\theta$ and $\varphi$. The number of grid points is not reduced by the presence of these periodic directions but one still has the opportunity to discretize them with more efficient numerical algorithms.
 
-3) The final example we mention is of direct interest for the discussion of the wave equation. If we want to track the wave for a long time interval, we need a very long spatial domain. Using a fine numerical grid, this requires a very larger number of grid points. This is costly and inefficient as the wave packet only occupies a fraction of the domain at once. One way around this difficulty is to wrap the domain of propagation around itself. It then becomes a circle and the wave goes round and round around this circle. This is fine as long its circumference is large enough compared to length of the wave packet under consideration. In this setup, the direction of propagation is then periodic.  
+c) The final example we mention is of direct interest for the discussion of the wave equation. If we want to track the wave for a long time interval, we need a very long spatial domain. Using a fine numerical grid, this requires a very larger number of grid points. This is costly and inefficient as the wave packet only occupies a fraction of the domain at once. One way around this difficulty is to wrap the domain of propagation around itself. It then becomes a circle and the wave goes round and round around this circle. This is fine as long its circumference is large enough compared to length of the wave packet under consideration. In this setup, the direction of propagation is then periodic.  
 
-[40]: <https://www.iter.org> "ITER official website"
+[40]: <https://phys.org/news/2019-10-dark-massive-spiral-galaxies-breakneck.html> "phys.org: massive spiral galaxies"
+[41]: <https://www.iter.org> "ITER official website"
 
 +++
 

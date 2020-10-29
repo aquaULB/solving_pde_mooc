@@ -52,7 +52,8 @@ In Chapter 2 and 3 of this course, we described respectively the time integratio
 Here we combine these tools to address the numerical solution of partial differential equations. We mainly focus on the first-order wave equation (all symbols are properly defined in the corresponding sections of the notebooks),
 
 $$
-   \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,\label{eq:advection}
+\label{eq:advection}
+   \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,
 $$
 
 and the heat equation,
@@ -64,7 +65,8 @@ $$
 To solve these equations we will transform them into systems of coupled ordinary differential equations using a semi-discretization technique. In that framework, our model equations are approximated as,
 
 \begin{equation}
-    \frac{du_i}{dt}=f_i (u_0, u_1, \ldots, u_{nx-1}), \; \; i=0,\ldots, nx-1 \label{eq:semiDiscrete}
+\label{eq:semiDiscrete}
+    \frac{du_i}{dt}=f_i (u_0, u_1, \ldots, u_{nx-1}), \; \; i=0,\ldots, nx-1
 \end{equation}
 
 To achieve this, we need to choose a time integration scheme for the left-hand side *and* a spatial discretization scheme for the right-hand side. The combination of these two choices determines the success or failure of the whole numerical method. 

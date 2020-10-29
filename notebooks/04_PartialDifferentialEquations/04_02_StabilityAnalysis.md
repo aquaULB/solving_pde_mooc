@@ -52,13 +52,15 @@ plt.style.use('../styles/mainstyle.use')
 In the previous notebook, we have shown how to transform a partial differential equation into a system of coupled ordinary differential equations using semi-discretization. We stressed that the success of our numerical methods depends on the combination chosen for the time integration scheme *and* the spatial discretization scheme for the right-hand side. In this notebook we explore this question in more details. To illustrate the concepts, we use again the example of the first order wave equation:
 
 $$
-  \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,\; c>0.\label{eq:advection}
+\label{eq:advection}
+  \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,\; c>0.
 $$
 
 Before proceeding, we recall an important result discussed in notebook `02_01_EulerMethod`. If an equation takes the form:
 
 $$
-  \frac{dx}{dt}=\lambda x \label{eq:basicForm}
+\label{eq:basicForm}
+  \frac{dx}{dt}=\lambda x
 $$
 
 for any complex number $\lambda$, the forward Euler integration scheme provides a bounded solution only if $\lambda dt$ is contained in its stability domain. For the forward Euler method, the stability domain consists of disk of radius $1$ in the complex plane $z=x+iy$, centered around the point $x=-1$.
@@ -167,7 +169,8 @@ If we use the same boundary conditions as before, the matrix $\tilde A$ is expre
 with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$. This time, $\tilde A$ is the transpose of a Jordan block. Using the same argument as in the previous section, we conclude that the powers of $\tilde A$ will remain bounded if and only if $\vert \tilde \lambda \vert \leq 1$. Compared to the case of the forward Euler method with forward first-order finite differentiation, the situation is therefore very different. By choosing $dt$ such that,
 
 \begin{equation}
- dt < \frac{dx}{c} \label{eq:cfl}
+\label{eq:cfl}
+ dt < \frac{dx}{c}
 \end{equation}
 
 we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \frac{dx}{c}$ and check what happens.
@@ -201,12 +204,14 @@ u^{n+1}_i = u^n_i -cdt \frac{u^n_{i+1} - u^n_{i-1}}{2\Delta x}
 In matrix notation, we can write:
 
 \begin{equation}
-    \boldsymbol{u}^{n+1} = (I-\frac{cdt}{2\Delta x}B)\boldsymbol{u}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{u}^{n+1} = (I-\frac{cdt}{2\Delta x}B)^{n+1}\boldsymbol{u}^{0}\label{eq:iterunp1}
+\label{eq:iterunp1}
+    \boldsymbol{u}^{n+1} = (I-\frac{cdt}{2\Delta x}B)\boldsymbol{u}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{u}^{n+1} = (I-\frac{cdt}{2\Delta x}B)^{n+1}\boldsymbol{u}^{0}
 \end{equation}
 
 Using our usual boundary conditions, the matrix $B$ is defined as:
 
 \begin{align}
+\label{eq:discB}
 B =
 \begin{pmatrix}
 0 & -1 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
@@ -218,7 +223,7 @@ B =
 0 & 0 & 0 & 0 & \dots & 0 & 1 & 0 & -1 & 0 \\
 0 & 0 & 0 & 0 & \dots & 0 & 0 & 1 & 0 & -1 \\
 0 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 1 & 0
-\end{pmatrix}.\label{eq:discB}
+\end{pmatrix}.
 \end{align}
 
 This matrix belongs to the family of triadiagonal Toeplitz matrices. Their general form is:
@@ -241,7 +246,8 @@ c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
 where $m\times m$ are the matrix dimensions. Contrary to the matrices $A$ and $\tilde A$ described earlier, $T_m$ is diagonalizable when $bc \not = 0$. The eigenvalues are then distinct and given by \cite{horn2013}:
 
 \begin{equation}
-\lambda_k = (a+2\sqrt{bc}\cos(\frac{\pi k}{m+1})),\; k=1,\ldots, m. \label{eq:eigenvals1}
+\label{eq:eigenvals1}
+\lambda_k = (a+2\sqrt{bc}\cos(\frac{\pi k}{m+1})),\; k=1,\ldots, m.
 \end{equation}
 
 This property is very useful here as it allows us to make a direct connexion with the stability analysis discussed in the notebook *02_01_EulerMethod*. To that end, let us denote by $\boldsymbol{z}^{m}$ the coordinates of $\boldsymbol{u}^m$ in the basis of eigenvectors. Because $B$ is diagonal in this basis we have:
@@ -274,7 +280,8 @@ For the modified wavenumber stability analysis, we need to use periodic boundary
 If our domain is periodic, we may decompose the exact solution $u(x,t)$ in Fourier series:
 
 \begin{equation}
-    u(x,t)=\sum_{m} \hat{u}(k_m,t) e^{ik_m x},\; \; k_m = \frac{2\pi m}{L}\label{eq:wave}
+\label{eq:wave}
+    u(x,t)=\sum_{m} \hat{u}(k_m,t) e^{ik_m x},\; \; k_m = \frac{2\pi m}{L}
 \end{equation}
 
 where $k_m$ are the wavenumbers, $L$ is the periodicity of the domain and $\hat{u}(k_m,t)$ are the time dependent Fourier coefficients of the decomposition. If we substitute this series in \eqref{eq:wave} we get,
@@ -313,7 +320,8 @@ Denoting $\lambda_m = -ic\tilde k_m$, we also have:
 with 
 
 \begin{equation}
-\lambda_{m} = \frac{c}{\Delta x}\left(1-e^{ik_m \Delta x}\right).\label{eq:modesbackward}
+\label{eq:modesbackward}
+\lambda_{m} = \frac{c}{\Delta x}\left(1-e^{ik_m \Delta x}\right).
 \end{equation}
 
 The locus on which those values lie is, the complex plane $z=x+iy$, a circle of radius $\frac{c}{\Delta x}$ centered around $(1,0)$.

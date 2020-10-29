@@ -63,14 +63,15 @@ Using finite differences, we can construct derivatives up to any order. Before w
 Using Taylor's theorem we can write:
 
 \begin{align}
-& f(x+\Delta x) = f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+\frac16 f'''(x)\Delta x^3+O(\Delta^4)\label{eq:leftTaylor2} \\
-& f(x-\Delta x) = f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2-\frac16 f'''(x)\Delta x^3+O(\Delta^4)\label{eq:rightTaylor2}.
+& f(x+\Delta x) = f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+\frac16 f'''(x)\Delta x^3+O(\Delta^4) \\
+& f(x-\Delta x) = f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2-\frac16 f'''(x)\Delta x^3+O(\Delta^4).
 \end{align}
 
 If we add these two equations, we can define a centered second-order accurate formula for $f''$ at grid point $x_i$:
 
 \begin{equation}
-f''_i=\frac{f_{i-1}-2f_i+f_{i+1}}{\Delta x^2}\label{eq:centeredDiff2}.
+\label{eq:centeredDiff2}
+f''_i=\frac{f_{i-1}-2f_i+f_{i+1}}{\Delta x^2}.
 \end{equation}
 
 The stencil for this expression is the sequence $[-1,0,1]$ and we represent it as:

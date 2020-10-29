@@ -55,7 +55,8 @@ plt.style.use('../styles/mainstyle.use')
 In this part of the course we describe how to compute numerically derivatives of functions such as,
 
 $$
-f(x)=e^x \sin(3\pi x) \label{eq:testfunc}
+\label{eq:testfunc}
+f(x)=e^x \sin(3\pi x)
 $$
 
 There are several conceptually different ways to do this. Following the same approach as for time integration, we can rely on Taylor's theorem to use the value of $f(x)$ at some neighboring points of $x$. This approach relies on what are known as finite differences. Another way to compute derivatives relies on decomposing the function $f(x)$ on a basis of functions $T_k(x)$ and computing the derivatives of $f(x)$ from the known derivatives of $T_k(x)$. This method is known as the spectral method and will be described later on in the course.
@@ -75,7 +76,8 @@ We will refer to the continuous variable defined in $[x_0,x_n]$ by $x$, and to i
 Using these notations, the approximation of a derivative through a finite-difference expression is generically given by:
 
 \begin{equation}
-f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_{i+j},\label{eq:generic}
+\label{eq:generic}
+f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_{i+j},
 \end{equation}
 
 where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stencil* - the group of points used to build the finite-difference approximation - and $c_j$ is the finite-difference coefficient defined at the stencil point of index $j$.
@@ -85,13 +87,15 @@ where $k$ represents the order of derivative, $\mathcal{J}$ is called the *stenc
 As an example of how the finite-difference approximation for a derivative of a given order can be derived, let us consider the first-order derivative of $f(x)$. According to Taylor's theorem, we can approximate $f(x+\Delta x)$ as follows:
 
 \begin{equation}
-f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2)\label{TaylorSer}.
+\label{TaylorSer}
+f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2).
 \end{equation}
 
 Expression \ref{TaylorSer} is exact and allows us to get the following expression for the first-order derivative of $f$ at point $x$:
 
 \begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x) \label{eq:forwardTaylorDiff1}
+\label{eq:forwardTaylorDiff1}
+f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x)
 \end{equation}
 
 This expression is the usual left derivative of $f(x)$.
@@ -99,7 +103,8 @@ This expression is the usual left derivative of $f(x)$.
 To approximate \ref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$, we define the following first-oder accurate approximation of $f'$ at $x_i$:
 
 \begin{equation}
-f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference} \label{eq:forwardNodal}.
+\label{eq:forwardNodal}
+f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference}.
 \end{equation}
 
 The stencil for this expression is given by the sequence $[0, 1]$, where 0 stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
@@ -123,7 +128,8 @@ f(x-\Delta x) \approx f(x) - f'(x)\Delta x.
 We can then define the first-order accurate backward finite-differences formula for the first order derivative of $f(x)$ at $x_i$ as:
 
 \begin{equation}
-f^{'\rm b}_i = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}\label{eq:backwardNodal}. 
+\label{eq:backwardNodal}
+f^{'\rm b}_i = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}. 
 \end{equation}
 
 It is based on the right derivative $f'(x)$. Highlighting in red the stencil points used to build expression \ref{eq:backwardNodal} we have,
@@ -135,20 +141,22 @@ As the forward finite-difference approximation cannot be used at the right bound
 Let us now derive a higher order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
 
 \begin{align}
-& f(x+\Delta x) \approx f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2\label{eq:leftTaylor2} \\
-& f(x-\Delta x) \approx f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2\label{eq:rightTaylor2}.
+& f(x+\Delta x) \approx f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2 \\
+& f(x-\Delta x) \approx f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2.
 \end{align}
 
-We substract equations \ref{eq:leftTaylor2} and \ref{eq:rightTaylor2} and get:
+We substract equations both equations and get:
 
 \begin{equation}
-f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2), \label{eq:centeredTaylorDiff}
+\label{eq:centeredTaylorDiff}
+f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2),
 \end{equation}
 
 which leads us to the second-oder accurate approximation of $f'(x)$ at $x_i$:
 
 \begin{equation}
-f^{' \rm c}_i = \frac{f_{i+1} - f_{i-1}}{2\Delta x},\;\; \hbox{centered finite difference} \label{eq:centeredDiff}.
+\label{eq:centeredDiff}
+f^{' \rm c}_i = \frac{f_{i+1} - f_{i-1}}{2\Delta x},\;\; \hbox{centered finite difference}.
 \end{equation}
 
 This expression is called the centered finite difference first-order derivative and its stencil looks like this:

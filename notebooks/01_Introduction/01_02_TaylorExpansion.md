@@ -68,8 +68,8 @@ Taylor's theorem provides a valuable tool to estimate the accuracy of discretize
 *Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exists a $\xi$, so that*
 
 \begin{equation}
-f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k + R_{k+1}
 \label{eq:taylorExpansion}
+f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k)}(x)}{k!}\Delta x^k + R_{k+1}
 \end{equation}
 
 *where $R_{k+1}$ is a **remainder term**:*
@@ -83,7 +83,8 @@ In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note, that
 Assuming that $\vert f^{(k+1)}\vert$ is bounded by a constant $C$ in $[a\ b]$, read $\vert f^{(k+1)} \vert \leq C$, we can then write:
 
 \begin{equation}
-\vert R_{k+1}\vert \leq \frac{C}{(k+1)!}\Delta x^{k+1}\label{eq:remainder}
+\label{eq:remainder}
+\vert R_{k+1}\vert \leq \frac{C}{(k+1)!}\Delta x^{k+1}
 \end{equation}
 
 Equation $\ref{eq:remainder}$ gives a bound on the error made by dropping terms beyond $\displaystyle\frac{f^{(k)}(x)}{k!}\Delta x^k$ in $\ref{eq:taylorExpansion}$. One then gets as estimate for the remainder $R_{k+1}$:
@@ -111,7 +112,8 @@ is of order $k+1$. Importantly, this implies that the remainder is at least redu
 To make things more concrete and to write our first Python code of the course, let us consider the Taylor expansion of the exponential function $e^x$ around $x=0$. According to \ref{eq:taylorExpansion}, one has:
 
 \begin{equation}
-e^{\Delta x} = 1 + \Delta x + \frac{\Delta x^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{\Delta x^3}{3!},\label{eq:residual} \quad\quad 0\leq \xi \leq \Delta x.
+\label{eq:residual}
+e^{\Delta x} = 1 + \Delta x + \frac{\Delta x^2}{2} + R_3,\quad\quad R_3=e^{\xi} \frac{\Delta x^3}{3!}, \quad\quad 0\leq \xi \leq \Delta x.
 \end{equation}
 
 As $e^x$ is monotonously increasing, we certainly can bound $e^{\xi}$ by $e$ when $\Delta x \rightarrow 0$. Therefore, $\vert R_3 \vert \leq e \frac{\Delta x^3}{3!} = \mathcal{O}(\Delta x^3)$.

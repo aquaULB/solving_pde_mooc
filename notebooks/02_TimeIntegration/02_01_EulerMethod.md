@@ -46,7 +46,8 @@ In this part of the course we discuss how to solve ordinary differential equatio
 The ODEs we consider can be written in the form:
 
 \begin{equation}
-  y^{(n)}=f(t, y, \dots, y^{(n-1)}) \label{eq:ODE},
+\label{eq:ODE}
+  y^{(n)}=f(t, y, \dots, y^{(n-1)}),
 \end{equation}
 
 where $y=y(t)$ is a function of the variable $t$ and $y^{(n)}$ represents the n-th derivative of $y$ with respect to $t$:
@@ -62,14 +63,15 @@ Note that we have used $t$ as the variable on which the unknown function $y$ dep
 As an example and toy problem, let us consider radioactive decay. Imagine we have a sample of material containing $N$ unstable nuclei at a given initial time $t_0$. The time evolution of $N$ then follows an exponential decay law:
 
 \begin{equation}
+\label{eq:decay}
   \frac{dN(t)}{dt}=-\alpha N(t).
-  \label{eq:decay}
 \end{equation}
 
 where $\alpha>0$ is a constant depending on the type of nuclei present in the material. Of course, we don't really need a computer to solve this equation as its solution is readily obtained and reads:
 
 \begin{equation}
-  N(t)=N(t_0)e^{-\alpha t} \label{eq:expDecay}
+\label{eq:expDecay}
+  N(t)=N(t_0)e^{-\alpha t}
 \end{equation}
 
 However, our objective here is to obtain the above time evolution using a numerical scheme.
@@ -79,7 +81,8 @@ However, our objective here is to obtain the above time evolution using a numeri
 The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward (explicit) Euler method - it is actually member of the Euler family of numerical methods for ordinary differential equations. We use it to introduce several fundamental concepts that will pop up frequently in the rest of the course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
 
 \begin{align}
-   & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} \label{eq:ForwardEuler}
+\label{eq:ForwardEuler}
+   & N(t+dt) \equiv N(t) + N'(t)dt & \textrm{Forward Euler method} 
 \end{align}
 
 From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2)$). Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
@@ -91,7 +94,8 @@ By convention, we denote the different intermediate times as $t^n = t_0+ndt$ and
 The forward Euler scheme is then alternatively written as:
 
 \begin{align}
-    & N^{n+1} \equiv N^n + N^{'n} dt & \textrm{Forward Euler method} \label{eq:ForwardEuler2}
+\label{eq:ForwardEuler2}
+    & N^{n+1} \equiv N^n + N^{'n} dt & \textrm{Forward Euler method}
 \end{align}
 
 Let's write a Python code for that. First, we perform some imports.
@@ -347,8 +351,8 @@ For the radioactive decay equation, the forward Euler method does a decent job: 
 For the problem of radioactive decay, we first observe that according to equation \eqref{eq:ForwardEuler2} we have:
 
 \begin{equation}
+\label{eq:demo_stability}
     N^{n} = (1-\alpha dt)N^{n-1}  = (1-\alpha dt)^2 N^{n-2}= \dots = (1-\alpha dt)^{n}N_{0}
-    \label{eq:demo_stability}
 \end{equation}
 
 Equation \ref{eq:demo_stability} implies that $N^n\to \infty$ if $\vert 1-\alpha dt \vert^n \to \infty$. In such a case the numerical scheme is called *unstable* - i.e when solution grows unbounded (blows up in the jargon). On the other hand, in the case $\vert 1-\alpha dt \vert \le 1$, the Euler scheme is said to be stable. This requirement limits the time step allowed when performing the numerical integration.
@@ -356,8 +360,8 @@ Equation \ref{eq:demo_stability} implies that $N^n\to \infty$ if $\vert 1-\alpha
 In many problems, the coefficients of the equations are complex (e.g. Schrödinger equation). If we generalize our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{equation}
+\label{eq:complex_stability}
   \vert 1-\alpha dt \vert \le 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 \le 1.
-  \label{eq:complex_stability}
 \end{equation}
 
 Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$, where the forward Euler scheme is stable. As it is obvious from \ref{eq:complex_stability}, the bounded region of stability *is a circle*.
@@ -508,8 +512,8 @@ If $dt$ is chosen sufficiently small, so that both $\alpha_rdt$ and $\alpha_i dt
 So far we have only considered a simple one-dimensional example. In practice, many problems are modelled with coupled variables, making the corresponding equation multi-dimensional. Multi-dimensional equations also arise when the starting equations contain higher-order derivatives. They can then be converted to a system of first-order differential equations. Consider the scalar third-order differential equation for $y=y(x)$:
 
 \begin{equation}
+\label{eq:high_order_eq}
     \frac{d^3 y(x)}{dx^3} = f(y, x).
-    \label{eq:high_order_eq}
 \end{equation}
 
 Let us introduce new variables:
@@ -551,8 +555,8 @@ We introduce the new variable $\displaystyle v = \frac{dh}{dt}$, which has the p
 If we apply the forward Euler scheme to this system, we get:
 
 \begin{align}
-    & h^{n+1}=h^n + v^n dt,\label{eq:grav_first}\\
-    & v^{n+1}=v^n  - g dt.\label{eq:grav_second}
+    & h^{n+1}=h^n + v^n dt,\\
+    & v^{n+1}=v^n  - g dt.
 \end{align}
 
 We can also write the system of equation in matrix form:
@@ -746,8 +750,8 @@ In the above plots we have explicitly changed our usual plotting style: we used 
 Let's consider another two dimensional example and analyze the motion of an object attached to a spring. The equation of motion reads:
 
 \begin{equation}
+\label{eq:spring}
     m\frac{d^2 x}{d t^2}=-kx,
-    \label{eq:spring}
 \end{equation}
 
 where $x$ is the position of the object with respect to its equilibrium position and $k>0$ is the spring constant. Introducing the velocity $v=dx/dt$, this equation is equivalent to the following system:
@@ -895,8 +899,9 @@ Q=
 Using the vector notation $y=(x\;\; v)$, we can then reformulate our time advancement scheme as,
 
 \begin{align}
+\label{eq:eigenCoor}
 y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n} + Q^{-1}Ly^{n}dt \\
-& \Leftrightarrow \;\; z^{n+1} = z^{n} + \Lambda z^{n}dt. \label{eq:eigenCoor}
+& \Leftrightarrow \;\; z^{n+1} = z^{n} + \Lambda z^{n}dt.
 \end{align}
 
 In $\eqref{eq:eigenCoor}$, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:
@@ -1131,14 +1136,14 @@ Let's compute the region of stability of the implicit Euler scheme.
 
 The problem we are solving can be written as follows:
 \begin{equation}
-y^{n+1} = \sigma y^{n} = \sigma^n y^{0}.
 \label{eq:generic}
+y^{n+1} = \sigma y^{n} = \sigma^n y^{0}.
 \end{equation}
 
 In the case of the implicit Euler scheme we have:
 \begin{equation}
-\sigma = (1-\lambda dt)^{-1} = (1-\lambda_r dt - i\lambda_i dt)^{-1}.
 \label{eq:back_stab_sigma}
+\sigma = (1-\lambda dt)^{-1} = (1-\lambda_r dt - i\lambda_i dt)^{-1}.
 \end{equation}
 
 We can write the denominator of \ref{eq:back_stab_sigma} in a trigonometric form:
@@ -1150,8 +1155,8 @@ where $A = 1/r = ((1-\lambda_r dt)^2 + \lambda_i^2 dt^2)^{-1/2}$.
 
 Stability then requires:
 \begin{equation}
-\vert \sigma \vert = A\vert e^{i\phi} \vert = A \le 1 \Rightarrow (1-\lambda_r dt)^2 + \lambda_i^2 dt^2 \ge 1.
 \label{eq:back_stab}
+\vert \sigma \vert = A\vert e^{i\phi} \vert = A \le 1 \Rightarrow (1-\lambda_r dt)^2 + \lambda_i^2 dt^2 \ge 1.
 \end{equation}
 
 Condition \ref{eq:back_stab} implies that the region of stability of the implicit Euler is *outside* of the circle of radius 1 centered at $\lambda_r dt=1$ and $\lambda_i dt=0$, which is, obviously, an infinite domain.

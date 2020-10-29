@@ -111,7 +111,8 @@ In the previous notebook we have defined $A_{ij}$ for the centered second-order 
 Let's see how to modify this matrix to take into account the boundary conditions. First, consider the equation centered around grid node $1$. It reads:
 
 \begin{equation}
-    \frac{(T_0 - 2T_1+T_2)}{\Delta x^2} = b_1 \label{eq:leftBndDC}.
+\label{eq:leftBndDC}
+    \frac{(T_0 - 2T_1+T_2)}{\Delta x^2} = b_1.
 \end{equation}
 
 As $T_0=0$, it can be replaced by:

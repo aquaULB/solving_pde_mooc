@@ -67,7 +67,8 @@ where $y$ and $f$ are vector valued functions.
 The forward Euler method is defined through:
 
 \begin{align}
-    & y^{n+1} \equiv y^n + f(t^n,y^n) dt & (\textrm{Forward Euler method}) \label{eq:ForwardEuler3},
+\label{eq:ForwardEuler3}
+    & y^{n+1} \equiv y^n + f(t^n,y^n) dt & (\textrm{Forward Euler method}),
 \end{align}
 
 with all the intermediate times denoted $t^n = t_0+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.
@@ -85,16 +86,18 @@ The following two-stage Runge-Kutta method is the simplest of such schemes. Grap
 so that,
 
 \begin{align}
+\label{RK2ynp1}
     y^* = y^n +\frac{dt}{2}f(t^n, y^n) \\
-    y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*) \label{RK2ynp1}
+    y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*)
 \end{align}
 
 In notebook 1.1, we discussed the fact that the forward Euler method is second-order accurate for one time step and first-order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
 
 \begin{align}
+\label{TaylorRK2}
  y^{n+1} & = y^n + dt f(t^n+\frac{dt}{2},y^n + \frac{dt}{2}f(t^n, y^n)) \nonumber \\
          & = y^n + dt \left[ f(t^n, y^n) + \frac{dt}{2} \partial_t f(t^n, y^n) + \frac{dt}{2} f(t^n, y^n)\partial_y f(t^n,y^n) + O(dt^2) \right] \nonumber \\
-         & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3), \label{TaylorRK2}
+         & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3),
 \end{align}
 
 where we have used the property: $y''=\partial_t f + f\partial_y f$. Eq. \ref{TaylorRK2} proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two-stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
@@ -156,9 +159,9 @@ Rephrasing it in matrix form we get:
 \end{align}
 
 \begin{equation}
+\label{eq:free_fall}
 \Leftrightarrow
 \frac{dy}{dt} = Ly + b
-\label{eq:free_fall}
 \end{equation}
 
 
@@ -246,12 +249,13 @@ In exercise 2, we ask you to check the accuracy of your solution.
 General Runge-Kutta schemes are defined as follows \cite{Hairer1987}:
 
 \begin{align}
+\label{eq:rk_gen_exp}
  y^{n+1} &= y^n + dt(b_1 k_1 + \cdots + b_s k_s) \nonumber \\
  k_1 & = f(t^n, y^n) \nonumber \\
  k_2 & = f(t^n + c_2 dt, y^n + dta_{21}k_1) \nonumber \\
  k_3 & = f(t^n + c_3 dt, y^n + dt(a_{31}k_1+a_{32}k_2)) \nonumber \\
  & \cdots \nonumber \\
- k_s & = f(t^n + c_s dt, y^n + dt(a_{s1}k_1+\cdots + a_{s,s-1}k_{s-1})) \label{eq:rk_gen_exp}
+ k_s & = f(t^n + c_s dt, y^n + dt(a_{s1}k_1+\cdots + a_{s,s-1}k_{s-1}))
 \end{align}
 
 Some constraints are then put on all the coefficients to achieve a given order of accuracy $O(dt^p)$ for $y^{n+1}$. One says that the $s$-stage Runge-Kutta method is of order $p$.

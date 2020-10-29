@@ -68,7 +68,7 @@ The forward Euler method is defined through:
 
 \begin{align}
 \label{eq:ForwardEuler3}
-y^{n+1} \equiv y^n + f(t^n,y^n) dt \hbox{1cm} (\textrm{Forward Euler method}),
+y^{n+1} \equiv y^n + f(t^n,y^n) dt \hspace{1cm} (\textrm{Forward Euler method}),
 \end{align}
 
 with all the intermediate times denoted $t^n = t_0+ndt$, and the corresponding values of $y(t)$ as $y^n = y(t^n)$.

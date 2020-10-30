@@ -30,7 +30,7 @@ toc:
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
 
-# Time integration II
+# Runge-Kutta methods
 
 +++ {"toc": true}
 

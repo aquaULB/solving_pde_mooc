@@ -30,7 +30,7 @@ toc:
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
 
-# Finite Differences I
+# First-order derivative and slicing
 
 +++ {"toc": true}
 

@@ -82,7 +82,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
 
 \begin{align}
 \label{eq:ForwardEuler}
-N(t+dt) \equiv N(t) + N'(t)dt \hspace{1cm} \textrm{Forward Euler method} 
+N(t+dt) \equiv N(t) + N'(t)dt \;\;\;\; \textrm{Forward Euler method} 
 \end{align}
 
 From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2)$). Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
@@ -95,7 +95,7 @@ The forward Euler scheme is then alternatively written as:
 
 \begin{align}
 \label{eq:ForwardEuler2}
-N^{n+1} \equiv N^n + N^{'n} dt \hspace{1cm} \textrm{Forward Euler method}
+N^{n+1} \equiv N^n + N^{'n} dt \;\;\;\; \textrm{Forward Euler method}
 \end{align}
 
 Let's write a Python code for that. First, we perform some imports.

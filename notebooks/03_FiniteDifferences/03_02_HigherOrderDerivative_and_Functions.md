@@ -30,7 +30,7 @@ toc:
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
 </div>
 
-# Finite Differences II
+# Higher order derivatives, functions and matrix formulation
 
 +++ {"toc": true}
 

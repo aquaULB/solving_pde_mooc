@@ -91,7 +91,7 @@ so that,
     y^{n+1} = y^n + dt f(t^n+\frac{dt}{2},y^*)
 \end{align}
 
-In notebook 1.1, we discussed the fact that the forward Euler method is second-order accurate for one time step and first-order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in $\eqref{RK2ynp1}$.
+In notebook 1.1, we discussed the fact that the forward Euler method is second-order accurate for one time step and first-order accurate for a complete time interval. Here, we hope to improve the accuracy. Let's check that this is true by evaluating the Taylor expansion of $y^{n+1}$ in \eqref{RK2ynp1}.
 
 \begin{align}
 \label{TaylorRK2}

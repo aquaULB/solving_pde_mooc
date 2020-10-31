@@ -360,7 +360,7 @@ As a final example, let us consider backward finite differentiation.
 The Fourier modes evolve according to,
 
 \begin{align}
-\frac{d\hat{u}(k_m,t)}{dt}&=-\frac{c}{\Delta x}\left(1 - e^{-ik_m \Delta x}\right)\hat{u}(k_m,t)
+\frac{d\hat{u}(k_m,t)}{dt}=-\frac{c}{\Delta x}\left(1 - e^{-ik_m \Delta x}\right)\hat{u}(k_m,t)
 \end{align}
 
 and the modified wavenumbers are:

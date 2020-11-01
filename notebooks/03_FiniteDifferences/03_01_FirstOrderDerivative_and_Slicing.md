@@ -401,7 +401,7 @@ And another important property of slicing:
 
 > If i is greater than or equal to j, the slice is empty.
 
-Note that this particular statement concerns the case of `step`$>0$. Similarly, in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo: 
+Note that this particular statement concerns the case of `step`$>0$. Similarly, in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo:
 
 ```{code-cell} ipython3
 print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')

@@ -25,6 +25,11 @@ toc:
   toc_window_display: false
 ---
 
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+
 # Matrix and modified wavenumber stability analysis
 
 +++ {"toc": true}

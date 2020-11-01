@@ -25,12 +25,17 @@ toc:
   toc_window_display: false
 ---
 
+<div class="copyright" property="vk:rights">&copy;
+  <span property="vk:dateCopyrighted">2020</span>
+  <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
+</div>
+
 # The first-order wave equation
 
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-differentiation" data-toc-modified-id="Forward-Euler,-forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite differentiation</a></span></li><li><span><a href="#Forward-Euler,-backward-finite-difference-differentiation" data-toc-modified-id="Forward-Euler,-backward-finite-difference-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Forward Euler, backward finite difference differentiation</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span><ul class="toc-item"><li><span><a href="#Sample-usages" data-toc-modified-id="Sample-usages-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Sample usages</a></span></li><li><span><a href="#Advection-in-a-1D-periodic-domain" data-toc-modified-id="Advection-in-a-1D-periodic-domain-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Advection in a 1D periodic domain</a></span></li></ul></li><li><span><a href="#Matplotlib-animations" data-toc-modified-id="Matplotlib-animations-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Matplotlib animations</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Python-modules" data-toc-modified-id="Python-modules-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Python modules</a></span></li><li><span><a href="#Advection-equation" data-toc-modified-id="Advection-equation-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Advection equation</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler,-forward-finite-differentiation" data-toc-modified-id="Forward-Euler,-forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward Euler, forward finite differentiation</a></span></li><li><span><a href="#Forward-Euler,-backward-finite-difference-differentiation" data-toc-modified-id="Forward-Euler,-backward-finite-difference-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Forward Euler, backward finite difference differentiation</a></span></li></ul></li><li><span><a href="#Periodic-boundary-conditions" data-toc-modified-id="Periodic-boundary-conditions-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Periodic boundary conditions</a></span><ul class="toc-item"><li><span><a href="#Sample-usages" data-toc-modified-id="Sample-usages-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Sample usages</a></span></li><li><span><a href="#Advection-in-a-1D-periodic-domain" data-toc-modified-id="Advection-in-a-1D-periodic-domain-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Advection in a 1D periodic domain</a></span></li></ul></li><li><span><a href="#Matplotlib-animations" data-toc-modified-id="Matplotlib-animations-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Matplotlib animations</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -337,7 +342,7 @@ def rhs_forward(u, dx, c):
 Parameters for the simulation:
 
 ```{code-cell} ipython3
-c=1.          # wave or advection speed
+c = 1.        # wave or advection speed
 lx = 1.       # length of the computational domain
 t_final = 0.2 # final time of for the computation (assuming t0=0)
 ```
@@ -546,8 +551,7 @@ def rhs_backward_periodic(u, dx, c):
     -------
     f : array of float
         right-hand side of the wave equation with
-        boundary conditions implemented (periodic
-        boundary conditions)
+        boundary conditions implemented
     """
     nx = u.shape[0]
     f = np.empty(nx)
@@ -731,6 +735,27 @@ We also introduced the notion of periodic boundary conditions and discussed some
 Finally, we showed how to create animations using `matplotlib.animation.FuncAnimation` to visualize results of time dependent problems.
 
 In the next notebook, we discuss in detail how to determine the stability of the numerical algorithms obtained through semi-discretization.
+
++++
+
+## Exercises
+
+**Exercise 1:** Using the same parameters as in Section [Section 4.2](#Advection-in-a-1D-periodic-domain), compute the solution of the first order wave equation at $t=0.68$ using the explicit RK4 method for time discretization and second-order centered finite differentiation for the spatial derivative.
+
+*Constraints:*
+
+1. You must use and import the `rk4_step` function provided in the `steppers.py` module file
+2. You must implement a function for the right-hand side of \eqref{eq:semiDiscrete} with proper boundary conditions (see above for examples)
+
+- Plot your solution at time $t=0.68$. 
+
+- What is the maximum value of $u$ at that time?
+
+**Exercise 2:** Using the same parameters as in [Section 4.2](#Advection-in-a-1D-periodic-domain), rerun the simulation using the MacCormack method described in Wikipedia: https://en.wikipedia.org/wiki/MacCormack_method. 
+
+- Provide an animation of your solution up to $t=3$.
+
+- What is the maximum value of $u$ at that time?
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

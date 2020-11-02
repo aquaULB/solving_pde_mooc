@@ -578,9 +578,9 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 
 **Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropriate time step).
 
-**Exercise 5.** Implement *Pareschi and Russo's two-stage second-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][1].
+**Exercise 5.** Implement *Pareschi and Russo's two-stage second-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][2].
 
-[1]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
+[2]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 +++
 

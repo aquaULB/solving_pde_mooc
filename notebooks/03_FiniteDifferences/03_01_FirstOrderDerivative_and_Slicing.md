@@ -76,7 +76,7 @@ We will refer to the continuous variable defined in $[x_0,x_n]$ by $x$, and to i
 Using these notations, the approximation of a derivative through a finite-difference expression is generically given by:
 
 \begin{equation}
-\label{eq:generic}
+\label{eq:diffgeneric}
 f^{(k)}_i = \frac{1}{(\Delta x)^k}\sum_{j\in\mathcal{J}}c_j f_{i+j},
 \end{equation}
 
@@ -107,7 +107,7 @@ To approximate \ref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dot
 f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference}.
 \end{equation}
 
-The stencil for this expression is given by the sequence $[0, 1]$, where 0 stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:generic}).
+The stencil for this expression is given by the sequence $[0, 1]$, where 0 stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:diffgeneric}).
 
 In the following figure we illustrate the stencil and mark in red the points involved in the computation:
 

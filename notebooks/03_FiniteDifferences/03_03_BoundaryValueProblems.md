@@ -256,9 +256,9 @@ A = d2_mat_dirichlet(nx, dx)
 print(A)
 ```
 
-We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][1].
+We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][2].
 
-[1]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
+[2]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
 
 ```{code-cell} ipython3
 from scipy.linalg import inv

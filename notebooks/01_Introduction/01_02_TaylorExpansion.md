@@ -318,11 +318,11 @@ for i in range(len(delta)):
     delta[i] = 2**(-i-1)
 ```
 
-For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][5]. 
+For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][15]. 
 
 We are now <a name="exc2"> all set to build $R_3$</a>.
 
-[5]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
+[15]: <https://www.python.org/dev/peps/pep-0008/> "PEP 8"
 
 ```{code-cell} ipython3
 # Here you can clearly see the advantage of

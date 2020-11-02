@@ -57,7 +57,6 @@ plt.style.use('../styles/mainstyle.use')
 In the previous notebook, we have shown how to transform a partial differential equation into a system of coupled ordinary differential equations using semi-discretization. We stressed that the success of our numerical methods depends on the combination chosen for the time integration scheme *and* the spatial discretization scheme for the right-hand side. In this notebook we explore this question in more details. To illustrate the concepts, we use again the example of the first order wave equation:
 
 $$
-\label{eq:advection}
   \frac{\partial u}{\partial t}+c\frac{\partial u}{\partial x}=0,\; c>0.
 $$
 

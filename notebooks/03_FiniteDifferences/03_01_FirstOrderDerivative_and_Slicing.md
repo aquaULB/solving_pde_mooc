@@ -247,7 +247,7 @@ ax[1].plot(x, dfdx)
 ax[1].plot(x_c[1:nx], df_backward[1: nx], '^m')
 
 ax[2].plot(x, dfdx)
-ax[2].plot(x_c[1:nx-1], df_centered[1: nx-1], '^c')
+ax[2].plot(x_c[1:nx-1], df_centered[1: nx-1], '^c');
 ```
 
 What do you think about the agreement? What happens when you increase the number of points in the coarse grid?
@@ -612,7 +612,7 @@ ax.plot(x_c, df_2, '^g', label='Approximated')
 ax.set_xlabel('$x$')
 ax.set_ylabel("$f'$")
 
-ax.legend(loc='upper left')
+ax.legend(loc='upper left');
 ```
 
 ## Summary

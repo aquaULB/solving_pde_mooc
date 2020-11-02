@@ -118,7 +118,7 @@ fig, ax = plt.subplots(figsize=(10, 5))
 ax.plot(x[1:-1], ddf[1:-1])
 ax.plot(x_c[1:-1], ddf_c[1:-1], '^g')
 ax.set_xlabel('$x$')
-ax.set_ylabel('$f\'$')
+ax.set_ylabel('$f\'$');
 ```
 
 As the centered formula for $f''$ is not defined at the boundary nodes, they have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.

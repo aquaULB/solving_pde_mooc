@@ -337,7 +337,11 @@ ax.set_xlabel('$dt$')
 ax.set_ylabel('Error')
 ax.set_title('Accuracy')
 
-ax.legend()
+# Add a legend to the plot. Note how we added a semi-
+# colon at the end of the statement. This removes an
+# unnecessary ipython output just below the cell.
+# Remove it and see the difference.
+ax.legend();
 
 # fig.savefig('../figures/eulerSlope.png', dpi=300)
 ```
@@ -1003,7 +1007,7 @@ ax.set_ylabel('$N$')
 ax.set_title('Radioactive decay')
 
 # Make the legend visible.
-ax.legend()
+ax.legend();
 ```
 
 Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Even though they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.

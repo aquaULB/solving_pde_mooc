@@ -387,7 +387,7 @@ ax.plot(x, u[int(t_final / dt)], lw=1.5, color='brown', label=f't={t_final}')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$u$')
 ax.set_title('Advection with forward Euler scheme - forward finite differences')
-ax.legend()
+ax.legend();
 ```
 
 What is happening ? The solution rapidly deteriorates; it is not peacefully translated at constant wave speed $c$: the maximum increases and some wiggles appear at the trailing edge. If you were to run the simulation just a bit longer, the solution would completely blow up. Try it !
@@ -462,7 +462,7 @@ ax.plot(x, u[int(t_final / dt)], lw=1.5, color='brown', label=f't={t_final}')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$u$')
 ax.set_title('Advection with forward Euler scheme - backward finite differences')
-ax.legend()
+ax.legend();
 ```
 
 This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. By reducing the time step and grid spacing we can however reduce this phenomenon. You should however rerun this version of the discretization with a lager time step, for example $dt=0.05$. What happens in that case?
@@ -602,7 +602,7 @@ ax.plot(x, u[int(0.68 / dt)], lw=1.5, color='green', label='t=0.68')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$u$')
 ax.set_title('Advection with periodic boundary conditions')
-ax.legend()
+ax.legend();
 ```
 
 Quite satisfactorily, the algorithm works as expected !
@@ -655,7 +655,7 @@ time_text = ax.text(0.05, 0.9, 't=0')
 
 ax.set_xlabel('$x$')
 ax.set_ylabel('$u$')
-ax.set_title('Advection with periodic boundary conditions')
+ax.set_title('Advection with periodic boundary conditions');
 ```
 
 Now that we have created our template plot, we need to define a function to tell `FuncAnimation` how to modify it for each frame added to the animation. Here we call this function `animate` but you may give it whatever valid name you want. At minimum, it should contain one argument to indicate the value of an iterator.

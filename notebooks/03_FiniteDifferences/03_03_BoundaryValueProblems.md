@@ -290,7 +290,7 @@ ax.plot(x, T, '^g', label='Approximate solution')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$T$')
 ax.set_title('Heat equation - Homogeneous Dirichlet boundary conditions')
-ax.legend()
+ax.legend();
 ```
 
 ### Non-homogeneous Dirichlet boundary conditions
@@ -336,7 +336,7 @@ ax.plot(x, T, '^g', label='Approximate solution')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$T$')
 ax.set_title('Heat equation - Mixed Dirichlet boundary conditions')
-ax.legend()
+ax.legend();
 ```
 
 The solution looks just as expected!
@@ -430,7 +430,7 @@ ax.plot(x, T, '^g', label='Approximate solution')
 ax.set_xlabel('$x$')
 ax.set_ylabel('$T$')
 ax.set_title('Heat equation - Mixed boundary conditions')
-ax.legend()
+ax.legend();
 ```
 
 Once again, the computed solution behaves appropriately!

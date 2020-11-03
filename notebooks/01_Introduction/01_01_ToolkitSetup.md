@@ -293,9 +293,11 @@ There are different services which allow to create and manage remote Git reposit
 If you don't have GitHub account, you will have to go to GitHub.com and create one. GitHub has a graphical interface allowing you to download files to the repository, create branches, see changes in the latest commit etc. For some purposes, the GitHub interface might be quite convenient, but we advise you against uploading files directly via GitHub. It would make the whole idea of Git meaningless, and ultimately lead you to storing multiple versions of your project at the same time. We suggest that you learn how to update your project over time and keep control over the evolutionary tree of all the changes you make.
 
 In order to create new GitHub repository, click on *New*:
+
 <img src="../figures/CreateRepo.png">
 
 Choose a name for your repository and set some description. You can make it either public - so that anyone will be able to see it - or private - only the ones you invite as collaborators will be able to see it. Click on *Create repository*.
+
 <img src="../figures/CreateRepoSet.png">
 
 Let's go through a small tutorial describing how you can connect your newly created remote repo to the local one.
@@ -307,6 +309,7 @@ To see, what are the current remote repositories tracked from your local reposit
 Of course, this command will output nothing, as we have not yet added any remotes.
 
 Copy the url of your remote repo. Make sure you've chosen HTTPS format, especially if you have never used SSH.
+
 <img src="../figures/CopyURL.png">
 
 Now go back to the terminal window and type (*replace `yourUserName` with your actual Github username*):

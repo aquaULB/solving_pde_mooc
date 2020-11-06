@@ -190,7 +190,7 @@ with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$ and $\displaystyle \tild
  dt < \frac{2dx}{c}
 \end{equation}
 
-we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Even if the method does not blow up, it does not mean that you would get an accurate physical solution when using a large time step. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \frac{2dx}{c}$ and check what happens.
+we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Even if the method does not blow up, it does not mean that you would get an accurate physical solution when using a large time step. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \displaystyle\frac{2dx}{c}$ and check what happens.
 
 The non-dimensional number,
 

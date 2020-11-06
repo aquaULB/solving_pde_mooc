@@ -96,7 +96,7 @@ Let us write our algorithm in matrix notation:
 As before (see previous notebook), we adopt homogeneous Dirichlet boundary conditions: $u_0^m = u_{nx-1}^m=0, \forall m$. This means that our unknowns are $u^m_1,\ldots,u^m_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
-A =
+A = \alpha
 \begin{pmatrix}
 \lambda & 1 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 0 & \lambda & 1 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -110,7 +110,7 @@ A =
 \end{pmatrix}.
 \end{align}
 
-where $\displaystyle{\lambda=-(1+\frac{dx}{cdt})}$. In linear algebra terminology, $A$ has the form of a Jordan block.
+where $\displaystyle{\lambda=-(1+\frac{dx}{cdt})}$ and $\displaystyle \alpha = -\frac{cdt}{dx}$ In linear algebra terminology, $A$ has the form of a Jordan block (up to a multiplicative number).
 
 A useful result for us is that the powers of a Jordan block may be evaluated without too much effort. As an example, let's consider the powers of a $5\times 5$ Jordan block:
 
@@ -131,9 +131,22 @@ A useful result for us is that the powers of a Jordan block may be evaluated wit
 \end{pmatrix}
 \end{align}
 
-where the binomial coefficients are defined as $\tbinom{n}{k}=\prod_{i=1}^k \tfrac{n+1-i}{i}$. One can show that the matrix entries remain bounded if and only if $\vert \lambda \vert <1$ - the fact that the entries blow up for $\vert \lambda \vert \geq 1$ is evident. A detailed proof of this property may be found in \cite{horn2013}.
+where the binomial coefficients are defined as $\tbinom{n}{k}=\prod_{i=1}^k \tfrac{n+1-i}{i}$. One can show that the matrix entries remain bounded if and only if $\vert \lambda \vert <1$ - the fact that the entries blow up for $\vert \lambda \vert \geq 1$ is evident. A detailed proof of this property may be found in \cite{horn2013}. In terms of $A$ we have:
 
-The entries of the above discretization matrix $A$ are specific to the combined choice of the forward Euler method and the forward first-order finite differentiation. As these entries blow up as we power iterate the matrix, whatever the value of $dt$, this choice of discretization is *unconditionnally unstable* for the first order wave equation.
+\begin{align}
+A^n 
+=\begin{pmatrix}
+ \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} & \alpha^2\tbinom{n}{2}\beta^{n-2} & \alpha^3\tbinom{n}{3}\beta^{n-3}   & \alpha^4\tbinom{n}{4}\beta^{n-4} \\
+ 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} & \alpha^2\tbinom{n}{2}\beta^{n-2}   & \alpha^3\tbinom{n}{3}\beta^{n-3} \\
+ 0  & 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1}   & \alpha^2\tbinom{n}{2}\beta^{n-2} \\ 
+ 0  & 0  & 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} \\
+ 0  & 0  & 0  & 0   & \beta^n
+\end{pmatrix}
+\end{align}
+
+with $\displaystyle{\beta=1+\frac{cdt}{dx}}$. Similarly to the case of an exact Jordan block, the matrix entries remain bounded if and only if $\vert \beta \vert < 1$ and this condition cannot be satisfied here.
+
+The entries of the discretization matrix $A$ are specific to the combined choice of the forward Euler method and the forward first-order finite differentiation. As these entries blow up as we power iterate the matrix, whatever the value of $dt$, this choice of discretization is *unconditionnally unstable* for the first order wave equation (and $c>0$).
 
 +++
 
@@ -156,7 +169,7 @@ In matrix notation we have,
 If we use the same boundary conditions as before, the matrix $\tilde A$ is expressed as,
 
 \begin{align}
-\tilde A = 
+\tilde A = \tilde \alpha
 \begin{pmatrix}
 \tilde \lambda & 0 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 1 & \tilde \lambda & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -170,7 +183,7 @@ If we use the same boundary conditions as before, the matrix $\tilde A$ is expre
 \end{pmatrix},
 \end{align}
 
-with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$. This time, $\tilde A$ is the transpose of a Jordan block. Using the same argument as in the previous section, we conclude that the powers of $\tilde A$ will remain bounded if and only if $\vert \tilde \lambda \vert \leq 1$. Compared to the case of the forward Euler method with forward first-order finite differentiation, the situation is therefore very different. By choosing $dt$ such that,
+with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$ and $\displaystyle \tilde \alpha = \frac{cdt}{dx}$ This time, $\tilde A$ is the transpose of a Jordan block (up to a multiplicative factor). Using the same argument as in the previous section, we conclude that the powers of $\tilde A$ will remain bounded if and only if $\vert \tilde \beta \vert \leq 1$ with $\displaystyle \tilde \beta = 1-\frac{cdt}{dx}$. Compared to the case of the forward Euler method with forward first-order finite differentiation, the situation is therefore very different. By choosing $dt$ such that,
 
 \begin{equation}
 \label{eq:cfl}
@@ -191,7 +204,7 @@ is called the CFL number after the mathematicians Courant, Friedrich and Lewy. H
 C<1.
 \end{equation}
 
-This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation.
+This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation (and $c>0$).
 
 +++
 

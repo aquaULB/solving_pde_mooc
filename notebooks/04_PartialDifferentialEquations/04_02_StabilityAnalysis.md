@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Stability:-matrix-analysis" data-toc-modified-id="Stability:-matrix-analysis-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Stability: matrix analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler-method-with-first-order-forward-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-first-order-forward-finite-differentiation.-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Forward Euler method with first-order forward finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-backward-first-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-backward-first-order-finite-differentiation.-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Forward Euler method with backward first-order finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-centered-second-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-centered-second-order-finite-differentiation.-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Forward Euler method with centered second-order finite differentiation.</a></span></li></ul></li><li><span><a href="#Stability:-modified-wavenumber-analysis" data-toc-modified-id="Stability:-modified-wavenumber-analysis-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability: modified wavenumber analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-finite-differentiation" data-toc-modified-id="Forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward finite differentiation</a></span></li><li><span><a href="#Centered-finite-differentiation" data-toc-modified-id="Centered-finite-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Centered finite differentiation</a></span></li><li><span><a href="#Backward-finite-differentiation" data-toc-modified-id="Backward-finite-differentiation-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Backward finite differentiation</a></span></li><li><span><a href="#Graphical-summary" data-toc-modified-id="Graphical-summary-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Graphical summary</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li><li><span><a href="#References" data-toc-modified-id="References-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Stability:-matrix-analysis" data-toc-modified-id="Stability:-matrix-analysis-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Stability: matrix analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler-method-with-first-order-forward-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-first-order-forward-finite-differentiation.-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Forward Euler method with first-order forward finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-backward-first-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-backward-first-order-finite-differentiation.-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Forward Euler method with backward first-order finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-centered-second-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-centered-second-order-finite-differentiation.-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Forward Euler method with centered second-order finite differentiation.</a></span></li></ul></li><li><span><a href="#Stability:-modified-wavenumber-analysis" data-toc-modified-id="Stability:-modified-wavenumber-analysis-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability: modified wavenumber analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-finite-differentiation" data-toc-modified-id="Forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward finite differentiation</a></span></li><li><span><a href="#Centered-finite-differentiation" data-toc-modified-id="Centered-finite-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Centered finite differentiation</a></span></li><li><span><a href="#Backward-finite-differentiation" data-toc-modified-id="Backward-finite-differentiation-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Backward finite differentiation</a></span></li><li><span><a href="#Graphical-summary" data-toc-modified-id="Graphical-summary-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Graphical summary</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -187,10 +187,10 @@ with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$ and $\displaystyle \tild
 
 \begin{equation}
 \label{eq:cfl}
- dt < \frac{dx}{c}
+ dt < \frac{2dx}{c}
 \end{equation}
 
-we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \frac{dx}{c}$ and check what happens.
+we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Even if the method does not blow up, it does not mean that you would get an accurate physical solution when using a large time step. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \frac{2dx}{c}$ and check what happens.
 
 The non-dimensional number,
 
@@ -201,7 +201,7 @@ C = \frac{cdt}{dx}
 is called the CFL number after the mathematicians Courant, Friedrich and Lewy. Here the condition for stability is:
 
 \begin{equation}
-C<1.
+C<2.
 \end{equation}
 
 This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation (and $c>0$).
@@ -406,7 +406,7 @@ we can satisfy the stability criteria for the forward Euler time integration sch
 C<1.
 \end{equation}
 
-Note that this criteria is identical to the one obtained through matrix stability analysis. But there is no guarantee that this is the case !
+Note that this criteria is not identical to the one obtained through matrix stability analysis because of the difference in boundary conditions.
 
 ### Graphical summary
 

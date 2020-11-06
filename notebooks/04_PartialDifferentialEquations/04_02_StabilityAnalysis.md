@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Stability:-matrix-analysis" data-toc-modified-id="Stability:-matrix-analysis-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Stability: matrix analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler-method-with-first-order-forward-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-first-order-forward-finite-differentiation.-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Forward Euler method with first-order forward finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-backward-first-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-backward-first-order-finite-differentiation.-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Forward Euler method with backward first-order finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-centered-second-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-centered-second-order-finite-differentiation.-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Forward Euler method with centered second-order finite differentiation.</a></span></li></ul></li><li><span><a href="#Stability:-modified-wavenumber-analysis" data-toc-modified-id="Stability:-modified-wavenumber-analysis-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability: modified wavenumber analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-finite-differentiation" data-toc-modified-id="Forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward finite differentiation</a></span></li><li><span><a href="#Centered-finite-differentiation" data-toc-modified-id="Centered-finite-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Centered finite differentiation</a></span></li><li><span><a href="#Backward-finite-differentiation" data-toc-modified-id="Backward-finite-differentiation-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Backward finite differentiation</a></span></li><li><span><a href="#Graphical-summary" data-toc-modified-id="Graphical-summary-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Graphical summary</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li><li><span><a href="#References" data-toc-modified-id="References-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Stability:-matrix-analysis" data-toc-modified-id="Stability:-matrix-analysis-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Stability: matrix analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-Euler-method-with-first-order-forward-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-first-order-forward-finite-differentiation.-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Forward Euler method with first-order forward finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-backward-first-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-backward-first-order-finite-differentiation.-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Forward Euler method with backward first-order finite differentiation.</a></span></li><li><span><a href="#Forward-Euler-method-with-centered-second-order-finite-differentiation." data-toc-modified-id="Forward-Euler-method-with-centered-second-order-finite-differentiation.-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Forward Euler method with centered second-order finite differentiation.</a></span></li></ul></li><li><span><a href="#Stability:-modified-wavenumber-analysis" data-toc-modified-id="Stability:-modified-wavenumber-analysis-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability: modified wavenumber analysis</a></span><ul class="toc-item"><li><span><a href="#Forward-finite-differentiation" data-toc-modified-id="Forward-finite-differentiation-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Forward finite differentiation</a></span></li><li><span><a href="#Centered-finite-differentiation" data-toc-modified-id="Centered-finite-differentiation-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Centered finite differentiation</a></span></li><li><span><a href="#Backward-finite-differentiation" data-toc-modified-id="Backward-finite-differentiation-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Backward finite differentiation</a></span></li><li><span><a href="#Graphical-summary" data-toc-modified-id="Graphical-summary-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Graphical summary</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -96,7 +96,7 @@ Let us write our algorithm in matrix notation:
 As before (see previous notebook), we adopt homogeneous Dirichlet boundary conditions: $u_0^m = u_{nx-1}^m=0, \forall m$. This means that our unknowns are $u^m_1,\ldots,u^m_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
-A =
+A = \alpha
 \begin{pmatrix}
 \lambda & 1 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 0 & \lambda & 1 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -110,7 +110,7 @@ A =
 \end{pmatrix}.
 \end{align}
 
-where $\displaystyle{\lambda=-(1+\frac{dx}{cdt})}$. In linear algebra terminology, $A$ has the form of a Jordan block.
+where $\displaystyle{\lambda=-(1+\frac{dx}{cdt})}$ and $\displaystyle \alpha = -\frac{cdt}{dx}$ In linear algebra terminology, $A$ has the form of a Jordan block (up to a multiplicative number).
 
 A useful result for us is that the powers of a Jordan block may be evaluated without too much effort. As an example, let's consider the powers of a $5\times 5$ Jordan block:
 
@@ -131,9 +131,22 @@ A useful result for us is that the powers of a Jordan block may be evaluated wit
 \end{pmatrix}
 \end{align}
 
-where the binomial coefficients are defined as $\tbinom{n}{k}=\prod_{i=1}^k \tfrac{n+1-i}{i}$. One can show that the matrix entries remain bounded if and only if $\vert \lambda \vert <1$ - the fact that the entries blow up for $\vert \lambda \vert \geq 1$ is evident. A detailed proof of this property may be found in \cite{horn2013}.
+where the binomial coefficients are defined as $\tbinom{n}{k}=\prod_{i=1}^k \tfrac{n+1-i}{i}$. One can show that the matrix entries remain bounded if and only if $\vert \lambda \vert <1$ - the fact that the entries blow up for $\vert \lambda \vert \geq 1$ is evident. A detailed proof of this property may be found in \cite{horn2013}. In terms of $A$ we have:
 
-The entries of the above discretization matrix $A$ are specific to the combined choice of the forward Euler method and the forward first-order finite differentiation. As these entries blow up as we power iterate the matrix, whatever the value of $dt$, this choice of discretization is *unconditionnally unstable* for the first order wave equation.
+\begin{align}
+A^n 
+=\begin{pmatrix}
+ \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} & \alpha^2\tbinom{n}{2}\beta^{n-2} & \alpha^3\tbinom{n}{3}\beta^{n-3}   & \alpha^4\tbinom{n}{4}\beta^{n-4} \\
+ 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} & \alpha^2\tbinom{n}{2}\beta^{n-2}   & \alpha^3\tbinom{n}{3}\beta^{n-3} \\
+ 0  & 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1}   & \alpha^2\tbinom{n}{2}\beta^{n-2} \\ 
+ 0  & 0  & 0  & \beta^n & \alpha\tbinom{n}{1}\beta^{n-1} \\
+ 0  & 0  & 0  & 0   & \beta^n
+\end{pmatrix}
+\end{align}
+
+with $\displaystyle{\beta=1+\frac{cdt}{dx}}$. Similarly to the case of an exact Jordan block, the matrix entries remain bounded if and only if $\vert \beta \vert < 1$ and this condition cannot be satisfied here.
+
+The entries of the discretization matrix $A$ are specific to the combined choice of the forward Euler method and the forward first-order finite differentiation. As these entries blow up as we power iterate the matrix, whatever the value of $dt$, this choice of discretization is *unconditionnally unstable* for the first order wave equation (and $c>0$).
 
 +++
 
@@ -156,7 +169,7 @@ In matrix notation we have,
 If we use the same boundary conditions as before, the matrix $\tilde A$ is expressed as,
 
 \begin{align}
-\tilde A = 
+\tilde A = \tilde \alpha
 \begin{pmatrix}
 \tilde \lambda & 0 & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 1 & \tilde \lambda & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -170,14 +183,14 @@ If we use the same boundary conditions as before, the matrix $\tilde A$ is expre
 \end{pmatrix},
 \end{align}
 
-with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$. This time, $\tilde A$ is the transpose of a Jordan block. Using the same argument as in the previous section, we conclude that the powers of $\tilde A$ will remain bounded if and only if $\vert \tilde \lambda \vert \leq 1$. Compared to the case of the forward Euler method with forward first-order finite differentiation, the situation is therefore very different. By choosing $dt$ such that,
+with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$ and $\displaystyle \tilde \alpha = \frac{cdt}{dx}$ This time, $\tilde A$ is the transpose of a Jordan block (up to a multiplicative factor). Using the same argument as in the previous section, we conclude that the powers of $\tilde A$ will remain bounded if and only if $\vert \tilde \beta \vert \leq 1$ with $\displaystyle \tilde \beta = 1-\frac{cdt}{dx}$. Compared to the case of the forward Euler method with forward first-order finite differentiation, the situation is therefore very different. By choosing $dt$ such that,
 
 \begin{equation}
 \label{eq:cfl}
- dt < \frac{dx}{c}
+ dt < \frac{2dx}{c}
 \end{equation}
 
-we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \frac{dx}{c}$ and check what happens.
+we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Even if the method does not blow up, it does not mean that you would get an accurate physical solution when using a large time step. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \displaystyle\frac{2dx}{c}$ and check what happens.
 
 The non-dimensional number,
 
@@ -188,10 +201,10 @@ C = \frac{cdt}{dx}
 is called the CFL number after the mathematicians Courant, Friedrich and Lewy. Here the condition for stability is:
 
 \begin{equation}
-C<1.
+C<2.
 \end{equation}
 
-This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation.
+This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation (and $c>0$).
 
 +++
 
@@ -393,7 +406,7 @@ we can satisfy the stability criteria for the forward Euler time integration sch
 C<1.
 \end{equation}
 
-Note that this criteria is identical to the one obtained through matrix stability analysis. But there is no guarantee that this is the case !
+Note that this criteria is not identical to the one obtained through matrix stability analysis because of the difference in boundary conditions.
 
 ### Graphical summary
 

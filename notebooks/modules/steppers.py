@@ -6,7 +6,7 @@ def euler_step(u, f, dt, *args):
     
     Parameters
     ----------
-    u : array of float
+    u : array of floats
         solution at the current time-step.
     f : function
         function to compute the right hand-side of the system of equation.
@@ -16,7 +16,7 @@ def euler_step(u, f, dt, *args):
     
     Returns
     -------
-    unp1 : array of float
+    unp1 : array of floats
         approximate solution at the next time step.
     """
     unp1 = u + dt * f(u, *args)
@@ -28,7 +28,7 @@ def rk4_step(u, f, dt, *args):
     
     Parameters
     ----------
-    u : array of float
+    u : array of floats
         solution at the current time-step.
     f : function
         function to compute the right hand-side of the system of equation.
@@ -38,7 +38,7 @@ def rk4_step(u, f, dt, *args):
     
     Returns
     -------
-    u_n_plus_1 : array of float
+    u_n_plus_1 : array of floats
         approximate solution at the next time step.
     """
     

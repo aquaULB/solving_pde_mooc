@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wave-number-analysis" data-toc-modified-id="Modified-wave-number-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wave number analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops---break-and-continue" data-toc-modified-id="Python-loops---break-and-continue-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops - break and continue</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wave-number-analysis" data-toc-modified-id="Modified-wave-number-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wave number analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops---break-and-continue" data-toc-modified-id="Python-loops---break-and-continue-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops - break and continue</a></span></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -54,7 +54,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the first notebooks of this chapter, we have described several methods - based on semi-discretization - to numerically solve the first order wave equation. We showed that the stability of the algorithms depends on the combination of the time advancement method and the spatial discretization.
+In the first notebooks of this chapter, we have described several methods to numerically solve the first order wave equation. We showed that the stability of the algorithms depends on the combination of the time advancement method and the spatial discretization.
 
 Here we treat another case, the one dimensional heat equation:
 
@@ -87,13 +87,16 @@ T^{n+1}_i = T^n_i+\frac{\alpha dt}{\Delta x^2} (T^n_{i-1}-2T^n_i+T^{n}_{n+1})
 In matrix notation this is equivalent to:
 
 \begin{equation}
-    \boldsymbol{T}^{n+1} = A\boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{T}^{n+1} = A^{n+1}\boldsymbol{T}^{0}.
+\label{eq:matHeatEuler}
+    \boldsymbol{T}^{n+1} = (I+A)\boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{T}^{n+1} = (I+A)^{n+1}\boldsymbol{T}^{0},
 \end{equation}
+
+where $I$ is the identity matrix.
 
 Let us first study the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,u^T_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
-A =
+A = \frac{\alpha dt}{dx^2}
 \begin{pmatrix}
 a & b & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -107,19 +110,32 @@ c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
 \end{pmatrix},
 \end{align}
 
-with $\displaystyle a = 1-2\frac{\alpha dt}{dx^2}$ and $b = c = \frac{\alpha dt}{dx^2}$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues of $A$ are:
+with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues $m_k$ of $A$ are real and negative:
 
 \begin{equation}
-\lambda_k = 1+\frac{2\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{n}\right)-1\right),\; k=1,\ldots, n-1.
+m_k = 2\frac{\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{n}\right)-1\right),\; k=1,\ldots, n-1.
 \end{equation}
 
-As A is diagonalizable, the algorithm is stable if all the eigenvalues satisfy $\vert \lambda_k \vert < 1$. This imposes the following constraint on $dt$:
+As a consequence, $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $dt$:
 
 \begin{equation}
-dt<\frac{dx^2}{2\alpha} \Leftrightarrow  F<\frac{1}{2}
+dt<\frac{dx^2}{2\alpha} \Leftrightarrow  F<0.5
 \end{equation}
 
-where $F= \alpha dt/dx^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $dx^2$. As a consequence, explicit integration of the heat equation can become problematic and implicit methods might be rapidly preferred if a high spatial resolution is needed.
+where $F= \alpha dt/dx^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $dx^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be rapidly preferred if a high spatial resolution is needed.
+
+If we use the RK4 method instead of the Euler method for the time discretization, eq. \ref{eq:matHeatEuler} becomes,
+
+\begin{equation}
+\label{eq:matHeatRK4}
+   \boldsymbol{T}^{n+1} = \left(I+A+\frac12 A^2 + \frac16 A^3+A^4\right)^{n+1}\boldsymbol{T}^{0}.
+\end{equation}
+
+and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in the stability region of the RK4 time integration scheme. The constraint on the time step is then,
+
+\begin{equation}
+dt<2.79\frac{dx^2}{4\alpha} \Leftrightarrow  F<0.7
+\end{equation}
 
 ### Modified wave number analysis
 
@@ -127,11 +143,11 @@ where $F= \alpha dt/dx^2$ is sometimes referred to as the Fourier number. This c
 
 ### Numerical solution
 
-Let's implement the algorithm \ref{heatEulerForward} and empirically check the above stability criteria. To make the problem more interesting, we include a source term in the equation by setting: $\sigma = \sin(\pi x)$. In that case, the solution of the equation converges to,
+Let's implement the algorithm \ref{heatEulerForward} and empirically check the above stability criteria. To make the problem more interesting, we include a source term in the equation by setting: $\sigma = \sin(\pi x)$. As initial condition we choose $T_0(x) = \sin(2\pi x)$. In that case, the exact solution of the equation reads,
 
 \begin{equation}
 \label{eq:solution1DHeat}
-T(x,t)=\frac{1}{\pi^2}sin(\pi x)\; \; \;\hbox{for $t\rightarrow \infty$}
+T(x,t)=e^{-4\pi^2 t}\sin(2\pi x) + (1-e^{-\pi^2 t})\sin(\pi x).
 \end{equation}
 
 To get started we import the `euler_step` function from the `steppers` module (see notebook 04_01_Advection for further details):
@@ -139,7 +155,7 @@ To get started we import the `euler_step` function from the `steppers` module (s
 ```{code-cell} ipython3
 import sys
 sys.path.insert(0, '../modules')
-from steppers import euler_step
+from steppers import euler_step, rk4_step
 ```
 
 The heat equation is solved using the following parameters. Note that we currently have set $F=0.49$.
@@ -150,7 +166,7 @@ alpha = 1.                     # Heat transfer coefficient
 lx = 1.                        # Size of computational domain
 
 # Grid parameters
-nx = 41                        # number of grid points 
+nx = 21                        # number of grid points 
 dx = lx / (nx-1)               # grid spacing
 x = np.linspace(0., lx, nx)    # coordinates of grid points
 
@@ -162,11 +178,11 @@ dt = fourier*dx**2/alpha       # time step
 nt = int((t_f-t_i) / dt)       # number of time steps
 
 # Initial condition
-T0 = 0.5*np.sin(2*np.pi*x)     # initial condition
-source = np.sin(np.pi*x)       # heat source term
+T0 = np.sin(2*np.pi*x)     # initial condition
+source = 2*np.sin(np.pi*x)       # heat source term
 ```
 
-In the function below we discretize the right-hand side of the heat equation using the centered finite difference formula of second-order accuracy: 
+In the function below we discretize the right-hand side of the heat equation using the centered finite difference formula of second-order accuracy:
 
 ```{code-cell} ipython3
 def rhs_centered(T, dx, alpha, source):
@@ -200,28 +216,49 @@ def rhs_centered(T, dx, alpha, source):
     return f
 ```
 
+We also define a function that return the exact solution at any time $t$:
+
+```{code-cell} ipython3
+def exact_solution(x,t):
+    """Returns the exact solution of the 1D
+    heat equation with heat source term sin(np.pi*x)
+    and initial condition sin(2*np.pi*x)
+    
+    Parameters
+    ----------
+    x : array of floats
+        grid points coordinates
+    t: float
+        time
+    
+    Returns
+    -------
+    f : array of floats
+        exact solution
+    """
+    f = np.exp(-4*np.pi**2*t) * np.sin(2*np.pi*x) + 2.0*(1-np.exp(-np.pi**2*t)) * np.sin(np.pi*x) / np.pi**2
+    
+    return f
+```
+
 And now we perform the time stepping:
 
 ```{code-cell} ipython3
 T = np.empty((nt+1, nx))
 T[0] = T0.copy()
-t = 0
+
 for i in range(nt):
     T[i+1] = euler_step(T[i], rhs_centered, dt, dx, alpha, source)
 ```
 
 ```{code-cell} ipython3
-# Exact solution as t -> infinity
-exact_sol = np.sin(np.pi*x)/np.pi**2
-
-
 # plot the solution at several times
 fig, ax = plt.subplots(figsize=(10, 5))
 
 ax.plot(x, T[0], label='Initial condition')
-ax.plot(x, T[int(0.05/dt)], color='green', label='t=0.05')
-ax.plot(x, T[-1], color='brown', label=f't={t_f}')
-ax.plot(x, exact_sol, '*', label='Exact solution')
+ax.plot(x, T[int(0.025/dt)], color='green', label='$t=0.05$')
+ax.plot(x, T[-1], color='brown', label=f'$t={t_f}$')
+ax.plot(x, exact_solution(x, 1.0), '*', label='Exact solution at $t=1$')
 
 
 ax.set_xlabel('$x$')
@@ -239,7 +276,7 @@ At the beginning of this notebook we emphasized that we need better ways of chec
 ```{code-cell} ipython3
 def l2_diff(f1, f2):
     """
-    Computes the relative l2-norm of the difference
+    Computes the l2-norm of the difference
     between a function f1 and a function f2
     
     Parameters
@@ -252,35 +289,124 @@ def l2_diff(f1, f2):
     Returns
     -------
     diff : float
-        The (relative) l2-norm of the difference.
+        The l2-norm of the difference.
     """
-    l2_diff = np.sqrt(np.sum((f1 - f2)**2))
-    l2_f2 = np.sqrt(np.sum(f2**2))
+    l2_diff = np.sqrt(np.sum((f1 - f2)**2))/f1.shape[0]
     
-    # Avoid division by zero
-    if l2_f2 > 1e-12:
-        return l2_diff / l2_f2
     return l2_diff
 ```
 
 Using this function we can compute the relative error - in $L_2$-norm - of our computed solution compared to the exact solution:
 
 ```{code-cell} ipython3
-error = l2_diff(T[-1], exact_sol) 
-print(f'The relative L2-error of the computed solution is {error}')
+error = l2_diff(T[-1], exact_solution(x, t_f)) 
+print(f'The L2-error made in the computed solution is {error}')
 ```
 
-This is already quite good, the relative $L_2$ norm of the error is 0.2%. There are three ways to improve this:
+This is already quite good: in terms of the $L_2$ norm, the error is quite small. There are two ways to improve this:
 
 1. Increase the number of grid points
 2. Decrease the time step
-3. Increase the final time of the computation (we had chosen $t_f=1$ but our reference solution is computed at $t=\infty$).
 
-Before we explore these possibilities, we provide a short tutorial on how to control the flow of python loops and also describe the `while` loop. These two notions are very useful to make our codes more flexible and in particular control the convergence of our numerical solutions. 
+Before we explore these possibilities, we provide a short tutorial on how to control the flow of python loops and also describe the `while` loop. These two notions are very useful to make our codes more flexible and in particular control the convergence of our numerical solutions.
 
 +++
 
 ## Python loops - break and continue
+
++++
+
+## Convergence of the numerical solution
+
++++
+
+Now that we know how to control the flow of python loops, let's use this skill to study the convergence of our algorithm in more detail.
+
+Ideally, we would like to specify a maximum error for our solution and change the simulation parameters to meet this threshold. To do so we have to increase the number of grid points and reduce the time step.
+
+In practice we don't have access to the exact solution to measure the error - otherwise why would we bother solving the problem numerically? To overcome this difficulty, we have to perform what is known as a convergence study. The technique relies again on Taylor's theorem. When we design numerical algorithms, we do so in such a way that they have a given convergence rate: as we make the grid spacing and time step smaller and smaller, the solution should get closer and and closer to the exact solution. Therefore, at some point in the refinement process, the obtained solution should barely change as we refine the parameters further. When the difference between two consecutive solutions falls below a given threshold that we choose, we say that we have converged the solution up to a given precision.
+
+Let's rewrite our numerical procedure to implement this strategy. First we define the precision we want to achieve. Strictly speaking, this is not  really a precision but rather a measure of how well the numerical solution is converged:
+
+```{code-cell} ipython3
+precision = 1e-6
+```
+
+In the current problem, we have to vary two parameters: the grid spacing and the time step. However, we don't have to separately modify the time step as it is computed from the grid spacing to meet the stability criteria. To vary the grid spacing until convergence is met, we will use a `while` loop. This while loop iterates until the L2 difference between two consecutive solutions gets smaller than the precision. However, as we don't know in advance how many grid refinements are needed, we also add a break statement that stops the loop after a given number of grid refinements. This avoids having the computer run for an excessively long time. If that's the case, it might be better to reconsider the discretization scheme and seek a higher order accurate discretization requiring fewer grid points for the same precision.
+
+```{code-cell} ipython3
+# Physical parameters
+alpha = 1.                     # Heat transfer coefficient
+lx = 1.                        # Size of computational domain
+t_i = 0.0                      # Initial time
+t_f = 1.0                      # Final time
+fourier = 0.49                 # Fourier number to ensure stability
+
+
+
+max_grid_refinements = 7
+grid_refinement = 1
+
+# Starting number of grid points
+nx = 3
+
+# Reference solution for comparison after first grid refinement.
+# It is arbitrarely set to zero
+Tref = np.zeros(nx)
+
+# Initial value for the difference before entering the while loop
+# Any value larger than precision is fine
+diff = 1.
+
+while (diff > precision):
+    
+    # Grid parameters
+    nx = 2*nx - 1                  # At each grid refinement dx is divided by 2
+    dx = lx / (nx-1)               # grid spacing
+    x = np.linspace(0., lx, nx)    # coordinates of grid points
+
+    Tn = np.sin(2*np.pi*x)     # initial condition
+    source = 2.0*np.sin(np.pi*x)       # heat source term
+    
+    dt = fourier*dx**2/alpha       # time step
+    nt = int((t_f-t_i) / dt)       # number of time steps
+    
+    # Time stepping
+    for i in range(nt):
+        Tnp1 = euler_step(Tn, rhs_centered, dt, dx, alpha, source)
+        Tn = Tnp1.copy()
+    
+    # diff computation
+    diff = l2_diff(Tnp1[::2], Tref)
+    print(f'L2 difference after {grid_refinement} grid refinement(s) (nx={nx}): {diff}')
+    
+    grid_refinement += 1
+    
+    if grid_refinement > max_grid_refinements:
+        break
+    
+    # Store the new reference solution
+    Tref = Tnp1.copy()
+    
+if (diff < precision):
+    print(f'\nSolution converged with required precision for {nx} grid points')
+else:
+    print('\nSolution not converged within the maximum allowed grid refinements')
+    print(f'Last number of grid points tested: nx = {nx}')
+```
+
+The code tells us that by going from $nx=129$ to $nx=257$, the L2-norm of the difference between the solutions has gotten below $10^{-6}$. If that's the precision we want to achieve we now we can stop there and we know we are fine with $nx=257$.
+
+Rerun the above code after setting `precision = 1e-7` and see what happens. You should get a message informing you that the solution could not be converged within the required precision. This means that our break statement was useful; without it, the computations could run for a very long time before stopping.
+
+For reference, we also compare the converged solution (`nx=257`) with the exact solution:
+
+```{code-cell} ipython3
+diff_exact = l2_diff(Tnp1, exact_solution(x, t_f))
+print(f'The L2-error made in the computed solution is {diff_exact}')
+```
+
+The strategy of comparing the solutions while refining the grid worked very well. By doing so, we converged towards the exact solution and the L2 norm of the error is about $10^{-7}$.
 
 +++
 

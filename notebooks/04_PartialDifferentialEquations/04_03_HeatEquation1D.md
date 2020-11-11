@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wave-number-analysis" data-toc-modified-id="Modified-wave-number-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wave number analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops---break-and-continue" data-toc-modified-id="Python-loops---break-and-continue-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops - break and continue</a></span></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wavenumber-analysis" data-toc-modified-id="Modified-wavenumber-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wavenumber analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops---break-and-continue" data-toc-modified-id="Python-loops---break-and-continue-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops - break and continue</a></span></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -93,7 +93,7 @@ In matrix notation this is equivalent to:
 
 where $I$ is the identity matrix.
 
-Let us first study the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,u^T_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
+Consider the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,u^T_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
 A = \frac{\alpha dt}{dx^2}
@@ -128,7 +128,7 @@ If we use the RK4 method instead of the Euler method for the time discretization
 
 \begin{equation}
 \label{eq:matHeatRK4}
-   \boldsymbol{T}^{n+1} = \left(I+A+\frac12 A^2 + \frac16 A^3+A^4\right)^{n+1}\boldsymbol{T}^{0}.
+   \boldsymbol{T}^{n+1} = \left(I+A+\frac12 A^2 + \frac16 A^3+\frac{1}{24}A^4\right)^{n+1}\boldsymbol{T}^{0}.
 \end{equation}
 
 and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in the stability region of the RK4 time integration scheme. The constraint on the time step is then,
@@ -137,9 +137,67 @@ and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in
 dt<2.79\frac{dx^2}{4\alpha} \Leftrightarrow  F<0.7
 \end{equation}
 
-### Modified wave number analysis
+This is a little bit less restrictive than the criteria for the forward Euler method.
 
-...
+### Modified wavenumber analysis
+
+We can also consider the stability of the algorithms when using periodic boundary condition. In that case we may use the modified wavenumber analysis that we discussed in the previous notebook.
+
+The temperature field is decomposed into Fourier modes:
+
+\begin{equation}
+    T(x,t)=\sum_{m} \hat{T}(k_m,t) e^{ik_m x},\; \; k_m = \frac{2\pi m}{L}
+\end{equation}
+
+If we substitute this expression in the heat equation (without source term) we get:
+
+\begin{equation}
+\label{eq:FourierT}
+    \frac{d\hat T(k_m,t)}{dt}=-\alpha k_m^2 \hat{T}(k_m,t)
+\end{equation}
+
+This equation is 'exact'. When discretizing the second-order derivative using the second-order accurate centered finite difference formula, we get instead:
+
+\begin{align}
+    \frac{d\hat T(k_m,t)}{dt}&=\alpha\left(\frac{e^{-ik_m dx} - 2 + e^{ik_m dx}}{dx^2}\right) \hat{T}(k_m,t) \\
+    &= -\alpha k_m'^2 \hat T(k_m,t)
+\end{align}
+
+with the modified wavenumbers being real and defined by,
+
+\begin{equation}
+k_m'^2 = \frac{2}{dx^2}(1 - cos(k_m dx)).
+\end{equation}
+
+The semi-discretized equation is identical to the original equation \ref{eq:FourierT} except for a modification of the wavenumber.
+
+In this formulation, all the Fourier modes are decoupled and evolve according to:
+
+\begin{equation}
+    \frac{d\hat T(k_m,t)}{dt}=\lambda \hat{T}(k_m,t),\; \; \lambda = -\alpha k'^2_m
+\end{equation}
+
+Depending on how we discretize the time derivative we get different constraints on $dt$ for stability: in each case, all the coefficients $\lambda_m$ must lie within the stability domain of the corresponding scheme.
+
+For the forward Euler method we get:
+
+\begin{align}
+-2 < -\alpha dt \frac{2}{dx^2}(1 - cos(k_m dx)) < 0
+\end{align}
+
+The ensure that these constraints are satisfied for all values of $m$, the required restriction on the time step is:
+
+\begin{equation}
+dt < \frac{dx^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
+\end{equation}
+
+For the RK4 time integration method we get:
+
+\begin{equation}
+dt < 2.79\frac{dx^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
+\end{equation}
+
+These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and that there is no guarantee that the conditions would match. 
 
 ### Numerical solution
 
@@ -380,6 +438,9 @@ while (diff > precision):
     diff = l2_diff(Tnp1[::2], Tref)
     print(f'L2 difference after {grid_refinement} grid refinement(s) (nx={nx}): {diff}')
     
+    # Perform another grid refinement but
+    # break if we have reached the maximum
+    # number of refinements allowed
     grid_refinement += 1
     
     if grid_refinement > max_grid_refinements:
@@ -410,6 +471,12 @@ The strategy of comparing the solutions while refining the grid worked very well
 
 +++
 
+## Summary
+
+In this notebook we have discretized the one dimensional heat equation and analyzed its stability. We have shown that the restriction on the time step is quite strong as it scales with $dx^2$. We also provided a tutorial on how to control the flow of Python loop. We then explained how to monitor the accuracy of our numerical solution by using performing a *convergence study*. In this method, one checks the accuracy of the solution by refining the temporal and spatial discretization parameters until the solution remains unchanged up to a chosen accuracy. In the next notebook we will revisit the discretization of the heat equation using implicit time advancements schemes. 
+
++++
+
 ## Exercises
 
 **Exercise 1:**
@@ -418,8 +485,4 @@ The strategy of comparing the solutions while refining the grid worked very well
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```{code-cell} ipython3
-
 ```

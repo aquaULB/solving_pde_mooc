@@ -79,9 +79,9 @@ We begin by considering the forward Euler time advancement scheme in combination
 
 \begin{align}
 \label{heatEulerForward}
-& \frac{T^{n+1}_i - T^n_i}{dt}=\alpha \frac{T^n_{i-1}-2T^n_i+T^{n}_{n+1}}{\Delta x^2} \\
+& \frac{T^{n+1}_i - T^n_i}{\Delta t}=\alpha \frac{T^n_{i-1}-2T^n_i+T^{n}_{i+1}}{\Delta x^2} \\
 &\Leftrightarrow
-T^{n+1}_i = T^n_i+\frac{\alpha dt}{\Delta x^2} (T^n_{i-1}-2T^n_i+T^{n}_{n+1})
+T^{n+1}_i = T^n_i+\frac{\alpha \Delta t}{\Delta x^2} (T^n_{i-1}-2T^n_i+T^{n}_{i+1})
 \end{align}
 
 In matrix notation this is equivalent to:
@@ -96,7 +96,7 @@ where $I$ is the identity matrix.
 Consider the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,u^T_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
-A = \frac{\alpha dt}{dx^2}
+A = \frac{\alpha \Delta t}{\Delta x^2}
 \begin{pmatrix}
 a & b & 0 & 0 & 0 & \dots & 0 & 0 & 0 & 0\\
 c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
@@ -113,16 +113,16 @@ c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
 with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues $m_k$ of $A$ are real and negative:
 
 \begin{equation}
-m_k = 2\frac{\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{n}\right)-1\right),\; k=1,\ldots, n-1.
+m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{n}\right)-1\right),\; k=1,\ldots, n-1.
 \end{equation}
 
-As a consequence, $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $dt$:
+As a consequence, $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
 
 \begin{equation}
-dt<\frac{dx^2}{2\alpha} \Leftrightarrow  F<0.5
+\Delta t<\frac{\Delta x^2}{2\alpha} \Leftrightarrow  F<0.5
 \end{equation}
 
-where $F= \alpha dt/dx^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $dx^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be rapidly preferred if a high spatial resolution is needed.
+where $F= \alpha \Delta t/\Delta x^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $\Delta x^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be rapidly preferred if a high spatial resolution is needed.
 
 If we use the RK4 method instead of the Euler method for the time discretization, eq. \ref{eq:matHeatEuler} becomes,
 
@@ -134,7 +134,7 @@ If we use the RK4 method instead of the Euler method for the time discretization
 and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in the stability region of the RK4 time integration scheme. The constraint on the time step is then,
 
 \begin{equation}
-dt<2.79\frac{dx^2}{4\alpha} \Leftrightarrow  F<0.7
+\Delta t<2.79\frac{\Delta x^2}{4\alpha} \Leftrightarrow  F<0.7
 \end{equation}
 
 This is a little bit less restrictive than the criteria for the forward Euler method.
@@ -159,14 +159,14 @@ If we substitute this expression in the heat equation (without source term) we g
 This equation is 'exact'. When discretizing the second-order derivative using the second-order accurate centered finite difference formula, we get instead:
 
 \begin{align}
-    \frac{d\hat T(k_m,t)}{dt}&=\alpha\left(\frac{e^{-ik_m dx} - 2 + e^{ik_m dx}}{dx^2}\right) \hat{T}(k_m,t) \\
+    \frac{d\hat T(k_m,t)}{dt}&=\alpha\left(\frac{e^{-ik_m \Delta x} - 2 + e^{ik_m \Delta x}}{\Delta x^2}\right) \hat{T}(k_m,t) \\
     &= -\alpha k_m'^2 \hat T(k_m,t)
 \end{align}
 
 with the modified wavenumbers being real and defined by,
 
 \begin{equation}
-k_m'^2 = \frac{2}{dx^2}(1 - cos(k_m dx)).
+k_m'^2 = \frac{2}{\Delta x^2}(1 - cos(k_m \Delta x)).
 \end{equation}
 
 The semi-discretized equation is identical to the original equation \ref{eq:FourierT} except for a modification of the wavenumber.
@@ -182,19 +182,19 @@ Depending on how we discretize the time derivative we get different constraints 
 For the forward Euler method we get:
 
 \begin{align}
--2 < -\alpha dt \frac{2}{dx^2}(1 - cos(k_m dx)) < 0
+-2 < -\alpha \Delta t \frac{2}{\Delta x^2}(1 - cos(k_m \Delta x)) < 0
 \end{align}
 
 The ensure that these constraints are satisfied for all values of $m$, the required restriction on the time step is:
 
 \begin{equation}
-dt < \frac{dx^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
+\Delta t < \frac{\Delta x^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
 \end{equation}
 
 For the RK4 time integration method we get:
 
 \begin{equation}
-dt < 2.79\frac{dx^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
+\Delta t < 2.79\frac{\Delta x^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
 \end{equation}
 
 These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and that there is no guarantee that the conditions would match. 
@@ -473,7 +473,7 @@ The strategy of comparing the solutions while refining the grid worked very well
 
 ## Summary
 
-In this notebook we have discretized the one dimensional heat equation and analyzed its stability. We have shown that the restriction on the time step is quite strong as it scales with $dx^2$. We also provided a tutorial on how to control the flow of Python loop. We then explained how to monitor the accuracy of our numerical solution by using performing a *convergence study*. In this method, one checks the accuracy of the solution by refining the temporal and spatial discretization parameters until the solution remains unchanged up to a chosen accuracy. In the next notebook we will revisit the discretization of the heat equation using implicit time advancements schemes. 
+In this notebook we have discretized the one dimensional heat equation and analyzed its stability. We have shown that the restriction on the time step is quite strong as it scales with $\Delta x^2$. We also provided a tutorial on how to control the flow of Python loop. We then explained how to monitor the accuracy of our numerical solution by using performing a *convergence study*. In this method, one checks the accuracy of the solution by refining the temporal and spatial discretization parameters until the solution remains unchanged up to a chosen accuracy. In the next notebook we will revisit the discretization of the heat equation using implicit time advancements schemes.
 
 +++
 

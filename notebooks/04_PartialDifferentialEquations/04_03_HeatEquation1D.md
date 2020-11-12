@@ -113,7 +113,7 @@ c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
 with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues $m_k$ of $A$ are real and negative:
 
 \begin{equation}
-m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{n}\right)-1\right),\; k=1,\ldots, n-1.
+m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\; k=1,\ldots, nx-2.
 \end{equation}
 
 As a consequence, $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:

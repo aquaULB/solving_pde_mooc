@@ -93,7 +93,7 @@ In matrix notation this is equivalent to:
 
 where $I$ is the identity matrix.
 
-Consider the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,u^T_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
+Consider the case with homogeneous Dirichlet boundary conditions: $T_0^m = T_{nx-1}^m=0, \forall m$. This means that our unknowns are $T^m_1,\ldots,T^m_{nx-2}$ and that the matrix $A$ has dimensions $(nx-2)\times (nx-2)$. Its expression is:
 
 \begin{align}
 A = \frac{\alpha \Delta t}{\Delta x^2}
@@ -116,13 +116,13 @@ with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previou
 m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\; k=1,\ldots, nx-2.
 \end{equation}
 
-As a consequence, $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
+As a consequence, matrix $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
 
 \begin{equation}
 \Delta t<\frac{\Delta x^2}{2\alpha} \Leftrightarrow  F<0.5
 \end{equation}
 
-where $F= \alpha \Delta t/\Delta x^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $\Delta x^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be rapidly preferred if a high spatial resolution is needed.
+where $F= \alpha \Delta t/\Delta x^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $\Delta x^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be preferred if a high spatial resolution is needed.
 
 If we use the RK4 method instead of the Euler method for the time discretization, eq. \ref{eq:matHeatEuler} becomes,
 
@@ -197,7 +197,7 @@ For the RK4 time integration method we get:
 \Delta t < 2.79\frac{\Delta x^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
 \end{equation}
 
-These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and that there is no guarantee that the conditions would match. 
+These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and in general case there is no guarantee that the conditions for stability will match. 
 
 ### Numerical solution
 
@@ -294,7 +294,14 @@ def exact_solution(x,t):
     f : array of floats
         exact solution
     """
-    f = np.exp(-4*np.pi**2*t) * np.sin(2*np.pi*x) + 2.0*(1-np.exp(-np.pi**2*t)) * np.sin(np.pi*x) / np.pi**2
+    # Note the 'Pythonic' way to break the long line. You could
+    # split a long line using a backlash (\) but the conventional
+    # way is to embrace your code in parenthesis.
+    #
+    # For more info we refer you to PEP8:
+    # https://www.python.org/dev/peps/pep-0008/#id19 
+    f = (np.exp(-4*np.pi**2*t) * np.sin(2*np.pi*x)
+      + 2.0*(1-np.exp(-np.pi**2*t)) * np.sin(np.pi*x) / np.pi**2)
     
     return f
 ```
@@ -321,11 +328,12 @@ ax.plot(x, exact_solution(x, 1.0), '*', label='Exact solution at $t=1$')
 
 ax.set_xlabel('$x$')
 ax.set_ylabel('$T$')
-ax.set_title('Heat transport with forward Euler scheme - forward finite differences')
+ax.set_title('Heat transport with forward Euler scheme'
+             ' - forward finite differences')
 ax.legend();
 ```
 
-The solution looks qualitatively very good !
+The solution looks qualitatively very good!
 
 Run the code again with a slightly larger Fourier number equal to $0.51$ and see what happens... The solution blows up and it is clear that the stability criteria needs to be satisfied to get a stable solution.
 
@@ -382,7 +390,7 @@ Now that we know how to control the flow of python loops, let's use this skill t
 
 Ideally, we would like to specify a maximum error for our solution and change the simulation parameters to meet this threshold. To do so we have to increase the number of grid points and reduce the time step.
 
-In practice we don't have access to the exact solution to measure the error - otherwise why would we bother solving the problem numerically? To overcome this difficulty, we have to perform what is known as a convergence study. The technique relies again on Taylor's theorem. When we design numerical algorithms, we do so in such a way that they have a given convergence rate: as we make the grid spacing and time step smaller and smaller, the solution should get closer and and closer to the exact solution. Therefore, at some point in the refinement process, the obtained solution should barely change as we refine the parameters further. When the difference between two consecutive solutions falls below a given threshold that we choose, we say that we have converged the solution up to a given precision.
+In practice we don't have access to the exact solution to measure the error - otherwise why would we bother solving the problem numerically? To overcome this difficulty, we have to perform what is known as *a convergence study*. The technique relies again on Taylor's theorem. When we design numerical algorithms, we do so in such a way that they have a given convergence rate: as we make the grid spacing and time step smaller and smaller, the solution should get closer and and closer to the exact solution. Therefore, at some point in the refinement process, the obtained solution should barely change as we refine the parameters further. When the difference between two consecutive solutions falls below a given threshold that we choose, we say that we have converged the solution up to a given precision.
 
 Let's rewrite our numerical procedure to implement this strategy. First we define the precision we want to achieve. Strictly speaking, this is not  really a precision but rather a measure of how well the numerical solution is converged:
 
@@ -390,7 +398,7 @@ Let's rewrite our numerical procedure to implement this strategy. First we defin
 precision = 1e-6
 ```
 
-In the current problem, we have to vary two parameters: the grid spacing and the time step. However, we don't have to separately modify the time step as it is computed from the grid spacing to meet the stability criteria. To vary the grid spacing until convergence is met, we will use a `while` loop. This while loop iterates until the L2 difference between two consecutive solutions gets smaller than the precision. However, as we don't know in advance how many grid refinements are needed, we also add a break statement that stops the loop after a given number of grid refinements. This avoids having the computer run for an excessively long time. If that's the case, it might be better to reconsider the discretization scheme and seek a higher order accurate discretization requiring fewer grid points for the same precision.
+In the current problem, we have to vary two parameters: the grid spacing and the time step. However, we don't have to separately modify the time step as it is computed from the grid spacing to meet the stability criteria. To vary the grid spacing until convergence is met, we will use a `while` loop. This while loop iterates until the L2 difference between two consecutive solutions gets smaller than the precision. However, as we don't know in advance how many grid refinements are needed, we also add a `break` statement that exits the loop after a given number of grid refinements. This avoids having the computer run for an excessively long time. If that's the case, it might be better to reconsider the discretization scheme and seek a higher order accurate discretization requiring fewer grid points for the same precision.
 
 ```{code-cell} ipython3
 # Physical parameters
@@ -399,7 +407,6 @@ lx = 1.                        # Size of computational domain
 t_i = 0.0                      # Initial time
 t_f = 1.0                      # Final time
 fourier = 0.49                 # Fourier number to ensure stability
-
 
 
 max_grid_refinements = 7
@@ -415,16 +422,17 @@ Tref = np.zeros(nx)
 # Initial value for the difference before entering the while loop
 # Any value larger than precision is fine
 diff = 1.
+```
 
+```{code-cell} ipython3
 while (diff > precision):
-    
     # Grid parameters
     nx = 2*nx - 1                  # At each grid refinement dx is divided by 2
     dx = lx / (nx-1)               # grid spacing
     x = np.linspace(0., lx, nx)    # coordinates of grid points
 
-    Tn = np.sin(2*np.pi*x)     # initial condition
-    source = 2.0*np.sin(np.pi*x)       # heat source term
+    Tn = np.sin(2*np.pi*x)         # initial condition
+    source = 2.0*np.sin(np.pi*x)   # heat source term
     
     dt = fourier*dx**2/alpha       # time step
     nt = int((t_f-t_i) / dt)       # number of time steps
@@ -436,7 +444,11 @@ while (diff > precision):
     
     # diff computation
     diff = l2_diff(Tnp1[::2], Tref)
-    print(f'L2 difference after {grid_refinement} grid refinement(s) (nx={nx}): {diff}')
+    # Pay attention that when you break an f-string in Python
+    # the 'f' specifier must preceed each string segment starting
+    # from the new line.
+    print(f'L2 difference after {grid_refinement} grid refinement(s)'
+          f' (nx={nx}): {diff}')
     
     # Perform another grid refinement but
     # break if we have reached the maximum
@@ -450,9 +462,11 @@ while (diff > precision):
     Tref = Tnp1.copy()
     
 if (diff < precision):
-    print(f'\nSolution converged with required precision for {nx} grid points')
+    print(f'\nSolution converged with required precision'
+          f' for {nx} grid points')
 else:
-    print('\nSolution not converged within the maximum allowed grid refinements')
+    print('\nSolution did not converged within the maximum'
+          ' allowed grid refinements')
     print(f'Last number of grid points tested: nx = {nx}')
 ```
 

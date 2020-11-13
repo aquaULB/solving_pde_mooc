@@ -116,7 +116,7 @@ with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previou
 m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\; k=1,\ldots, nx-2.
 \end{equation}
 
-As a consequence, matrix $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
+As a consequence, the matrix $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
 
 \begin{equation}
 \Delta t<\frac{\Delta x^2}{2\alpha} \Leftrightarrow  F<0.5
@@ -197,7 +197,7 @@ For the RK4 time integration method we get:
 \Delta t < 2.79\frac{\Delta x^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
 \end{equation}
 
-These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and in general case there is no guarantee that the conditions for stability will match. 
+These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and in general there is no guarantee that the conditions for stability will match. 
 
 ### Numerical solution
 
@@ -443,6 +443,9 @@ while (diff > precision):
         Tn = Tnp1.copy()
     
     # diff computation
+    # Note how we sliced the Tnp1 array. As the grid has been
+    # refined by a factor of 2, we need to keep every other point
+    # when comparing with Tref.
     diff = l2_diff(Tnp1[::2], Tref)
     # Pay attention that when you break an f-string in Python
     # the 'f' specifier must preceed each string segment starting

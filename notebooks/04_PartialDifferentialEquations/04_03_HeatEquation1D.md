@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wavenumber-analysis" data-toc-modified-id="Modified-wavenumber-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wavenumber analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops---break-and-continue" data-toc-modified-id="Python-loops---break-and-continue-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops - break and continue</a></span></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wavenumber-analysis" data-toc-modified-id="Modified-wavenumber-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wavenumber analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops" data-toc-modified-id="Python-loops-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops</a></span></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
 
 +++
 
@@ -379,7 +379,279 @@ Before we explore these possibilities, we provide a short tutorial on how to con
 
 +++
 
-## Python loops - break and continue
+## Python loops
+
++++
+
+### *for* and *while* loops
+
++++
+
+You are already well familiar with Python `for` loops. They are also called **definite loops** meaning that the number of iteration is known before entering the loop. `for` loops are useful when you need to iterate over a certain sequence, or, sticking to Python terminology, over a *collection*. There are generally [three concepts for `for` loops][1] in programming. The one that Python implements is called *Collection-Based loop*. Schematically the Collection-Based `for` loop in Python has the following syntax:
+
+```python
+for <element> in <collection>:
+    <do something>
+```
+
+`<collection>` must be *iterable*, or in other words it must be a sequence. For example you obviously cannot iterate over an integer or a function. The following code will raise Exceptions of type TypeError:
+
+```python
+for i in 785:
+    print(i)
+
+---------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-15-dec972479acc> in <module>
+----> 1 for i in 784:
+      2     print(i)
+
+TypeError: 'int' object is not iterable
+   
+```
+
+```python
+for i in len:
+    print(i)
+    
+---------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-17-28a55301f0c9> in <module>
+----> 1 for i in len:
+      2     print(i)
+
+TypeError: 'builtin_function_or_method' object is not iterable
+```
+
+[1]: <https://realpython.com/python-for-loop/#a-survey-of-definite-iteration-in-programming> "Concepts of for loops"
+
++++
+
+But what if we do *not* know the number of iterations we need to perform in advance? Imagine we have a `list` of $10000$ elements that are integers from $0$ to $9999$. Each integer only occurs once in the sequence but its location is *random*. We are determined to compute an index of the element that is equal to $7$. First, let's implement this sequence, so that we can thinks of the routes we could take to solve our little problem.
+
+```{code-cell} ipython3
+# This variable will store our solution - index of
+# the element that is equal to 7.
+ind_of_seven = -1
+
+seq = np.linspace(0, 9999, 10000)
+```
+
+Right now our sequence is of course ordered. We can shuffle it using [Python's `random` module][2]:
+
+[2]: <https://docs.python.org/3/library/random.html> "random module"
+
+```{code-cell} ipython3
+import random
+
+random.shuffle(seq)
+```
+
+Note that `random.shuffle` returns `None` object. It basically takes advantage of that the mutable (modifiable) objects, when function's arguments, are passed by object reference in Python. Or in other words *function does not receive a copy of an object but its address in memory*, and so it can modify or *mutate* the original object. And numpy array is a mutable (modifiable) object.
+
+But let's go back to our task. How are we going to approach it? In principle, we could use the `for` loop:
+
+```{code-cell} ipython3
+# The enumerate built-in function will manage elements'
+# indices for you. At each iteration it will return the
+# index of the current element and the element itself.
+# That's why we need two iteration variables instead of
+# usual one.
+#
+# For more info:
+# https://docs.python.org/3/library/functions.html#enumerate
+for i, elem in enumerate(seq):
+    if elem == 7:
+        ind_of_seven = i
+        
+if ind_of_seven >= 0:
+    print(f'Location of 7 in the sequence: {ind_of_seven}')
+else:
+    # Obviously this scenario should never happen.
+    print('Could not found 7 in the sequence')
+```
+
+We solved the problem but is our solution efficient or elegant? No. $7$ can end up being located at `i=9999` but the odds are obviously quite low. It means that most probably we are going to perform $n$ unnecessary iteration. It can be $5$ unnecessary iteration but it can as well be $9995$. **That is why there are `while` loops**. `while` loops are also called **indefinite loops**. They execute until certain condition is satisfied. Schematically their syntax is the following:
+
+```python
+while <condition>:
+    <do things>
+```
+
+The loop will execute until `<condition>` evaluates to `False`. Straightforward way to exit `while` loop is to modify `<condition>` inside the loop. It is also worth mentioning that the code snippet
+
+
+```python
+while True:
+    <do things>
+```
+
+implements the *infinite loop*. Normally infinite loop executes until you exceed memory limits.
+
+Let's approach our model problem with the `while` loop:
+
+```{code-cell} ipython3
+# Reset solution
+ind_of_seven = -1
+
+i = 0            # current index of element in sequence
+found = False    # will evaluate to True when 7 is found
+while not found:
+    if seq[i] == 7:
+        ind_of_seven = i
+        found = True
+    # Increment i to proceed to the next element of seq
+    i += 1
+    
+    
+if ind_of_seven >= 0:
+    print(f'Location of 7 in the sequence: {ind_of_seven}')
+else:
+    # Obviously this scenario should never happen.
+    print('Could not found 7 in the sequence')
+```
+
+Such solution is obviously the preferred one for our particular problem: *we performed exactly as many iterations as we needed*.
+
+To conclude this subsection we propose you to keep such philosophy in mind:
+- Use `for` loop if you know *exactly* the number of iteration you have to perform.
+- Use `while` loop if you cannot know the number of iterations in advance but you know what is the condition for the loop to terminate.
+
+You might think, though, is there no other way to exit loop than to reach the end of the sequence (in the case of `for` loop), or to satisfy certain condition? What if you are running your code on the supercomputer where you have pre-ordered just one hour of time, you are out of time and your code is still running? Or what if you perform series of computation at each iteration, end up with singularity in the beginning of certain iteration, and want to immediately proceed to the next iteration to avoid division by zero? There are tools in Python to cover such cases, and they are the `break` and `continue` statements.
+
++++
+
+### *break* and *continue* statements
+
++++
+
+`break` and `continue` provide the possibility to terminate iteration *before* the entire body of the loop is executed.
+- `break` immediately terminates execution of the loop.
+- `continue` immediately terminates execution of the current iteration.
+
+The following little examples demonstrate distinction between `break` and `continue`:
+
+```{code-cell} ipython3
+# Loop is terminated if i >= 5: mind the output
+#
+# Note the optional argument of print - end. You can configure
+# what your output ends with - by default its '\n' (new line).
+print('Using break statement: ', end='')
+for i in range(10):
+    if i == 5: break
+    print(i, end=' ')
+
+# Iteration is terminated if i >= 5: mind the output
+print('\nUsing continue statement: ', end='')
+for i in range(10):
+    if i == 5: continue
+    print(i, end=' ')
+```
+
+How would we approach more "real life" problems - for instance the ones assumed in the end of the previous subsection? Obviously the problem of the time limit excess is to be addressed using the `break` statement. Consider the following code snippet:
+
+```python
+# For safety we want to terminate in 55 minutes from now.
+timeout = time.time() + 55*60
+
+while True: # in principle infinite loop
+    <do things>  
+    # If the time limit has been reached, save data that has been computed
+    # to the files and terminate loop immediately.
+    if time.time() >= timeout:
+        <save data to the files>
+        break
+```
+
+This is the schematic example of how we would safely manage limited time resources. We have not only "gracefully" terminated our code but saved all the data we have collected to disk, so that it's not lost if we couldn't complete all of the iterations.
+
+Consider now the code snippet governing schematic solution of the problem of division by zero occurring for certain iterations:
+
+```python
+# sol is the matrix to fill with solution of the linear system of equations
+# at each iteration, and i is the line of a matrix that is to be filled at
+# current iteration. Therefore n here is the number of grid points and num
+# is the number of iterations.
+i, sol = 0, np.empty(num, n)
+
+for elem in <collection>: # collection contains num elements
+    <compute param>
+    # We assume param occurs in the denominator in the equations.
+    if param == 0:
+        # Delete the row of a matrix correspondent to the iteration
+        # that is to be skipped. In this case i doesn't need to be
+        # incremented.
+        sol = np.delete(sol, (i))
+        continue
+    <solve equations>
+    sol[i] = current_solution
+    # We now must increment i.
+    i += 1
+```
+
+As a result, we obtain a matrix `sol` of shape `(num-m, n)`, where `m` is the number of iterations, for which the singularity occurred. 
+
+Note that this little demo does *not* implement optimal way of handling division by zero in Python. The more "Pythonic" approach is to use Exception handling. This is rather the advanced topic of Python programming that is not covered in this course. You must know, though, that the above demo is perfectly valid for your understanding of the logic to usage of `continue` statement. *`continue` would still be used in the same manner if the algorithm is implemented using Exception handling*.
+
++++
+
+### *else* clause
+
++++
+
+Let's dig even deeper into the functionality of Python loops. Python implements something that is almost unique to this programming language, which is the `else` clause in loops. You could wonder how can there be `else` if there is no `if`? Indeed, `else` seems to make more sense along other conditional statements, such as `if` and `elif`. But `else` in loops is a convention that appears to be quite useful in some cases. Consider the following example using `for` loop:
+
+```{code-cell} ipython3
+print('I let the loop run to the end: ', end='')
+for i in range(10):
+    print(i, end=' ')
+else:
+    print('\nI have finished the loop.')
+
+print('\nI use break statement to get out of the loop: ', end='')
+for i in range(10):
+    if i == 5: break
+    print(i, end=' ')
+else:
+    print('\nI never get here')
+```
+
+You can conclude from the output that the `else` clause executes *only* when the loop terminates because we have reached the end of the sequence. In the case when we break out of the loop before the iterations have been exhausted, `else` clause *never* executes. 
+
+The same logic applies to using `else` clause in `while` loops:
+
+```{code-cell} ipython3
+seq = list(range(10))
+
+i = 0
+found = False
+
+print('I exit the loop by changing <condition> to False: ', end='')
+while not found:
+    # We don't want to exceed bounds of the sequence.
+    if i >= len(seq): break
+    if seq[i] == 5:
+        found = True
+    i += 1
+else:
+    print('I end up in the else clause.')
+
+# Reset index and boolean.
+i = 0
+found = False
+
+print('\nI use break statement to get out of the loop.', end='')
+while not found:
+    # We don't want to exceed bounds of the sequence.
+    if i >= len(seq): break
+    if seq[i] == 999:
+        found = True
+    i += 1
+else:
+    print('\nI never get here')
+```
+
+Usage of `else` clause allows you to shorten your code and make it more elegant. Imagine you wanted to perform extra computations but only in the case if certain object has been found when executing the `while` loop. If not for the `else` clause you would have to create the block of conditional statement `if`. This way, though, you can perform these computation where they logically belong - at the end of the loop.
 
 +++
 

@@ -220,7 +220,7 @@ The heat equation is solved using the following parameters. Note that we current
 
 ```{code-cell} ipython3
 # Physical parameters
-alpha = 1.                     # Heat transfer coefficient
+alpha = 0.1                     # Heat transfer coefficient
 lx = 1.                        # Size of computational domain
 
 # Grid parameters
@@ -230,7 +230,7 @@ x = np.linspace(0., lx, nx)    # coordinates of grid points
 
 # Time parameters
 t_i = 0.                       # initial time
-t_f = 1.                       # final time
+t_f = 5.                       # final time
 fourier = 0.49                 # Fourier number
 dt = fourier*dx**2/alpha       # time step
 nt = int((t_f-t_i) / dt)       # number of time steps
@@ -277,7 +277,7 @@ def rhs_centered(T, dx, alpha, source):
 We also define a function that return the exact solution at any time $t$:
 
 ```{code-cell} ipython3
-def exact_solution(x,t):
+def exact_solution(x,t, alpha):
     """Returns the exact solution of the 1D
     heat equation with heat source term sin(np.pi*x)
     and initial condition sin(2*np.pi*x)
@@ -300,8 +300,9 @@ def exact_solution(x,t):
     #
     # For more info we refer you to PEP8:
     # https://www.python.org/dev/peps/pep-0008/#id19 
-    f = (np.exp(-4*np.pi**2*t) * np.sin(2*np.pi*x)
-      + 2.0*(1-np.exp(-np.pi**2*t)) * np.sin(np.pi*x) / np.pi**2)
+    f = (np.exp(-4*np.pi**2*alpha*t) * np.sin(2*np.pi*x)
+      + 2.0*(1-np.exp(-np.pi**2*alpha*t)) * np.sin(np.pi*x) 
+      / (np.pi**2*alpha))
     
     return f
 ```
@@ -321,9 +322,9 @@ for i in range(nt):
 fig, ax = plt.subplots(figsize=(10, 5))
 
 ax.plot(x, T[0], label='Initial condition')
-ax.plot(x, T[int(0.025/dt)], color='green', label='$t=0.05$')
+ax.plot(x, T[int(0.5/dt)], color='green', label='$t=0.5$')
 ax.plot(x, T[-1], color='brown', label=f'$t={t_f}$')
-ax.plot(x, exact_solution(x, 1.0), '*', label='Exact solution at $t=1$')
+ax.plot(x, exact_solution(x, 5.0, alpha), '*', label='Exact solution at $t=5$')
 
 
 ax.set_xlabel('$x$')
@@ -365,7 +366,7 @@ def l2_diff(f1, f2):
 Using this function we can compute the relative error - in $L_2$-norm - of our computed solution compared to the exact solution:
 
 ```{code-cell} ipython3
-error = l2_diff(T[-1], exact_solution(x, t_f)) 
+error = l2_diff(T[-1], exact_solution(x, t_f, alpha)) 
 print(f'The L2-error made in the computed solution is {error}')
 ```
 
@@ -402,14 +403,14 @@ In the current problem, we have to vary two parameters: the grid spacing and the
 
 ```{code-cell} ipython3
 # Physical parameters
-alpha = 1.                     # Heat transfer coefficient
+alpha = 0.1                    # Heat transfer coefficient
 lx = 1.                        # Size of computational domain
 t_i = 0.0                      # Initial time
-t_f = 1.0                      # Final time
+t_f = 5.0                      # Final time
 fourier = 0.49                 # Fourier number to ensure stability
 
 
-max_grid_refinements = 7
+max_grid_refinements = 8
 grid_refinement = 1
 
 # Starting number of grid points
@@ -480,7 +481,7 @@ Rerun the above code after setting `precision = 1e-7` and see what happens. You 
 For reference, we also compare the converged solution (`nx=257`) with the exact solution:
 
 ```{code-cell} ipython3
-diff_exact = l2_diff(Tnp1, exact_solution(x, t_f))
+diff_exact = l2_diff(Tnp1, exact_solution(x, 5., alpha))
 print(f'The L2-error made in the computed solution is {diff_exact}')
 ```
 

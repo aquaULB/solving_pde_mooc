@@ -166,7 +166,7 @@ This equation is 'exact'. When discretizing the second-order derivative using th
 with the modified wavenumbers being real and defined by,
 
 \begin{equation}
-k_m'^2 = \frac{2}{\Delta x^2}(1 - cos(k_m \Delta x)).
+k_m'^2 = \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)).
 \end{equation}
 
 The semi-discretized equation is identical to the original equation \ref{eq:FourierT} except for a modification of the wavenumber.
@@ -182,7 +182,7 @@ Depending on how we discretize the time derivative we get different constraints 
 For the forward Euler method we get:
 
 \begin{align}
--2 < -\alpha \Delta t \frac{2}{\Delta x^2}(1 - cos(k_m \Delta x)) < 0
+-2 < -\alpha \Delta t \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)) < 0
 \end{align}
 
 The ensure that these constraints are satisfied for all values of $m$, the required restriction on the time step is:
@@ -201,11 +201,11 @@ These conditions are identical to the ones we obtained using the matrix stabilit
 
 ### Numerical solution
 
-Let's implement the algorithm \ref{heatEulerForward} and empirically check the above stability criteria. To make the problem more interesting, we include a source term in the equation by setting: $\sigma = \sin(\pi x)$. As initial condition we choose $T_0(x) = \sin(2\pi x)$. In that case, the exact solution of the equation reads,
+Let's implement the algorithm \ref{heatEulerForward} and empirically check the above stability criteria. To make the problem more interesting, we include a source term in the equation by setting: $\sigma = 2\sin(\pi x)$. As initial condition we choose $T_0(x) = \sin(2\pi x)$. In that case, the exact solution of the equation reads,
 
 \begin{equation}
 \label{eq:solution1DHeat}
-T(x,t)=e^{-4\pi^2 t}\sin(2\pi x) + (1-e^{-\pi^2 t})\sin(\pi x).
+T(x,t)=e^{-4\pi^2 t}\sin(2\pi x) + \frac{2}{\pi^2}(1-e^{-\pi^2 t})\sin(\pi x).
 \end{equation}
 
 To get started we import the `euler_step` function from the `steppers` module (see notebook 04_01_Advection for further details):
@@ -229,11 +229,11 @@ dx = lx / (nx-1)               # grid spacing
 x = np.linspace(0., lx, nx)    # coordinates of grid points
 
 # Time parameters
-t_i = 0.                       # initial time
-t_f = 5.                       # final time
+ti = 0.                       # initial time
+tf = 5.                       # final time
 fourier = 0.49                 # Fourier number
 dt = fourier*dx**2/alpha       # time step
-nt = int((t_f-t_i) / dt)       # number of time steps
+nt = int((tf-ti) / dt)       # number of time steps
 
 # Initial condition
 T0 = np.sin(2*np.pi*x)     # initial condition
@@ -323,7 +323,7 @@ fig, ax = plt.subplots(figsize=(10, 5))
 
 ax.plot(x, T[0], label='Initial condition')
 ax.plot(x, T[int(0.5/dt)], color='green', label='$t=0.5$')
-ax.plot(x, T[-1], color='brown', label=f'$t={t_f}$')
+ax.plot(x, T[-1], color='brown', label=f'$t={tf}$')
 ax.plot(x, exact_solution(x, 5.0, alpha), '*', label='Exact solution at $t=5$')
 
 
@@ -366,7 +366,7 @@ def l2_diff(f1, f2):
 Using this function we can compute the relative error - in $L_2$-norm - of our computed solution compared to the exact solution:
 
 ```{code-cell} ipython3
-error = l2_diff(T[-1], exact_solution(x, t_f, alpha)) 
+error = l2_diff(T[-1], exact_solution(x, tf, alpha)) 
 print(f'The L2-error made in the computed solution is {error}')
 ```
 
@@ -677,8 +677,8 @@ In the current problem, we have to vary two parameters: the grid spacing and the
 # Physical parameters
 alpha = 0.1                    # Heat transfer coefficient
 lx = 1.                        # Size of computational domain
-t_i = 0.0                      # Initial time
-t_f = 5.0                      # Final time
+ti = 0.0                      # Initial time
+tf = 5.0                      # Final time
 fourier = 0.49                 # Fourier number to ensure stability
 
 
@@ -708,7 +708,7 @@ while (diff > precision):
     source = 2.0*np.sin(np.pi*x)   # heat source term
     
     dt = fourier*dx**2/alpha       # time step
-    nt = int((t_f-t_i) / dt)       # number of time steps
+    nt = int((tf-ti) / dt)       # number of time steps
     
     # Time stepping
     for i in range(nt):

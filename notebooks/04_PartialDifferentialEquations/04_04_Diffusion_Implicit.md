@@ -54,7 +54,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the previous notebook we have described some explicit methods to solve the one dimensional heat equation;
+In the previous notebook we have described some explicit methods to solve one dimensional heat equation;
 
 \begin{equation}
 \label{eq:1Dheat2}
@@ -63,7 +63,7 @@ In the previous notebook we have described some explicit methods to solve the on
 
 where $T$ is the temperature and $\sigma$ is an optional heat source term.
 
-In all cases considered, we have observed that stability of the algorithm requires a restriction on the time proportional to $\Delta x^2$. As this is rather restrictive, we focus here on some implicit methods and see how they compare.
+In all cases considered, we have observed that stability of the algorithm requires a restriction on the time step proportional to $\Delta x^2$. As this is rather restrictive, we focus here on some implicit methods and see how they compare.
 
 +++
 
@@ -76,19 +76,19 @@ We begin by considering the backward Euler time advancement scheme in combinatio
 We recall that for a generic ordinary differential equation $y'=f(y,t)$, the backward Euler method is,
 
 \begin{equation*}
-y^{n+1} = y^{n} + \Delta t f(y^{n+1},t).
+y^{n} = y^{n-1} + \Delta t f(y^{n},t).
 \end{equation*}
 
 In our case, the discretization is therefore,
 
 \begin{align*}
-& \frac{T^{n+1}_i - T^n_i}{\Delta t}=\alpha \frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}
+& \frac{T^n_i - T^{n-1}_i}{\Delta t}=\alpha \frac{T^n_{i-1}-2T^n_i+T^n_{i+1}}{\Delta x^2}
 \end{align*}
 
 In matrix notation this is equivalent to:
 
 \begin{equation*}
-    (I-A)\boldsymbol{T}^{n+1} = \boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; (I-A)^{n}\boldsymbol{T}^{n} = \boldsymbol{T}^{0},
+    (I-A)\boldsymbol{T}^n = \boldsymbol{T}^{n-1}\; \; \Leftrightarrow \; \; (I-A)^{n}\boldsymbol{T}^{n} = \boldsymbol{T}^{0},
 \end{equation*}
 
 where $I$ is the identity matrix. If we adopt Dirichlet boundary conditions, the matrix $A$ is identical to its counterpart for the forward Euler scheme (see previous notebook). For reference, the eigenvalues $m_k$ of $A$ are real and negative:
@@ -134,31 +134,31 @@ Because all the coefficients $-\alpha k_m'^2$ are real and negative, the Fourier
 A popular method for discretizing the diffusion term in the heat equation is the Crank-Nicolson scheme. It is a second-order accurate implicit method that is defined for a generic equation $y'=f(y,t)$ as:
 
 \begin{align*}
-\frac{y^{n+1} - y^n}{\Delta t} = \frac12(f(y^{n+1}, t^{n+1}) + f(y^n, t^n)).
+\frac{y^{n} - y^{n-1}}{\Delta t} = \frac12\left(f(y^{n}, t^{n}) + f(y^{n-1}, t^{n-1})\right).
 \end{align*}
 
-You should check that this method is indeed second-order accurate in time by expanding $f(y^{n+1}, t^{n+1})$ in Taylor series (see exercice ...).
+You should check that this method is indeed second-order accurate in time by expanding $f(y^{n}, t^{n})$ in Taylor series (see exercise ...).
 
-For the heat equation, the Crank Nicolson method yields the following expression:
+For the heat equation, the Crank-Nicolson method yields the following expression:
 
 \begin{align}
 \label{eq:heatCN}
-\frac{T^{n+1}_i - T^n_i}{\Delta t}=\frac{\alpha}{2} \left(\frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}  + 
-\frac{T^{n}_{i}-2T^{n}_i+T^{n}_{i}}{\Delta x^2}\right)
+\frac{T^{n}_i - T^{n-1}_i}{\Delta t}=\frac{\alpha}{2} \left(\frac{T^{n}_{i-1}-2T^{n}_i+T^{n}_{i+1}}{\Delta x^2}  + 
+\frac{T^{n-1}_{i}-2T^{n-1}_i+T^{n-1}_{i}}{\Delta x^2}\right)
 \end{align}
 
 In matrix form (assuming Dirichlet boundary conditions), this is equivalent to:
 
 \begin{equation*}
-    (I-A_{cn})\boldsymbol{T}^{n+1} = (I+A_{cn})\boldsymbol{T}^{n}.
+    (I-A_{cn})\boldsymbol{T}^{n} = (I+A_{cn})\boldsymbol{T}^{n-1}.
 \end{equation*}
 
-with $A_{cn}$ being the same matrix as in the previous section except for the prefactor that is now $\frac{\alpha \Delta t}{2\Delta x^2}$.
+with $A_{cn}$ being the same matrix as in the previous section except for the prefactor that is now $\displaystyle\frac{\alpha \Delta t}{2\Delta x^2}$.
 
 Both sides of the equation can be diagonalized using the same eigenvectors. Therefore, the coordinates of $\boldsymbol{T}$ in the basis of eigenvectors evolve according to:
 
 \begin{equation*}
-    (I-\Lambda) \boldsymbol z^{n+1} = (I+\Lambda)\boldsymbol z^n \Rightarrow \boldsymbol z^{n}_k = \left(\frac{1+m_k/2}{1-m_k/2}\right)^n z^0_k.
+    (I-\Lambda) \boldsymbol z^{n} = (I+\Lambda)\boldsymbol z^{n-1} \Rightarrow \boldsymbol z^{n}_k = \left(\frac{1+m_k/2}{1-m_k/2}\right)^n z^0_k.
 \end{equation*}
 
 Since $m_k < 0\; \forall k$, all the coordinates $z_k$ remain again bounded and the algorithm is unconditionally stable.
@@ -166,13 +166,13 @@ Since $m_k < 0\; \forall k$, all the coordinates $z_k$ remain again bounded and 
 In the case of periodic boundary conditions, we may again study the stability of the method by decomposing the temperature field in Fourier modes. According to eq. \ref{eq:heatCN} we get:
 
 \begin{align*}
-    \frac{\hat T^{n+1}(k_m)-\hat T^{n}(k_m)}{\Delta t}= \frac{\alpha}{2\Delta x^2}((&2\cos(k_m\Delta x)-2)\hat T^{n+1}(k_m) \\ &+(2\cos(k_m\Delta x)-2)\hat T^{n}(k_m))
+    \frac{\hat T^{n}(k_m)-\hat T^{n-1}(k_m)}{\Delta t}= \frac{\alpha}{2\Delta x^2}((&2\cos(k_m\Delta x)-2)\hat T^{n}(k_m) \\ &+(2\cos(k_m\Delta x)-2)\hat T^{n-1}(k_m))
 \end{align*}
 
 or equivalently
 
 \begin{equation*}
-    \hat T^{n+1}(k_m) = \frac{1-\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}{1+\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}\hat T^{n}(k_m).
+    \hat T^{n}(k_m) = \frac{1-\displaystyle\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}{1+\displaystyle\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}\hat T^{n-1}(k_m).
 \end{equation*}
 
 As the denominator is always larger than the numerator, all the Fourier modes remain bounded and we conclude again the algorithm is unconditionally stable.
@@ -191,7 +191,7 @@ The source term in eq. \ref{eq:1Dheat2} is $\sigma = 2\sin(\pi x)$and the initia
 T(x,t)=e^{-4\pi^2\alpha t}\sin(2\pi x) + \frac{2}{\pi^2\alpha}(1-e^{-\alpha\pi^2 t})\sin(\pi x).
 \end{equation}
 
-To get started we import some module functions. The corresponding modules are part of the course's `module` directory and its path has to add to the Python search path. The only exception is the `pde_module` that is located in the current notebook's directory as they are not useful for other notebooks.
+To get started we import some helper functions. The corresponding modules are part of the course's `module` directory and its path has to be added to the Python search path. The only exception is the `pde_module` that is located in the current notebook's directory, as they are not useful for other notebooks.
 
 ```{code-cell} ipython3
 import sys
@@ -227,7 +227,7 @@ dx = lx / (nx-1)               # grid spacing
 x = np.linspace(0., lx, nx)    # coordinates of grid points
 ```
 
-To evaluate how much faster we can get our solution with the implicit scheme, we will time our algorithms. The first one we consider is the forward Euler scheme using the Euler step function. We know that in that case, we have to use a Fourier number $F<0.5$.
+To evaluate how much faster we can get our solution with the implicit scheme, we will time our algorithms. The first one we consider is the forward Euler scheme using the Euler step function. We know that in that case, we have to use a Fourier number $F<0.5$ (see the notebook `04_03_Diffusion_Explicit`).
 
 **Forward Euler method in vector form:**
 
@@ -251,7 +251,6 @@ T[0] = T0.copy()         # Set the initial condition
 ```{code-cell} ipython3
 %%timeit
 for i in range(nt):
-    # We only keep the solution at t=tf
     T[i+1] = euler_step(T[i], rhs_heat_centered, dt, dx, alpha, source)
 ```
 
@@ -261,7 +260,7 @@ print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
 
-Using $nx=513$, the accuracy is below our set target but it requires 267493 time steps and an average 3.2s runtime.
+Using $nx=513$, the accuracy is below our set target but it requires $267493$ time steps.
 
 +++
 
@@ -271,7 +270,7 @@ For the implicit methods, we need to perform matrix multiplications to time adva
 
 In this case, the time stepping is performed with:
 \begin{equation}
-    \boldsymbol{T}^{n+1} = (I+A)\boldsymbol{T}^{n}
+    \boldsymbol{T}^{n} = (I+A)\boldsymbol{T}^{n-1}
 \end{equation}
 
 The needed matrices are computed as follows:
@@ -281,7 +280,7 @@ The needed matrices are computed as follows:
 D2 = d2_mat_dirichlet(nx, dx)     
 
 # I+A matrix
-M = np.eye(nx-2) + alpha*dt * D2
+M = np.eye(nx-2) + alpha*dt*D2
 ```
 
 Timing of the solution:
@@ -291,9 +290,10 @@ T[0] = T0.copy()         # Set the initial condition
 ```
 
 ```{code-cell} ipython3
-#%%timeit
+%%timeit
 for i in range(nt):
     T[i+1, 1:-1] = np.dot(M, T[i, 1:-1]) + source[1:-1]*dt
+
 # Set the boundary values
 T[-1,0] = 0.
 T[-1,-1] = 0.
@@ -307,7 +307,7 @@ print(f'Time integration required {nt} steps')
 
 As expected, the algorithm in matrix form gives nearly identical results as in vector form. The tiny differences are due to round-off errors. 
 
-We note that the algorithm in matrix is two times slower than in vector form.
+We note that the algorithm implemented in a matrix form is two times slower than that implemented in a vector form.
 
 Let's turn our attention to the implicit algorithms. For these, there is no limit on the time step but we still want to achieve the desired precision.
 
@@ -321,7 +321,7 @@ dt = fourier*dx**2/alpha       # time step
 nt = int((tf-ti) / dt)         # number of time steps
 
 # I-A matrix
-M = np.eye(nx-2) - alpha*dt * D2
+M = np.eye(nx-2) - alpha*dt*D2
 Minv = np.linalg.inv(M)
 ```
 
@@ -334,8 +334,6 @@ Timing of the solution:
 
 ```{code-cell} ipython3
 %%timeit
-T = np.empty((nt+1, nx))
-
 for i in range(nt):
     T[i+1, 1:-1] = np.dot(Minv, T[i, 1:-1] + source[1:-1]*dt)
 # Set boundary values
@@ -349,26 +347,26 @@ print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
 
-Using the backward Euler method, the number of time steps has been reduced by a factor of 20 and the execution time by a factor 10 compared to the forward Euler method in vector form !
+Using the backward Euler method, the number of time steps has been reduced by a factor of 20 and the execution time by a factor 10 compared to the forward Euler method in vector form!
 
 +++
 
 **Crank-Nicolson method**
 
-The last method we consider here is the Crank-Nicolson method. This methods is second-order accurate in time so we can except even more savings. After some testing, we have determined that the Fourier number could be raised to a value of $55$. Let's check this:
+The last method we consider here is the Crank-Nicolson method. This methods is second-order accurate in time so we can expect even better improvement. After some testing, we have determined that the Fourier number could be raised to a value of $55$. Let's check this:
 
 ```{code-cell} ipython3
 fourier = 55              # Fourier number
 dt = fourier*dx**2/alpha  # time step
 
-nt = int((tf-ti) / dt)    # number of time steps
+nt = int((tf-ti)/dt)      # number of time steps
 
 # I-0.5*A matrix + inverse
-A = np.eye(nx-2) - 0.5*alpha*dt * D2
+A = np.eye(nx-2) - 0.5*alpha*dt*D2
 Ainv = np.linalg.inv(A)
 
 # I+0.5*A matric
-B = np.eye(nx-2) + 0.5*alpha*dt * D2
+B = np.eye(nx-2) + 0.5*alpha*dt*D2
 
 # (I+0.5A)^{-1} * (I-0.5*A)
 C = np.dot(Ainv, B)
@@ -395,7 +393,7 @@ print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
 
-The number of time steps has been further reduced by a factor of 5 and the execution time is approximately 30 times faster than with the forward Euler method !
+The number of time steps has been further reduced by a factor of 5 and the execution time is approximately 30 times faster than that with the forward Euler method!
 
 +++
 
@@ -403,7 +401,7 @@ The number of time steps has been further reduced by a factor of 5 and the execu
 
 +++
 
-In this notebook we have discussed implicit methods for the discretization of the one dimensional heat equation. These are particularly useful as explicit scheme require a time step scaling as $dx^2$. We have shown that the backward Euler and Crank-Nicolson methods are unconditionally stable for this problem. Although they require more complex arithmetical operations than explicit schemes, they result in very significant reduction in computational cost. The savings are problem dependent because achieving enough accuracy depends on several factors. However, the discussion indicates that it is always important to explore the various algorithm options when trying to solve a numerical problem and there is vast literature available to do this.
+In this notebook we have discussed implicit discretization techniques for the the one-dimensional heat equation. These are particularly useful as explicit scheme requires a time step scaling with $dx^2$. We have shown that the backward Euler and Crank-Nicolson methods are unconditionally stable for this problem. Although they require more complex arithmetical operations than explicit schemes, they result in very significant reduction in computational cost. These reductions are problem dependent because achieving enough accuracy depends on several factors. However, the discussion indicates that it is always important to explore the various algorithms when trying to solve a numerical problem and there is vast literature available to do this.
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

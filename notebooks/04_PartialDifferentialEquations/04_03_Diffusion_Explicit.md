@@ -88,7 +88,7 @@ In matrix notation this is equivalent to:
 
 \begin{equation}
 \label{eq:matHeatEuler}
-    \boldsymbol{T}^{n+1} = (I+A)\boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{T}^{n+1} = (I+A)^{n+1}\boldsymbol{T}^{0},
+    \boldsymbol{T}^{n+1} = (I+A)\boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; \boldsymbol{T}^{n} = (I+A)^{n}\boldsymbol{T}^{0},
 \end{equation}
 
 where $I$ is the identity matrix.
@@ -110,16 +110,16 @@ c & a & b & 0 & 0 & \dots & 0 & 0 & 0 & 0 \\
 \end{pmatrix},
 \end{align}
 
-with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues $m_k$ of $A$ are real and negative:
+with $a = -2$ and $b = c = 1$. According to the theorem we quoted in the previous notebook concerning Toeplitz matrices, the eigenvalues $m_k$ of $A$ are in this case real and negative:
 
 \begin{equation}
 m_k = 2\frac{\alpha \Delta t}{\Delta x^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\; k=1,\ldots, nx-2.
 \end{equation}
 
-As a consequence, the matrix $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert < 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
+All the eigenvalues are distinct and as a consequence, the matrix $I+A$ is diagonalizable with eigenvalues $\lambda_k = 1+m_k$. The algorithm is stable if all these eigenvalues satisfy $\vert \lambda_k \vert \leq 1$ or in other words, if all the eigenvalues of $A$ are within the stability domain of the Euler method. This imposes the following constraint on $\Delta t$:
 
 \begin{equation}
-\Delta t<\frac{\Delta x^2}{2\alpha} \Leftrightarrow  F<0.5
+\Delta t\leq \frac{\Delta x^2}{2\alpha} \Leftrightarrow  F\leq 0.5
 \end{equation}
 
 where $F= \alpha \Delta t/\Delta x^2$ is sometimes referred to as the Fourier number. This condition is quite strict as the limitation on the time step is proportional to $\Delta x^2$.  Explicit integration of the heat equation can therefore become problematic and implicit methods might be preferred if a high spatial resolution is needed.
@@ -134,14 +134,14 @@ If we use the RK4 method instead of the Euler method for the time discretization
 and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in the stability region of the RK4 time integration scheme. The constraint on the time step is then,
 
 \begin{equation}
-\Delta t<2.79\frac{\Delta x^2}{4\alpha} \Leftrightarrow  F<0.7
+\Delta t\leq 2.79\frac{\Delta x^2}{4\alpha} \Leftrightarrow  F\leq 0.7
 \end{equation}
 
 This is a little bit less restrictive than the criteria for the forward Euler method.
 
 ### Modified wavenumber analysis
 
-We can also consider the stability of the algorithms when using periodic boundary condition. In that case we may use the modified wavenumber analysis that we discussed in the previous notebook.
+We can also consider the stability of the algorithms when using periodic boundary conditions. In that case we may use the modified wavenumber analysis that we discussed in the previous notebook.
 
 The temperature field is decomposed into Fourier modes:
 
@@ -182,22 +182,22 @@ Depending on how we discretize the time derivative we get different constraints 
 For the forward Euler method we get:
 
 \begin{align}
--2 < -\alpha \Delta t \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)) < 0
+-2 \leq -\alpha \Delta t \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)) \leq 0
 \end{align}
 
 The ensure that these constraints are satisfied for all values of $m$, the required restriction on the time step is:
 
 \begin{equation}
-\Delta t < \frac{\Delta x^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
+\Delta t \leq \frac{\Delta x^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
 \end{equation}
 
 For the RK4 time integration method we get:
 
 \begin{equation}
-\Delta t < 2.79\frac{\Delta x^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
+\Delta t \leq 2.79\frac{\Delta x^2}{4\alpha}\; \; \; \hbox{(RK4 mehod)}
 \end{equation}
 
-These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions used are different and in general there is no guarantee that the conditions for stability will match. 
+These conditions are identical to the ones we obtained using the matrix stability method. Keep in mind that the boundary conditions are different and in general there is no guarantee that the conditions for stability will match. 
 
 ### Numerical solution
 
@@ -205,7 +205,7 @@ Let's implement the algorithm \ref{heatEulerForward} and empirically check the a
 
 \begin{equation}
 \label{eq:solution1DHeat}
-T(x,t)=e^{-4\pi^2 t}\sin(2\pi x) + \frac{2}{\pi^2}(1-e^{-\pi^2 t})\sin(\pi x).
+T(x,t)=e^{-4\pi^2\alpha t}\sin(2\pi x) + \frac{2}{\pi^2\alpha}(1-e^{-\pi^2\alpha t})\sin(\pi x).
 \end{equation}
 
 To get started we import the `euler_step` function from the `steppers` module (see notebook 04_01_Advection for further details):
@@ -213,31 +213,31 @@ To get started we import the `euler_step` function from the `steppers` module (s
 ```{code-cell} ipython3
 import sys
 sys.path.insert(0, '../modules')
-from steppers import euler_step, rk4_step
+from steppers import euler_step
 ```
 
-The heat equation is solved using the following parameters. Note that we currently have set $F=0.49$.
+The heat equation is solved using the following parameters. Note that we have set $F=0.49$.
 
 ```{code-cell} ipython3
 # Physical parameters
 alpha = 0.1                     # Heat transfer coefficient
-lx = 1.                        # Size of computational domain
+lx = 1.                         # Size of computational domain
 
 # Grid parameters
-nx = 21                        # number of grid points 
-dx = lx / (nx-1)               # grid spacing
-x = np.linspace(0., lx, nx)    # coordinates of grid points
+nx = 21                         # number of grid points 
+dx = lx / (nx-1)                # grid spacing
+x = np.linspace(0., lx, nx)     # coordinates of grid points
 
 # Time parameters
-ti = 0.                       # initial time
-tf = 5.                       # final time
-fourier = 0.49                 # Fourier number
-dt = fourier*dx**2/alpha       # time step
-nt = int((tf-ti) / dt)       # number of time steps
+ti = 0.                         # initial time
+tf = 5.                         # final time
+fourier = 0.49                  # Fourier number
+dt = fourier*dx**2/alpha        # time step
+nt = int((tf-ti) / dt)          # number of time steps
 
 # Initial condition
-T0 = np.sin(2*np.pi*x)     # initial condition
-source = 2*np.sin(np.pi*x)       # heat source term
+T0 = np.sin(2*np.pi*x)          # initial condition
+source = 2*np.sin(np.pi*x)      # heat source term
 ```
 
 In the function below we discretize the right-hand side of the heat equation using the centered finite difference formula of second-order accuracy:
@@ -274,7 +274,7 @@ def rhs_centered(T, dx, alpha, source):
     return f
 ```
 
-We also define a function that return the exact solution at any time $t$:
+We also define a function that returns the exact solution at any time $t$:
 
 ```{code-cell} ipython3
 def exact_solution(x,t, alpha):
@@ -336,7 +336,7 @@ ax.legend();
 
 The solution looks qualitatively very good!
 
-Run the code again with a slightly larger Fourier number equal to $0.51$ and see what happens... The solution blows up and it is clear that the stability criteria needs to be satisfied to get a stable solution.
+Run the code again with a slightly larger Fourier number equal to $0.53$ and see what happens... The solution blows up and it is clear that the stability criteria needs to be satisfied to get a stable solution.
 
 At the beginning of this notebook we emphasized that we need better ways of checking the accuracy of our numerical solutions. To that end, let us create a function that returns the $L_2$-norm of the difference between two functions:
 
@@ -387,7 +387,7 @@ Before we explore these possibilities, we provide a short tutorial on how to con
 
 +++
 
-You are already well familiar with Python `for` loops. They are also called **definite loops** meaning that the number of iteration is known before entering the loop. `for` loops are useful when you need to iterate over a certain sequence, or, sticking to Python terminology, over a *collection*. There are generally [three concepts for `for` loops][1] in programming. The one that Python implements is called *Collection-Based loop*. Schematically the Collection-Based `for` loop in Python has the following syntax:
+You are already well familiar with Python `for` loops. They are also called **definite loops** meaning that the number of iterations is known before entering the loop. `for` loops are useful when you need to iterate over a certain sequence, or, sticking to Python terminology, over a *collection*. There are generally [three concepts for `for` loops][1] in programming. The one that Python implements is called *Collection-Based loop*. Schematically the Collection-Based `for` loop in Python has the following syntax:
 
 ```python
 for <element> in <collection>:
@@ -427,11 +427,14 @@ TypeError: 'builtin_function_or_method' object is not iterable
 
 +++
 
-But what if we do *not* know the number of iterations we need to perform in advance? Imagine we have a `list` of $10000$ elements that are integers from $0$ to $9999$. Each integer only occurs once in the sequence but its location is *random*. We are determined to compute an index of the element that is equal to $7$. First, let's implement this sequence, so that we can thinks of the routes we could take to solve our little problem.
+But what if we do *not* know the number of iterations we need to perform in advance? Imagine we have a `list` of $10000$ elements that are integers from $0$ to $9999$. Each integer only occurs once in the sequence but its location is *random*. We are determined to compute the index (location in the sequence) of the element that is equal to $7$. First, let's implement this sequence, so that we can think of the routes we could take to solve our little problem.
 
 ```{code-cell} ipython3
 # This variable will store our solution - index of
-# the element that is equal to 7.
+# the element that is equal to 7. We initially set
+# it -1 and change this value only if 7 is found 
+# somewhere in the sequence (which should be the case
+# in our example)
 ind_of_seven = -1
 
 seq = np.linspace(0, 9999, 10000)
@@ -447,7 +450,7 @@ import random
 random.shuffle(seq)
 ```
 
-Note that `random.shuffle` returns `None` object. It basically takes advantage of that the mutable (modifiable) objects, when function's arguments, are passed by object reference in Python. Or in other words *function does not receive a copy of an object but its address in memory*, and so it can modify or *mutate* the original object. And numpy array is a mutable (modifiable) object.
+Note that `random.shuffle` returns the `None` object. It basically takes advantage of that mutable (modifiable) objects, when passed as functions arguments, are passed by object reference in Python. Or in other words, the *function does not receive a copy of an object but its address in memory*, and so it can modify or *mutate* the original object. And a numpy array is a mutable (modifiable) object.
 
 But let's go back to our task. How are we going to approach it? In principle, we could use the `for` loop:
 
@@ -471,14 +474,14 @@ else:
     print('Could not found 7 in the sequence')
 ```
 
-We solved the problem but is our solution efficient or elegant? No. $7$ can end up being located at `i=9999` but the odds are obviously quite low. It means that most probably we are going to perform $n$ unnecessary iteration. It can be $5$ unnecessary iteration but it can as well be $9995$. **That is why there are `while` loops**. `while` loops are also called **indefinite loops**. They execute until certain condition is satisfied. Schematically their syntax is the following:
+We solved the problem but is our solution efficient or elegant? No. $7$ can end up being located at `i=9999` but the odds are obviously quite low. It means that most probably we are going to perform unnecessary iterations. It can be $5$ unnecessary iteration but it can as well be $9995$. **That is why there are `while` loops**. `while` loops are also called **indefinite loops**. They execute until a certain condition is satisfied. Schematically their syntax is the following:
 
 ```python
 while <condition>:
     <do things>
 ```
 
-The loop will execute until `<condition>` evaluates to `False`. Straightforward way to exit `while` loop is to modify `<condition>` inside the loop. It is also worth mentioning that the code snippet
+The loop will execute until `<condition>` evaluates to `False`. A straightforward way to exit a `while` loop is to modify `<condition>` inside the loop. It is also worth mentioning that the code snippet
 
 
 ```python
@@ -513,11 +516,11 @@ else:
 
 Such solution is obviously the preferred one for our particular problem: *we performed exactly as many iterations as we needed*.
 
-To conclude this subsection we propose you to keep such philosophy in mind:
-- Use `for` loop if you know *exactly* the number of iteration you have to perform.
-- Use `while` loop if you cannot know the number of iterations in advance but you know what is the condition for the loop to terminate.
+To conclude this subsection we propose you to keep this philosophy in mind:
+- Use `for` loops if you know *exactly* the number of iterations you have to perform.
+- Use `while` loops if you don't know the number of iterations in advance but you know what is the condition for the loop to terminate.
 
-You might think, though, is there no other way to exit loop than to reach the end of the sequence (in the case of `for` loop), or to satisfy certain condition? What if you are running your code on the supercomputer where you have pre-ordered just one hour of time, you are out of time and your code is still running? Or what if you perform series of computation at each iteration, end up with singularity in the beginning of certain iteration, and want to immediately proceed to the next iteration to avoid division by zero? There are tools in Python to cover such cases, and they are the `break` and `continue` statements.
+You might wonder if there is another way to exit a loop before reaching the end of the sequence (in the case of the `for` loop), or to satisfy a certain condition? What if you are running your code on a supercomputer where you have requested just one hour of computation time, you are out of time and your code is still running? Or what if you perform series of computations at each iteration, end up with a singularity in the beginning of an iteration, and want to immediately proceed to the next iteration to avoid a division by zero? There are tools in Python to cover such cases, and they are the `break` and `continue` statements.
 
 +++
 

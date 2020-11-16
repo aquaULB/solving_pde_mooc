@@ -141,7 +141,7 @@ This is a little bit less restrictive than the criteria for the forward Euler me
 
 ### Modified wavenumber analysis
 
-We can also consider the stability of the algorithms when using periodic boundary condition. In that case we may use the modified wavenumber analysis that we discussed in the previous notebook.
+We can also consider the stability of the algorithms when using periodic boundary conditions. In that case we may use the modified wavenumber analysis that we discussed in the previous notebook.
 
 The temperature field is decomposed into Fourier modes:
 
@@ -169,7 +169,7 @@ with the modified wavenumbers being real and defined by,
 k_m'^2 = \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)).
 \end{equation}
 
-The semi-discretized equation is identical to the original equation \ref{eq:FourierT} except for a modification of the wavenumber.
+The semi-discretized equation is identical to the original equation \ref{eq:FourierT} except for the modification of the wavenumber.
 
 In this formulation, all the Fourier modes are decoupled and evolve according to:
 
@@ -185,7 +185,7 @@ For the forward Euler method we get:
 -2 < -\alpha \Delta t \frac{2}{\Delta x^2}(1 - \cos(k_m \Delta x)) < 0
 \end{align}
 
-The ensure that these constraints are satisfied for all values of $m$, the required restriction on the time step is:
+To ensure that these constraints are satisfied for all values of $m$, the following restriction on the time step is required:
 
 \begin{equation}
 \Delta t < \frac{\Delta x^2}{2\alpha}\; \; \; \hbox{(Forward Euler mehod)}
@@ -274,7 +274,7 @@ def rhs_centered(T, dx, alpha, source):
     return f
 ```
 
-We also define a function that return the exact solution at any time $t$:
+We also define a function that returns the exact solution at any time $t$:
 
 ```{code-cell} ipython3
 def exact_solution(x,t, alpha):
@@ -375,7 +375,7 @@ This is already quite good: in terms of the $L_2$ norm, the error is quite small
 1. Increase the number of grid points
 2. Decrease the time step
 
-Before we explore these possibilities, we provide a short tutorial on how to control the flow of python loops and also describe the `while` loop. These two notions are very useful to make our codes more flexible and in particular control the convergence of our numerical solutions.
+Before we explore these possibilities, we provide a short tutorial on how to control the flow of Python loops and also introduce the `while` loop. These notions are very useful to make our codes more flexible and in particular control the convergence of our numerical solutions.
 
 +++
 
@@ -532,7 +532,7 @@ You might think, though, is there no other way to exit loop than to reach the en
 The following little examples demonstrate distinction between `break` and `continue`:
 
 ```{code-cell} ipython3
-# Loop is terminated if i >= 5: mind the output
+# Loop is terminated if i == 5: mind the output
 #
 # Note the optional argument of print - end. You can configure
 # what your output ends with - by default its '\n' (new line).
@@ -541,7 +541,7 @@ for i in range(10):
     if i == 5: break
     print(i, end=' ')
 
-# Iteration is terminated if i >= 5: mind the output
+# Iteration is terminated if i == 5: mind the output
 print('\nUsing continue statement: ', end='')
 for i in range(10):
     if i == 5: continue
@@ -708,7 +708,7 @@ while (diff > precision):
     source = 2.0*np.sin(np.pi*x)   # heat source term
     
     dt = fourier*dx**2/alpha       # time step
-    nt = int((tf-ti) / dt)       # number of time steps
+    nt = int((tf-ti)/dt)           # number of time steps
     
     # Time stepping
     for i in range(nt):

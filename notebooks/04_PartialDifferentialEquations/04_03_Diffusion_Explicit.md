@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wavenumber-analysis" data-toc-modified-id="Modified-wavenumber-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wavenumber analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops" data-toc-modified-id="Python-loops-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops</a></span><ul class="toc-item"><li><span><a href="#for-and-while-loops" data-toc-modified-id="for-and-while-loops-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span><em>for</em> and <em>while</em> loops</a></span></li><li><span><a href="#break-and-continue-statements" data-toc-modified-id="break-and-continue-statements-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span><em>break</em> and <em>continue</em> statements</a></span></li><li><span><a href="#else-clause" data-toc-modified-id="else-clause-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span><em>else</em> clause</a></span></li></ul></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Explicit-resolution-of-the-1D-heat-equation" data-toc-modified-id="Explicit-resolution-of-the-1D-heat-equation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Explicit resolution of the 1D heat equation</a></span><ul class="toc-item"><li><span><a href="#Matrix-stability-analysis" data-toc-modified-id="Matrix-stability-analysis-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Matrix stability analysis</a></span></li><li><span><a href="#Modified-wavenumber-analysis" data-toc-modified-id="Modified-wavenumber-analysis-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Modified wavenumber analysis</a></span></li><li><span><a href="#Numerical-solution" data-toc-modified-id="Numerical-solution-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Numerical solution</a></span></li></ul></li><li><span><a href="#Python-loops" data-toc-modified-id="Python-loops-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Python loops</a></span><ul class="toc-item"><li><span><a href="#for-and-while-loops" data-toc-modified-id="for-and-while-loops-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span><em>for</em> and <em>while</em> loops</a></span></li><li><span><a href="#break-and-continue-statements" data-toc-modified-id="break-and-continue-statements-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span><em>break</em> and <em>continue</em> statements</a></span></li><li><span><a href="#else-clause" data-toc-modified-id="else-clause-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span><em>else</em> clause</a></span></li></ul></li><li><span><a href="#Convergence-of-the-numerical-solution" data-toc-modified-id="Convergence-of-the-numerical-solution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Convergence of the numerical solution</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -528,11 +528,11 @@ You might wonder if there is another way to exit a loop before reaching the end 
 
 +++
 
-`break` and `continue` provide the possibility to terminate iteration *before* the entire body of the loop is executed.
+`break` and `continue` provide the possibility to terminate iterations *before* the entire body of the loop is executed.
 - `break` immediately terminates execution of the loop.
 - `continue` immediately terminates execution of the current iteration.
 
-The following little examples demonstrate distinction between `break` and `continue`:
+The following little examples demonstrate the distinction between `break` and `continue`:
 
 ```{code-cell} ipython3
 # Loop is terminated if i == 5: mind the output
@@ -568,20 +568,21 @@ while True: # in principle infinite loop
 
 This is the schematic example of how we would safely manage limited time resources. We have not only "gracefully" terminated our code but saved all the data we have collected to disk, so that it's not lost if we couldn't complete all of the iterations.
 
-Consider now the code snippet governing schematic solution of the problem of division by zero occurring for certain iterations:
+Consider now the code snippet to address the problem of division by zero occurring for certain iterations:
 
 ```python
-# sol is the matrix to fill with solution of the linear system of equations
-# at each iteration, and i is the line of a matrix that is to be filled at
+# sol is the matrix filled with solution of the linear system of equations
+# at each iteration, and i is the line of a matrix that is filled at the
 # current iteration. Therefore n here is the number of grid points and num
 # is the number of iterations.
-i, sol = 0, np.empty(num, n)
+i = 0 
+sol = np.empty(num, n)
 
 for elem in <collection>: # collection contains num elements
     <compute param>
     # We assume param occurs in the denominator in the equations.
     if param == 0:
-        # Delete the row of a matrix correspondent to the iteration
+        # Delete the row of the matrix corresponding to the iteration
         # that is to be skipped. In this case i doesn't need to be
         # incremented.
         sol = np.delete(sol, (i))
@@ -594,7 +595,7 @@ for elem in <collection>: # collection contains num elements
 
 As a result, we obtain a matrix `sol` of shape `(num-m, n)`, where `m` is the number of iterations, for which the singularity occurred. 
 
-Note that this little demo does *not* implement optimal way of handling division by zero in Python. The more "Pythonic" approach is to use Exception handling. This is rather the advanced topic of Python programming that is not covered in this course. You must know, though, that the above demo is perfectly valid for your understanding of the logic to usage of `continue` statement. *`continue` would still be used in the same manner if the algorithm is implemented using Exception handling*.
+Note that this little demo does *not* implement optimal way of handling division by zero in Python. The more "Pythonic" approach is to use Exception handling. This is a more advanced topic of Python programming that is not covered in this course. You must know, though, that the above demo is perfectly valid for your understanding of the logic behind the use of the `continue` statement. *`continue` would still be used in the same manner if the algorithm is implemented using Exception handling*.
 
 +++
 
@@ -602,7 +603,7 @@ Note that this little demo does *not* implement optimal way of handling division
 
 +++
 
-Let's dig even deeper into the functionality of Python loops. Python implements something that is almost unique to this programming language, which is the `else` clause in loops. You could wonder how can there be `else` if there is no `if`? Indeed, `else` seems to make more sense along other conditional statements, such as `if` and `elif`. But `else` in loops is a convention that appears to be quite useful in some cases. Consider the following example using `for` loop:
+Let's dig even deeper into the functionality of Python loops. Python implements something that is almost unique to this programming language: the `else` clause in loops. You could wonder how can there be `else` if there is no `if`? Indeed, `else` seems to make more sense along other conditional statements, such as `if` and `elif`. But `else` in loops is a convention that appears to be quite useful in some cases. Consider the following example using the `for` loop:
 
 ```{code-cell} ipython3
 print('I let the loop run to the end: ', end='')
@@ -654,7 +655,7 @@ else:
     print('\nI never get here')
 ```
 
-Usage of `else` clause allows you to shorten your code and make it more elegant. Imagine you wanted to perform extra computations but only in the case if certain object has been found when executing the `while` loop. If not for the `else` clause you would have to create the block of conditional statement `if`. This way, though, you can perform these computation where they logically belong - at the end of the loop.
+Usage of `else` clause allows you to shorten your code and make it more elegant. Imagine you wanted to perform extra computations but only in the case when a certain object has been found when executing the `while` loop. If not for the `else` clause, you would have to create a block of `if` conditional statement. This way you can perform these computation where they logically belong - at the end of the loop.
 
 +++
 
@@ -674,14 +675,14 @@ Let's rewrite our numerical procedure to implement this strategy. First we defin
 precision = 1e-6
 ```
 
-In the current problem, we have to vary two parameters: the grid spacing and the time step. However, we don't have to separately modify the time step as it is computed from the grid spacing to meet the stability criteria. To vary the grid spacing until convergence is met, we will use a `while` loop. This while loop iterates until the L2 difference between two consecutive solutions gets smaller than the precision. However, as we don't know in advance how many grid refinements are needed, we also add a `break` statement that exits the loop after a given number of grid refinements. This avoids having the computer run for an excessively long time. If that's the case, it might be better to reconsider the discretization scheme and seek a higher order accurate discretization requiring fewer grid points for the same precision.
+In the current problem, we have to vary two parameters: the grid spacing and the time step. However, we don't have to separately modify the time step as it is computed from the grid spacing to meet the stability criteria. To vary the grid spacing until convergence is met, we will use a `while` loop. This while loop iterates until the L2 difference between two consecutive solutions gets smaller than the precision. However, as we don't know in advance how many grid refinements are needed, we also add a `break` statement that exits the loop after a given number of grid refinements. This avoids having the computer to run for an excessively long time. If that's the case, it might be better to reconsider the discretization scheme and seek a higher order accurate discretization requiring fewer grid points for the same precision.
 
 ```{code-cell} ipython3
 # Physical parameters
 alpha = 0.1                    # Heat transfer coefficient
 lx = 1.                        # Size of computational domain
-ti = 0.0                      # Initial time
-tf = 5.0                      # Final time
+ti = 0.0                       # Initial time
+tf = 5.0                       # Final time
 fourier = 0.49                 # Fourier number to ensure stability
 
 
@@ -767,12 +768,6 @@ The strategy of comparing the solutions while refining the grid worked very well
 ## Summary
 
 In this notebook we have discretized the one dimensional heat equation and analyzed its stability. We have shown that the restriction on the time step is quite strong as it scales with $\Delta x^2$. We also provided a tutorial on how to control the flow of Python loop. We then explained how to monitor the accuracy of our numerical solution by using performing a *convergence study*. In this method, one checks the accuracy of the solution by refining the temporal and spatial discretization parameters until the solution remains unchanged up to a chosen accuracy. In the next notebook we will revisit the discretization of the heat equation using implicit time advancements schemes.
-
-+++
-
-## Exercises
-
-**Exercise 1:**
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

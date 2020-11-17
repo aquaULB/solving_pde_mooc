@@ -82,7 +82,7 @@ y^{n+1} = y^{n} + \Delta t f(y^{n+1},t).
 In our case, the discretization is therefore,
 
 \begin{align*}
-& \frac{T^{n+1}_i - T^n_i}{\Delta t}=\alpha \frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}
+\frac{T^{n+1}_i - T^n_i}{\Delta t}=\alpha \frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}
 \end{align*}
 
 In matrix notation this is equivalent to:
@@ -187,7 +187,6 @@ To test the above numerical methods we use the same example as in the previous n
 The source term in eq. \ref{eq:1Dheat2} is $\sigma = 2\sin(\pi x)$ and the initial condition is $T_0(x) = \sin(2\pi x)$. To make the algorithms work a bit more, we increase the diffusivity parameter to $\alpha=0.1$. The exact solution of the equation is,
 
 \begin{equation}
-\label{eq:solution1DHeat}
 T(x,t)=e^{-4\pi^2\alpha t}\sin(2\pi x) + \frac{2}{\pi^2\alpha}(1-e^{-\alpha\pi^2 t})\sin(\pi x).
 \end{equation}
 

@@ -94,7 +94,7 @@ In matrix notation this is equivalent to:
 where $I$ is the identity matrix. If we adopt Dirichlet boundary conditions, the matrix $A$ is identical to its counterpart for the forward Euler scheme (see previous notebook). For reference, the eigenvalues $m_k$ of $A$ are real and negative:
 
 \begin{equation*}
-m_k = 2\frac{\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\; k=1,\ldots, nx-2.
+m_k = 2\frac{\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{nx-1}\right)-1\right),\; k=1,\ldots, nx-2.
 \end{equation*}
 
 If we diagonalize $A$ and denote by $\boldsymbol z=(z_1,\ldots,z_{nx-2})$ the coordinates of $\boldsymbol T$ in the basis of eigenvectors, we have:

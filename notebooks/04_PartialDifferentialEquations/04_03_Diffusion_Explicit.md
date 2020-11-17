@@ -128,7 +128,7 @@ If we use the RK4 method instead of the Euler method for the time discretization
 
 \begin{equation}
 \label{eq:matHeatRK4}
-   \boldsymbol{T}^{n+1} = \left(I+A+\frac12 A^2 + \frac16 A^3+\frac{1}{24}A^4\right)^{n+1}\boldsymbol{T}^{0}.
+   \boldsymbol{T}^{n} = \left(I+A+\frac12 A^2 + \frac16 A^3+\frac{1}{24}A^4\right)^{n}\boldsymbol{T}^{0}.
 \end{equation}
 
 and the algorithm is stable if all the eigenvalues $m_k$ of $A$ are contained in the stability region of the RK4 time integration scheme. The constraint on the time step is then,
@@ -703,6 +703,13 @@ diff = 1.
 
 ```{code-cell} ipython3
 while (diff > precision):
+    
+    if grid_refinement > max_grid_refinements:
+        print('\nSolution did not converged within the maximum'
+              ' allowed grid refinements')
+        print(f'Last number of grid points tested: nx = {nx}')
+        break
+    
     # Grid parameters
     nx = 2*nx - 1                  # At each grid refinement dx is divided by 2
     dx = lx / (nx-1)               # grid spacing
@@ -734,20 +741,13 @@ while (diff > precision):
     # break if we have reached the maximum
     # number of refinements allowed
     grid_refinement += 1
-    
-    if grid_refinement > max_grid_refinements:
-        break
-    
+        
     # Store the new reference solution
     Tref = Tnp1.copy()
     
-if (diff < precision):
+else:
     print(f'\nSolution converged with required precision'
           f' for {nx} grid points')
-else:
-    print('\nSolution did not converged within the maximum'
-          ' allowed grid refinements')
-    print(f'Last number of grid points tested: nx = {nx}')
 ```
 
 The code tells us that by going from $nx=257$ to $nx=513$, the L2-norm of the difference between the solutions has gotten below $10^{-6}$. If that's the precision we want to achieve we now we can stop there and we know we are fine with $nx=513$.

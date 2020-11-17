@@ -54,7 +54,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the previous notebook we have described some explicit methods to solve one dimensional heat equation;
+In the previous notebook we have described some explicit methods to solve the one dimensional heat equation;
 
 \begin{equation}
 \label{eq:1Dheat2}
@@ -76,19 +76,19 @@ We begin by considering the backward Euler time advancement scheme in combinatio
 We recall that for a generic ordinary differential equation $y'=f(y,t)$, the backward Euler method is,
 
 \begin{equation*}
-y^{n} = y^{n-1} + \Delta t f(y^{n},t).
+y^{n+1} = y^{n} + \Delta t f(y^{n+1},t).
 \end{equation*}
 
 In our case, the discretization is therefore,
 
 \begin{align*}
-& \frac{T^n_i - T^{n-1}_i}{\Delta t}=\alpha \frac{T^n_{i-1}-2T^n_i+T^n_{i+1}}{\Delta x^2}
+& \frac{T^{n+1}_i - T^n_i}{\Delta t}=\alpha \frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}
 \end{align*}
 
 In matrix notation this is equivalent to:
 
 \begin{equation*}
-    (I-A)\boldsymbol{T}^n = \boldsymbol{T}^{n-1}\; \; \Leftrightarrow \; \; (I-A)^{n}\boldsymbol{T}^{n} = \boldsymbol{T}^{0},
+    (I-A)\boldsymbol{T}^{n+1} = \boldsymbol{T}^{n}\; \; \Leftrightarrow \; \; (I-A)^{n+1}\boldsymbol{T}^{n+1} = \boldsymbol{T}^{0},
 \end{equation*}
 
 where $I$ is the identity matrix. If we adopt Dirichlet boundary conditions, the matrix $A$ is identical to its counterpart for the forward Euler scheme (see previous notebook). For reference, the eigenvalues $m_k$ of $A$ are real and negative:
@@ -100,13 +100,13 @@ m_k = 2\frac{\alpha dt}{dx^2}\left(\cos\left(\frac{\pi k}{nx}\right)-1\right),\;
 If we diagonalize $A$ and denote by $\boldsymbol z=(z_1,\ldots,z_{nx-2})$ the coordinates of $\boldsymbol T$ in the basis of eigenvectors, we have:
 
 \begin{equation*}
-(I-\Lambda)^n \boldsymbol z^n = \boldsymbol z^0 
+(I-\Lambda)^{n+1} \boldsymbol z^{n+1} = \boldsymbol z^0 
 \end{equation*}
 
 where $\Lambda$ is the diagonal matrix containing the eigenvalues of $A$. Each of the $nx-2$ decoupled equations may therefore be written as:
 
 \begin{equation*}
-z_k^n = \left(\frac{1}{1-m_k}\right)^n z_k^0 
+z_k^{n+1} = \left(\frac{1}{1-m_k}\right)^{n+1} z_k^0 
 \end{equation*}
 
 Since $m_k < 0\; \forall k$, all the coordinates $z_k$ remain bounded and the algorithm is unconditionally stable.
@@ -134,23 +134,23 @@ Because all the coefficients $-\alpha k_m'^2$ are real and negative, the Fourier
 A popular method for discretizing the diffusion term in the heat equation is the Crank-Nicolson scheme. It is a second-order accurate implicit method that is defined for a generic equation $y'=f(y,t)$ as:
 
 \begin{align*}
-\frac{y^{n} - y^{n-1}}{\Delta t} = \frac12\left(f(y^{n}, t^{n}) + f(y^{n-1}, t^{n-1})\right).
+\frac{y^{n+1} - y^n}{\Delta t} = \frac12(f(y^{n+1}, t^{n+1}) + f(y^n, t^n)).
 \end{align*}
 
-You should check that this method is indeed second-order accurate in time by expanding $f(y^{n}, t^{n})$ in Taylor series (see exercise ...).
+You should check that this method is indeed second-order accurate in time by expanding $f(y^{n+1}, t^{n+1})$ in Taylor series.
 
 For the heat equation, the Crank-Nicolson method yields the following expression:
 
 \begin{align}
 \label{eq:heatCN}
-\frac{T^{n}_i - T^{n-1}_i}{\Delta t}=\frac{\alpha}{2} \left(\frac{T^{n}_{i-1}-2T^{n}_i+T^{n}_{i+1}}{\Delta x^2}  + 
-\frac{T^{n-1}_{i}-2T^{n-1}_i+T^{n-1}_{i}}{\Delta x^2}\right)
+\frac{T^{n+1}_i - T^n_i}{\Delta t}=\frac{\alpha}{2} \left(\frac{T^{n+1}_{i-1}-2T^{n+1}_i+T^{n+1}_{i+1}}{\Delta x^2}  + 
+\frac{T^{n}_{i}-2T^{n}_i+T^{n}_{i}}{\Delta x^2}\right)
 \end{align}
 
 In matrix form (assuming Dirichlet boundary conditions), this is equivalent to:
 
 \begin{equation*}
-    (I-A_{cn})\boldsymbol{T}^{n} = (I+A_{cn})\boldsymbol{T}^{n-1}.
+    (I-A_{cn})\boldsymbol{T}^{n+1} = (I+A_{cn})\boldsymbol{T}^{n}.
 \end{equation*}
 
 with $A_{cn}$ being the same matrix as in the previous section except for the prefactor that is now $\displaystyle\frac{\alpha \Delta t}{2\Delta x^2}$.
@@ -158,7 +158,7 @@ with $A_{cn}$ being the same matrix as in the previous section except for the pr
 Both sides of the equation can be diagonalized using the same eigenvectors. Therefore, the coordinates of $\boldsymbol{T}$ in the basis of eigenvectors evolve according to:
 
 \begin{equation*}
-    (I-\Lambda) \boldsymbol z^{n} = (I+\Lambda)\boldsymbol z^{n-1} \Rightarrow \boldsymbol z^{n}_k = \left(\frac{1+m_k/2}{1-m_k/2}\right)^n z^0_k.
+    (I-\frac{\Lambda}{2}) \boldsymbol z^{n+1} = (I+\frac{\Lambda}{2})\boldsymbol z^n \Rightarrow \boldsymbol z^{n}_k = \left(\frac{1+m_k/2}{1-m_k/2}\right)^n z^0_k.
 \end{equation*}
 
 Since $m_k < 0\; \forall k$, all the coordinates $z_k$ remain again bounded and the algorithm is unconditionally stable.
@@ -166,13 +166,13 @@ Since $m_k < 0\; \forall k$, all the coordinates $z_k$ remain again bounded and 
 In the case of periodic boundary conditions, we may again study the stability of the method by decomposing the temperature field in Fourier modes. According to eq. \ref{eq:heatCN} we get:
 
 \begin{align*}
-    \frac{\hat T^{n}(k_m)-\hat T^{n-1}(k_m)}{\Delta t}= \frac{\alpha}{2\Delta x^2}((&2\cos(k_m\Delta x)-2)\hat T^{n}(k_m) \\ &+(2\cos(k_m\Delta x)-2)\hat T^{n-1}(k_m))
+    \frac{\hat T^{n+1}(k_m)-\hat T^{n}(k_m)}{\Delta t}= \frac{\alpha}{2\Delta x^2}((&2\cos(k_m\Delta x)-2)\hat T^{n+1}(k_m) \\ &+(2\cos(k_m\Delta x)-2)\hat T^{n}(k_m))
 \end{align*}
 
 or equivalently
 
 \begin{equation*}
-    \hat T^{n}(k_m) = \frac{1-\displaystyle\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}{1+\displaystyle\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}\hat T^{n-1}(k_m).
+    \hat T^{n+1}(k_m) = \frac{1-\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}{1+\frac{\alpha \Delta t}{\Delta x^2}(1-\cos(k_m\Delta x))}\hat T^{n}(k_m).
 \end{equation*}
 
 As the denominator is always larger than the numerator, all the Fourier modes remain bounded and we conclude again the algorithm is unconditionally stable.
@@ -184,14 +184,14 @@ Let's use these implicit methods and compare them with the forward Euler method 
 ## Numerical solution
 
 To test the above numerical methods we use the same example as in the previous notebook. 
-The source term in eq. \ref{eq:1Dheat2} is $\sigma = 2\sin(\pi x)$and the initial condition is $T_0(x) = \sin(2\pi x)$. To make the algorithms work a bit more, we increase the diffusivity parameter to $\alpha=0.1$. The exact solution of the equation is then,
+The source term in eq. \ref{eq:1Dheat2} is $\sigma = 2\sin(\pi x)$ and the initial condition is $T_0(x) = \sin(2\pi x)$. To make the algorithms work a bit more, we increase the diffusivity parameter to $\alpha=0.1$. The exact solution of the equation is,
 
 \begin{equation}
 \label{eq:solution1DHeat}
 T(x,t)=e^{-4\pi^2\alpha t}\sin(2\pi x) + \frac{2}{\pi^2\alpha}(1-e^{-\alpha\pi^2 t})\sin(\pi x).
 \end{equation}
 
-To get started we import some helper functions. The corresponding modules are part of the course's `module` directory and its path has to be added to the Python search path. The only exception is the `pde_module` that is located in the current notebook's directory, as they are not useful for other notebooks.
+To get started we import some helper functions. The corresponding modules are part of the course's `module` directory and its path has to be added to the Python search path. The only exception is the `pde_module` that is located in the current notebook's directory, as it is not useful for other notebooks.
 
 ```{code-cell} ipython3
 import sys
@@ -212,7 +212,7 @@ from matrices import d2_mat_dirichlet
 from pde_module import rhs_heat_centered, exact_solution
 ```
 
-Physical and grid parameters to achieve a precision of at least $10^{-6}$ in L2-norm:
+Physical and grid parameters to achieve a precision smaller than $10^{-6}$ in L2-norm:
 
 ```{code-cell} ipython3
 # Physical parameters
@@ -229,7 +229,7 @@ x = np.linspace(0., lx, nx)    # coordinates of grid points
 
 To evaluate how much faster we can get our solution with the implicit scheme, we will time our algorithms. The first one we consider is the forward Euler scheme using the Euler step function. We know that in that case, we have to use a Fourier number $F<0.5$ (see the notebook `04_03_Diffusion_Explicit`).
 
-**Forward Euler method in vector form:**
+**Forward Euler method in component form:**
 
 ```{code-cell} ipython3
 # Time parameters
@@ -255,7 +255,7 @@ for i in range(nt):
 ```
 
 ```{code-cell} ipython3
-diff_exact = l2_diff(T, sol)
+diff_exact = l2_diff(T[-1], sol)
 print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
@@ -270,7 +270,7 @@ For the implicit methods, we need to perform matrix multiplications to time adva
 
 In this case, the time stepping is performed with:
 \begin{equation}
-    \boldsymbol{T}^{n} = (I+A)\boldsymbol{T}^{n-1}
+    \boldsymbol{T}^{n+1} = (I+A)\boldsymbol{T}^{n}
 \end{equation}
 
 The needed matrices are computed as follows:
@@ -305,9 +305,9 @@ print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
 
-As expected, the algorithm in matrix form gives nearly identical results as in vector form. The tiny differences are due to round-off errors. 
+As expected, the algorithm in matrix form gives nearly identical results as in component form. The tiny differences are due to round-off errors. 
 
-We note that the algorithm implemented in a matrix form is two times slower than that implemented in a vector form.
+We note that the algorithm implemented in a matrix form is two times slower than that implemented in a component form.
 
 Let's turn our attention to the implicit algorithms. For these, there is no limit on the time step but we still want to achieve the desired precision.
 
@@ -336,6 +336,7 @@ Timing of the solution:
 %%timeit
 for i in range(nt):
     T[i+1, 1:-1] = np.dot(Minv, T[i, 1:-1] + source[1:-1]*dt)
+
 # Set boundary values
 T[-1,0] = 0
 T[-1,-1] = 0
@@ -347,7 +348,7 @@ print(f'The L2-error made in the computed solution is {diff_exact}')
 print(f'Time integration required {nt} steps')
 ```
 
-Using the backward Euler method, the number of time steps has been reduced by a factor of 20 and the execution time by a factor 10 compared to the forward Euler method in vector form!
+Using the backward Euler method, the number of time steps has been reduced by a factor of 20 and the execution time by a factor 10 compared to the forward Euler method in component form!
 
 +++
 
@@ -382,6 +383,7 @@ T[0] = T0.copy()         # Set the initial condition
 
 for i in range(nt):
     T[i+1, 1:-1] = np.dot(C, T[i, 1:-1]) + np.dot(Ainv,source[1:-1]*dt)
+
 # Set boundary values
 T[-1,0] = 0
 T[-1,-1] = 0

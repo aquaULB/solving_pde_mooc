@@ -1,4 +1,14 @@
+# Local jupyter-notebook checkpoints or Python cache files
 __pycache__
 *.ipynb
 .ipynb_checkpoints
+*.pyc
+
+# Vi/Joe backup files or crash reports
 *~
+DEADJOE
+
+# User config files
+.vscode
+.DS_Store
+settings.json

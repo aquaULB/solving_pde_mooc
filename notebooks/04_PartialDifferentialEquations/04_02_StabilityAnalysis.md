@@ -436,10 +436,9 @@ In this notebook, we have introduced two methods to analyse the stability of the
 
 +++
 
-# References
+## References
 
 (<a id="cit-horn2013" href="#call-horn2013">Horn and Johnson, 2013</a>) RA Horn and CR Johnson, ``_Matrix Analysis_'',  2013.
-
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

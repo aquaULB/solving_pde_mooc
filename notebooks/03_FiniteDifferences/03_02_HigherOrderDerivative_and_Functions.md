@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-order-derivatives" data-toc-modified-id="Higher-order-derivatives-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher order derivatives</a></span><ul class="toc-item"><li><span><a href="#Second-order-derivative" data-toc-modified-id="Second-order-derivative-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Second-order derivative</a></span></li><li><span><a href="#Higher-order-derivatives-and-one-sided-stencils" data-toc-modified-id="Higher-order-derivatives-and-one-sided-stencils-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Higher order derivatives and one-sided stencils</a></span></li></ul></li><li><span><a href="#Functions" data-toc-modified-id="Functions-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Functions</a></span><ul class="toc-item"><li><span><a href="#Parameters" data-toc-modified-id="Parameters-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Parameters</a></span></li><li><span><a href="#Return-statement" data-toc-modified-id="Return-statement-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Return statement</a></span></li><li><span><a href="#Variable-scope" data-toc-modified-id="Variable-scope-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Variable scope</a></span></li><li><span><a href="#Beware-passing-by-object-reference-in-Python!" data-toc-modified-id="Beware-passing-by-object-reference-in-Python!-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Beware passing by object reference in Python!</a></span></li></ul></li><li><span><a href="#Matrix-formulation" data-toc-modified-id="Matrix-formulation-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Matrix formulation</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-order-derivatives" data-toc-modified-id="Higher-order-derivatives-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher order derivatives</a></span><ul class="toc-item"><li><span><a href="#Second-order-derivative" data-toc-modified-id="Second-order-derivative-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Second-order derivative</a></span></li><li><span><a href="#Higher-order-derivatives-and-one-sided-stencils" data-toc-modified-id="Higher-order-derivatives-and-one-sided-stencils-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Higher-order derivatives and one-sided stencils</a></span></li></ul></li><li><span><a href="#Functions" data-toc-modified-id="Functions-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Functions</a></span><ul class="toc-item"><li><span><a href="#Parameters" data-toc-modified-id="Parameters-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Parameters</a></span></li><li><span><a href="#Return-statement" data-toc-modified-id="Return-statement-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Return statement</a></span></li><li><span><a href="#Variable-scope" data-toc-modified-id="Variable-scope-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Variable scope</a></span></li><li><span><a href="#Beware-passing-by-object-reference-in-Python!" data-toc-modified-id="Beware-passing-by-object-reference-in-Python!-3.4"><span class="toc-item-num">3.4&nbsp;&nbsp;</span>Beware passing by object reference in Python!</a></span></li></ul></li><li><span><a href="#Matrix-formulation" data-toc-modified-id="Matrix-formulation-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Matrix formulation</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -52,7 +52,7 @@ import matplotlib.pyplot as plt
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In this notebook we extend the concept of finite differences to higher order derivatives. We also discuss the use of Python `functions` and finally we describe how to construct matrices corresponding to the finite-difference operators. This is very useful when solving boundary value problems or eigenvalue problems.
+In this notebook we extend the concept of finite differences to higher-order derivatives. We also discuss the use of Python `functions` and finally we describe how to construct matrices corresponding to the finite-difference operators. This is very useful when solving boundary value problems or eigenvalue problems.
 
 ## Higher order derivatives
 
@@ -63,8 +63,8 @@ Using finite differences, we can construct derivatives up to any order. Before w
 Using Taylor's theorem we can write:
 
 \begin{align}
-& f(x+\Delta x) = f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+\frac16 f'''(x)\Delta x^3+O(\Delta^4) \\
-& f(x-\Delta x) = f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2-\frac16 f'''(x)\Delta x^3+O(\Delta^4).
+& f(x+\Delta x) = f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2+\frac16 f'''(x)\Delta x^3+O(\Delta x^4) \\
+& f(x-\Delta x) = f(x)-f'(x)\Delta x+\frac12 f''(x)\Delta x^2-\frac16 f'''(x)\Delta x^3+O(\Delta x^4).
 \end{align}
 
 If we add these two equations, we can define a centered second-order accurate formula for $f''$ at grid point $x_i$:
@@ -80,7 +80,7 @@ The stencil for this expression is the sequence $[-1,0,1]$ and we represent it a
 
 The centered second-order derivative cannot be used at the boundary nodes. Some one-sided formulas are needed at those locations.
 
-Let us write a Python code to check that expression \ref{eq:centeredDiff2} works as expected. We use the same test function as in the previous notebook - $f(x)=e^x \sin(3\pi x)$ - and we first represent it on a fine grid in the interval $x\in [O, \pi]$.
+Let us write a Python code to check that expression \eqref{eq:centeredDiff2} works as expected. We use the same test function as in the previous notebook - $f(x)=e^x \sin(3\pi x)$ - and we first represent it on a fine grid in the interval $x\in [O, \pi]$.
 
 ```{code-cell} ipython3
 pi = np.pi       # 3.14...
@@ -123,7 +123,7 @@ ax.set_ylabel('$f\'$');
 
 As the centered formula for $f''$ is not defined at the boundary nodes, they have been excluded in the computation. But in the next section, we will provide information on how to cope with this issue.
 
-### Higher order derivatives and one-sided stencils
+### Higher-order derivatives and one-sided stencils
 
 It should now be clear that the construction of finite difference formulas to compute differential operators can be done using Taylor's theorem. In general, as we increase the order of the derivative, we have to increase the number of points in the corresponding stencil. The construction of these stencils is not complicated and is well documented in several places, so we will not repeat it here. Instead we refer to the very detailed [Wikipedia][21] page that contains finite difference formulas for all the cases we use in this course, and many more.
 
@@ -476,7 +476,7 @@ def some_function(parameters):
 
 `statements` constitute the actual Python commands executed within the function. These can be any legal Python code.
 
-`something` is what the programmer wants to provide as output from the function after execution of all the statements (e.g. the result of some arithmetic operations). The return statement is optional.
+`something` is what the programmer wants to provide as output from the function after execution of all the statements (e.g. the result of some arithmetic operations). The `return` statement is optional.
 
 To make things less abstract, let's discuss some examples.
 

@@ -91,7 +91,7 @@ As an example of how the finite-difference approximation for a derivative of a g
 f(x+\Delta x)= f(x)+f'(x)\Delta x+O(\Delta x^2).
 \end{equation}
 
-Expression \ref{TaylorSer} is exact and allows us to get the following expression for the first-order derivative of $f$ at point $x$:
+Expression \eqref{TaylorSer} is exact and allows us to get the following expression for the first-order derivative of $f$ at point $x$:
 
 \begin{equation}
 \label{eq:forwardTaylorDiff1}
@@ -100,14 +100,14 @@ f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x)
 
 This expression is the usual left derivative of $f(x)$.
 
-To approximate \ref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$, we define the following first-oder accurate approximation of $f'$ at $x_i$:
+To approximate \eqref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$, we define the following first-order accurate approximation of $f'$ at $x_i$:
 
 \begin{equation}
 \label{eq:forwardNodal}
 f^{' \rm f}_i = \frac{f_{i+1} - f_i}{\Delta x},\;\; \hbox{forward finite difference}.
 \end{equation}
 
-The stencil for this expression is given by the sequence $[0, 1]$, where 0 stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are $[-1, 1]$ (see \ref{eq:diffgeneric}).
+The stencil for this expression is given by the sequence `[0, 1]`, where `0` stands for the point at which the derivative is evaluated, and the corresponding finite-difference coefficients are `[-1, 1]` (see \eqref{eq:diffgeneric}).
 
 In the following figure we illustrate the stencil and mark in red the points involved in the computation:
 
@@ -115,9 +115,9 @@ In the following figure we illustrate the stencil and mark in red the points inv
 
 Above the stencil, we display the quantity computed, and below the stencil we display the quantities involved in its computations.
 
-It is important to highlight that the *enumeration of a stencil has nothing to do with the enumeration of the grid points*. The enumeration of grid points usually starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. The enumeration of a stencil is characteristic of each particular approximation. The stencil point labeled $0$ corresponds to the grid point at which the derivative is being approximated. The stencil indices then decrease to the left of this point and increase to its right. This is why in the above example the stencil is $[0, 1]$.
+It is important to highlight that the *enumeration of a stencil has nothing to do with the enumeration of the grid points*. The enumeration of grid points usually starts at one of the grid boundaries ($x_0$ in our cases) and ends at another boundary. The enumeration of a stencil is characteristic of each particular approximation. The stencil point labeled $0$ corresponds to the grid point at which the derivative is being approximated. The stencil indices then decrease to the left of this point and increase to its right. This is why in the above example the stencil is `[0, 1]`.
 
-In the above stencil, we use two grid points - $x_i$ and $x_{i+1}$ - to obtain a first-order accurate expression for the first-order derivative at $x_i$. It is obvious that the forward finite difference formula \ref{eq:forwardNodal} cannot be used at the right boundary node $x_n$. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how the boundary nodes can be handled when the derivatives are being evaluated using finite differences.
+In the above stencil, we use two grid points - $x_i$ and $x_{i+1}$ - to obtain a first-order accurate expression for the first-order derivative at $x_i$. It is obvious that the forward finite difference formula \eqref{eq:forwardNodal} cannot be used at the right boundary node $x_n$. In section [One-sided finite differences](#One-sided-finite-differences), we discuss how the boundary nodes can be handled when the derivatives are being evaluated using finite differences.
 
 Let us now define the backward finite-differences scheme in an identical manner. As Taylor's theorem is valid for $x$ in the interval $a < x-\Delta x \le x \le x+\Delta x < b$, we can approximate $f(x-\Delta x)$ as follows:
 
@@ -125,20 +125,20 @@ Let us now define the backward finite-differences scheme in an identical manner.
 f(x-\Delta x) \approx f(x) - f'(x)\Delta x. 
 \end{equation}
 
-We can then define the first-order accurate backward finite-differences formula for the first order derivative of $f(x)$ at $x_i$ as:
+We can then define the first-order accurate backward finite-differences formula for the first-order derivative of $f(x)$ at $x_i$ as:
 
 \begin{equation}
 \label{eq:backwardNodal}
 f^{'\rm b}_i = \frac{f_i - f_{i-1}}{\Delta x}, \;\; \hbox{backward finite difference}. 
 \end{equation}
 
-It is based on the right derivative $f'(x)$. Highlighting in red the stencil points used to build expression \ref{eq:backwardNodal} we have,
+It is based on the right derivative $f'(x)$. Highlighting in red the stencil points used to build expression \eqref{eq:backwardNodal}, we have:
 
 <img width="600px" src="../figures/backwardDiff1.png">
 
 As the forward finite-difference approximation cannot be used at the right boundary node $x_n$, the backward finite-difference approximation cannot be used at the left boundary node $x_0$. We also note that $f^{'\rm b}_{i+1} = f^{'\rm f}_i$.
 
-Let us now derive a higher order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
+Let us now derive a higher-order accurate approximation for $f'(x)$. Resorting again to Taylor's theorem we write:
 
 \begin{align}
 & f(x+\Delta x) \approx f(x)+f'(x)\Delta x+\frac12 f''(x)\Delta x^2 \\
@@ -152,7 +152,7 @@ We substract equations both equations and get:
 f'(x) = \frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}+O(\Delta x^2),
 \end{equation}
 
-which leads us to the second-oder accurate approximation of $f'(x)$ at $x_i$:
+which leads us to the second-order accurate approximation of $f'(x)$ at $x_i$:
 
 \begin{equation}
 \label{eq:centeredDiff}
@@ -165,7 +165,7 @@ This expression is called the centered finite difference first-order derivative 
 
 Using just two grid points, it's not possible to achieve an accuracy of higher order than $2$. The centered finite-difference scheme cannot be used both at the left or right boundary nodes of the grid.
 
-Let us check that our formulas are correct. We first create a fine grid to accurately represent the function \ref{eq:testfunc} and its derivative in the interval $x\in [O, \pi]$.
+Let us check that our formulas are correct. We first create a fine grid to accurately represent the function \eqref{eq:testfunc} and its derivative in the interval $x\in [0, \pi]$.
 
 ```{code-cell} ipython3
 pi = np.pi       # 3.14...
@@ -183,7 +183,7 @@ f = np.exp(x)*np.sin(3*pi*x) # function in the fine grid
 dfdx = np.exp(x)*(np.sin(3*pi*x) + 3*pi*np.cos(3*pi*x))
 ```
 
-We have built a numpy array for the exact expression of the first-order derivative of $f(x)$. But what if we worked with a complicated function or required expressions for higher order derivatives? It is useful to keep in mind that there is Python package just for that - for symbolic computations - [SymPy][20]. We won't get into details and leave it to you to explore SymPy. Note that SymPy is not part of the basic distribution of Anaconda, you would have to install it. 
+We have built a numpy array for the exact expression of the first-order derivative of $f(x)$. But what if we worked with a complicated function or required expressions for higher-order derivatives? It is useful to keep in mind that there is Python package just for that - for symbolic computations - [SymPy][20]. We won't get into details and leave it to you to explore SymPy. Note that SymPy is not part of the basic distribution of Anaconda, you would have to install it. 
 
 Sympy supports [basic symbolic calculus][21], and provides [tools][22] to transform symbolic data to numerical representation. 
 
@@ -348,7 +348,7 @@ print(a)
 print(a[:3], a[:5], sep='\n')
 ```
 
-The output basically tells us that when `start` is omitted it is implicitly set to $0$. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step`$>0$. Consider the following example:
+The output basically tells us that when `start` is omitted it is implicitly set to `0`. Slicing a sequence with `sequence[:n]` is equivalent to *extracting subsequence of first $n$ elements*. It is important to keep in mind that the above statement concerns the case of `step > 0`. Consider the following example:
 
 ```{code-cell} ipython3
 print(a[:-3:-1])
@@ -364,7 +364,7 @@ Obviously, slicing in such a way is equivalent to doing `a[5:-3:-1]` or `a[-1:-3
 print(a[2::2], a[5:], a[4::-1], sep='\n')
 ```
 
-If `stop` is omitted, `sequence[n::step]` for `step`$>0$ extracts the relevant elements from index n up to (and including) the last element of the sequence. If the `step`$<0$, `sequence[n::step]` extracts the relevant elements from index n down to (and including) the first element of the sequence.
+If `stop` is omitted, `sequence[n::step]` for `step > 0` extracts the relevant elements from index n up to (and including) the last element of the sequence. If the `step < 0`, `sequence[n::step]` extracts the relevant elements from index n down to (and including) the first element of the sequence.
 
 +++
 
@@ -378,13 +378,13 @@ Let's summarize our little tests by the exact citations taken from [documentatio
 
 Consider the slice sequence `s` taken as follows: `s[i:j:k]`, then
 
-> If i or j are omitted or None, they become “end” values (which end depends on the sign of k). Note, k cannot be zero. If k is None, it is treated like 1.
+> If *i* or *j* are omitted or `None`, they become “end” values (which end depends on the sign of *k*). Note, *k* cannot be zero. If *k* is `None`, it is treated like `1`.
 
 That is pretty much what we've observed so far. We would comment on that `k` cannot be zero. This limitation implies that the implementation of this case raises an [exception][32] of type `ValueError`. By default occurrences of uncaught exceptions terminate code execution. We won't get into the details of the treatment of exceptions, but you can read about it on your own if you are interested.
 
 We would also cite another important piece of documentation on sequences slicing:
 
-> If i or j is greater than len(s), use len(s).
+> If *i* or *j* is greater than `len(s)`, use `len(s)`.
 
 What is so curious about it exactly? Consider the following examples:
 
@@ -399,9 +399,9 @@ Do you see the point now? **Index overflow does not raise exception in Python sl
 
 And another important property of slicing:
 
-> If i is greater than or equal to j, the slice is empty.
+> If *i* is greater than or equal to *j*, the slice is empty.
 
-Note that this particular statement concerns the case of `step`$>0$. Similarly, in the case `step`$<0$, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo:
+Note that this particular statement concerns the case of `step > 0`. Similarly, in the case `step < 0`, if `j` is greater than or equal to `i`, the slice is empty. Consider the demo:
 
 ```{code-cell} ipython3
 print(a[10:1:1], a[1:10:-1], a[3:3], sep='\n')
@@ -452,9 +452,9 @@ print(f'Value of a after re-assignment: {a}')
 
 Do you notice something intriguing? The content of the list `a` has been modified by the statement `b[0]=5`. Let's discuss why this is so.
 
-The first line of code creates 4 integer objects and a list object. It gives the name `a` to this list. `a[0], a[1], a[2], a[3]` are just shortcuts for the integer objects storing the values $0, 1, 2, 3$.
+The first line of code creates 4 integer objects and a list object. It gives the name `a` to this list. `a[0], a[1], a[2], a[3]` are just shortcuts for the integer objects storing the values `0, 1, 2, 3`.
 
-In the second line of code, we give another name to the list; we tell the code that `a` and `b` are two different names pointing to the same list. `b[0], b[1], b[2], b[3]` are then names pointing to the same integer objects as `a[0], a[1], a[2], a[3]`. For that reason, the initial `print`statement outputs the content of the list `a`. 
+In the second line of code, we give another name to the list; we tell the code that `a` and `b` are two different names pointing to the same list. `b[0], b[1], b[2], b[3]` are then names pointing to the same integer objects as `a[0], a[1], a[2], a[3]`. For that reason, the initial `print` statement outputs the content of the list `a`. 
 
 The statement `b[0]=5` then creates another integer object storing the value $5$ and `b[0]` becomes a shortcut to this new object. The list `b` is obviously affected. But the system has been told that `a` and `b` are nicknames for the same list. Note that we have not re-assigned `b` to another list, we have only changed the content of the list; this is allowed as a list in Python is mutable (you can change its content). So `a[0]` now also points to the integer object storing $5$ and this explains the output produced by the last print statement.
 
@@ -548,17 +548,17 @@ The inconvenience of this formulation is that it is second-order accurate for in
 To improve our discretized operator, we have to find second-order accurate expressions for the boundary nodes and we can use Taylor's theorem to achieve this goal. At the left boundary node we have:
 
 \begin{align*}
-f(x_0 + \Delta) = f(x_0) +f'(x_0)\Delta x+\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)\\
-f(x_0 + 2\Delta) = f(x_0) +2f'(x_0)\Delta x+4\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)
+f(x_0 + \Delta x) = f(x_0) +f'(x_0)\Delta x+\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)\\
+f(x_0 + 2\Delta x) = f(x_0) +2f'(x_0)\Delta x+4\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)
 \end{align*}
 
 If we multiply the first equation by two and then substract the second one, we get:
 
 \begin{equation*}
-4 f(x_0 + \Delta) - f(x_0 + 2\Delta) = 3 f(x_0) + 2f'(x_0)\Delta x + O(\Delta x^3)
+4 f(x_0 + \Delta x) - f(x_0 + 2\Delta x) = 3 f(x_0) + 2f'(x_0)\Delta x + O(\Delta x^3)
 \end{equation*}
 
-We can then define the following second-oder accurate approximation of $f'$ at $x_0$:
+We can then define the following second-order accurate approximation of $f'$ at $x_0$:
 
 \begin{equation*}
 f'_0 = \frac{-\frac32 f_0 + 2f_1 - \frac12 f_2}{\Delta x}
@@ -568,7 +568,7 @@ The stencil for this expression is represented as:
 
 <img width="600px" src="../figures/onesideDiff1.png">
 
-Similarly, the following expression constitutes a second-oder accurate approximation of $f'$ at $x_n$,
+Similarly, the following expression constitutes a second-order accurate approximation of $f'$ at $x_n$,
 
 \begin{equation*}
 f'(x_n) = \frac{\frac32 f_n - 2f_{n-1} + \frac12 f_{n-2}}{\Delta x}
@@ -621,7 +621,7 @@ ax.legend(loc='upper left');
 
 In this notebook, we learned how to approximate derivatives using finite differences. We illustrated how finite-difference formulas can be derived and showed how to treat boundary nodes in the numerical grid.
 
-Besides that, we've explained the Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we extend our knowledge on finite differences by considering higher order derivatives.
+Besides that, we've explained the Python slicing and motivated its usage showing its advantage over Python looping. In the next notebook we extend our knowledge on finite differences by considering higher-order derivatives.
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

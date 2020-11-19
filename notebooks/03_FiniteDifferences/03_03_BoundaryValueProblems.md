@@ -59,13 +59,13 @@ plt.style.use('../styles/mainstyle.use')
 Let's consider a rod made of heat conducting material. Under some simplifications, the temperature $T(x,t)$ along the rod can be determined by solving the following heat equation based on Fourier's law,
 
 \begin{equation}
-    \partial_t T(x,t) = \alpha \frac{d^2 T}{dx^2}(x,t) + \sigma (x,t)
+    \frac{\partial T}{\partial t}(x,t) = \alpha \frac{\partial^2 T} {\partial x^2}(x,t) + \sigma (x,t).
 \end{equation}
 
 where $\alpha$ is the thermal conductivity of the rod and $\sigma (x,t)$ is a heat source present along the rod. To close this equation, some boundary conditions at both ends of the rod need to be specified. If these boundary conditions and $\sigma$ do not depend on time, the temperature within the rod ultimately settles to the solution of the steady-state equation:
 
 \begin{equation}
- \frac{d^2 T}{dx^2}(x) = b(x), \; \; \; b(x) = -\sigma(x)/\alpha.
+    \frac{d^2 T}{dx^2}(x) = b(x), \; \; \; b(x) = -\sigma(x)/\alpha.
 \end{equation}
 
 In the examples below, we solve this equation with some common boundary conditions.

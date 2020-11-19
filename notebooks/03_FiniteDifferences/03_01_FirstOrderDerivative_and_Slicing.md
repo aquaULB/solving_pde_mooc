@@ -1,4 +1,4 @@
-    ---
+---
 jupytext:
   formats: ipynb,md:myst
   notebook_metadata_filter: toc

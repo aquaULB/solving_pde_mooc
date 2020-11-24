@@ -345,5 +345,55 @@ fig.savefig('../figures/logo.png', dpi=300)
 ```
 
 ```python
+## 2D grid
+fig, ax = plt.subplots(figsize=(8, 8))
+
+xmin, xmax = -0.1, 10.1
+ymin, ymax = -0.1, 10.1
+x = y = np.arange(0, 11, 2)
+X, Y = np.meshgrid(x, y)
+
+ax.scatter(X, Y)
+
+ax.arrow(xmin-0.5, 0., xmax+2, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./40.*(ymax-ymin), head_length=1./40.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin-.5, 0., ymax+2, fc='k', ec='k', lw=0.5,
+         head_width=1./40.*(xmax-xmin), head_length=1./40.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.text(xmax+0.6, -0.6, r'$x$', horizontalalignment='center')
+ax.text(-0.4, ymax+0.5, r'$y$', horizontalalignment='center')
+
+ax.text(6, 6.5,r'$p_{i,j}$', horizontalalignment='center')
+ax.text(6, 8.5,r'$p_{i,j+1}$', horizontalalignment='center')
+ax.text(6, 4.5,r'$p_{i,j-1}$', horizontalalignment='center')
+
+ax.text(4, 6.5,r'$p_{i-1,j}$', horizontalalignment='center')
+ax.text(4, 8.5,r'$p_{i-1,j+1}$', horizontalalignment='center')
+ax.text(4, 4.5,r'$p_{i-1,j-1}$', horizontalalignment='center')
+
+ax.text(8, 6.5,r'$p_{i+1,j}$', horizontalalignment='center')
+ax.text(8, 8.5,r'$p_{i+1,j+1}$', horizontalalignment='center')
+ax.text(8, 4.5,r'$p_{i+1,j-1}$', horizontalalignment='center')
+
+ax.text(4, -0.6,r'$i-1$', horizontalalignment='center')
+ax.text(6, -0.6,r'$i$', horizontalalignment='center')
+ax.text(8, -0.6,r'$i+1$', horizontalalignment='center')
+
+ax.text(-0.8, 4,r'$j-1$', horizontalalignment='center')
+ax.text(-0.7, 6,r'$j$', horizontalalignment='center')
+ax.text(-0.8, 8,r'$j+1$', horizontalalignment='center')
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+ax.set_axis_off()
+ax.set_aspect(1)
+
+fig.savefig('../figures/2Dgrid.png', dpi=300)
+```
+
+```python
 
 ```

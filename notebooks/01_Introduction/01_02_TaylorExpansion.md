@@ -61,11 +61,11 @@ In the context of the numerical solution of ordinary or partial diffential equat
 
 Taylor's theorem provides a valuable tool to estimate the accuracy of discretized differential operators or time integration schemes \cite{arfken2012}.
 
-***Theorem.** Let $x$ be any point in the interval $[a\ b]$ and $\Delta x$ a small positive real number. Schematically we have*:
+***Theorem.** Let $x$ be any point in the interval $[a, b]$ and $\Delta x$ a small positive real number. Schematically we have*:
 
 <img src="../figures/taylor.png">
 
-*Let $f(x)$ be some $k+1$ times differentiable function defined in $[a\ b]$, then for each $\Delta x>0$ there exists a $\xi$, so that*
+*Let $f(x)$ be some $k+1$ times differentiable function defined in $[a, b]$, then for each $\Delta x>0$ there exists a $\xi$, so that*
 
 \begin{equation}
 \label{eq:taylorExpansion}

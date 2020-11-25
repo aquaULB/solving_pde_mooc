@@ -196,6 +196,8 @@ p_e = -\frac{1}{2\pi^2}\sin(\pi x) \cos(\pi y) -\frac{1}{50\pi^2}\sin(5\pi x) \c
 
 Let's define some grid parameters for the numerical discretization.
 
+WARNING: change the indexing in meshgrid
+
 ```{code-cell} ipython3
 # Grid parameters.
 nx = 101                  # number of points in the x direction

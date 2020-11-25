@@ -65,6 +65,30 @@ In the previous chapter we have ...
 
 +++
 
+## Boosting Python
+
++++
+
+Python has plenty of appeal to the programming community: it's simple, interactive and free. But Fortran, C, C++ dominate high-performance programming. Why? Python is *slow*. There are two major reasons for that: **Python is a dynamically typed language** and **Python is an interpreted language**.
+
+There is *a lot* of reading you can do on this topic. In case you are interested, you might consider the following sources to begin with:
+
+* [Interpreted vs Compiled Programming Languages: What's the Difference?][1]
+* [Why Python is Slow: Looking Under the Hood][2]
+
+It doesn't make Python *a bad* programming language. On the contrary, Python is a great tool for various tasks that do not require running expensive simulations (web-development, scripting). Python also dominates the data-science due to availability of such packages as NumPy and SciPy.
+
+As we discussed earlier, NumPy and SciPy integrate optimized and precompiled C code into Python and, therefore, might provide significant speed up. Though, there are serious limitations to the optimization that can be done by using NumPy and SciPy. We have already encountered situations when it was not possible to avoid running Python loops that easily end up being painfully slow.
+
+In this subsection we are going to discuss tools that designed to provide C-like performance to the Python code: *Cython* and *Numba*. What are they, what are they good for and why people still use C/C++ with much more complicated syntax?
+
+But before proceeding to the discussion, let us introduce the concept of *Python decorators*, as Numba strongly relies o
+
+[1]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Compiled VS interpreted"
+[2]: <http://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/> "Why Python is slow?"
+
++++
+
 ## Gauss-Seidel with numba
 
 ```{code-cell} ipython3

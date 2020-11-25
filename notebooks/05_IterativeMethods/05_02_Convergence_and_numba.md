@@ -80,14 +80,159 @@ It doesn't make Python *a bad* programming language. On the contrary, Python is 
 
 As we discussed earlier, NumPy and SciPy integrate optimized and precompiled C code into Python and, therefore, might provide significant speed up. Though, there are serious limitations to the optimization that can be done by using NumPy and SciPy. We have already encountered situations when it was not possible to avoid running Python loops that easily end up being painfully slow.
 
-In this subsection we are going to discuss tools that designed to provide C-like performance to the Python code: *Cython* and *Numba*. What are they, what are they good for and why people still use C/C++ with much more complicated syntax?
+In this subsection we are going to discuss tools designed to provide C-like performance to the Python code: *Cython* and *Numba*. What are they, what are they good for and why people still use C/C++ with much more complicated syntax?
 
-But before proceeding to the discussion, let us introduce the concept of *Python decorators*, as Numba strongly relies o
+But before proceeding to the discussion, let us introduce the concept Numba strongly relies on - *Python decorators*.
 
 [1]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Compiled VS interpreted"
 [2]: <http://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/> "Why Python is slow?"
 
 +++
+
+### Python decorators
+
++++
+
+So called wrapper functions are widely used in various programming languages. They take function or method as parameter extending it behaviour. Wrapper functions usually intend to *abstract* the code. They, therefore, might shorten and simplify it *by a lot*. Python decorator is unique to Python - it is basically a shortcut (syntactic sugar) for calling a wrapper function. Consider implementation of sample decorator function:
+
+```{code-cell} ipython3
+def decorator(func):
+    def wrapper(*args, **kwargs):
+        print('Preprocessing...')
+        
+        res = func(*args, **kwargs)
+        
+        print('Postprocessing...')
+        
+        return res
+    return wrapper
+```
+
+This decorator does nothing but simply prints something before and after the internal function is called. We propose you perceive it as an abstraction for some computations. Note that a decorator function returns *a function*. When decorating functions, you will ultimately want to normally return what the internal function returns *but* also perform certain computations before and after it executes.
+
+If we proceed without using Python decorators, two more principal steps are required from us. First, we must implement the function we want to decorate. Let's go for something trivial:
+
+```{code-cell} ipython3
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+```
+
+Second, we have to perform actual decoration:
+
+```{code-cell} ipython3
+print_identity_and_more = decorator(print_identity)
+```
+
+Obviously, `print_identity_and_more` is a function that accepts the same parameters as `print_identity` and prints certain string before and after it executes.
+
+```{code-cell} ipython3
+print_identity_and_more('Marichka', 42)
+```
+
+Python decorator decorates the function in a single step:
+
+```{code-cell} ipython3
+@decorator
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+```
+
+We can simply call `print_identity` now:
+
+```{code-cell} ipython3
+print_identity('Mao', 33)
+```
+
+Let's consider slightly less trivial but a very useful example. Until now, whenever we needed to time execution of the code, we were using `time` or `timeit` magic. Magic commands is a nice tool but they are unique to IPython and usage of IPython is quite limited. The programmer is paying the price of lowered performance for the graphical interface. So, after all IPython is great for debugging, testing and visualization but in the optimized code you will have it disabled. Let's then implement a *decorator* that will be a timer for arbitrary function:
+
+```{code-cell} ipython3
+from timeit import default_timer
+
+def timing(func):
+    def wrapper(*args, **kwargs):
+        t_init = default_timer()
+        res = func(*args, **kwargs)
+        t_fin = default_timer()
+        
+        print(f'Time elapsed: {t_fin-t_init} s')
+        
+        return res
+    return wrapper
+```
+
+```{code-cell} ipython3
+@timing
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+```
+
+```{code-cell} ipython3
+print_identity('Mark', 21)
+```
+
+It is possible to wrap the function in multiple decorators if necessary. Note that the outer decorator must go before the inner one:
+
+```{code-cell} ipython3
+@timing
+@decorator
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+```
+
+```{code-cell} ipython3
+print_identity('Jacques', 9)
+```
+
+In the end of the day Python decorators are simply functions, so it is possible to pass parameters to the decorator. The syntax for that, though, is a bit different and requires additional layer of decoration called the *decorator factory*. Decorator factory is a decorator function that accepts certain parameters and returns the actual decorator. Consider the example where the timing is made optional using the decorator factory:
+
+```{code-cell} ipython3
+def timing(timing_on=True):
+    def inner_timing(func):
+        def wrapper(*args, **kwargs):
+            if not timing_on:
+                return func(*args, **kwargs)
+            
+            t_init = default_timer()
+            res = func(*args, **kwargs)
+            t_fin = default_timer()
+
+            print(f'Time elapsed: {t_fin-t_init} s')
+
+            return res
+        
+        return wrapper
+    return inner_timing
+```
+
+We can now have timing enabled or disabled with the same decorator:
+
+```{code-cell} ipython3
+@timing()
+def time_printing_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+
+@timing(False)
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+
+time_printing_identity('Donald', 74)
+
+print('\n')
+
+print_identity('Joe', 78)
+```
+
+Implementation of the timing function is accessible in `modules/timers.py` by the name `dummy_timer`. You are free to use it as an alternative to `time` magic. Note that it does not implement the decorator factory, as in the above example, and does not provide functionality of the `timeit` magic that estimated the time averaged among $n$ runs. Consider example using `dummy_timer`:
+
+```{code-cell} ipython3
+import timers
+
+@timers.dummy_timer
+def print_identity(name, age):
+    print(f'Your name is {name}. You are {age} year(s) old.')
+
+print_identity('Jacob', 65)
+```
 
 ## Gauss-Seidel with numba
 

@@ -1,5 +1,7 @@
+from numba import njit
 import numpy as np
 
+@njit
 def l2_diff(f1, f2):
     """
     Computes the l2-norm of the difference

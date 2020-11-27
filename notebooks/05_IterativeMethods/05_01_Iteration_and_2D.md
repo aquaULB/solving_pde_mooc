@@ -533,7 +533,7 @@ ax_3.legend();
 
 Note that to achieve this l2 precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
 
-A last diagnostic we report here is the sequence of the `l2_diff` during the iterative procedure. It shows how the `l2_diff` progressively decays below the desired tolerance.
+A last diagnostic we report here is the sequence of the `l2_diff` during the iterative procedure. It shows how `l2_diff` progressively decays below the desired tolerance.
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10,5))
@@ -541,11 +541,11 @@ ax.semilogy(tol_hist_jac)
 
 # We set labels of x axis and y axis.
 ax.set_xlabel(r'$iteration$')
-ax.set_ylabel('$Tolerance$')
-ax.set_title('Tolerance decay');
+ax.set_ylabel('l2_diff')
+ax.set_title('l2_diff decay');
 ```
 
-For the problem considered, we observe that the tolerance decreases smoothly (in semi-log scale) during the iterative procedure. But this is not systematic, the decay may be very erratic in many cases.
+For the problem considered, we observe that the tolerance decreases smoothly (in semi-log scale) during the iterative procedure. But this is not systematic, the decay may more erratic in some cases.
 
 Now the good news. You may safely repeat the above iteration method with larger values of `nx` or `ny`. Multiplying those values by 2 or 3 will likely not exhaust your computer.
 
@@ -555,7 +555,35 @@ Now the good news. You may safely repeat the above iteration method with larger 
 
 +++
 
-WARNING: this takes long to execute.
+For the Jacobi method we made use of `numpy` slicing and array operations to avoid Python loops. If we had performed the looping explicitly, we could have done it like this:
+
+```python
+for i in range(1, nx-1):
+        for j in range(1, ny-1):
+            pnew[i, j] = ( 0.25*(p[i-1, j] + p[i+1, j] + p[i, j-1]
+                             + p[i, j+1] - b[i, j]*dx**2 ))
+```
+
+Note how we are looping in row major order. For each value of `i`, the inner loops updates each value of `j` in sequence before preceeding to the next value of `i`. Graphically, the loops scan the domain in this order:
+
+<img width="450px" src="../figures/GSgrid_e.png">
+
++++
+
+In the Gauss-Seidel method, one takes advantage of this looping order to use updated as soon as they become available. The iteration procedure then reads:
+
+\begin{equation}
+    \label{eq:iterkSolGS}
+p^{k+1}_{i,j}=\frac14(p^{k+1}_{i-1,j}+p^k_{i+1,j}+p^{k+1}_{i,j-1}+p^k_{i,j+1})-\frac14b_{i,j}\Delta^2
+\end{equation}
+
++++
+
+This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro wheres as the Jacobi method took a few seconds.
+
+So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the next notebook we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
+
+Let's solve our problem with the Gauss-Seidel method, **but beware**, it will take some time...
 
 ```{code-cell} ipython3
 p0 = np.zeros((nx,ny))
@@ -592,7 +620,20 @@ else:
     print(f'\nThe solution converged after {iter} iterations')
 ```
 
-The Gauss-Seidel method needed half as much iterations as the Jacobi method to converge with the same tolerance. That's a very significant 'speedup'. But unfortunately, as we used Python loops instead of `numpy` array operations, the execution time has skyrocketed. So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the next notebook we will show a simple way to do this and make the Gauss-Seidel method achieve full potential.
+The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how the `l2_dif` decrease during the iteration procedure and compare the output with the Jacobi method:
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(figsize=(10,5))
+ax.semilogy(tol_hist_jac, label='Jacobi')
+ax.semilogy(tol_hist_gs, color='red', label='Gauss-Seidel')
+
+
+# We set labels of x axis and y axis.
+ax.set_xlabel(r'$iteration$')
+ax.set_ylabel('l2_diff')
+ax.set_title('l2_diff decay')
+ax.legend();
+```
 
 ## Convergence of iterative methods
 

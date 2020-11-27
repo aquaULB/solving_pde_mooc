@@ -32,7 +32,7 @@ toc:
 
 +++
 
-# Convergence and numba acceleration
+# Boosting Python
 
 +++ {"toc": true}
 
@@ -43,49 +43,65 @@ toc:
 
 ## Introduction
 
-For convenience, we start by importing some modules needed below:
-
-```{code-cell} ipython3
-import numpy as np
-import matplotlib.pyplot as plt
-
-import sys
-sys.path.insert(0, '../modules')
-# Function to compute an error in L2 norm
-from norms import l2_diff
-
-from iter_module import p_exact_2d
-
-%matplotlib inline
-
-plt.style.use('../styles/mainstyle.use')
-```
-
-In the previous chapter we have ...
-
-+++
-
-## Boosting Python
-
 +++
 
 Python has plenty of appeal to the programming community: it's simple, interactive and free. But Fortran, C, C++ dominate high-performance programming. Why? Python is *slow*. There are two major reasons for that: **Python is a dynamically typed language** and **Python is an interpreted language**.
-
-There is *a lot* of reading you can do on this topic. In case you are interested, you might consider the following sources to begin with:
-
-* [Interpreted vs Compiled Programming Languages: What's the Difference?][1]
-* [Why Python is Slow: Looking Under the Hood][2]
 
 It doesn't make Python *a bad* programming language. On the contrary, Python is a great tool for various tasks that do not require running expensive simulations (web-development, scripting). Python also dominates the data-science due to availability of such packages as NumPy and SciPy.
 
 As we discussed earlier, NumPy and SciPy integrate optimized and precompiled C code into Python and, therefore, might provide significant speed up. Though, there are serious limitations to the optimization that can be done by using NumPy and SciPy. We have already encountered situations when it was not possible to avoid running Python loops that easily end up being painfully slow.
 
-In this subsection we are going to discuss tools designed to provide C-like performance to the Python code: *Cython* and *Numba*. What are they, what are they good for and why people still use C/C++ with much more complicated syntax?
+In this notebook we are going to discuss tools designed to provide C-like performance to the Python code: *Cython* and *Numba*. What are they, what are they good for and why people still use C/C++ with much more complicated syntax?
 
-But before proceeding to the discussion, let us introduce the concept Numba strongly relies on - *Python decorators*.
++++
 
-[1]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Compiled VS interpreted"
-[2]: <http://jakevdp.github.io/blog/2014/05/09/why-python-is-slow/> "Why Python is slow?"
+## Interpreters VS compilers
+
++++
+
+Before we can precisely understand what are Cython and Numba, let's discuss the basics of what are exactly the compilers and interpreters.
+
+The common mistake when understanding compiler is to think that the output of the compiler is necessarily the [*machine code*][3] - code written in a low-level programming language that is used to directly manipulate the central processing unit (CPU). In fact, *compiler* is simply a program that *translates* a source code written in certain programming language into any other programming language (normally lower-lever). *Interpreter* is also a computer program. It executes the source code without it been translated into the machine code. *But it doesn't make compilation and interpretation mutually exclusive:*
+
+> [...most interpreting systems also perform some translation work, just like compilers][4].
+
+The relevant example is that of CPython. CPython is the default implementation of Python and is a [bytecode interpreter][5]. At the intermediate stage it compiles the source code into the lower-level so-called bytecode, or p-code (portable code). Bytecode is universal to all platforms, or platform-independent. There is no further compilation of the bytecode into the machine code. Bytecode is executed *at the runtime* by so-called Python Virtual Machine (PVM). PVM is a program that is part of CPython. When virtual machines, or p-code machines, are explained, it is often said that the p-code can be viewed as a machine code of the *hypothetical* CPU. The virtual machines, unlike real CPUs, are implemented as part of interpreter program not in the hardware of the platform.
+
+Whenever you hear that "interpreters are slower than compilers", you must have in mind that it is not just a generic translator program that is meant by compiler in that context. CPython performs compilation itself, as we know. The compilers meant in the present context are those programs that translate the source code into the machine code. Why are interpreters slower? While the fact that the p-code is *interpreted* and *executed* by the interpreters *at the runtime* is partially the answer, we still have to understand what are the compiler systems do.
+
+There are two distinct types of compilers: *ahead-of-time* (AOT) compilers and *just-in-time* (JIT) compilers.
+
+> [AOT compilation][6] is the act of compiling a higher-level programming language ... into a native (system-dependent) machine code so that the resulting binary file can execute natively.
+
+In this way, the code executed at the runtime produces behaviour that has been predefined at the compile time. While the interpreter must both define and produce desired behaviour at the runtime performing statement-by-statement analysis. Note though that
+
+> [It generally takes longer][4] to run a program under an interpreter than to run the compiled code but it can take less time to interpret it than the total time required to compile and run it.
+
+What about the JIT compilers then? First of all,
+
+> [JIT compilation][7] ... is a way of executing computer code that involves compilation during execution of a program – at runtime – rather than before execution.
+
+Following the logic used to explain speed gain for AOT compilers versus interpreters, you might wonder: how then the JIT compiler can be faster if it as well defines the desired behaviour at the runtime? There is good example that could explain the difference in performance between typical interpreter and JIT compiler. Suppose the source code contains a loop that has to be executed $n$ times. Interpreter will have to analyze the bytecode statement-by-statement at each iteration. Well-implemented JIT compiler will produce the translation into the machine code, which is the most computationally expensive operation, only once.
+
+How the JIT compilers compare to the AOT compilers is a somewhat more sophisticated discussion that we won't enter but you are free to investigate this question on your own.  
+
+**Cython** is a *programming language* itself. It aims to run at C-like speed using Python-like syntax. Normally any Python code can be "translated" into Cython, which, if well designed, may speed your code up by the factor of order(s) of magnitude.
+
+**Numba** is a so-called *just-in-time compiler*. To be more precise, it is the just-in-time (JIT) compiler, meaning that it does *not* require compilation prior to execution but compiles the source code at the run time.
+
+You should not confuse Cython with CPython. Python as you know it is itself implemented in other programming languages. CPython is a default implementation of Python written in C. Other popular implementations of Python are [Jython][8], [PyPy][9]. CPython is also sometimes called an *interpreter*. Note that 
+
+[3]: <https://en.wikipedia.org/wiki/Machine_code> "Machine code"
+[4]: <https://en.wikipedia.org/wiki/Interpreter_(computing)> "Interpreter"
+[5]: <https://en.wikipedia.org/wiki/Interpreter_(computing)#Bytecode_interpreters> "Bytecode interpreters"
+[6]: <https://en.wikipedia.org/wiki/Ahead-of-time_compilation> "AOT compilation"
+[7]: <https://en.wikipedia.org/wiki/Just-in-time_compilation> "JIT compilation"
+[8]: <https://en.wikipedia.org/wiki/Jython> "Jython"
+[9]: <https://en.wikipedia.org/wiki/PyPy> "PyPy"
+
++++
+
+## Cython and Numba: why and how?
 
 +++
 
@@ -108,9 +124,11 @@ def decorator(func):
     return wrapper
 ```
 
+*Note* that choice of names for `decorator` and `wrapper` is not restricted in any way in Python. Whatever you are allowed to name the regular Python function, you are also allowed to name the decorating and wrapping functions.
+
 This decorator does nothing but simply prints something before and after the internal function is called. We propose you perceive it as an abstraction for some computations. Note that a decorator function returns *a function*. When decorating functions, you will ultimately want to normally return what the internal function returns *but* also perform certain computations before and after it executes.
 
-If we proceed without using Python decorators, two more principal steps are required from us. First, we must implement the function we want to decorate. Let's go for something trivial:
+If we proceed without using Python decorators, two more principal steps are required. First, we must implement the function we want to decorate. Let's go for something trivial:
 
 ```{code-cell} ipython3
 def print_identity(name, age):
@@ -123,7 +141,7 @@ Second, we have to perform actual decoration:
 print_identity_and_more = decorator(print_identity)
 ```
 
-Obviously, `print_identity_and_more` is a function that accepts the same parameters as `print_identity` and prints certain string before and after it executes.
+`print_identity_and_more` is a function that accepts the same parameters as `print_identity` and prints certain string before and after it executes.
 
 ```{code-cell} ipython3
 print_identity_and_more('Marichka', 42)

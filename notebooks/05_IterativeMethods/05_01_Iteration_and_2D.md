@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Convergence-of-iterative-methods" data-toc-modified-id="Convergence-of-iterative-methods-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Convergence of iterative methods</a></span></li></ul></div>
 
 +++
 
@@ -414,7 +414,7 @@ In the Jacobi method, the iterated value is computed as follows:
 
 \begin{equation}
     \label{eq:iterkSolPoisson}
-p^{k+1}_{i,j}=\frac14(p^k_{i-1,j}+p^k_{i+1,j}+p^k_{i,j-1}p^k_{i,j+1})-\frac14b_{i,j}\Delta^2
+p^{k+1}_{i,j}=\frac14(p^k_{i-1,j}+p^k_{i+1,j}+p^k_{i,j-1}+p^k_{i,j+1})-\frac14b_{i,j}\Delta^2
 \end{equation}
 
 There is of course no exact way to determine if we have performed enough iterations. However, if the iterative method is able to solve the equation considered, the difference between too successive iterated values should become increasingly small as we converge to the exact solution. We will therefore adopt the same strategy as the one we used for the grid convergence study. We will measure the difference in L2-norm between $p^{k+1}$ and $p^k$ and stop iterating once it falls below a given values.
@@ -594,6 +594,93 @@ else:
 
 The Gauss-Seidel method needed half as much iterations as the Jacobi method to converge with the same tolerance. That's a very significant 'speedup'. But unfortunately, as we used Python loops instead of `numpy` array operations, the execution time has skyrocketed. So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the next notebook we will show a simple way to do this and make the Gauss-Seidel method achieve full potential.
 
+## Convergence of iterative methods
+
+We have observed empirically that the Jocabi and Guass-Seidel methods converge to the solution of the discretized Poisson equations. In this section we explore this convergence process in more detail.
+
+The definition of the Jacobi is given in \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
+If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
+
+\begin{equation}
+    A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
+\end{equation}
+
+$A^J_1$ is the $-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
+
+\begin{align}
+  L=
+  \left(
+    \begin{array}{*{16}c}
+       . &  &   &   &  &   &   &   \\
+      1 & .  &  &   &   &  &   &   \\
+        & 1 & . &  &   &   &  &   \\
+        &   & 1 & . &   &   &   &  \\
+      1 &   &   &   & . &  &   &     \\
+        & 1 &   &   & 1 & . &  &      \\
+        &   & 1 &   &   & 1 & . &    \\
+        &   &   & 1 &   &   & 1 & .   \\
+    \end{array}
+  \right),
+\end{align}
+and 
+\begin{align}
+  U=
+  \left(
+    \begin{array}{*{16}c}
+      . & 1 &   &   & 1 &   &   &   \\
+       & . & 1 &   &   & 1 &   &   \\
+        &  & . & 1 &   &   & 1 &   \\
+        &   &  & . &   &   &   & 1 \\
+       &   &   &   & . & 1 &   &     \\
+        &  &   &   &  & . & 1 &      \\
+        &   &  &   &   &  & . & 1   \\
+        &   &   &  &   &   &  & .   \\
+    \end{array}
+  \right),
+\end{align}
+Similarly, the Gauss-Seidel algorithm may be written as:
+
+\begin{equation}
+  A^{GS}_1\boldsymbol p^{k+1} = A^{GS}_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
+\end{equation}
+
+with $A_1^{GS}=4\times I - L$ and $A_2^{GS}=U$.
+
+The arguments developped here can be genelarized to any iterative method of the form,
+
+\begin{equation}
+  \label{eq:iterSplit}
+  A_1\boldsymbol p^{k+1} = A_2 \boldsymbol p^k + \boldsymbol c
+  \;\; \Leftrightarrow \;\; \boldsymbol p^{k+1} = A_1^{-1} A_2 \boldsymbol p^k +A_1^{-1} \boldsymbol c
+\end{equation}
+where $A=A_1 - A_2$ and $A\boldsymbol p = c$ is the original matrix problem.
+
+The make the algorithm  work, $A_1$ needs to be easily invertible otherwise we would not save any effort. For the Jacobi method this is obvious as $A_1$ because proportional to the identity. For the Gauss-Seidel method things are sligthly more complicated but $\boldsymbol p^{k+1}$ can still be computed by looping in the order described in the previous section.
+
+Let us denote by $\boldsymbol \epsilon^k$ the error at iteration $k$:
+
+\begin{equation}
+  \boldsymbol \epsilon^k = \boldsymbol p^{exact} - \boldsymbol p^k
+\end{equation}
+
+where $\boldsymbol p^{exact}$ is the exact solution of the discretized equation. If we substitute this definition in \eqref{eq:iterSplit} we get
+
+\begin{equation}
+  \boldsymbol \epsilon^{k+1} = A^{-1}_1 A_2 \boldsymbol \epsilon^k.
+\end{equation}
+
+Obviously we need to have $\boldsymbol \epsilon^k \rightarrow 0$ for $\rightarrow \infty$ for the iterative method to converge. In order for this to happen, all the eigenvalues $\lambda_i$ of $A^{-1}_1 A_2$ must be such that \cite{watkins2010},
+
+\begin{align}
+  \vert \lambda_i \vert < 1.
+\end{align}
+
+If the matrix $A^{-1}_1 A_2$ is diagonalizable, this result can be proven rather easily by expressing the condition in the basis of eigenvectors. The quantity $\hbox{max} \vert \lambda_i\vert$ is called the spectral radius $\rho$ of the matrix. The criteria for convergence is then also equivalent to:
+
+\begin{align}
+  \rho(A^{-1}_1 A_2) < 1.
+\end{align}
+
 ```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
@@ -603,3 +690,7 @@ HTML(open(css_file, 'r').read())
 ```{code-cell} ipython3
 
 ```
+
+## References
+
+(<a id="cit-watkins2010" href="#call-watkins2010">Watkins, 2010</a>) DS Watkins, ``_Fondamentals of Matrix Computations - Third Edition_'',  2010.

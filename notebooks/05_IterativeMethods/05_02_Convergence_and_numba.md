@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Gauss-Seidel-with-numba" data-toc-modified-id="Gauss-Seidel-with-numba-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Gauss-Seidel with numba</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li></ul></li><li><span><a href="#Gauss-Seidel-with-numba" data-toc-modified-id="Gauss-Seidel-with-numba-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel with numba</a></span></li></ul></div>
 
 +++
 
@@ -61,47 +61,71 @@ In this notebook we are going to discuss tools designed to provide C-like perfor
 
 Before we can precisely understand what are Cython and Numba, let's discuss the basics of what are exactly the compilers and interpreters.
 
-The common mistake when understanding compiler is to think that the output of the compiler is necessarily the [*machine code*][3] - code written in a low-level programming language that is used to directly manipulate the central processing unit (CPU). In fact, *compiler* is simply a program that *translates* a source code written in certain programming language into any other programming language (normally lower-lever). *Interpreter* is also a computer program. It executes the source code without it been translated into the machine code. *But it doesn't make compilation and interpretation mutually exclusive:*
+The common mistake when understanding compiler is to think that the output of the compiler is necessarily the [*machine code*][1] - code written in a low-level programming language that is used to directly manipulate the central processing unit (CPU). In fact, *compiler* is simply a program that *translates* a source code written in certain programming language into any other programming language (normally lower-lever). *Interpreter* is also a computer program. It executes the source code without it been translated into the machine code. *But it doesn't make compilation and interpretation mutually exclusive:*
 
-> [...most interpreting systems also perform some translation work, just like compilers][4].
+> [...most interpreting systems also perform some translation work, just like compilers][2].
 
-The relevant example is that of CPython. CPython is the default implementation of Python and is a [bytecode interpreter][5]. At the intermediate stage it compiles the source code into the lower-level so-called bytecode, or p-code (portable code). Bytecode is universal to all platforms, or platform-independent. There is no further compilation of the bytecode into the machine code. Bytecode is executed *at the runtime* by so-called Python Virtual Machine (PVM). PVM is a program that is part of CPython. When virtual machines, or p-code machines, are explained, it is often said that the p-code can be viewed as a machine code of the *hypothetical* CPU. The virtual machines, unlike real CPUs, are implemented as part of interpreter program not in the hardware of the platform.
+The relevant example is that of CPython. CPython is the default implementation of Python and is a [bytecode interpreter][3]. At the intermediate stage it compiles the source code into the lower-level so-called bytecode, or p-code (portable code). Bytecode is universal to all platforms, or platform-independent. There is no further compilation of the bytecode into the machine code. Bytecode is executed *at the runtime* by so-called Python Virtual Machine (PVM). PVM is a program that is part of CPython. When virtual machines, or p-code machines, are explained, it is often said that the p-code can be viewed as a machine code of the *hypothetical* CPU. The virtual machines, unlike real CPUs, are implemented as part of interpreter program not in the hardware of the platform.
 
 Whenever you hear that "interpreters are slower than compilers", you must have in mind that it is not just a generic translator program that is meant by compiler in that context. CPython performs compilation itself, as we know. The compilers meant in the present context are those programs that translate the source code into the machine code. Why are interpreters slower? While the fact that the p-code is *interpreted* and *executed* by the interpreters *at the runtime* is partially the answer, we still have to understand what are the compiler systems do.
 
 There are two distinct types of compilers: *ahead-of-time* (AOT) compilers and *just-in-time* (JIT) compilers.
 
-> [AOT compilation][6] is the act of compiling a higher-level programming language ... into a native (system-dependent) machine code so that the resulting binary file can execute natively.
+> [AOT compilation][4] is the act of compiling a higher-level programming language ... into a native (system-dependent) machine code so that the resulting binary file can execute natively.
 
 In this way, the code executed at the runtime produces behaviour that has been predefined at the compile time. While the interpreter must both define and produce desired behaviour at the runtime performing statement-by-statement analysis. Note though that
 
-> [It generally takes longer][4] to run a program under an interpreter than to run the compiled code but it can take less time to interpret it than the total time required to compile and run it.
+> [It generally takes longer][2] to run a program under an interpreter than to run the compiled code but it can take less time to interpret it than the total time required to compile and run it.
 
 What about the JIT compilers then? First of all,
 
-> [JIT compilation][7] ... is a way of executing computer code that involves compilation during execution of a program – at runtime – rather than before execution.
+> [JIT compilation][5] ... is a way of executing computer code that involves compilation during execution of a program – at runtime – rather than before execution.
 
 Following the logic used to explain speed gain for AOT compilers versus interpreters, you might wonder: how then the JIT compiler can be faster if it as well defines the desired behaviour at the runtime? There is good example that could explain the difference in performance between typical interpreter and JIT compiler. Suppose the source code contains a loop that has to be executed $n$ times. Interpreter will have to analyze the bytecode statement-by-statement at each iteration. Well-implemented JIT compiler will produce the translation into the machine code, which is the most computationally expensive operation, only once.
 
-How the JIT compilers compare to the AOT compilers is a somewhat more sophisticated discussion that we won't enter but you are free to investigate this question on your own.  
+How the JIT compilers compare to the AOT compilers is a somewhat more sophisticated discussion that we won't enter but you are free to investigate this question on your own.
 
-**Cython** is a *programming language* itself. It aims to run at C-like speed using Python-like syntax. Normally any Python code can be "translated" into Cython, which, if well designed, may speed your code up by the factor of order(s) of magnitude.
-
-**Numba** is a so-called *just-in-time compiler*. To be more precise, it is the just-in-time (JIT) compiler, meaning that it does *not* require compilation prior to execution but compiles the source code at the run time.
-
-You should not confuse Cython with CPython. Python as you know it is itself implemented in other programming languages. CPython is a default implementation of Python written in C. Other popular implementations of Python are [Jython][8], [PyPy][9]. CPython is also sometimes called an *interpreter*. Note that 
-
-[3]: <https://en.wikipedia.org/wiki/Machine_code> "Machine code"
-[4]: <https://en.wikipedia.org/wiki/Interpreter_(computing)> "Interpreter"
-[5]: <https://en.wikipedia.org/wiki/Interpreter_(computing)#Bytecode_interpreters> "Bytecode interpreters"
-[6]: <https://en.wikipedia.org/wiki/Ahead-of-time_compilation> "AOT compilation"
-[7]: <https://en.wikipedia.org/wiki/Just-in-time_compilation> "JIT compilation"
-[8]: <https://en.wikipedia.org/wiki/Jython> "Jython"
-[9]: <https://en.wikipedia.org/wiki/PyPy> "PyPy"
+[1]: <https://en.wikipedia.org/wiki/Machine_code> "Machine code"
+[2]: <https://en.wikipedia.org/wiki/Interpreter_(computing)> "Interpreter"
+[3]: <https://en.wikipedia.org/wiki/Interpreter_(computing)#Bytecode_interpreters> "Bytecode interpreters"
+[4]: <https://en.wikipedia.org/wiki/Ahead-of-time_compilation> "AOT compilation"
+[5]: <https://en.wikipedia.org/wiki/Just-in-time_compilation> "JIT compilation"
 
 +++
 
-## Cython and Numba: why and how?
+## Cython and Numba: what, when and how?
+
++++
+
+We are now well-equipped to discuss Cython and Numba. What are they? 
+
+*Cython* is a *compiled programming language* itself. It aims to run at C-like speed using Python-like syntax. If well designed, Cython code may gain the speedup by the factor of order(s) of magnitude in comparison to its Python analogy.
+
+*Numba* is a *JIT compiler*. It translates Python source code into the machine code using the open source [LLVM compiler][6] written in C++.
+
+Cython and Numba generally show similar performance for the same kinds of problems but each of them might fit better in certain situation. 
+
+Cython has the advantage of being very flexible meaning that normally any Python code can be rewritten in Cython without global rethinking of the original logic.
+
+The major "disadvantage" of Cython is that it obviously requires some programming effort "translating" the Python code into Cython. It is said, though, that for the Python programmer it must take relatively insignificant effort to learn Cython. Being a compiled language, Cython also requires compilation instructions to be provided - so-called Makefiles. Python's Makefiles are usually those named `setup.py`. As they are simply the Python modules, they do not require a lot of extra knowledge from the Python programmers.
+
+Even though it has been said that Cython does not require enormous effort from the Python programmer, Numba is an absolute winner when it comes to simplicity of implementation. It very often does not require anything but a simple Python decorator applied on a Python function. *The Python decorator is a tool provided in standard python distribution and will be explained further in this notebook.*
+
+The disadvantage of Numba is interconnected with what we have called its advantage. While being very simple to use, it comes with [certain limitations, such as][7]:
+
+* Not compiling the whole program but only the Python function;
+* Not integrating well with some Python packages (such as Pandas);
+* Providing limited support to some types of data (such as strings);
+* Not integrating as efficiently as Cython with C and C++.
+
+In some cases it might be quite a challenge to take advantage of Numba in your program, as it will require radical changes to the source code.
+
+You should not confuse Cython with CPython. Python as you know it is itself implemented in other programming languages. CPython is a default implementation of Python written in C. Other popular implementations of Python are [Jython][6], [PyPy][7]. CPython is also sometimes called an *interpreter*. Note that 
+
+[6]: <https://en.wikipedia.org/wiki/LLVM> "LLVM"
+[7]: <https://christinakouridi.blog/2019/12/29/intro-numba/> "Limitations of Numba"
+[8]: <https://en.wikipedia.org/wiki/Jython> "Jython"
+[9]: <https://en.wikipedia.org/wiki/PyPy> "PyPy"
 
 +++
 

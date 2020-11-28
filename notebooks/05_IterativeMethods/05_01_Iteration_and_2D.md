@@ -637,18 +637,18 @@ ax.legend();
 
 ## Convergence of iterative methods
 
-We have observed empirically that the Jocabi and Guass-Seidel methods converge to the solution of the discretized Poisson equations. In this section we explore this convergence process in more detail.
+We have observed empirically that the Jocabi and Guass-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
-The definition of the Jacobi is given in \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
+The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
 If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
 
-\begin{equation}
+\begin{equation*}
     A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
-\end{equation}
+\end{equation*}
 
 $A^J_1$ is the $-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
 
-\begin{align}
+\begin{align*}
   L=
   \left(
     \begin{array}{*{16}c}
@@ -662,9 +662,9 @@ $A^J_1$ is the $-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
         &   &   & 1 &   &   & 1 & .   \\
     \end{array}
   \right),
-\end{align}
+\end{align*}
 and 
-\begin{align}
+\begin{align*}
   U=
   \left(
     \begin{array}{*{16}c}
@@ -678,12 +678,12 @@ and
         &   &   &  &   &   &  & .   \\
     \end{array}
   \right),
-\end{align}
+\end{align*}
 Similarly, the Gauss-Seidel algorithm may be written as:
 
-\begin{equation}
+\begin{equation*}
   A^{GS}_1\boldsymbol p^{k+1} = A^{GS}_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
-\end{equation}
+\end{equation*}
 
 with $A_1^{GS}=4\times I - L$ and $A_2^{GS}=U$.
 
@@ -694,44 +694,92 @@ The arguments developped here can be genelarized to any iterative method of the 
   A_1\boldsymbol p^{k+1} = A_2 \boldsymbol p^k + \boldsymbol c
   \;\; \Leftrightarrow \;\; \boldsymbol p^{k+1} = A_1^{-1} A_2 \boldsymbol p^k +A_1^{-1} \boldsymbol c
 \end{equation}
+
 where $A=A_1 - A_2$ and $A\boldsymbol p = c$ is the original matrix problem.
 
-The make the algorithm  work, $A_1$ needs to be easily invertible otherwise we would not save any effort. For the Jacobi method this is obvious as $A_1$ because proportional to the identity. For the Gauss-Seidel method things are sligthly more complicated but $\boldsymbol p^{k+1}$ can still be computed by looping in the order described in the previous section.
+The make the algorithm  work, $A_1$ needs to be easily invertible otherwise we would not save any effort. For the Jacobi method this is obvious because $A_1$ is proportional to the identity. For the Gauss-Seidel method things are sligthly more complicated but $\boldsymbol p^{k+1}$ can still be computed easily by looping in the order described in the previous section.
 
 Let us denote by $\boldsymbol \epsilon^k$ the error at iteration $k$:
 
-\begin{equation}
+\begin{equation*}
   \boldsymbol \epsilon^k = \boldsymbol p^{exact} - \boldsymbol p^k
-\end{equation}
+\end{equation*}
 
 where $\boldsymbol p^{exact}$ is the exact solution of the discretized equation. If we substitute this definition in \eqref{eq:iterSplit} we get
 
 \begin{equation}
-  \boldsymbol \epsilon^{k+1} = A^{-1}_1 A_2 \boldsymbol \epsilon^k.
+\label{eq:iterError}
+  \boldsymbol \epsilon^{k+1} = A^{-1}_1 A_2 \boldsymbol \epsilon^k = \left(A^{-1}_1 A_k\right)^{k+1}\boldsymbol \epsilon^0.
 \end{equation}
 
 Obviously we need to have $\boldsymbol \epsilon^k \rightarrow 0$ for $\rightarrow \infty$ for the iterative method to converge. In order for this to happen, all the eigenvalues $\lambda_i$ of $A^{-1}_1 A_2$ must be such that \cite{watkins2010},
 
-\begin{align}
+\begin{align*}
   \vert \lambda_i \vert < 1.
-\end{align}
+\end{align*}
 
-If the matrix $A^{-1}_1 A_2$ is diagonalizable, this result can be proven rather easily by expressing the condition in the basis of eigenvectors. The quantity $\hbox{max} \vert \lambda_i\vert$ is called the spectral radius $\rho$ of the matrix. The criteria for convergence is then also equivalent to:
+If the matrix $A^{-1}_1 A_2$ is diagonalizable, this result can be proven rather easily by expressing the error in the basis of eigenvectors. 
 
-\begin{align}
+The quantity $\rho= \hbox{max} \vert \lambda_i\vert$ is called the spectral radius of the matrix. The criteria for convergence is thus also equivalent to:
+
+\begin{align*}
   \rho(A^{-1}_1 A_2) < 1.
-\end{align}
+\end{align*}
+
+When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate its rate of convergence. For that purpose, let us introduce the $l2$ matrix norm defined as:
+
+\begin{equation*}
+  \| G \|_2 = \max_{\boldsymbol x}\frac{\| G\boldsymbol x \|}{\| \boldsymbol x \|}.
+\end{equation*}
+ where $G$ is any matrix. One says that the matrix norm is induced by the $l2$-norm $\|\cdot\|$ defined for vectors $\boldsymbol x$. Like all matrix norms, it satisfies the submultiplicativity rule \cite{watkins2010}:
+
+ \begin{equation*}
+  \| AB \|_2 \leq \| A \|_2 \| B \|_2.
+\end{equation*}
+
+for any matrices $A$ and $B$.
+
+Using the definition of the $l2$ norm and the submultiplicativity rule we then have:
+
+\begin{equation*}
+  \boldsymbol \| \epsilon^{k+1} \| = \| \left(A^{-1}_1 A_k\right)^{k+1}\boldsymbol \epsilon^0 \| \leq \| \left(A^{-1}_1 A_k\right)\|_2^{k+1}\boldsymbol \| \epsilon^0 \|
+\end{equation*}
+
+An important result of linear algebra is that the $l2$ norm of a matrix is equal to its largest singular value $\sigma_1$ \cite{horn2013}:
+
+\begin{equation*}
+  \| A \|_2 = \sigma_1(A).
+\end{equation*}
+
+We won't use the concept of singular values in this course so we will not describe it further. We just note that for symmetric matrices we have:
+
+\begin{equation*}
+  \sigma_1(A) = \rho(A)\;\;\;\; \hbox{if $A$ is symmetric}.
+\end{equation*}
+
+For such matrices, we then have:
+
+\begin{equation*}
+  \frac{\boldsymbol \| \epsilon^{k+1} \|}{\| \epsilon^0 \|}\leq \rho^{k+1}(A^{-1}_1 A_2).
+\end{equation*}
+
+Reducing the $l2$-norm of the error by a factor $10^{-m}$ after $k$ iterations therefore requires,
+
+\begin{equation*}
+  k \geq -\frac{m}{\log_{10}\rho (A^{-1}_1 A_2) } = -\frac{m}{\log_{10}(\hbox{max} \vert \lambda_i\vert )}
+\end{equation*}
+
++++
+
+## References
+
+(<a id="cit-watkins2010" href="#call-watkins2010">Watkins, 2010</a>) DS Watkins, ``_Fondamentals of Matrix Computations - Third Edition_'',  2010.
+
+(<a id="cit-horn2013" href="#call-horn2013">Horn and Johnson, 2013</a>) RA Horn and CR Johnson, ``_Matrix Analysis_'',  2013.
+
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
 ```
-
-```{code-cell} ipython3
-
-```
-
-## References
-
-(<a id="cit-watkins2010" href="#call-watkins2010">Watkins, 2010</a>) DS Watkins, ``_Fondamentals of Matrix Computations - Third Edition_'',  2010.

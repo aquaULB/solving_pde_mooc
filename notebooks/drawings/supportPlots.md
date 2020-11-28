@@ -15,7 +15,7 @@ jupyter:
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#2D-grid" data-toc-modified-id="2D-grid-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>2D grid</a></span></li><li><span><a href="#Gauss-Seidel" data-toc-modified-id="Gauss-Seidel-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Gauss-Seidel</a></span></li></ul></div>
 <!-- #endregion -->
 
 ```python
@@ -344,8 +344,9 @@ ax.plot(lam.real, lam.imag,'o', color='black')
 fig.savefig('../figures/logo.png', dpi=300)
 ```
 
-```python
 ## 2D grid
+
+```python
 fig, ax = plt.subplots(figsize=(8, 8))
 
 xmin, xmax = -0.1, 10.1
@@ -392,6 +393,36 @@ ax.set_axis_off()
 ax.set_aspect(1)
 
 fig.savefig('../figures/2Dgrid.png', dpi=300)
+```
+
+## Gauss-Seidel
+
+```python
+fig, ax = plt.subplots(figsize=(8, 8))
+
+xmin, xmax = -0.1, 10.1
+ymin, ymax = -0.1, 10.1
+x = y = np.arange(0, 11, 2)
+X, Y = np.meshgrid(x, y)
+
+ax.scatter(X, Y)
+
+
+
+ax.text(4, -0.6,r'$i-1$', horizontalalignment='center')
+ax.text(6, -0.6,r'$i$', horizontalalignment='center')
+ax.text(8, -0.6,r'$i+1$', horizontalalignment='center')
+
+ax.text(-0.8, 4,r'$j-1$', horizontalalignment='center')
+ax.text(-0.7, 6,r'$j$', horizontalalignment='center')
+ax.text(-0.8, 8,r'$j+1$', horizontalalignment='center')
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+ax.set_axis_off()
+ax.set_aspect(1)
+
+#fig.savefig('../figures/GSgrid.png', dpi=300)
 ```
 
 ```python

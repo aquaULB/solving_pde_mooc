@@ -118,7 +118,11 @@ The disadvantage of Numba is interconnected with what we have called its advanta
 * Providing limited support to some types of data (such as strings);
 * Not integrating as efficiently as Cython with C and C++.
 
-In some cases it might be quite a challenge to take advantage of Numba in your program, as it will require radical changes to the source code.
+In some cases it might be quite a challenge to use Numba in your program, as it will require radical changes to the source code.
+
+Cython and Numba are powerful tools. They have their "downsides", which does not mean that one is to be *always* chosen over another. The programmer must always have their mind open and decisions balanced. Whenever you have troubles explaining your designing decisions, it usually means that they must be questioned.
+
+For the problems considered in this course, means of Numba suffice. Nevertheless, we further demonstrate how to use both Cython and Numba. Let us first the model problem. There is plenty of examples you can find but we'll go for something 
 
 You should not confuse Cython with CPython. Python as you know it is itself implemented in other programming languages. CPython is a default implementation of Python written in C. Other popular implementations of Python are [Jython][6], [PyPy][7]. CPython is also sometimes called an *interpreter*. Note that 
 
@@ -127,7 +131,77 @@ You should not confuse Cython with CPython. Python as you know it is itself impl
 [8]: <https://en.wikipedia.org/wiki/Jython> "Jython"
 [9]: <https://en.wikipedia.org/wiki/PyPy> "PyPy"
 
-+++
+```{code-cell} ipython3
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+
+sys.path.insert(0, '../demos/BoostingPython')
+
+import solvers
+```
+
+```{code-cell} ipython3
+# Grid parameters.
+nx = 61                  # number of points in the x direction
+ny = 61                  # number of points in the y direction
+xmin, xmax = 0.0, 1.0     # limits in the x direction
+ymin, ymax = -0.5, 0.5    # limits in the y direction
+lx = xmax - xmin          # domain length in the x direction
+ly = ymax - ymin          # domain length in the y direction
+dx = lx / (nx - 1)        # grid spacing in the x direction
+dy = ly / (ny - 1)        # grid spacing in the y direction
+
+# Create the gridline locations and the mesh grid;
+# see notebook 02_02_Runge_Kutta for more details
+x = np.linspace(xmin, xmax, nx)
+y = np.linspace(ymin, ymax, ny)
+X, Y = np.meshgrid(x, y, indexing ='ij')
+
+# Compute the rhs
+b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
+     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+```
+
+```{code-cell} ipython3
+p = np.zeros((nx,ny))
+
+success = solvers.py_gauss_seidel(p, b, dx, tol = 1e-10, max_it = 1e6)
+```
+
+```{code-cell} ipython3
+fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
+# We shall now use the
+# matplotlib.pyplot.contourf function.
+# As X and Y, we pass the mesh data.
+#
+# For more info
+# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
+#
+ax_1.contourf(X, Y, p, 20)
+
+# plot along the line y=0:
+jc = int(ly/(2*dy))
+ax_3.plot(x, p[:,jc], label=r'$pnew$')
+
+# add some labels and titles
+ax_1.set_xlabel(r'$x$')
+ax_1.set_ylabel(r'$y$')
+ax_1.set_title('Exact solution')
+
+ax_2.set_xlabel(r'$x$')
+ax_2.set_ylabel(r'$y$')
+ax_2.set_title('Numerical solution')
+
+ax_3.set_xlabel(r'$x$')
+ax_3.set_ylabel(r'$p$')
+ax_3.set_title(r'$p(x,0)$')
+
+ax_3.legend()
+```
 
 ### Python decorators
 
@@ -276,158 +350,8 @@ def print_identity(name, age):
 print_identity('Jacob', 65)
 ```
 
-## Gauss-Seidel with numba
-
 ```{code-cell} ipython3
 from numba import njit
-```
-
-```{code-cell} ipython3
-# Grid parameters.
-nx = 61                  # number of points in the x direction
-ny = 61                  # number of points in the y direction
-xmin, xmax = 0.0, 1.0     # limits in the x direction
-ymin, ymax = -0.5, 0.5    # limits in the y direction
-lx = xmax - xmin          # domain length in the x direction
-ly = ymax - ymin          # domain length in the y direction
-dx = lx / (nx - 1)        # grid spacing in the x direction
-dy = ly / (ny - 1)        # grid spacing in the y direction
-
-# Create the gridline locations and the mesh grid;
-# see notebook 02_02_Runge_Kutta for more details
-x = np.linspace(xmin, xmax, nx)
-y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y, indexing ='ij')
-
-# Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
-```
-
-```{code-cell} ipython3
-def gauss_seidel(p, b, tolerance, max_iter):
-    
-    nx, ny = b.shape
-    iter = 0
-    diff = 1
-    tol_hist_gs = []
-    
-    pnew = p.copy()
-    
-    while (diff > tolerance):
-    
-        if iter > max_iter:
-            print('\nSolution did not converged within the maximum'
-                ' number of iterations')
-            break
-        
-        for i in range(1, nx-1):
-            for j in range(1, ny-1):
-                pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
-                                + p[i, j+1] - b[i, j]*dx**2 ))
-        
-        diff = l2_diff(pnew, p)
-        tol_hist_gs.append(diff)
-
-        # Show iteration progress (I would like to add iter but cannot do it)
-        # Problems in numba here
-        # print('\r', f'diff: {diff:5.2e}', end='')
-        
-        p = pnew.copy()
-        iter += 1
-
-    else:
-        print('The solution converged after {:d} iterations'.format(iter))
-        return p, tol_hist_gs
-
-@njit
-def gauss_seidel_numba(p, b, tolerance, max_iter):
-    
-    nx, ny = b.shape
-    iter = 0
-    diff = 1
-    tol_hist_gs = []
-    
-    pnew = p.copy()
-    
-    while (diff > tolerance):
-    
-        if iter > max_iter:
-            print('\nSolution did not converged within the maximum'
-                ' number of iterations')
-            break
-        
-        for i in range(1, nx-1):
-            for j in range(1, ny-1):
-                pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
-                                + p[i, j+1] - b[i, j]*dx**2 ))
-        
-        diff = l2_diff(pnew, p)
-        tol_hist_gs.append(diff)
-
-        # Show iteration progress (I would like to add iter but cannot do it)
-        # Problems in numba here
-        # print('\r', f'diff: {diff:5.2e}', end='')
-        
-        p = pnew.copy()
-        iter += 1
-
-    else:
-        print('The solution converged after iterations', iter)
-        return p, tol_hist_gs
-```
-
-```{code-cell} ipython3
-p0 = np.zeros((nx,ny))
-```
-
-```{code-cell} ipython3
-# 20 seconds on my computer (7 times)
-%timeit p, tol_hist_gs = gauss_seidel(p0.copy(), b, tolerance = 1e-10, max_iter = 1e6)
-```
-
-```{code-cell} ipython3
-# 80ms on my computer (70 times) !!!
-%timeit p, tol_hist_gs = gauss_seidel_numba(p0.copy(), b, tolerance = 1e-10, max_iter = 1e6)
-```
-
-```{code-cell} ipython3
-# Compute the exact solution (and p for the plot %%timeit does not return it)
-p, tol_hist_gs = gauss_seidel_numba(p0.copy(), b, tolerance = 1e-10, max_iter = 1e6)
-p_e = p_exact_2d(X, Y)
-```
-
-```{code-cell} ipython3
-fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
-# We shall now use the
-# matplotlib.pyplot.contourf function.
-# As X and Y, we pass the mesh data.
-#
-# For more info
-# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
-#
-ax_1.contourf(X, Y, p, 20)
-ax_2.contourf(X, Y, p_e, 20)
-
-# plot along the line y=0:
-jc = int(ly/(2*dy))
-ax_3.plot(x, p_e[:,jc], '*', color='red', markevery=2, label=r'$p_e$')
-ax_3.plot(x, p[:,jc], label=r'$pnew$')
-
-# add some labels and titles
-ax_1.set_xlabel(r'$x$')
-ax_1.set_ylabel(r'$y$')
-ax_1.set_title('Exact solution')
-
-ax_2.set_xlabel(r'$x$')
-ax_2.set_ylabel(r'$y$')
-ax_2.set_title('Numerical solution')
-
-ax_3.set_xlabel(r'$x$')
-ax_3.set_ylabel(r'$p$')
-ax_3.set_title(r'$p(x,0)$')
-
-ax_3.legend();
 ```
 
 ```{code-cell} ipython3

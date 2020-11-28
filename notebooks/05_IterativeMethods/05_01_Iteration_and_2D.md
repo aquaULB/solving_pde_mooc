@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Convergence-of-iterative-methods" data-toc-modified-id="Convergence-of-iterative-methods-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Convergence of iterative methods</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>References</a></span></li></ul></div>
 
 +++
 
@@ -635,9 +635,8 @@ ax.set_title('l2_diff decay')
 ax.legend();
 ```
 
-## Convergence of iterative methods
 
-We have observed empirically that the Jocabi and Guass-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
+We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
 The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
 If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
@@ -768,6 +767,56 @@ Reducing the $l2$-norm of the error by a factor $10^{-m}$ after $k$ iterations t
 \begin{equation*}
   k \geq -\frac{m}{\log_{10}\rho (A^{-1}_1 A_2) } = -\frac{m}{\log_{10}(\hbox{max} \vert \lambda_i\vert )}
 \end{equation*}
+
+Let's now use the above theoretical concepts for the analysis of the Jacobi and Gauss-Seidel methods in the case of the 2D Poisson equation.
+
+$\bullet$ For the Jacobi method, we have $ \displaystyle A^{-1}_1 A_2 = -\frac14(L+U)$. The matrix is a Teoplitz matrix and it is possible to compute all its eigenvalues by decomposing it using tensor products \cite{watkins2010}. The resulting eigenvalues are:
+
+\begin{equation*}
+  \lambda_{kl} = \frac12\left[\cos \frac{k\pi}{nx-1} + \cos \frac{l\pi}{ny-1}\right ],\; k=1,\ldots, nx-2,\; l=1,\ldots ny-2.
+\end{equation*}
+
+The spectral radius is thus,
+
+\begin{equation*}
+  \rho_{JC} = \frac12\left[\cos \frac{\pi}{nx-1} + \cos \frac{\pi}{ny-1}\right ]
+\end{equation*}
+
+and the method converges since $\rho_{JC} < 1$. If $nx=ny$ are both large, we have
+
+\begin{equation*}
+  \rho_{JC} \simeq 1 - \frac12 \frac{\pi^2}{(nx-1)^2}
+\end{equation*}
+
+For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $46652$ iterations. 
+
+$\bullet$ For the Gauss-Seidel method, we have $ \displaystyle A^{-1}_1 A_2 = (4\times I - L)^{-1} U$ and the eigenvalues are the squares of the eigenvalues of the Jacobi method \cite{watkins2010}:
+
+\begin{equation*}
+  \lambda_{kl} = \frac14\left[\cos \frac{k\pi}{nx-1} + \cos \frac{l\pi}{ny-1}\right ]^2,\; k=1,\ldots, nx-2,\; l=1,\ldots ny-2.
+\end{equation*}
+
+The spectral radius is thus,
+
+\begin{equation*}
+  \rho_{GS} = \rho_{JC}^2 = \frac14\left[\cos \frac{\pi}{nx-1} + \cos \frac{\pi}{ny-1}\right ]^2
+\end{equation*}
+
+and the method converges since $\rho_{GS} < 1$. The above relation also implies that the rate of convergence of the Gauss-Seidel is twice that of the Jacobi method. If $nx=ny$ are both large, we have
+
+\begin{equation*}
+  \rho_{GS} \simeq 1 - \frac{\pi^2}{(nx-1)^2}
+\end{equation*}
+
+For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $23326$ iterations. 
+
+These results confirm our observations when solving the sample problem described earlier in this notebook.
+
++++
+
+## Summary
+
+In this notebook we have shown how to define a cartesian grid for solving two-dimensional partial differential equations using the finite difference discretization. The strategy can easily be extended to three-dimensional problems. When they require matrix inversions, higher-dimensional problems rapidly make direct inversion methods very inefficient if not impracticable. For such cases, we have shown how iterative methods can come to the rescue. We have described in detail the Jacobi and Gauss-Seidel methods and rapidly presented the classical theory used to analyze their stability. The implementation of some iterative methods like the Jacobi method can be done directly with `numpy` and therefore benefit from the speedup of precompiled code. Others, like the Gauss-Seidel method, require an explicit looping on the grid nodes in a given order and this can lead to very slow algorithm if the loops are performed with Python loops. To circumvent this difficulty we provide in the next notebook several strategies to boost your Python programs.
 
 +++
 

@@ -38,7 +38,7 @@ def py_gauss_seidel(p, b, dx, tol, max_it, tol_hist_gs=[]):
         print('\r', f'diff: {diff:5.2e}', end='')
 
         # Memory leak safe deepcopy. Alternative: numpy.copyto.
-        p[:] = pnew
+        p[:, :] = pnew
     else:
         print(f'\nSolution converged after {it} iterations')
         return True

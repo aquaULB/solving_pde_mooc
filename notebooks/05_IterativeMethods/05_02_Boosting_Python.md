@@ -181,7 +181,7 @@ p = np.zeros((nx, ny))
 c_p = np.zeros((nx, ny), dtype=np.float64)
 c_tol_hist_gs = np.empty(max_it, dtype=np.float64)
 
-%time nit = csolver.c_gauss_seidel(c_p, b, c_tol_hist_gs, dx, 1e-10, max_it)
+%time success, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, 1e-10, max_it)
 ```
 
 ```{code-cell} ipython3
@@ -210,6 +210,23 @@ ax[0, 0].set_title('Exact solution')
 ax[0, 1].set_xlabel(r'$x$')
 ax[0, 1].set_ylabel(r'$p$')
 ax[0, 1].set_title(r'$p(x,0)$')
+```
+
+```{code-cell} ipython3
+a = [1, 1]
+b = [3, 2]
+c= []; d = []
+print(len(c) == len(d))
+
+size = sum([b[i] - a[i] + 1 for i in range(len(a))])
+
+slices = [slice(a[i], b[i]+1) for i in range(len(a))]
+print(slices)
+
+arr = np.arange(16).reshape(4, 4)
+
+print(arr)
+print(arr[tuple(slices)])
 ```
 
 ### Python decorators

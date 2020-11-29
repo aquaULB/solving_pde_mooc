@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li></ul></li><li><span><a href="#Gauss-Seidel-with-numba" data-toc-modified-id="Gauss-Seidel-with-numba-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel with numba</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li></ul></li></ul></div>
 
 +++
 
@@ -142,6 +142,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, '../demos/BoostingPython')
 
 import solvers
+import csolver
 ```
 
 ```{code-cell} ipython3
@@ -167,13 +168,25 @@ b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
 ```
 
 ```{code-cell} ipython3
-p = np.zeros((nx,ny))
-
-success = solvers.py_gauss_seidel(p, b, dx, tol = 1e-10, max_it = 1e6)
+max_it = int(1e6)
 ```
 
 ```{code-cell} ipython3
-fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
+p = np.zeros((nx, ny))
+
+%time success = solvers.py_gauss_seidel(p, b, dx, tol = 1e-10, max_it = max_it)
+```
+
+```{code-cell} ipython3
+c_p = np.zeros((nx, ny), dtype=np.float64)
+c_tol_hist_gs = np.empty(max_it, dtype=np.float64)
+
+%time nit = csolver.c_gauss_seidel(c_p, b, c_tol_hist_gs, dx, 1e-10, max_it)
+```
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 2, figsize=(16, 10))
+
 # We shall now use the
 # matplotlib.pyplot.contourf function.
 # As X and Y, we pass the mesh data.
@@ -181,26 +194,22 @@ fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
 #
-ax_1.contourf(X, Y, p, 20)
+ax[0, 0].contourf(X, Y, p, 20)
+ax[1, 0].contourf(X, Y, c_p, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))
-ax_3.plot(x, p[:,jc], label=r'$pnew$')
+ax[0, 1].plot(x, p[:,jc], label=r'$pnew$')
+ax[1, 1].plot(x, c_p[:,jc], label=r'$pnew$')
 
 # add some labels and titles
-ax_1.set_xlabel(r'$x$')
-ax_1.set_ylabel(r'$y$')
-ax_1.set_title('Exact solution')
+ax[0, 0].set_xlabel(r'$x$')
+ax[0, 0].set_ylabel(r'$y$')
+ax[0, 0].set_title('Exact solution')
 
-ax_2.set_xlabel(r'$x$')
-ax_2.set_ylabel(r'$y$')
-ax_2.set_title('Numerical solution')
-
-ax_3.set_xlabel(r'$x$')
-ax_3.set_ylabel(r'$p$')
-ax_3.set_title(r'$p(x,0)$')
-
-ax_3.legend()
+ax[0, 1].set_xlabel(r'$x$')
+ax[0, 1].set_ylabel(r'$p$')
+ax[0, 1].set_title(r'$p(x,0)$')
 ```
 
 ### Python decorators

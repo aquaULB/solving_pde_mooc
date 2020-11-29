@@ -15,6 +15,10 @@ def py_gauss_seidel(p, b, dx, tol, max_it, tol_hist_gs=[]):
         raise ValueError('p and b must have the same shape')
     nx, ny = p.shape
 
+    # If tol_hist_gs is not a list, make it one.
+    if not isinstance(tol_hist_gs, list):
+        tol_hist_gs = []
+
     diff = np.abs(tol) * 10
 
     it = 0
@@ -25,15 +29,16 @@ def py_gauss_seidel(p, b, dx, tol, max_it, tol_hist_gs=[]):
 
         for i in range(1, nx-1):
             for j in range(1, ny-1):
-                pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
-                                + p[i, j+1] - b[i, j]*dx**2 ))
+                pnew[i, j] = (0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
+                           + p[i, j+1] - b[i, j]*dx**2))
 
         diff = norms.l2_diff(pnew, p)
         tol_hist_gs.append(diff)
 
-        print('\r', f'diff: {diff:5.2e}', end='\n')
+        print('\r', f'diff: {diff:5.2e}', end='')
 
-        p[:] = pnew.copy()
+        # Memory leak safe deepcopy. Alternative: numpy.copyto.
+        p[:] = pnew
     else:
         print(f'\nSolution converged after {it} iterations')
         return True

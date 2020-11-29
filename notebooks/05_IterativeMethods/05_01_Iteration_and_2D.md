@@ -459,18 +459,42 @@ We then iterate using a `while` loop and stop the loop once the l2-norm get smal
 
 ```{code-cell} ipython3
 tolerance = 1e-10
-max_iter = 1e6
+max_iter = 100000
 ```
 
+When your programs might take an extended time to execute, it might be useful to add a progress bar while it executes. A nice Python package that provides this functionality without adding a significant overhead to the execution time is `tqdm` (you may want to check out its [documentation][51]). To use it, you first have to install it in your Python environment (if it's not already done). To do so, open a terminal and type the following commands:
+
+```
+conda activate course
+conda install tqdm
+```
+
+You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm`that we are goind to use:
+
+[51]: <https://tqdm.github.io> "TQDM documentation"
+
 ```{code-cell} ipython3
+from tqdm.notebook import tqdm
+```
+
+In your notebook, a progress bar can then be created by calling the `tqdm()`function. We pass the `max_iter` argument as the `total` number of iterations so that `tqdm`knows how to size the progress bar. We also change the default prefix legend for the progress bar to be more informative. Then we can iterate towards the solution:
+
+```{code-cell} ipython3
+pbar = tqdm(total=max_iter)
+pbar.set_description("iter / max_iter");
+
+# Let's iterate...
+
 iter = 0 # iteration counter
 diff = 1.0
 tol_hist_jac = []
+
 while (diff > tolerance):
     
     if iter > max_iter:
         print('\nSolution did not converged within the maximum'
-              ' number of iterations')
+              ' number of iterations'
+              f'\nLast l2_diff was: {diff:.5e}')
         break
     
     p = pnew.copy()
@@ -482,13 +506,16 @@ while (diff > tolerance):
     diff = l2_diff(pnew, p)
     tol_hist_jac.append(diff)
     
-    # Show iteration progress (I would like to add iter but cannot do it)
-    print('\r', f'diff: {diff:5.2e}', end='')
-    
     iter += 1
+    # We update our progress bar
+    pbar.update(1)
 
 else:
     print(f'\nThe solution converged after {iter} iterations')
+
+# When the progress bar will not be used
+# further, it has to be closed
+pbar.close()
 ```
 
 We can measure the accuracy of our solution with the same diagnostics as above.
@@ -590,7 +617,10 @@ p0 = np.zeros((nx,ny))
 pnew = p0.copy()
 
 tolerance = 1e-10
-max_iter = 1e6
+max_iter = 10000
+
+pbar = tqdm(total=max_iter)
+pbar.set_description("iter / max_iter")
 
 iter = 0 # iteration counter
 diff = 1.0
@@ -599,7 +629,8 @@ while (diff > tolerance):
     
     if iter > max_iter:
         print('\nSolution did not converged within the maximum'
-              ' number of iterations')
+              ' number of iterations'
+              f'\nLast l2_diff was: {diff:.5e}')
         break
     
     p = pnew.copy()
@@ -611,10 +642,8 @@ while (diff > tolerance):
     diff = l2_diff(pnew, p)
     tol_hist_gs.append(diff)
 
-    # Show iteration progress (I would like to add iter but cannot do it)
-    print('\r', f'diff: {diff:5.2e}', end='')
-    
     iter += 1
+    pbar.update(1)
 
 else:
     print(f'\nThe solution converged after {iter} iterations')
@@ -634,7 +663,6 @@ ax.set_ylabel('l2_diff')
 ax.set_title('l2_diff decay')
 ax.legend();
 ```
-
 
 We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 

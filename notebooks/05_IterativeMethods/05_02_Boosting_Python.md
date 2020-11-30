@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li></ul></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li><li><span><a href="#Implementing-Gauss-Seidel-solver" data-toc-modified-id="Implementing-Gauss-Seidel-solver-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Implementing Gauss-Seidel solver</a></span></li></ul></li></ul></div>
 
 +++
 
@@ -122,124 +122,14 @@ In some cases it might be quite a challenge to use Numba in your program, as it 
 
 Cython and Numba are powerful tools. They have their "downsides", which does not mean that one is to be *always* chosen over another. The programmer must always have their mind open and decisions balanced. Whenever you have troubles explaining your designing decisions, it usually means that they must be questioned.
 
-For the problems considered in this course, means of Numba suffice. Nevertheless, we further demonstrate how to use both Cython and Numba. Let us first the model problem. There is plenty of examples you can find but we'll go for something 
+For the problems considered in this course, means of Numba suffice. Nevertheless, we further demonstrate how to use both Cython and Numba. Let us first the model problem. In the previous notebook you were introduced the Gauss-Seidel method. We have implemented the numerical solver using Python loops and saw considerable slow down in comparison with the Jacobi solver. We will further show how this code can be sped up using both Cython and Numba.
 
-You should not confuse Cython with CPython. Python as you know it is itself implemented in other programming languages. CPython is a default implementation of Python written in C. Other popular implementations of Python are [Jython][6], [PyPy][7]. CPython is also sometimes called an *interpreter*. Note that 
+But before we introduce the Python tool that Numba strongly relies on - *Python decorators*.
 
 [6]: <https://en.wikipedia.org/wiki/LLVM> "LLVM"
 [7]: <https://christinakouridi.blog/2019/12/29/intro-numba/> "Limitations of Numba"
-[8]: <https://en.wikipedia.org/wiki/Jython> "Jython"
-[9]: <https://en.wikipedia.org/wiki/PyPy> "PyPy"
 
-```{code-cell} ipython3
-import sys
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-sys.path.insert(0, '../demos/BoostingPython')
-
-import solvers
-import csolver
-```
-
-```{code-cell} ipython3
-%matplotlib inline
-```
-
-```{code-cell} ipython3
-# Grid parameters.
-nx = 61                  # number of points in the x direction
-ny = 61                  # number of points in the y direction
-xmin, xmax = 0.0, 1.0     # limits in the x direction
-ymin, ymax = -0.5, 0.5    # limits in the y direction
-lx = xmax - xmin          # domain length in the x direction
-ly = ymax - ymin          # domain length in the y direction
-dx = lx / (nx - 1)        # grid spacing in the x direction
-dy = ly / (ny - 1)        # grid spacing in the y direction
-
-# Create the gridline locations and the mesh grid;
-# see notebook 02_02_Runge_Kutta for more details
-x = np.linspace(xmin, xmax, nx)
-y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y, indexing ='ij')
-
-# Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
-```
-
-```{code-cell} ipython3
-tol = 1e-10
-max_it = int(1e6)
-```
-
-```{code-cell} ipython3
-p = np.zeros((nx, ny))
-nb_p = p.copy()
-c_p = np.zeros((nx, ny), dtype=np.float64)
-```
-
-```{code-cell} ipython3
-%time success, p, _ = solvers.gauss_seidel(p, b, dx, tol, max_it)
-```
-
-```{code-cell} ipython3
-%time success, nb_p, _ = solvers.gauss_seidel(nb_p, b, dx, tol, max_it, use_numba=True)
-```
-
-```{code-cell} ipython3
-%time success, nb_p, _ = solvers.numba_gauss_seidel(nb_p, b, dx, tol, max_it)
-```
-
-```{code-cell} ipython3
-%time success, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
-```
-
-```{code-cell} ipython3
-fig, ax = plt.subplots(2, 2, figsize=(16, 10))
-
-# We shall now use the
-# matplotlib.pyplot.contourf function.
-# As X and Y, we pass the mesh data.
-#
-# For more info
-# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
-#
-#ax[0, 0].contourf(X, Y, p, 20)
-ax[1, 0].contourf(X, Y, c_p, 20)
-
-# plot along the line y=0:
-jc = int(ly/(2*dy))
-#ax[0, 1].plot(x, p[:,jc], label=r'$pnew$')
-ax[1, 1].plot(x, c_p[:,jc], label=r'$pnew$')
-
-# add some labels and titles
-ax[0, 0].set_xlabel(r'$x$')
-ax[0, 0].set_ylabel(r'$y$')
-ax[0, 0].set_title('Exact solution')
-
-ax[0, 1].set_xlabel(r'$x$')
-ax[0, 1].set_ylabel(r'$p$')
-ax[0, 1].set_title(r'$p(x,0)$')
-```
-
-```{code-cell} ipython3
-a = [1, 1]
-b = [3, 2]
-c= []; d = []
-print(len(c) == len(d))
-
-size = sum([b[i] - a[i] + 1 for i in range(len(a))])
-
-slices = [slice(a[i], b[i]+1) for i in range(len(a))]
-print(slices)
-
-arr = np.arange(16).reshape(4, 4)
-
-print(arr)
-print(arr[tuple(slices)])
-```
++++
 
 ### Python decorators
 
@@ -388,16 +278,99 @@ def print_identity(name, age):
 print_identity('Jacob', 65)
 ```
 
+### Implementing Gauss-Seidel solver
+
 ```{code-cell} ipython3
-from numba import njit
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+sys.path.insert(0, '../demos/BoostingPython')
+
+import py.solvers as solver
+import cy.lib.csolver as csolver
+```
+
+```{code-cell} ipython3
+%matplotlib inline
+```
+
+```{code-cell} ipython3
+# Grid parameters.
+nx = 61                  # number of points in the x direction
+ny = 61                  # number of points in the y direction
+xmin, xmax = 0.0, 1.0     # limits in the x direction
+ymin, ymax = -0.5, 0.5    # limits in the y direction
+lx = xmax - xmin          # domain length in the x direction
+ly = ymax - ymin          # domain length in the y direction
+dx = lx / (nx - 1)        # grid spacing in the x direction
+dy = ly / (ny - 1)        # grid spacing in the y direction
+
+# Create the gridline locations and the mesh grid;
+# see notebook 02_02_Runge_Kutta for more details
+x = np.linspace(xmin, xmax, nx)
+y = np.linspace(ymin, ymax, ny)
+X, Y = np.meshgrid(x, y, indexing ='ij')
+
+# Compute the rhs
+b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
+     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+```
+
+```{code-cell} ipython3
+tol = 1e-10
+max_it = 1000000
+```
+
+```{code-cell} ipython3
+p = np.zeros((nx, ny))
+nb_p = p.copy()
+c_p = np.zeros((nx, ny), dtype=np.float64)
+```
+
+```{code-cell} ipython3
+%time _, p, _ = solver.gauss_seidel(p, b, dx, tol, max_it)
+```
+
+```{code-cell} ipython3
+%time _, nb_p, _ = solver.gauss_seidel(nb_p, b, dx, tol, max_it, use_numba=True)
+```
+
+```{code-cell} ipython3
+%time _, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
+```
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(2, 2, figsize=(16, 10))
+
+# We shall now use the
+# matplotlib.pyplot.contourf function.
+# As X and Y, we pass the mesh data.
+#
+# For more info
+# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
+#
+ax[0, 0].contourf(X, Y, nb_p, 20)
+ax[1, 0].contourf(X, Y, c_p, 20)
+
+# plot along the line y=0:
+jc = int(ly/(2*dy))
+ax[0, 1].plot(x, nb_p[:,jc], 'r*', label=r'$pnew$')
+ax[1, 1].plot(x, c_p[:,jc], '--', label=r'$pnew$')
+
+# add some labels and titles
+ax[0, 0].set_xlabel(r'$x$')
+ax[0, 0].set_ylabel(r'$y$')
+ax[0, 0].set_title('Exact solution')
+
+ax[0, 1].set_xlabel(r'$x$')
+ax[0, 1].set_ylabel(r'$p$')
+ax[0, 1].set_title(r'$p(x,0)$')
 ```
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML
 css_file = '../styles/notebookstyle.css'
 HTML(open(css_file, 'r').read())
-```
-
-```{code-cell} ipython3
-
 ```

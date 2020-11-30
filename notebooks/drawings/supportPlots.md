@@ -15,7 +15,7 @@ jupyter:
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#2D-grid" data-toc-modified-id="2D-grid-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>2D grid</a></span></li><li><span><a href="#Gauss-Seidel" data-toc-modified-id="Gauss-Seidel-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Gauss-Seidel</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#2D-grid" data-toc-modified-id="2D-grid-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>2D grid</a></span></li><li><span><a href="#Gauss-Seidel" data-toc-modified-id="Gauss-Seidel-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Gauss-Seidel</a></span></li><li><span><a href="#2D-stencils" data-toc-modified-id="2D-stencils-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>2D stencils</a></span></li></ul></div>
 <!-- #endregion -->
 
 ```python
@@ -423,6 +423,165 @@ ax.set_axis_off()
 ax.set_aspect(1)
 
 #fig.savefig('../figures/GSgrid.png', dpi=300)
+```
+
+## 2D stencils
+
+```python
+# Five points
+from matplotlib.lines import Line2D
+fig, ax = plt.subplots(figsize=(5, 5))
+
+xmin, xmax = 1, 7
+ymin, ymax = 1, 7
+
+ax.set_axis_off()
+ax.set_aspect(1)
+
+line = Line2D([2, 6], [4, 4], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+line = Line2D([4, 4], [2, 6], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+circle = plt.Circle((4, 4), 0.5, lw=2, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 6), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 2), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((2, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((6, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+
+ax.text(4, 4,r'$-4$', ha='center', va='center')
+ax.text(4, 6,r'$1$', ha='center', va='center')
+ax.text(6, 4,r'$1$', ha='center', va='center')
+ax.text(2, 4,r'$1$', ha='center', va='center')
+ax.text(4, 2,r'$1$', ha='center', va='center')
+
+ax.text(7, 3,r'$\frac{1}{\Delta x^2}$', ha='center', va='center')
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+fig.savefig('../figures/2Dstencil5pt.png', dpi=300)
+```
+
+```python
+# 9 points
+from matplotlib.lines import Line2D
+fig, ax = plt.subplots(figsize=(5, 5))
+
+xmin, xmax = 1, 7
+ymin, ymax = 1, 7
+
+ax.set_axis_off()
+ax.set_aspect(1)
+
+line = Line2D([2, 6], [4, 4], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+line = Line2D([4, 4], [2, 6], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+line = Line2D([2, 6], [2, 6], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+line = Line2D([2, 6], [6, 2], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+circle = plt.Circle((4, 4), 0.5, lw=2, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 6), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 2), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((2, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((6, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((2, 2), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((6, 2), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((2, 6), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((6, 6), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+
+ax.text(4, 4,r'$-\frac{10}{3}$', ha='center', va='center')
+ax.text(4, 6,r'$\frac{2}{3}$', ha='center', va='center')
+ax.text(6, 4,r'$\frac{2}{3}$', ha='center', va='center')
+ax.text(2, 4,r'$\frac{2}{3}$', ha='center', va='center')
+ax.text(4, 2,r'$\frac{2}{3}$', ha='center', va='center')
+ax.text(2, 2,r'$\frac{1}{6}$', ha='center', va='center')
+ax.text(2, 6,r'$\frac{1}{6}$', ha='center', va='center')
+ax.text(6, 2,r'$\frac{1}{6}$', ha='center', va='center')
+ax.text(6, 6,r'$\frac{1}{6}$', ha='center', va='center')
+
+ax.text(7, 3,r'$\frac{1}{\Delta x^2}$', ha='center', va='center')
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+fig.savefig('../figures/2Dstencil9pt.png', dpi=300)
+```
+
+```python
+# Fourth order
+# 9 point
+from matplotlib.lines import Line2D
+fig, ax = plt.subplots(figsize=(8, 8))
+
+xmin, xmax = -1, 9
+ymin, ymax = -1, 9
+
+ax.set_axis_off()
+ax.set_aspect(1)
+
+line = Line2D([0, 8], [4, 4], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+line = Line2D([4, 4], [0, 8], color='k', axes=ax, zorder=0)
+ax.add_line(line)
+
+circle = plt.Circle((4, 4), 0.5, lw=2, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 6), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 2), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((2, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((6, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((0, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((8, 4), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 0), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+circle = plt.Circle((4, 8), 0.5, ec='k', fc='white', alpha=1.)
+ax.add_artist(circle)
+
+ax.text(4, 4,r'$-5$', ha='center', va='center')
+ax.text(4, 6,r'$\frac{4}{3}$', ha='center', va='center')
+ax.text(6, 4,r'$\frac{4}{3}$', ha='center', va='center')
+ax.text(2, 4,r'$\frac{4}{3}$', ha='center', va='center')
+ax.text(4, 2,r'$\frac{4}{3}$', ha='center', va='center')
+ax.text(0, 4,r'$\frac{1}{12}$', ha='center', va='center')
+ax.text(8, 4,r'$\frac{1}{12}$', ha='center', va='center')
+ax.text(4, 0,r'$\frac{1}{12}$', ha='center', va='center')
+ax.text(4, 8,r'$\frac{1}{12}$', ha='center', va='center')
+
+ax.text(7, 3,r'$\frac{1}{\Delta x^2}$', ha='center', va='center', fontsize=24)
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+fig.savefig('../figures/2Dstencil4th.png', dpi=300)
 ```
 
 ```python

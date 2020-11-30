@@ -169,12 +169,21 @@ Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2
 
 All the blank areas are filled fill zeros and the matrix is sparse. Pay attention to the extra zeros on the diagonals that occur because of the boundary conditions.
 
-As we did in the one dimensional case, we can graphically represent the stencil we are using. For second-order accurate centered finite differences in both directions it looks like:
+As we did in the one dimensional case, we can graphically represent the stencil we are using. Assuming that $\Delta x=\Delta y$ and for second-order accurate centered finite differences in both directions it looks like:
 
+<img width="300px" src="../figures/2Dstencil5pt.png">
 
-Note that several other options are possible. If we had adopted fourth-order accurate centered finite differences, the stencil would be:
+The factor $\frac{1}{\Delta x^2}$ in the drawing is there to remind you that all the values in the stencil need to be divided this factor to get the correct finite difference formula.
 
-But there are also some more complex possibilites in which one uses more neighbours around the central grid points:
+Note that several other stencils are possible. If we had adopted fourth-order accurate centered finite differences, the stencil would be:
+
+<img width="350px" src="../figures/2Dstencil4th.png">
+
+But there are also some more complex possibilities in which one uses more neighbours around the central grid point:
+
+<img width="300px" src="../figures/2Dstencil9pt.png">
+
+With more points in the stencil, we would expect to achieve higher accuracy. For the Poisson equation, the last stencil is in fact only second-order accurate. But it is fourth-order accurate for the Laplace equation \cite{iserles2008}.
 
 +++
 
@@ -855,6 +864,8 @@ In this notebook we have shown how to define a cartesian grid for solving two-di
 +++
 
 ## References
+
+(<a id="cit-iserles2008" href="#call-iserles2008">Iserles, 2008</a>) A Iserles, ``_A First Course in the Numerical Analysis of Differential Equations - Second Edition_'',  2008.
 
 (<a id="cit-watkins2010" href="#call-watkins2010">Watkins, 2010</a>) DS Watkins, ``_Fondamentals of Matrix Computations - Third Edition_'',  2010.
 

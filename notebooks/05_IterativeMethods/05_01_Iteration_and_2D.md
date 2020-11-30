@@ -113,7 +113,7 @@ We thus have $nx\times ny$ variables $p_{i,j} = p(x_i, y_j)$ distributed on the 
 
 The discretization of \eqref{eq:Poisson2D} using finite differences is straightforward if we discretize the two second-order derivatives along their respective directions. We then get:
 
-\\begin{align}
+\begin{align}
     \label{eq:discPoisson2D}
     \frac{p_{i-1,j}-2p_{i,j} + p_{i+1,j}}{\Delta x^2} &+ \frac{p_{i,j-1}-2p_{i,j} + p_{i,j+1}}{\Delta y^2}= b_{i,j} \\
     &\Leftrightarrow \nonumber \\
@@ -467,6 +467,12 @@ When your programs might take an extended time to execute, it might be useful to
 ```
 conda activate course
 conda install tqdm
+```
+
+The use `tqdm` inside `jupyter` notebooks, you also need a dependency called `pywidgets`. Depending on your installation, it might already be present in your environment. But to be sure, type also:
+
+```
+conda install ipywidgets
 ```
 
 You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm`that we are goind to use:

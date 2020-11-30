@@ -1,7 +1,5 @@
 cimport cython
 
-cimport libc.stdlib as lib
-
 import numpy as np
 cimport numpy as np
 
@@ -10,14 +8,13 @@ ctypedef np.float64_t DTYPE_t
 
 @cython.wraparound(False)
 def c_gauss_seidel(DTYPE_t[:, :] p, DTYPE_t[:, :] b,
-DTYPE_t dx, DTYPE_t tol, int max_it):
-    # if p.shape[0] != b.shape[0] or p.shape[1] != b.shape[1]:
-    #     raise ValueError("p and b must have the same shape.")
-    # if tol_hist_gs.size != max_it:
-    #     raise ValueError("tol_hist_gs must have lenght equal to max_it.")
+                   DTYPE_t dx, DTYPE_t tol, int max_it):
+    if tuple(p.shape) != tuple(b.shape):
+        raise ValueError("p and b must have the same shape")
 
     cdef Py_ssize_t nx = p.shape[0]
     cdef Py_ssize_t ny = p.shape[1]
+
     cdef DTYPE_t diff = np.abs(tol) * 10
 
     cdef np.ndarray[DTYPE_t, ndim=1] tol_hist_gs = np.empty(max_it, dtype=DTYPE)
@@ -48,6 +45,6 @@ DTYPE_t dx, DTYPE_t tol, int max_it):
 
         p[:, :] = p_new_view
     else:
-        return True, p, tol_hist_gs
+        return True, p, tol_hist_gs[:it]
 
-    return False, p, tol_hist_gs
+    return False, p, tol_hist_gs[:it-1]

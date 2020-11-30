@@ -137,12 +137,14 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-%matplotlib inline
-
 sys.path.insert(0, '../demos/BoostingPython')
 
 import solvers
 import csolver
+```
+
+```{code-cell} ipython3
+%matplotlib inline
 ```
 
 ```{code-cell} ipython3
@@ -168,20 +170,30 @@ b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
 ```
 
 ```{code-cell} ipython3
+tol = 1e-10
 max_it = int(1e6)
 ```
 
 ```{code-cell} ipython3
 p = np.zeros((nx, ny))
-
-%time success = solvers.py_gauss_seidel(p, b, dx, tol = 1e-10, max_it = max_it)
+nb_p = p.copy()
+c_p = np.zeros((nx, ny), dtype=np.float64)
 ```
 
 ```{code-cell} ipython3
-c_p = np.zeros((nx, ny), dtype=np.float64)
-c_tol_hist_gs = np.empty(max_it, dtype=np.float64)
+%time success, p, _ = solvers.gauss_seidel(p, b, dx, tol, max_it)
+```
 
-%time success, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, 1e-10, max_it)
+```{code-cell} ipython3
+%time success, nb_p, _ = solvers.gauss_seidel(nb_p, b, dx, tol, max_it, use_numba=True)
+```
+
+```{code-cell} ipython3
+%time success, nb_p, _ = solvers.numba_gauss_seidel(nb_p, b, dx, tol, max_it)
+```
+
+```{code-cell} ipython3
+%time success, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
 ```
 
 ```{code-cell} ipython3
@@ -194,12 +206,12 @@ fig, ax = plt.subplots(2, 2, figsize=(16, 10))
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
 #
-ax[0, 0].contourf(X, Y, p, 20)
+#ax[0, 0].contourf(X, Y, p, 20)
 ax[1, 0].contourf(X, Y, c_p, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))
-ax[0, 1].plot(x, p[:,jc], label=r'$pnew$')
+#ax[0, 1].plot(x, p[:,jc], label=r'$pnew$')
 ax[1, 1].plot(x, c_p[:,jc], label=r'$pnew$')
 
 # add some labels and titles

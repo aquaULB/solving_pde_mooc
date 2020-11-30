@@ -40,6 +40,6 @@ def l2_diff(f1, f2):
     diff : float
         The l2-norm of the difference.
     """
-    l2_diff = np.sqrt(np.sum((f1 - f2)**2))/f1.size
+    l2_diff = np.sqrt(np.sum((f1 - f2)**2)) / f1.size
 
     return l2_diff

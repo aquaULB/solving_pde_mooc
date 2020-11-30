@@ -280,6 +280,32 @@ print_identity('Jacob', 65)
 
 ### Implementing Gauss-Seidel solver
 
++++
+
+We remind you the setup of the problem. We solve the Poisson equation in 2D domain $\displaystyle [0, 1]\times [-\frac12, \frac12]$ with the following right-hand side term:
+
+\begin{equation}
+b = \sin(\pi x) \cos(\pi y) + \sin(5\pi x) \cos(5\pi y)
+\end{equation}
+
+The exact solution of the equation is:
+
+\begin{equation}
+p_e = -\frac{1}{2\pi^2}\sin(\pi x) \cos(\pi y) -\frac{1}{50\pi^2}\sin(5\pi x) \cos(5\pi y)
+\end{equation}
+
+Sample solvers written in Python and Cython are provided along with the course in directory `solving_pde_mooc/notebooks/demos/BoostingPython`. Python solver can be used with or without Numba.
+
+Cython solver is hosted in `BoostingPython/cy`. `BoostingPython/cy/csolver.pyx` contains the source Cython code. Library compiled from the source cose is located in `BoostingPython/cy/lib`. You therefore don't have to recompile the source code but can simply import the library by running:
+```
+import cy.lib.csolver as csolver
+```
+If you're willing to recompile it, we refer you to `BoostingPython/README.md` for concrete instruction and to generic tutorial from Cython's [official documentation][8].
+
+Python and Cython code we provide is thoroughly documented but we will still comment on certain pieces.
+
+[8]: <https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html> "Cython compilation"
+
 ```{code-cell} ipython3
 import sys
 
@@ -297,9 +323,9 @@ import cy.lib.csolver as csolver
 ```
 
 ```{code-cell} ipython3
-# Grid parameters.
-nx = 61                  # number of points in the x direction
-ny = 61                  # number of points in the y direction
+# Grid parameters
+nx = 61                   # number of points in the x direction
+ny = 61                   # number of points in the y direction
 xmin, xmax = 0.0, 1.0     # limits in the x direction
 ymin, ymax = -0.5, 0.5    # limits in the y direction
 lx = xmax - xmin          # domain length in the x direction
@@ -307,6 +333,12 @@ ly = ymax - ymin          # domain length in the y direction
 dx = lx / (nx - 1)        # grid spacing in the x direction
 dy = ly / (ny - 1)        # grid spacing in the y direction
 
+# Iteration parameters
+tol = 1e-10               # convergence precision
+max_it = 1000000          # maximal amount of iterations allowed
+```
+
+```{code-cell} ipython3
 # Create the gridline locations and the mesh grid;
 # see notebook 02_02_Runge_Kutta for more details
 x = np.linspace(xmin, xmax, nx)
@@ -316,11 +348,6 @@ X, Y = np.meshgrid(x, y, indexing ='ij')
 # Compute the rhs
 b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
      np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
-```
-
-```{code-cell} ipython3
-tol = 1e-10
-max_it = 1000000
 ```
 
 ```{code-cell} ipython3
@@ -340,6 +367,8 @@ c_p = np.zeros((nx, ny), dtype=np.float64)
 ```{code-cell} ipython3
 %time _, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
 ```
+
+You can see that the Cython code runs faster than that with Numba. This is the price we pay for choosing to only partially compile our code using Numba. There is *interpreter overhead*, as Python interpreter compiles the source code into bytecode before executing it at each iteration. This is the example, though, when "slow" implementation is deliberate. The interpreter overhead is so little that we don't mind having it to be able to log the iteration progress with `tqmd` package. 
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(2, 2, figsize=(16, 10))

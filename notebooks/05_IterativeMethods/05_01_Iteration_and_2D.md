@@ -68,7 +68,7 @@ $$
     \nabla^2 p(x,y,z)= \frac{\partial^2 p(x,y,z)}{\partial x^2} + \frac{\partial^2 p(x,y,z)}{\partial y^2} + \frac{\partial^2 p(x,y,z)}{\partial z^2} = b(x,y,z)
 $$
 
-where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need $1000$ points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively $8$ Gb of memory. On modern desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries! Allocating the memory to store such matrix is therefore out of sight for even for the largest supercomputer available today (see the [list of world's largest supercomputers][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook `03_02_HigherOrderDerivative_and_Functions`). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
+where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need $1000$ points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively $8$ Gb of memory. On modern desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries! Allocating the memory to store such a matrix is therefore out of sight for even for the largest supercomputer available today (see the [list of world's largest supercomputers][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook `03_02_HigherOrderDerivative_and_Functions`). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
 
 We will further explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi and Gauss-Seidel iteration methods - to obtain the solution of the Poisson equation.
 
@@ -227,8 +227,8 @@ y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
 
 # Compute the rhs. Note that we non-dimensionalize the coordinates
-# variables x and y with the size of the domain in respective dire-
-# ction.
+# x and y with the size of the domain in their respective dire-
+# ctions.
 b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
   + np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
 
@@ -395,7 +395,7 @@ ax_3.set_xlabel(r'$x$')
 ax_3.set_ylabel(r'$p$')
 ax_3.set_title(r'$p(x,0)$')
 
-ax_3.legend()
+ax_3.legend();
 ```
 
 We have collected some conclusive evidence that our procedure worked very nicely!
@@ -474,7 +474,7 @@ p0 = np.zeros((nx, ny))
 pnew = p0.copy()
 ```
 
-We then iterate using a `while` loop and stop the loop once the $L2$-norm gets smaller than the desired tolerance. We also add a break statement for the case of number of iterations exceeding the limit we set.
+We then iterate using a `while` loop and stop the loop once the $L2$-norm gets smaller than the desired tolerance. We also add a break statement to exit the loop if the number of iterations exceeds the limit we set.
 
 ```{code-cell} ipython3
 tolerance = 1e-10
@@ -585,7 +585,7 @@ ax_3.set_xlabel(r'$x$')
 ax_3.set_ylabel(r'$p$')
 ax_3.set_title(r'$p(x,0)$')
 
-ax_3.legend()
+ax_3.legend();
 ```
 
 Note that to achieve this $L2$ precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
@@ -638,7 +638,7 @@ p^{k+1}_{i,j}=\frac14(p^{k+1}_{i-1,j}+p^k_{i+1,j}+p^{k+1}_{i,j-1}+p^k_{i,j+1})-\
 
 This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro whereas the Jacobi method took a few seconds.
 
-So you might think that the Gauss-Seidel method is completely useless. But if we could speedup the Python loops somehow, we'd benefited from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
+So you might think that the Gauss-Seidel method is completely useless. But if we could speedup the Python loops somehow, we could benefit from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
 
 Let's solve our problem with the Gauss-Seidel method, **but beware**, it will take some time...
 

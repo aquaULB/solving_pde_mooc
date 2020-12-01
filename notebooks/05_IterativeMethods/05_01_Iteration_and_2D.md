@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Convergence-of-Jacobi-and-Gauss-Seidel-methods" data-toc-modified-id="Convergence-of-Jacobi-and-Gauss-Seidel-methods-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Convergence of Jacobi and Gauss-Seidel methods</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>References</a></span></li></ul></div>
 
 +++
 
@@ -621,7 +621,7 @@ Note how we are looping in row major order. For each value of `i`, the inner loo
 
 +++
 
-In the Gauss-Seidel method, one takes advantage of this looping order to use updated as soon as they become available. The iteration procedure then reads:
+In the Gauss-Seidel method, one takes advantage of this looping order to use updated values as soon as they become available. The iteration procedure then reads:
 
 \begin{equation}
     \label{eq:iterkSolGS}
@@ -630,9 +630,9 @@ p^{k+1}_{i,j}=\frac14(p^{k+1}_{i-1,j}+p^k_{i+1,j}+p^{k+1}_{i,j-1}+p^k_{i,j+1})-\
 
 +++
 
-This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro wheres as the Jacobi method took a few seconds.
+This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro whereas the Jacobi method took a few seconds.
 
-So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the next notebook we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
+So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
 
 Let's solve our problem with the Gauss-Seidel method, **but beware**, it will take some time...
 
@@ -658,6 +658,10 @@ while (diff > tolerance):
         break
     
     p = pnew.copy()
+    
+    # We only modify interior nodes. The boundary nodes remain equal to
+    # zero and the Dirichlet boundary conditions are therefore automatically
+    # enforced.
     for i in range(1, nx-1):
         for j in range(1, ny-1):
             pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
@@ -673,7 +677,7 @@ else:
     print(f'\nThe solution converged after {iter} iterations')
 ```
 
-The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how the `l2_dif` decrease during the iteration procedure and compare the output with the Jacobi method:
+The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how `l2_diff` decreases during the iteration procedure and compare the output with the Jacobi method:
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10,5))
@@ -688,6 +692,8 @@ ax.set_title('l2_diff decay')
 ax.legend();
 ```
 
+## Convergence of Jacobi and Gauss-Seidel methods
+
 We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
 The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
@@ -697,7 +703,7 @@ If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using ag
     A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
 \end{equation*}
 
-$A^J_1$ is the $-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
+$A^J_1=-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
 
 \begin{align*}
   L=
@@ -777,12 +783,12 @@ The quantity $\rho= \hbox{max} \vert \lambda_i\vert$ is called the spectral radi
   \rho(A^{-1}_1 A_2) < 1.
 \end{align*}
 
-When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate its rate of convergence. For that purpose, let us introduce the $l2$ matrix norm defined as:
+When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate its rate of convergence. For that purpose, let us introduce the $L2$ matrix norm defined as:
 
 \begin{equation*}
   \| G \|_2 = \max_{\boldsymbol x}\frac{\| G\boldsymbol x \|}{\| \boldsymbol x \|}.
 \end{equation*}
- where $G$ is any matrix. One says that the matrix norm is induced by the $l2$-norm $\|\cdot\|$ defined for vectors $\boldsymbol x$. Like all matrix norms, it satisfies the submultiplicativity rule \cite{watkins2010}:
+ where $G$ is any matrix. One says that the matrix norm is induced by the $L2$-norm $\|\cdot\|$ defined for vectors $\boldsymbol x$. Like all matrix norms, it satisfies the submultiplicativity rule \cite{watkins2010}:
 
  \begin{equation*}
   \| AB \|_2 \leq \| A \|_2 \| B \|_2.
@@ -790,13 +796,13 @@ When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate it
 
 for any matrices $A$ and $B$.
 
-Using the definition of the $l2$ norm and the submultiplicativity rule we then have:
+Using the definition of the $L2$ norm and the submultiplicativity rule we then have:
 
 \begin{equation*}
   \boldsymbol \| \epsilon^{k+1} \| = \| \left(A^{-1}_1 A_k\right)^{k+1}\boldsymbol \epsilon^0 \| \leq \| \left(A^{-1}_1 A_k\right)\|_2^{k+1}\boldsymbol \| \epsilon^0 \|
 \end{equation*}
 
-An important result of linear algebra is that the $l2$ norm of a matrix is equal to its largest singular value $\sigma_1$ \cite{horn2013}:
+An important result of linear algebra is that the $L2$ norm of a matrix is equal to its largest singular value $\sigma_1$ \cite{horn2013}:
 
 \begin{equation*}
   \| A \|_2 = \sigma_1(A).
@@ -808,13 +814,13 @@ We won't use the concept of singular values in this course so we will not descri
   \sigma_1(A) = \rho(A)\;\;\;\; \hbox{if $A$ is symmetric}.
 \end{equation*}
 
-For such matrices, we then have:
+We then have:
 
 \begin{equation*}
   \frac{\boldsymbol \| \epsilon^{k+1} \|}{\| \epsilon^0 \|}\leq \rho^{k+1}(A^{-1}_1 A_2).
 \end{equation*}
 
-Reducing the $l2$-norm of the error by a factor $10^{-m}$ after $k$ iterations therefore requires,
+Reducing the $L2$-norm of the error by a factor $10^{-m}$ after $k$ iterations therefore requires,
 
 \begin{equation*}
   k \geq -\frac{m}{\log_{10}\rho (A^{-1}_1 A_2) } = -\frac{m}{\log_{10}(\hbox{max} \vert \lambda_i\vert )}
@@ -854,7 +860,7 @@ The spectral radius is thus,
   \rho_{GS} = \rho_{JC}^2 = \frac14\left[\cos \frac{\pi}{nx-1} + \cos \frac{\pi}{ny-1}\right ]^2
 \end{equation*}
 
-and the method converges since $\rho_{GS} < 1$. The above relation also implies that the rate of convergence of the Gauss-Seidel is twice that of the Jacobi method. If $nx=ny$ are both large, we have
+and the method converges since $\rho_{GS} < 1$. The above relation also implies that the rate of convergence of the Gauss-Seidel is about twice that of the Jacobi method when $nx=ny$. If both are large, we have
 
 \begin{equation*}
   \rho_{GS} \simeq 1 - \frac{\pi^2}{(nx-1)^2}
@@ -868,7 +874,7 @@ These results confirm our observations when solving the sample problem described
 
 ## Summary
 
-In this notebook we have shown how to define a cartesian grid for solving two-dimensional partial differential equations using the finite difference discretization. The strategy can easily be extended to three-dimensional problems. When they require matrix inversions, higher-dimensional problems rapidly make direct inversion methods very inefficient if not impracticable. For such cases, we have shown how iterative methods can come to the rescue. We have described in detail the Jacobi and Gauss-Seidel methods and rapidly presented the classical theory used to analyze their stability. The implementation of some iterative methods like the Jacobi method can be done directly with `numpy` and therefore benefit from the speedup of precompiled code. Others, like the Gauss-Seidel method, require an explicit looping on the grid nodes in a given order and this can lead to very slow algorithm if the loops are performed with Python loops. To circumvent this difficulty we provide in the next notebook several strategies to boost your Python programs.
+In this notebook we have shown how to define a cartesian grid for solving two-dimensional partial differential equations using the finite difference discretization. The strategy can easily be extended to three-dimensional problems. When they require matrix inversions, higher-dimensional problems rapidly make direct inversion methods very inefficient if not impracticable. For such cases, we have shown how iterative methods can come to the rescue. We have described in detail the Jacobi and Gauss-Seidel methods and rapidly presented the classical theory used to analyze their stability. The implementation of some iterative methods like the Jacobi method can be done directly with `numpy` and therefore benefit from the speedup of precompiled code. Others, like the Gauss-Seidel method, require an explicit looping on the grid nodes in a given order and this can lead to very slow algorithm if the loops are performed with Python loops. To circumvent this difficulty we provide in the third notebook of this chapter several strategies to boost your Python programs. But before that, we introduce another type of iterative method in the next notebook.
 
 +++
 

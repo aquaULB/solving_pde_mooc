@@ -71,7 +71,7 @@ A=A^{T} \hbox{ and } \boldsymbol{p}^{T}A\boldsymbol p > 0 \hbox{ for any } \bold
 
 The resolution of the linear system may then be viewed as a minimization problem and one of the most popular method to use in that case is the conjugate gradient method.
 
-In this notebook we will describe the conjugate gradient method algorithm but let us first introduce some keys concepts and a more primitive algorithm called the method of steepest descent.
+In this notebook we will describe the conjugate gradient method algorithm but let us first introduce some key concepts and a more primitive algorithm called the method of steepest descent.
 
 +++
 
@@ -131,7 +131,7 @@ The first method we consider is the *steepest descent method*.
 We showed in the previous section that the solution of the linear system minimizes the quadratic functional $J$ and that the residual is aligned with the gradient of $J$. To rapidly lower the value of $J$, one can therefore head in that direction to go from ${\boldsymbol p}^{k}$ to ${\boldsymbol p}^{k+1}$. This is exactly what the steepest descent method does and it also chooses $\alpha_k$ so that $J({\boldsymbol p}^{k+1})$ is as small as possible. We therefore have,
 
 \begin{align}
-{\boldsymbol d}^{k} &= {\boldsymbol r}^{k} \\
+{\boldsymbol d}^{k} &= {\boldsymbol r}^{k}, \\
 \frac{\partial}{\partial \alpha_k}{J({\boldsymbol p}^{k+1})}=\frac{\partial}{\partial \alpha_k}J({\boldsymbol p}^{k}+ \alpha_k {\boldsymbol r}^{k})&= 0.
 \end{align}
 
@@ -211,7 +211,6 @@ def A(v, dx, dy):
     
     Parameters
     ----------
-    
     v : numpy.ndarray
         input vector
     dx : float
@@ -226,13 +225,13 @@ def A(v, dx, dy):
         action of A on v
     """
     
-    Av = -((v[:-2, 1:-1] - 2.0*v[1:-1, 1:-1] + v[2:, 1:-1]) / dx**2 
-            +(v[1:-1, :-2] - 2.0*v[1:-1, 1:-1] + v[1:-1, 2:]) / dy**2)
+    Av = -((v[:-2, 1:-1]-2.0*v[1:-1, 1:-1]+v[2:, 1:-1])/dx**2 
+       + (v[1:-1, :-2]-2.0*v[1:-1,1:-1]+v[1:-1, 2:])/dy**2)
     
     return Av
 ```
 
-Let's now compute the initial guess and allocate some storage for the residual $r$ and $A(r)$:
+Let's now compute the initial guess and create storages for the residual $r$ and $A(r)$:
 
 ```{code-cell} ipython3
 # Initial guess
@@ -263,7 +262,6 @@ tol_hist_jac = []
 p = p0.copy()
 
 while (diff > tolerance):
-    
     if it > max_it:
         print('\nSolution did not converged within the maximum'
               ' number of iterations'
@@ -274,17 +272,17 @@ while (diff > tolerance):
     r[1:-1, 1:-1] = -b[1:-1, 1:-1] - A(p, dx, dy)
     # Laplacian of the residual
     Ar[1:-1, 1:-1] = A(r, dx, dy)
-    # Magnitude of jump.
-    alpha = np.sum(r * r) / np.sum(r * Ar)
+    # Magnitude of jump
+    alpha = np.sum(r*r) / np.sum(r*Ar)
     # Iterated solution
-    pnew = p + alpha * r
+    pnew = p + alpha*r
 
     diff = l2_diff(pnew, p)
     tol_hist_jac.append(diff)
     
     # Get ready for next iteration
     it += 1
-    p = pnew.copy()
+    np.copyto(p, pnew)
     
     # We update our progress bar
     pbar.update(1)
@@ -301,7 +299,8 @@ We can measure the accuracy of our solution with the same diagnostics as above.
 
 ```{code-cell} ipython3
 diff = l2_diff(pnew, p_exact)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution '
+      f'and the exact solution is:\n{diff}')
 ```
 
 ```{code-cell} ipython3
@@ -360,7 +359,7 @@ The conjugate gradient method is built upon the idea of reducing the number of j
 {\boldsymbol d}^{n+1}&={\boldsymbol r}^{n+1}+\beta^{n+1}{\boldsymbol d}^{n}, \hbox{ with } \beta^{n+1} = \frac{{\boldsymbol r}^{n+1} \cdot {\boldsymbol r}^{n+1}}{{\boldsymbol r}^n \cdot {\boldsymbol r}^n}\\ \hbox{ and } {\boldsymbol d}^{0} &= {\boldsymbol r}^{0}.
 \end{align}
 
-Obviously, the search directions are no longer equal to the residuals but they are a linear combination of the residual and the previous search direction. What is remarkable about this algorithm is that the residual at iteration $k+1$ is orthogonal not only to the previous residual but to all of them. As a vector space of dimension $n$ can only contain $n$ orthogonal vectors, we immediately conclude that the conjugate gradient method necessarily converges (remember the restriction we put on $A$ though) ! The derivation of the properties of the conjugate gradient method can cause some severe headaches. However, they are beautifully explained in this elegant paper: \cite{Shewchuk1994}. Here we only apply the algorithm to our sample problem and refer the interested reader to this paper.
+Obviously, the search directions are no longer equal to the residuals but they are a linear combination of the residual and the previous search direction. What is remarkable about this algorithm is that the residual at iteration $k+1$ is orthogonal not only to the previous residual but to all of them. As a vector space of dimension $n$ can only contain $n$ orthogonal vectors, we immediately conclude that the conjugate gradient method necessarily converges (remember the restriction we put on $A$ though)! The derivation of the properties of the conjugate gradient method can cause some severe headaches. However, they are beautifully explained in this elegant paper: \cite{Shewchuk1994}. Here we only apply the algorithm to our sample problem and refer the interested reader to this paper.
 
 A possible implementation of the method is as follows:
 
@@ -391,7 +390,6 @@ r[1:-1, 1:-1] = -b[1:-1, 1:-1] - A(p, dx, dy)
 d = r.copy()
 
 while (diff > tolerance):
-    
     if it > max_it:
         print('\nSolution did not converged within the maximum'
               ' number of iterations'
@@ -401,24 +399,24 @@ while (diff > tolerance):
     # Laplacian of the search direction.
     Ad[1:-1, 1:-1] = A(d, dx, dy)
     # Magnitude of jump.
-    alpha = np.sum(r * r) / np.sum(d * Ad)
+    alpha = np.sum(r*r) / np.sum(d*Ad)
     # Iterated solution
-    pnew = p + alpha * d
+    pnew = p + alpha*d
     # Intermediate computation
-    beta_denom = np.sum(r * r)
+    beta_denom = np.sum(r*r)
     # Update the residual.
-    r = r - alpha * Ad
+    r = r - alpha*Ad
     # Compute beta
-    beta = np.sum(r * r) / beta_denom
+    beta = np.sum(r*r) / beta_denom
     # Update the search direction.
-    d = r + beta * d
+    d = r + beta*d
     
     diff = l2_diff(pnew, p)
     tol_hist_jac.append(diff)
     
     # Get ready for next iteration
     it += 1
-    p = pnew.copy()
+    np.copyto(p, pnew)
     
     # We update our progress bar
     pbar.update(1)
@@ -431,13 +429,14 @@ else:
 pbar.close()
 ```
 
-You are not mistaken, it only took 3 iterations to reach the desired tolerance ! This is a bit extreme because the right-hand side of the equation is simple. But you can try other choices and still observe the conjugate gradient method is much faster than the steepest descent method.
+You are not mistaken, it only took 3 iterations to reach the desired tolerance! This is a rather a special case because the right-hand side of the equation is simple. But you can try other choices and still observe the conjugate gradient method to be much faster than the steepest descent method.
 
-To be sure, let's measure the accuracy of our solution with our usual diagnostics:
+To be sure, let's measure the accuracy of our solution using our usual diagnostics:
 
 ```{code-cell} ipython3
 diff = l2_diff(pnew, p_exact)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution '
+      f'and the exact solution is:\n{diff}')
 ```
 
 ```{code-cell} ipython3

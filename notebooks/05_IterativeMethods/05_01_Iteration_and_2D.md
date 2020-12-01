@@ -60,17 +60,17 @@ from norms import l2_diff
 plt.style.use('../styles/mainstyle.use')
 ```
 
-In the previous chapter we have discussed how to discretized two examples of partial differential equations: the one dimensional first order wave equation and the heat equation.
+In the previous chapter we have discussed how to discretize two examples of partial differential equations: the one dimensional first order wave equation and the heat equation.
 
-For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix system. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, these become less useful in terms of computational time and they also have very large memory requirements. This is especially true when solving multi-dimensional problems. Consider for example the Poisson equation in three dimensions:
+For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, these become less useful in terms of computational time and they also have very large memory requirements. This is especially true when solving multi-dimensional problems. Consider for example the Poisson equation in three dimensions:
 
 $$
     \nabla^2 p(x,y,z)= \frac{\partial^2 p(x,y,z)}{\partial x^2} + \frac{\partial^2 p(x,y,z)}{\partial y^2} + \frac{\partial^2 p(x,y,z)}{\partial z^2} = b(x,y,z)
 $$
 
-where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need 1000 points in each direction. That translate into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively 8 Gb of memory. On current desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries ! Allocating the memory to hold such a matrix is therefore out of sight for even for the largest supercomputer available today (for a current list of the largest computers in the world see [Top500.org][51]). Fortunately, the matrix for the laplacian operator is *sparse* (see notebook 03_02_HigherOrderDerivative_and_Functions). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
+where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need 1000 points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively 8 Gb of memory. On current desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries ! Allocating the memory to hold such a matrix is therefore out of sight for even for the largest supercomputer available today (for a current list of the largest computers in the world see [Top500.org][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook 03_02_HigherOrderDerivative_and_Functions). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
 
-In the next section, we explain in more detail how to discretize partial differential equations in more than one dimension and introduce one of the simplest iterative solver - the Jacobi iteration method - to obtain the solution of the Poisson equation.
+In the next section, we explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi iteration method and Gauss-Seidel methods - to obtain the solution of the Poisson equation.
 
 [51]: <https://www.top500.org/lists/top500/> "Top"
 
@@ -117,10 +117,10 @@ The discretization of \eqref{eq:Poisson2D} using finite differences is straightf
     \label{eq:discPoisson2D}
     \frac{p_{i-1,j}-2p_{i,j} + p_{i+1,j}}{\Delta x^2} &+ \frac{p_{i,j-1}-2p_{i,j} + p_{i,j+1}}{\Delta y^2}= b_{i,j} \\
     &\Leftrightarrow \nonumber \\
-    a p_{i-1,j} + bp_{i,j} + a &p_{i+1,j} + cp_{i,j-1}+ cp_{i,j+1} = b_{i,j} \nonumber
+    a p_{i-1,j} + cp_{i,j} + a &p_{i+1,j} + gp_{i,j-1}+ gp_{i,j+1} = b_{i,j} \nonumber
 \end{align}
 
-with $a=\displaystyle \frac{1}{\Delta x^2}$, $b=\displaystyle \frac{1}{\Delta y^2}$, $c=\displaystyle -\frac{2}{\Delta x^2}-\frac{2}{\Delta y^2}$.
+with $a=\displaystyle \frac{1}{\Delta x^2}$, $g=\displaystyle \frac{1}{\Delta y^2}$, $c=\displaystyle -\frac{2}{\Delta x^2}-\frac{2}{\Delta y^2}$.
 
 This equation is valid for any couple $(i,j)$ located away from the boundaries. At boundary nodes, the expression needs to be modified to take into account boundary conditions. To continue the discussion, we adopt *Dirichlet boundary conditions*:
 
@@ -128,30 +128,30 @@ $$
 p_{0, j} = p_{nx-1, j} = 0\;\; \forall j,\;\;p_{i,0} = p_{i,ny-1}=0\;\; \forall i.
 $$
 
-This implies that we have to solve a system containing a total of $(nx-2)\times (ny-2)$ unkowns.
-If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknows consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{1,1},\ldots, p_{1,ny-2}$. The list then goes on with $p_{2,1}, p_{2,2},\ldots, p_{2,ny-2}$ and so on until we reach the last components $p_{nx-2,1}, p_{nx-2,2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $i+j\times (ny-2)$. 
+This implies that we have to solve a system containing a total of $(nx-2)\times (ny-2)$ unknowns.
+If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{1,1},\ldots, p_{1,ny-2}$. The list then goes on with $p_{2,1}, p_{2,2},\ldots, p_{2,ny-2}$ and so on until we reach the last components $p_{nx-2,1}, p_{nx-2,2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $i+j\times (ny-2)$. 
 
 Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2D} may then be written as:
 
 \begin{align}
     \left(
       \begin{array}{*{16}c}
-        c & a &   &   & b &   &   &   &   &   &   &   &   &   &   &   \\
-        a & c & a &   &   & b &   &   &   &   &   &   &   &   &   &   \\
-          & a & c & a &   &   & b &   &   &   &   &   &   &   &   &   \\
-          &   & a & c &   &   &   & b &   &   &   &   &   &   &   &   \\
-          b & &   &   & c & a &   &   & b &   &   &   &   &   &   &   \\
-          & b &   &   & a & c & a &   &   & b &   &   &   &   &   &   \\
-          &   & b &   &   & a & c & a &   &   & b &   &   &   &   &   \\
-          &   &   & b &   &   & a & c &   &   &   & b &   &   &   &   \\
-          &   &   &   & b &   &   &   & c & a &   &   & b &   &   &   \\
-          &   &   &   &   & b &   &   & a & c & a &   &   & b &   &   \\
-          &   &   &   &   &   & b &   &   & a & c & a &   &   & b &   \\
-          &   &   &   &   &   &   & b &   &   & a & c &   &   &   & b \\
-          &   &   &   &   &   &   &   & b &   &   &   & c & a &   &   \\
-          &   &   &   &   &   &   &   &   & b &   &   & a & c & a &   \\
-          &   &   &   &   &   &   &   &   &   & b &   &   & a & c & a \\
-          &   &   &   &   &   &   &   &   &   &   & b &   &   & a & c
+        c & a &   &   & g &   &   &   &   &   &   &   &   &   &   &   \\
+        a & c & a &   &   & g &   &   &   &   &   &   &   &   &   &   \\
+          & a & c & a &   &   & g &   &   &   &   &   &   &   &   &   \\
+          &   & a & c &   &   &   & g &   &   &   &   &   &   &   &   \\
+          b & &   &   & c & a &   &   & g &   &   &   &   &   &   &   \\
+          & g &   &   & a & c & a &   &   & g &   &   &   &   &   &   \\
+          &   & g &   &   & a & c & a &   &   & g &   &   &   &   &   \\
+          &   &   & g &   &   & a & c &   &   &   & g &   &   &   &   \\
+          &   &   &   & g &   &   &   & c & a &   &   & g &   &   &   \\
+          &   &   &   &   & g &   &   & a & c & a &   &   & g &   &   \\
+          &   &   &   &   &   & g &   &   & a & c & a &   &   & g &   \\
+          &   &   &   &   &   &   & g &   &   & a & c &   &   &   & g \\
+          &   &   &   &   &   &   &   & g &   &   &   & c & a &   &   \\
+          &   &   &   &   &   &   &   &   & g &   &   & a & c & a &   \\
+          &   &   &   &   &   &   &   &   &   & g &   &   & a & c & a \\
+          &   &   &   &   &   &   &   &   &   &   & g &   &   & a & c
       \end{array}
     \right)
     \left(
@@ -169,11 +169,11 @@ Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2
 
 All the blank areas are filled fill zeros and the matrix is sparse. Pay attention to the extra zeros on the diagonals that occur because of the boundary conditions.
 
-As we did in the one dimensional case, we can graphically represent the stencil we are using. Assuming that $\Delta x=\Delta y$ and for second-order accurate centered finite differences in both directions it looks like:
+As we did in the one dimensional case, we can graphically represent the stencil we are using. Assuming that $\Delta x=\Delta y$, the stencil we just introduced looks like:
 
 <img width="300px" src="../figures/2Dstencil5pt.png">
 
-The factor $\frac{1}{\Delta x^2}$ in the drawing is there to remind you that all the values in the stencil need to be divided this factor to get the correct finite difference formula.
+The factor $\frac{1}{\Delta x^2}$ in the drawing is there to remind you that all the values in the stencil need to be divided by this factor to get the correct finite difference formula.
 
 Note that several other stencils are possible. If we had adopted fourth-order accurate centered finite differences, the stencil would be:
 
@@ -183,7 +183,7 @@ But there are also some more complex possibilities in which one uses more neighb
 
 <img width="300px" src="../figures/2Dstencil9pt.png">
 
-With more points in the stencil, we would expect to achieve higher accuracy. For the Poisson equation, the last stencil is in fact only second-order accurate. But it is fourth-order accurate for the Laplace equation \cite{iserles2008}.
+With more points in the stencil, we would expect to achieve higher-order accuracy. For the Poisson equation, the last stencil is in fact only second-order accurate. But it is fourth-order accurate for the Laplace equation \cite{iserles2008}.
 
 +++
 
@@ -204,8 +204,6 @@ p_e = -\frac{1}{2\pi^2}\sin(\pi x) \cos(\pi y) -\frac{1}{50\pi^2}\sin(5\pi x) \c
 +++
 
 Let's define some grid parameters for the numerical discretization.
-
-WARNING: change the indexing in meshgrid
 
 ```{code-cell} ipython3
 # Grid parameters.
@@ -232,6 +230,16 @@ X, Y = np.meshgrid(x, y)
 b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
      np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
 
+# b is currently a 2D array. We need to convert it to a row-major
+# ordered 1D array. This is done with the flatten numpy function.
+# We use the parameter 'F' to specify that we want want row-major
+# ordering. The letter 'F' is used because this is the natural
+# ordering of the popular Fortran language. For column-major
+# ordering you can pass 'C' as paremeter (column-major ordering)
+# is the natural ordering for the C language.
+# More info
+# https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html
+
 # Flatten the rhs
 bflat = b[1:-1, 1:-1].flatten('F')
 
@@ -244,8 +252,8 @@ In the following two cells, we define a routine to construct the differential ma
 ```{code-cell} ipython3
 def d2_mat_dirichlet_2d(nx, ny, dx, dy):
     """
-    Constructs the centered second-order accurate second-order derivative for
-    Dirichlet boundary conditions in 2D
+    Constructs the matrix for the centered second-order accurate second-order derivative 
+    for Dirichlet boundary conditions in 2D
 
     Parameters
     ----------
@@ -265,16 +273,16 @@ def d2_mat_dirichlet_2d(nx, ny, dx, dy):
         vative with Dirichlet boundary conditions
     """
     a = 1.0 / dx**2
-    b = 1.0 / dy**2
-    c = -2.0*a - 2.0*b
+    g = 1.0 / dy**2
+    c = -2.0*a - 2.0*g
     
     diag_a = a * np.ones((nx-2) * (ny-2) - 1)
     diag_a[nx-3::nx-2] = 0
-    diag_b = b * np.ones((nx-2) * (ny-3))
+    diag_g = g * np.ones((nx-2) * (ny-3))
     diag_c = c * np.ones((nx-2) * (ny-2))
     
     # We construct a sequence of main diagonal elements,
-    diagonals = [diag_b, diag_a, diag_c, diag_a, diag_b]
+    diagonals = [diag_g, diag_a, diag_c, diag_a, diag_g]
     # and a sequence of positions of the diagonal entries relative to the main
     # diagonal.
     offsets = [-(ny-2), -1, 0, 1, ny-2]
@@ -301,7 +309,7 @@ def p_exact_2d(X, Y):
     X : numpy.ndarray
         array of x coordinates for all grid points
     Y : numpy.ndarray
-        array of x coordinates for all grid points
+        array of y coordinates for all grid points
 
     Returns
     -------
@@ -322,7 +330,7 @@ A = d2_mat_dirichlet_2d(nx, ny, dx, dy)
 Ainv = np.linalg.inv(A)
 
 # The numerical solution is obtained by performing
-# the multiplication A^{-1}*b. This returns an vector
+# the multiplication A^{-1}*b. This returns a vector
 # in row major ordering. To convert it back to a 2D array
 # that is of the form p(x,y) we pass it immediately to 
 # the reshape function.
@@ -353,7 +361,7 @@ diff = l2_diff(p, p_e)
 print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
 ```
 
-We can represent graphically the exact solution and the computed solutions in contour plots and compare them along one line in the computational domain:
+We can represent graphically the exact solution and the computed solution in contour plots and compare them along one line in the computational domain:
 
 ```{code-cell} ipython3
 fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
@@ -364,8 +372,8 @@ fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
 #
-ax_1.contourf(X, Y, p, 20)
-ax_2.contourf(X, Y, p_e, 20)
+ax_1.contourf(X, Y, p_e, 20)
+ax_2.contourf(X, Y, p, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))
@@ -390,13 +398,13 @@ ax_3.legend();
 
 We have collected some conclusive evidence that our procedure worked very nicely !
 
-There is however a significant drawback. If you want to increase the precision, your need to refine the grid. But beware, on a fairly recent Macbook Pro with 16Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by 2. We therefore need another way of handling this type of problems.
+There is however a significant drawback. If you want to increase the precision, you need to refine the grid. But beware, on a fairly recent Macbook Pro with 16Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by 2. We therefore need another way of handling this type of problems.
 
 +++
 
 ## Jacobi method
 
-In the previous section we have solved the Poisson equation by inverting the discretized laplacian operator. This requires the explicit construction of the corresponding matrix and incurs a high storage cost associated with the computation of the inverse matrix. In this section we follow a radically different strategy and introduce a simple iterative method: the Jacobi method.
+In the previous section we have solved the Poisson equation by inverting the discretized Laplace operator. This requires the explicit construction of the corresponding matrix and incurs a high storage cost associated with the computation of the inverse matrix. In this section we follow a radically different strategy and introduce a simple iterative method: the Jacobi method.
 
 Let's go back to our discretised Poisson equation. To simplify the notation, we assume here that $\Delta x=\Delta y = \Delta$; the extension to the more general case is quite simple.
 
@@ -417,7 +425,7 @@ Imagine we pick any initial guess $p^0_{i,j}$ for the solution we are seeking. E
 
 Again, unless we are extremely lucky, the updated value $p^1_{i,j}$ will not satisfy \eqref{eq:iterSolPoisson} but maybe it got closer. The idea behind iterative methods is to continue this process hoping that the updated values converge to the desired solution. 
 
-The simple iterative procedure we outlined above is called the Jacobi method. In the next notebook we will prove mathematically that for the Poisson equation it does indeed converge to the exact solution. Here will implement it and empirically observe that this is the case for our toy problem.
+The simple iterative procedure we outlined above is called the Jacobi method. Below we will prove mathematically that for the Poisson equation it does indeed converge to the exact solution. Here we will implement it and empirically observe that this is the case for our toy problem.
 
 In the Jacobi method, the iterated value is computed as follows:
 
@@ -426,7 +434,7 @@ In the Jacobi method, the iterated value is computed as follows:
 p^{k+1}_{i,j}=\frac14(p^k_{i-1,j}+p^k_{i+1,j}+p^k_{i,j-1}+p^k_{i,j+1})-\frac14b_{i,j}\Delta^2
 \end{equation}
 
-There is of course no exact way to determine if we have performed enough iterations. However, if the iterative method is able to solve the equation considered, the difference between too successive iterated values should become increasingly small as we converge to the exact solution. We will therefore adopt the same strategy as the one we used for the grid convergence study. We will measure the difference in L2-norm between $p^{k+1}$ and $p^k$ and stop iterating once it falls below a given values.
+There is of course no exact way to determine if we have performed enough iterations. However, if the iterative method is able to solve the equation, the difference between too successive iterated values should become increasingly small as we converge to the exact solution. We will therefore adopt the same strategy as the one we used for the grid convergence study. We will measure the difference in L2-norm between $p^{k+1}$ and $p^k$ and stop iterating once it falls below a given values.
 
 +++
 
@@ -464,7 +472,7 @@ p0 = np.zeros((nx,ny))
 pnew = p0.copy()
 ```
 
-We then iterate using a `while` loop and stop the loop once the l2-norm get smaller than the desired tolerance. We also add a break statement in case the number of iterations get too large.
+We then iterate using a `while` loop and stop the loop once the L2-norm gets smaller than the desired tolerance. We also add a break statement in case the number of iterations gets too large.
 
 ```{code-cell} ipython3
 tolerance = 1e-10
@@ -513,8 +521,9 @@ while (diff > tolerance):
         break
     
     p = pnew.copy()
-    # We need to mention that this formula properly takes into account
-    # boundary conditions
+    # We only modify interior nodes. The boundary nodes remain equal to
+    # zero and the Dirichlet boundary conditions are therefore automatically
+    # enforced.
     pnew[1:-1, 1:-1] = ( 0.25*(p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2]
                              + p[1:-1, 2:] - b[1:-1, 1:-1]*dx**2 ))
     
@@ -573,7 +582,7 @@ ax_3.set_title(r'$p(x,0)$')
 ax_3.legend();
 ```
 
-Note that to achieve this l2 precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
+Note that to achieve this L2 precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
 
 A last diagnostic we report here is the sequence of the `l2_diff` during the iterative procedure. It shows how `l2_diff` progressively decays below the desired tolerance.
 
@@ -587,7 +596,7 @@ ax.set_ylabel('l2_diff')
 ax.set_title('l2_diff decay');
 ```
 
-For the problem considered, we observe that the tolerance decreases smoothly (in semi-log scale) during the iterative procedure. But this is not systematic, the decay may more erratic in some cases.
+For the problem considered, we observe that the tolerance decreases smoothly (in semi-log scale) during the iterative procedure. But this is not systematic for all iterative methods, the decay may more erratic in some cases.
 
 Now the good news. You may safely repeat the above iteration method with larger values of `nx` or `ny`. Multiplying those values by 2 or 3 will likely not exhaust your computer.
 

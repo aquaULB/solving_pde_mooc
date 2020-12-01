@@ -474,7 +474,11 @@ ax_3.legend();
 
 ## Summary
 
-To be written...
+In this notebook we provided an illustration of methods known as projection methods. They are called in this way because the jump from one iteration to the next one is along specific search directions.
+
+The method of steepest descent and the conjugate gradient methods are basic methods belonging to this class. The literature on this topic is vast and there exists a large collection of sophisticated methods tailored to many specific cases. Here we have only scratched the surface.
+
+The last notebook of this chapter will be devoted to a programming topic. As promised, we will show you how to speed up your Python code when you cannot rely directly on some precompiled function available in `numpy` or `scipy`.
 
 +++
 

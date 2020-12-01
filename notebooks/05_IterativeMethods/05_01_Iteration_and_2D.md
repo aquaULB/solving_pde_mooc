@@ -62,17 +62,17 @@ plt.style.use('../styles/mainstyle.use')
 
 In the previous chapter we have discussed how to discretize two examples of partial differential equations: the one dimensional first order wave equation and the heat equation.
 
-For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, these become less useful in terms of computational time and they also have very large memory requirements. This is especially true when solving multi-dimensional problems. Consider for example the Poisson equation in three dimensions:
+For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, matrix inversion becomes an expensive operation in terms of computational time and memory. This is especially true when solving multi-dimensional problems. Consider for example the Poisson equation in three dimensions:
 
 $$
     \nabla^2 p(x,y,z)= \frac{\partial^2 p(x,y,z)}{\partial x^2} + \frac{\partial^2 p(x,y,z)}{\partial y^2} + \frac{\partial^2 p(x,y,z)}{\partial z^2} = b(x,y,z)
 $$
 
-where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need 1000 points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively 8 Gb of memory. On current desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries ! Allocating the memory to hold such a matrix is therefore out of sight for even for the largest supercomputer available today (for a current list of the largest computers in the world see [Top500.org][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook 03_02_HigherOrderDerivative_and_Functions). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
+where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need $1000$ points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively $8$ Gb of memory. On current desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries! Allocating the memory to store such matrix is therefore out of sight for even for the largest supercomputer available today (for a current list of the largest computers in the world see [Top500.org][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook `03_02_HigherOrderDerivative_and_Functions`). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
 
-In the next section, we explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi iteration method and Gauss-Seidel methods - to obtain the solution of the Poisson equation.
+We will further explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi iteration method and Gauss-Seidel methods - to obtain the solution of the Poisson equation.
 
-[51]: <https://www.top500.org/lists/top500/> "Top"
+[51]: <https://www.top500.org/lists/top500/> "Largest supercomputers"
 
 ## Higher-dimensional discretizations
 
@@ -129,7 +129,7 @@ p_{0, j} = p_{nx-1, j} = 0\;\; \forall j,\;\;p_{i,0} = p_{i,ny-1}=0\;\; \forall 
 $$
 
 This implies that we have to solve a system containing a total of $(nx-2)\times (ny-2)$ unknowns.
-If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{1,1},\ldots, p_{1,ny-2}$. The list then goes on with $p_{2,1}, p_{2,2},\ldots, p_{2,ny-2}$ and so on until we reach the last components $p_{nx-2,1}, p_{nx-2,2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $i+j\times (ny-2)$. 
+If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{1,2},\ldots, p_{1,ny-2}$. The list then goes on with $p_{2,1}, p_{2,2},\ldots, p_{2,ny-2}$ and so on until we reach the last components $p_{nx-2,1}, p_{nx-2,2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $i+j\times (ny-2)$. 
 
 Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2D} may then be written as:
 
@@ -227,8 +227,8 @@ y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
 
 # Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+b = (np.sin(np.pi*X/lx)*np.cos(np.pi*Y/ly)
+  + np.sin(5.0*np.pi*X/lx)*np.cos(5.0*np.pi*Y/ly))
 
 # b is currently a 2D array. We need to convert it to a row-major
 # ordered 1D array. This is done with the flatten numpy function.
@@ -244,7 +244,7 @@ b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
 bflat = b[1:-1, 1:-1].flatten('F')
 
 # Allocate array for the (full) solution, including boundary values
-p = np.empty((nx,ny))
+p = np.empty((nx, ny))
 ```
 
 In the following two cells, we define a routine to construct the differential matrix (using again the `diags`routine from the `scipy.sparse` module) and a routine to compute the exact solution.
@@ -276,10 +276,10 @@ def d2_mat_dirichlet_2d(nx, ny, dx, dy):
     g = 1.0 / dy**2
     c = -2.0*a - 2.0*g
     
-    diag_a = a * np.ones((nx-2) * (ny-2) - 1)
+    diag_a = a * np.ones((nx-2)*(ny-2)-1)
     diag_a[nx-3::nx-2] = 0
-    diag_g = g * np.ones((nx-2) * (ny-3))
-    diag_c = c * np.ones((nx-2) * (ny-2))
+    diag_g = g * np.ones((nx-2)*(ny-3))
+    diag_c = c * np.ones((nx-2)*(ny-2))
     
     # We construct a sequence of main diagonal elements,
     diagonals = [diag_g, diag_a, diag_c, diag_a, diag_g]
@@ -317,8 +317,8 @@ def p_exact_2d(X, Y):
         exact solution of the Poisson equation
     """
     
-    sol = ( -1.0 / (2.0*np.pi**2) * np.sin(np.pi * X) * np.cos(np.pi * Y) + 
-     -1.0 / (50.0*np.pi**2) * np.sin(5.0 * np.pi * X) * np.cos(5.0 * np.pi * Y) )
+    sol = (-1.0/(2.0*np.pi**2)*np.sin(np.pi*X)*np.cos(np.pi*Y) + 
+        -1.0/(50.0*np.pi**2)*np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
     
     return sol
 ```
@@ -358,7 +358,8 @@ At the beginning of the notebook, we have imported the `l2_diff` function from o
 
 ```{code-cell} ipython3
 diff = l2_diff(p, p_e)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution and '
+      f'the exact solution is:\n{diff}')
 ```
 
 We can represent graphically the exact solution and the computed solution in contour plots and compare them along one line in the computational domain:
@@ -396,9 +397,9 @@ ax_3.set_title(r'$p(x,0)$')
 ax_3.legend();
 ```
 
-We have collected some conclusive evidence that our procedure worked very nicely !
+We have collected some conclusive evidence that our procedure worked very nicely!
 
-There is however a significant drawback. If you want to increase the precision, you need to refine the grid. But beware, on a fairly recent Macbook Pro with 16Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by 2. We therefore need another way of handling this type of problems.
+There is however a significant drawback. If you want to increase the precision, you need to refine the grid. But beware, on a fairly recent Macbook Pro with 16Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by $2$. We therefore need another way of handling this type of problems.
 
 +++
 
@@ -458,8 +459,8 @@ y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
 
 # Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+b = (np.sin(np.pi*X/lx)*np.cos(np.pi*Y/ly)
+  + np.sin(5.0*np.pi*X/lx)*np.cos(5.0*np.pi*Y/ly))
 
 # Compute the exact solution
 p_e = p_exact_2d(X, Y)
@@ -468,7 +469,7 @@ p_e = p_exact_2d(X, Y)
 For the initial guess of the Jacobi iteration we simply choose $p^0 = 0$:
 
 ```{code-cell} ipython3
-p0 = np.zeros((nx,ny))
+p0 = np.zeros((nx, ny))
 pnew = p0.copy()
 ```
 
@@ -520,7 +521,7 @@ while (diff > tolerance):
               f'\nLast l2_diff was: {diff:.5e}')
         break
     
-    p = pnew.copy()
+    np.copyto(p, pnew)
     # We only modify interior nodes. The boundary nodes remain equal to
     # zero and the Dirichlet boundary conditions are therefore automatically
     # enforced.
@@ -546,7 +547,8 @@ We can measure the accuracy of our solution with the same diagnostics as above.
 
 ```{code-cell} ipython3
 diff = l2_diff(pnew, p_e)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution and '
+      f'the exact solution is:\n{diff}')
 ```
 
 ```{code-cell} ipython3
@@ -621,7 +623,7 @@ Note how we are looping in row major order. For each value of `i`, the inner loo
 
 +++
 
-In the Gauss-Seidel method, one takes advantage of this looping order to use updated values as soon as they become available. The iteration procedure then reads:
+In the Gauss-Seidel method, one takes advantage of this looping order to use updated as soon as they become available. The iteration procedure then reads:
 
 \begin{equation}
     \label{eq:iterkSolGS}
@@ -630,9 +632,9 @@ p^{k+1}_{i,j}=\frac14(p^{k+1}_{i-1,j}+p^k_{i+1,j}+p^{k+1}_{i,j-1}+p^k_{i,j+1})-\
 
 +++
 
-This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro whereas the Jacobi method took a few seconds.
+This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro wheres as the Jacobi method took a few seconds.
 
-So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
+So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the next notebook we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
 
 Let's solve our problem with the Gauss-Seidel method, **but beware**, it will take some time...
 
@@ -658,10 +660,6 @@ while (diff > tolerance):
         break
     
     p = pnew.copy()
-    
-    # We only modify interior nodes. The boundary nodes remain equal to
-    # zero and the Dirichlet boundary conditions are therefore automatically
-    # enforced.
     for i in range(1, nx-1):
         for j in range(1, ny-1):
             pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
@@ -677,7 +675,7 @@ else:
     print(f'\nThe solution converged after {iter} iterations')
 ```
 
-The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how `l2_diff` decreases during the iteration procedure and compare the output with the Jacobi method:
+The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how the `l2_dif` decrease during the iteration procedure and compare the output with the Jacobi method:
 
 ```{code-cell} ipython3
 fig, ax = plt.subplots(figsize=(10,5))
@@ -692,8 +690,6 @@ ax.set_title('l2_diff decay')
 ax.legend();
 ```
 
-## Convergence of Jacobi and Gauss-Seidel methods
-
 We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
 The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
@@ -703,7 +699,7 @@ If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using ag
     A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
 \end{equation*}
 
-$A^J_1=-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
+$A^J_1$ is the $-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
 
 \begin{align*}
   L=
@@ -783,12 +779,12 @@ The quantity $\rho= \hbox{max} \vert \lambda_i\vert$ is called the spectral radi
   \rho(A^{-1}_1 A_2) < 1.
 \end{align*}
 
-When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate its rate of convergence. For that purpose, let us introduce the $L2$ matrix norm defined as:
+When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate its rate of convergence. For that purpose, let us introduce the $l2$ matrix norm defined as:
 
 \begin{equation*}
   \| G \|_2 = \max_{\boldsymbol x}\frac{\| G\boldsymbol x \|}{\| \boldsymbol x \|}.
 \end{equation*}
- where $G$ is any matrix. One says that the matrix norm is induced by the $L2$-norm $\|\cdot\|$ defined for vectors $\boldsymbol x$. Like all matrix norms, it satisfies the submultiplicativity rule \cite{watkins2010}:
+ where $G$ is any matrix. One says that the matrix norm is induced by the $l2$-norm $\|\cdot\|$ defined for vectors $\boldsymbol x$. Like all matrix norms, it satisfies the submultiplicativity rule \cite{watkins2010}:
 
  \begin{equation*}
   \| AB \|_2 \leq \| A \|_2 \| B \|_2.
@@ -796,13 +792,13 @@ When the algorithm converges, we can use eq. \eqref{eq:iterError} to evaluate it
 
 for any matrices $A$ and $B$.
 
-Using the definition of the $L2$ norm and the submultiplicativity rule we then have:
+Using the definition of the $l2$ norm and the submultiplicativity rule we then have:
 
 \begin{equation*}
   \boldsymbol \| \epsilon^{k+1} \| = \| \left(A^{-1}_1 A_k\right)^{k+1}\boldsymbol \epsilon^0 \| \leq \| \left(A^{-1}_1 A_k\right)\|_2^{k+1}\boldsymbol \| \epsilon^0 \|
 \end{equation*}
 
-An important result of linear algebra is that the $L2$ norm of a matrix is equal to its largest singular value $\sigma_1$ \cite{horn2013}:
+An important result of linear algebra is that the $l2$ norm of a matrix is equal to its largest singular value $\sigma_1$ \cite{horn2013}:
 
 \begin{equation*}
   \| A \|_2 = \sigma_1(A).
@@ -814,13 +810,13 @@ We won't use the concept of singular values in this course so we will not descri
   \sigma_1(A) = \rho(A)\;\;\;\; \hbox{if $A$ is symmetric}.
 \end{equation*}
 
-We then have:
+For such matrices, we then have:
 
 \begin{equation*}
   \frac{\boldsymbol \| \epsilon^{k+1} \|}{\| \epsilon^0 \|}\leq \rho^{k+1}(A^{-1}_1 A_2).
 \end{equation*}
 
-Reducing the $L2$-norm of the error by a factor $10^{-m}$ after $k$ iterations therefore requires,
+Reducing the $l2$-norm of the error by a factor $10^{-m}$ after $k$ iterations therefore requires,
 
 \begin{equation*}
   k \geq -\frac{m}{\log_{10}\rho (A^{-1}_1 A_2) } = -\frac{m}{\log_{10}(\hbox{max} \vert \lambda_i\vert )}
@@ -860,7 +856,7 @@ The spectral radius is thus,
   \rho_{GS} = \rho_{JC}^2 = \frac14\left[\cos \frac{\pi}{nx-1} + \cos \frac{\pi}{ny-1}\right ]^2
 \end{equation*}
 
-and the method converges since $\rho_{GS} < 1$. The above relation also implies that the rate of convergence of the Gauss-Seidel is about twice that of the Jacobi method when $nx=ny$. If both are large, we have
+and the method converges since $\rho_{GS} < 1$. The above relation also implies that the rate of convergence of the Gauss-Seidel is twice that of the Jacobi method. If $nx=ny$ are both large, we have
 
 \begin{equation*}
   \rho_{GS} \simeq 1 - \frac{\pi^2}{(nx-1)^2}

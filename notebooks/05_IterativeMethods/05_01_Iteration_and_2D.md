@@ -62,17 +62,17 @@ plt.style.use('../styles/mainstyle.use')
 
 In the previous chapter we have discussed how to discretize two examples of partial differential equations: the one dimensional first order wave equation and the heat equation.
 
-For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, these become less useful in terms of computational time and they also have very large memory requirements. This is especially true when solving multi-dimensional problems. Consider for example the Poisson equation in three dimensions:
+For the heat equation, the stability criteria requires a strong restriction on the time step and implicit methods offer a significant reduction in computational cost compared to explicit methods. Their implementation is a bit more complicated in the sense that they require the inversion of a matrix. When the size of the matrix is not too large, one can rely on efficient direct solvers. However, for very large systems, matrix inversion becomes an expensive operation in terms of computational time and memory. This is especially true when solving multi-dimensional problems. Consider as an example the Poisson equation in three dimensions:
 
 $$
     \nabla^2 p(x,y,z)= \frac{\partial^2 p(x,y,z)}{\partial x^2} + \frac{\partial^2 p(x,y,z)}{\partial y^2} + \frac{\partial^2 p(x,y,z)}{\partial z^2} = b(x,y,z)
 $$
 
-where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need 1000 points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively 8 Gb of memory. On current desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries ! Allocating the memory to hold such a matrix is therefore out of sight for even for the largest supercomputer available today (for a current list of the largest computers in the world see [Top500.org][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook 03_02_HigherOrderDerivative_and_Functions). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
+where $p$ is the unknown function and $b$ is the right-hand side. To solve this equation using finite differences we need to introduce a three-dimensional grid. If the right-hand side term has sharp gradients, the number of grid points in each direction must be high in order to obtain an accurate solution. Say we need $1000$ points in each direction. That translates into a grid containing $1000\times 1000\times 1000$ grid points. We thus have $10^9$ (one billion) unknowns $p(x_i, y_k, z_l)$ in our problem. If we work in double precision, storing the solution requires approximatively $8$ Gb of memory. On modern desktop or laptop computers, this represents a significant amount of memory but it's not extravagant. If we now turn our  attention to the discretized matrix, this is a different story. As we have $10^9$ unknowns, the discretized Laplace operator in matrix form contains $10^9$ lines and $10^9$ columns for a total of $10^{18}$ entries! Allocating the memory to store such matrix is therefore out of sight for even for the largest supercomputer available today (see the [list of world's largest supercomputers][51]). Fortunately, the matrix for the Laplace operator is *sparse* (see notebook `03_02_HigherOrderDerivative_and_Functions`). If we store only the non-zero elements of the matrix, the memory needed is drastically reduced. Even though direct solvers may take advantage of this, they are still pushed to their limits.
 
-In the next section, we explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi iteration method and Gauss-Seidel methods - to obtain the solution of the Poisson equation.
+We will further explain in more detail how to discretize partial differential equations in more than one dimension and introduce some of the simplest iterative solvers - the Jacobi and Gauss-Seidel iteration methods - to obtain the solution of the Poisson equation.
 
-[51]: <https://www.top500.org/lists/top500/> "Top"
+[51]: <https://www.top500.org/lists/top500/> "Largest supercomputers"
 
 ## Higher-dimensional discretizations
 
@@ -93,7 +93,7 @@ x_0 \leq x \leq x_0+l_x\;\;\;\; y_0 \leq y \leq y_0+l_y
 
 To close the problem, some boundary conditions are needed on the sides of the rectangles. They can be of three different types: Dirichlet, Neumann or Robin.
 
-To solve the equation numerically, we first need to introduce a 2D grid to hold our unknowns. It is a set of grid points at which we evaluate all physical quantities. For simplicity we work with a uniform gird and the coordinates of our grid points are therefore:
+To solve the equation numerically, we first need to introduce a 2D grid to hold our unknowns. It is a set of grid points, at which we evaluate all physical quantities. For simplicity we work with a uniform gird and the coordinates of our grid points are therefore:
 
 $$
  (x_i, y_j) = (x_0, y_0) + (i \Delta x, j \Delta y), \; \; 0\leq i \leq nx - 1,\; 0\leq  j \leq ny - 1
@@ -105,7 +105,7 @@ $$
     \Delta x=\frac{l_x}{nx-1}, \;\;\;\; \Delta y=\frac{l_y}{ny-1}.
 $$
 
-Note that we don't necessarilly take $nx=ny$ nor $\Delta x =\Delta y$ to allow for rectangular domains with anisotropic grid spacing.
+Note that we don't necessarily take $nx=ny$ nor $\Delta x =\Delta y$ to allow for rectangular domains with anisotropic grid spacing.
 
 We thus have $nx\times ny$ variables $p_{i,j} = p(x_i, y_j)$ distributed on the grid like this:
 
@@ -129,7 +129,7 @@ p_{0, j} = p_{nx-1, j} = 0\;\; \forall j,\;\;p_{i,0} = p_{i,ny-1}=0\;\; \forall 
 $$
 
 This implies that we have to solve a system containing a total of $(nx-2)\times (ny-2)$ unknowns.
-If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{1,1},\ldots, p_{1,ny-2}$. The list then goes on with $p_{2,1}, p_{2,2},\ldots, p_{2,ny-2}$ and so on until we reach the last components $p_{nx-2,1}, p_{nx-2,2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $i+j\times (ny-2)$. 
+If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{2,1},\ldots, p_{nx-2,1}$. The list then goes on with $p_{1,2}, p_{2,2},\ldots, p_{nx-2,2}$ and so on until we reach the last components $p_{1,ny-2}, p_{2,ny-2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $(i-1)+(j-1)\times (ny-2)$.
 
 Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2D} may then be written as:
 
@@ -140,7 +140,7 @@ Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2
         a & c & a &   &   & g &   &   &   &   &   &   &   &   &   &   \\
           & a & c & a &   &   & g &   &   &   &   &   &   &   &   &   \\
           &   & a & c &   &   &   & g &   &   &   &   &   &   &   &   \\
-          b & &   &   & c & a &   &   & g &   &   &   &   &   &   &   \\
+          g & &   &   & c & a &   &   & g &   &   &   &   &   &   &   \\
           & g &   &   & a & c & a &   &   & g &   &   &   &   &   &   \\
           &   & g &   &   & a & c & a &   &   & g &   &   &   &   &   \\
           &   &   & g &   &   & a & c &   &   &   & g &   &   &   &   \\
@@ -156,13 +156,13 @@ Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2
     \right)
     \left(
       \begin{array}{*{1}c}
-        p_{1,1} \\ p_{1,2} \\  p_{1,3} \\ p_{1,4} \\ p_{2,1} \\ p_{2,2}  \\  p_{2,3} \\  p_{2,4} \\  p_{3,1} \\  p_{3,2} \\ p_{3,3}  \\  p_{3,4} \\  p_{4,1} \\  p_{4,2} \\ p_{4,3}  \\  p_{4,4} 
+        p_{1,1} \\ p_{2,1} \\  p_{3,1} \\ p_{4,1} \\ p_{1,2} \\ p_{2,2}  \\  p_{3,2} \\  p_{4,2} \\  p_{1,3} \\  p_{2,3} \\ p_{3,3}  \\  p_{4,3} \\  p_{1,4} \\  p_{2,4} \\ p_{3,4}  \\  p_{4,4}
       \end{array}
     \right)
     =
     \left(
       \begin{array}{*{1}c}
-        b_{1,1} \\ b_{1,2} \\  b_{1,3} \\ b_{1,4} \\ b_{2,1} \\ b_{2,2}  \\  b_{2,3} \\  b_{2,4} \\  b_{3,1} \\  b_{3,2} \\ b_{3,3}  \\  b_{3,4} \\  b_{4,1} \\  b_{4,2} \\ b_{4,3}  \\  b_{4,4} 
+        b_{1,1} \\ b_{2,1} \\  b_{3,1} \\ b_{4,1} \\ b_{1,2} \\ b_{2,2}  \\  b_{3,2} \\  b_{4,2} \\  b_{1,3} \\  b_{2,3} \\ b_{3,3}  \\  b_{4,3} \\  b_{1,4} \\  b_{2,4} \\ b_{3,4}  \\  b_{4,4}
       \end{array}
     \right)
 \end{align}
@@ -179,7 +179,7 @@ Note that several other stencils are possible. If we had adopted fourth-order ac
 
 <img width="350px" src="../figures/2Dstencil4th.png">
 
-But there are also some more complex possibilities in which one uses more neighbours around the central grid point:
+But there are also some more complex possibilities in which one uses more neighbouring grid points around the central grid point:
 
 <img width="300px" src="../figures/2Dstencil9pt.png">
 
@@ -213,8 +213,8 @@ xmin, xmax = 0.0, 1.0     # limits in the x direction
 ymin, ymax = -0.5, 0.5    # limits in the y direction
 lx = xmax - xmin          # domain length in the x direction
 ly = ymax - ymin          # domain length in the y direction
-dx = lx / (nx - 1)        # grid spacing in the x direction
-dy = ly / (ny - 1)        # grid spacing in the y direction
+dx = lx / (nx-1)          # grid spacing in the x direction
+dy = ly / (ny-1)          # grid spacing in the y direction
 ```
 
 We now create the grid, the right-hand side of the equation and allocate an array to store the solution.
@@ -226,9 +226,11 @@ x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
 
-# Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+# Compute the rhs. Note that we non-dimensionalize the coordinates
+# variables x and y with the size of the domain in respective dire-
+# ction.
+b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
+  + np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
 
 # b is currently a 2D array. We need to convert it to a row-major
 # ordered 1D array. This is done with the flatten numpy function.
@@ -244,7 +246,7 @@ b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
 bflat = b[1:-1, 1:-1].flatten('F')
 
 # Allocate array for the (full) solution, including boundary values
-p = np.empty((nx,ny))
+p = np.empty((nx, ny))
 ```
 
 In the following two cells, we define a routine to construct the differential matrix (using again the `diags`routine from the `scipy.sparse` module) and a routine to compute the exact solution.
@@ -252,8 +254,8 @@ In the following two cells, we define a routine to construct the differential ma
 ```{code-cell} ipython3
 def d2_mat_dirichlet_2d(nx, ny, dx, dy):
     """
-    Constructs the matrix for the centered second-order accurate second-order derivative 
-    for Dirichlet boundary conditions in 2D
+    Constructs the matrix for the centered second-order accurate
+    second-order derivative for Dirichlet boundary conditions in 2D
 
     Parameters
     ----------
@@ -275,12 +277,12 @@ def d2_mat_dirichlet_2d(nx, ny, dx, dy):
     a = 1.0 / dx**2
     g = 1.0 / dy**2
     c = -2.0*a - 2.0*g
-    
-    diag_a = a * np.ones((nx-2) * (ny-2) - 1)
-    diag_a[nx-3::nx-2] = 0
-    diag_g = g * np.ones((nx-2) * (ny-3))
-    diag_c = c * np.ones((nx-2) * (ny-2))
-    
+
+    diag_a = a * np.ones((nx-2)*(ny-2)-1)
+    diag_a[nx-3::nx-2] = 0.0
+    diag_g = g * np.ones((nx-2)*(ny-3))
+    diag_c = c * np.ones((nx-2)*(ny-2))
+
     # We construct a sequence of main diagonal elements,
     diagonals = [diag_g, diag_a, diag_c, diag_a, diag_g]
     # and a sequence of positions of the diagonal entries relative to the main
@@ -298,12 +300,11 @@ def d2_mat_dirichlet_2d(nx, ny, dx, dy):
 
 ```{code-cell} ipython3
 def p_exact_2d(X, Y):
-    """
-    Computes the exact solution of the Poisson equation in the domain 
+    """Computes the exact solution of the Poisson equation in the domain
     [0, 1]x[-0.5, 0.5] with rhs:
     b = (np.sin(np.pi * X) * np.cos(np.pi * Y) +
-     np.sin(5.0 * np.pi * X) * np.cos(5.0 * np.pi * Y))
-    
+    np.sin(5.0 * np.pi * X) * np.cos(5.0 * np.pi * Y))
+
     Parameters
     ----------
     X : numpy.ndarray
@@ -316,10 +317,10 @@ def p_exact_2d(X, Y):
     sol : numpy.ndarray
         exact solution of the Poisson equation
     """
-    
-    sol = ( -1.0 / (2.0*np.pi**2) * np.sin(np.pi * X) * np.cos(np.pi * Y) + 
-     -1.0 / (50.0*np.pi**2) * np.sin(5.0 * np.pi * X) * np.cos(5.0 * np.pi * Y) )
-    
+
+    sol = (-1.0/(2.0*np.pi**2)*np.sin(np.pi*X)*np.cos(np.pi*Y)
+        - 1.0/(50.0*np.pi**2)*np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
+
     return sol
 ```
 
@@ -332,7 +333,7 @@ Ainv = np.linalg.inv(A)
 # The numerical solution is obtained by performing
 # the multiplication A^{-1}*b. This returns a vector
 # in row major ordering. To convert it back to a 2D array
-# that is of the form p(x,y) we pass it immediately to 
+# that is of the form p(x,y) we pass it immediately to
 # the reshape function.
 # For more info:
 # https://numpy.org/doc/stable/reference/generated/numpy.reshape.html
@@ -358,7 +359,8 @@ At the beginning of the notebook, we have imported the `l2_diff` function from o
 
 ```{code-cell} ipython3
 diff = l2_diff(p, p_e)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution '
+      f'and the exact solution is:\n{diff}')
 ```
 
 We can represent graphically the exact solution and the computed solution in contour plots and compare them along one line in the computational domain:
@@ -393,12 +395,12 @@ ax_3.set_xlabel(r'$x$')
 ax_3.set_ylabel(r'$p$')
 ax_3.set_title(r'$p(x,0)$')
 
-ax_3.legend();
+ax_3.legend()
 ```
 
-We have collected some conclusive evidence that our procedure worked very nicely !
+We have collected some conclusive evidence that our procedure worked very nicely!
 
-There is however a significant drawback. If you want to increase the precision, you need to refine the grid. But beware, on a fairly recent Macbook Pro with 16Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by 2. We therefore need another way of handling this type of problems.
+There is however a significant drawback. If you want to increase the precision, you need to refine the grid. But beware, on a fairly recent Macbook Pro with $16$ Gb of memory, the computation literally stalled when the number of grid points in both direction was multiplied by $2$. We therefore need another way of handling this type of problems.
 
 +++
 
@@ -423,7 +425,7 @@ Imagine we pick any initial guess $p^0_{i,j}$ for the solution we are seeking. E
     p^1_{i,j}=\frac14(p^0_{i-1,j}+p^0_{i+1,j}+p^0_{i,j-1}+p^0_{i,j+1})-\frac14b_{i,j}\Delta^2
 \end{equation}
 
-Again, unless we are extremely lucky, the updated value $p^1_{i,j}$ will not satisfy \eqref{eq:iterSolPoisson} but maybe it got closer. The idea behind iterative methods is to continue this process hoping that the updated values converge to the desired solution. 
+Again, unless we are extremely lucky, the updated value $p^1_{i,j}$ will not satisfy \eqref{eq:iterSolPoisson} but maybe it will get closer. The idea behind iterative methods is to continue this process until the updated values converge to the desired solution.
 
 The simple iterative procedure we outlined above is called the Jacobi method. Below we will prove mathematically that for the Poisson equation it does indeed converge to the exact solution. Here we will implement it and empirically observe that this is the case for our toy problem.
 
@@ -434,7 +436,7 @@ In the Jacobi method, the iterated value is computed as follows:
 p^{k+1}_{i,j}=\frac14(p^k_{i-1,j}+p^k_{i+1,j}+p^k_{i,j-1}+p^k_{i,j+1})-\frac14b_{i,j}\Delta^2
 \end{equation}
 
-There is of course no exact way to determine if we have performed enough iterations. However, if the iterative method is able to solve the equation, the difference between too successive iterated values should become increasingly small as we converge to the exact solution. We will therefore adopt the same strategy as the one we used for the grid convergence study. We will measure the difference in L2-norm between $p^{k+1}$ and $p^k$ and stop iterating once it falls below a given values.
+There is of course no exact way to determine if we have performed enough iterations. However, if the iterative method is able to solve the equation, the difference between too successive iterated values should become increasingly small, as we converge to the exact solution. We will therefore adopt the same strategy as the one we used for the grid convergence study. We will measure the difference in $L2$-norm between $p^{k+1}$ and $p^k$ and stop iterating once it falls below a given values.
 
 +++
 
@@ -448,8 +450,8 @@ xmin, xmax = 0.0, 1.0     # limits in the x direction
 ymin, ymax = -0.5, 0.5    # limits in the y direction
 lx = xmax - xmin          # domain length in the x direction
 ly = ymax - ymin          # domain length in the y direction
-dx = lx / (nx - 1)        # grid spacing in the x direction
-dy = ly / (ny - 1)        # grid spacing in the y direction
+dx = lx / (nx-1)          # grid spacing in the x direction
+dy = ly / (ny-1)          # grid spacing in the y direction
 
 # Create the gridline locations and the mesh grid;
 # see notebook 02_02_Runge_Kutta for more details
@@ -458,8 +460,8 @@ y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
 
 # Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
+  + np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
 
 # Compute the exact solution
 p_e = p_exact_2d(X, Y)
@@ -468,28 +470,32 @@ p_e = p_exact_2d(X, Y)
 For the initial guess of the Jacobi iteration we simply choose $p^0 = 0$:
 
 ```{code-cell} ipython3
-p0 = np.zeros((nx,ny))
+p0 = np.zeros((nx, ny))
 pnew = p0.copy()
 ```
 
-We then iterate using a `while` loop and stop the loop once the L2-norm gets smaller than the desired tolerance. We also add a break statement in case the number of iterations gets too large.
+We then iterate using a `while` loop and stop the loop once the $L2$-norm gets smaller than the desired tolerance. We also add a break statement for the case of number of iterations exceeding the limit we set.
 
 ```{code-cell} ipython3
 tolerance = 1e-10
-max_iter = 100000
+max_it = 100000
 ```
 
-When your programs might take an extended time to execute, it might be useful to add a progress bar while it executes. A nice Python package that provides this functionality without adding a significant overhead to the execution time is `tqdm` (you may want to check out its [documentation][51]). To use it, you first have to install it in your Python environment (if it's not already done). To do so, open a terminal and type the following commands:
+When your programs might take an extended time to execute, it is useful to add a progress bar while it executes. A nice Python package that provides this functionality without adding a significant overhead to the execution time is `tqdm` (you may want to check out its [documentation][51]). To use it, you first have to install it in your Python environment (if it's not already done). To do so, open a terminal and type the following commands:
 
 ```
 conda activate course
-conda install tqdm
+conda install -c conda-forge tqdm
 ```
 
-The use `tqdm` inside `jupyter` notebooks, you also need a dependency called `pywidgets`. Depending on your installation, it might already be present in your environment. But to be sure, type also:
+To use `tqdm` in `jupyter` notebooks, you also need a dependency called `pywidgets`. Depending on your installation, it might already be present in your environment. You can check if it appears in the output of the following command:
+```
+conda list
+```
+If it doesn't, install it by running:
 
 ```
-conda install ipywidgets
+conda install -c conda-forge ipywidgets
 ```
 
 You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm`that we are goind to use:
@@ -500,42 +506,41 @@ You should then close this notebook and relaunch it to make the package availabl
 from tqdm.notebook import tqdm
 ```
 
-In your notebook, a progress bar can then be created by calling the `tqdm()`function. We pass the `max_iter` argument as the `total` number of iterations so that `tqdm`knows how to size the progress bar. We also change the default prefix legend for the progress bar to be more informative. Then we can iterate towards the solution:
+In your notebook, a progress bar can then be created by calling the `tqdm()`function. We pass the `max_it` argument as the `total` number of iterations so that `tqdm`knows how to size the progress bar. We also change the default prefix legend for the progress bar to be more informative. Then we can iterate towards the solution:
 
 ```{code-cell} ipython3
-pbar = tqdm(total=max_iter)
-pbar.set_description("iter / max_iter");
+pbar = tqdm(total=max_it)
+pbar.set_description("it / max_it");
 
 # Let's iterate...
 
-iter = 0 # iteration counter
+it = 0 # iteration counter
 diff = 1.0
 tol_hist_jac = []
 
 while (diff > tolerance):
-    
-    if iter > max_iter:
+    if it > max_it:
         print('\nSolution did not converged within the maximum'
               ' number of iterations'
               f'\nLast l2_diff was: {diff:.5e}')
         break
-    
-    p = pnew.copy()
+
+    np.copyto(p, pnew)
     # We only modify interior nodes. The boundary nodes remain equal to
     # zero and the Dirichlet boundary conditions are therefore automatically
     # enforced.
-    pnew[1:-1, 1:-1] = ( 0.25*(p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2]
-                             + p[1:-1, 2:] - b[1:-1, 1:-1]*dx**2 ))
-    
+    pnew[1:-1, 1:-1] = (0.25*(p[:-2, 1:-1]+p[2:, 1:-1]+p[1:-1, :-2]
+                     + p[1:-1, 2:]-b[1:-1, 1:-1]*dx**2))
+
     diff = l2_diff(pnew, p)
     tol_hist_jac.append(diff)
-    
-    iter += 1
+
+    it += 1
     # We update our progress bar
     pbar.update(1)
 
 else:
-    print(f'\nThe solution converged after {iter} iterations')
+    print(f'\nThe solution converged after {it} iterations')
 
 # When the progress bar will not be used
 # further, it has to be closed
@@ -546,7 +551,8 @@ We can measure the accuracy of our solution with the same diagnostics as above.
 
 ```{code-cell} ipython3
 diff = l2_diff(pnew, p_e)
-print(f'The l2 difference between the computed solution and the exact solution is:\n{diff}')
+print(f'The l2 difference between the computed solution and '
+      f'the exact solution is:\n{diff}')
 ```
 
 ```{code-cell} ipython3
@@ -579,19 +585,19 @@ ax_3.set_xlabel(r'$x$')
 ax_3.set_ylabel(r'$p$')
 ax_3.set_title(r'$p(x,0)$')
 
-ax_3.legend();
+ax_3.legend()
 ```
 
-Note that to achieve this L2 precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
+Note that to achieve this $L2$ precision we used a tolerance of $10^{-10}$. Be careful not to confuse the accuracy of the solution and the tolerance. One measures the quality of the solution and the other is just a stop criteria for the iteration method. To achieve the accuracy of the direct solver, one can reduce the tolerance to even smaller values.
 
 A last diagnostic we report here is the sequence of the `l2_diff` during the iterative procedure. It shows how `l2_diff` progressively decays below the desired tolerance.
 
 ```{code-cell} ipython3
-fig, ax = plt.subplots(figsize=(10,5))
+fig, ax = plt.subplots(figsize=(10, 5))
 ax.semilogy(tol_hist_jac)
 
 # We set labels of x axis and y axis.
-ax.set_xlabel(r'$iteration$')
+ax.set_xlabel('iteration')
 ax.set_ylabel('l2_diff')
 ax.set_title('l2_diff decay');
 ```
@@ -609,13 +615,13 @@ Now the good news. You may safely repeat the above iteration method with larger 
 For the Jacobi method we made use of `numpy` slicing and array operations to avoid Python loops. If we had performed the looping explicitly, we could have done it like this:
 
 ```python
-for i in range(1, nx-1):
-        for j in range(1, ny-1):
-            pnew[i, j] = ( 0.25*(p[i-1, j] + p[i+1, j] + p[i, j-1]
-                             + p[i, j+1] - b[i, j]*dx**2 ))
+for j in range(1, ny-1):
+        for i in range(1, nx-1):
+            pnew[i, j] = (0.25 * (p[i-1, j]+p[i+1, j]+p[i, j-1]
+                       + p[i, j+1]-b[i, j]*dx**2))
 ```
 
-Note how we are looping in row major order. For each value of `i`, the inner loops updates each value of `j` in sequence before preceeding to the next value of `i`. Graphically, the loops scan the domain in this order:
+Note how we are looping in row major order. For each value of `j`, the inner loops updates `i` from `1` to `nx-1` before proceeding to the next value of `j`. Graphically, the loops scan the domain in this order:
 
 <img width="450px" src="../figures/GSgrid_e.png">
 
@@ -632,61 +638,62 @@ p^{k+1}_{i,j}=\frac14(p^{k+1}_{i-1,j}+p^k_{i+1,j}+p^{k+1}_{i,j-1}+p^k_{i,j+1})-\
 
 This strategy allows to cut the number of iterations by a factor of $2$! Unfortunately, the algorithm requires to explicitly perform the loops and we know that if we do this using Python loops, our code will slow down considerably. For example, solving the same problem as earlier using the Gauss-Seidel algorithm takes about 2.5 minutes on a fairly recent MacBook Pro whereas the Jacobi method took a few seconds.
 
-So you might think that the Gauss-Seidel method is completely useless. But that's not the case: if somehow we can speedup the Python loops maybe we can benefit from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
+So you might think that the Gauss-Seidel method is completely useless. But if we could speedup the Python loops somehow, we'd benefited from the fewer iterations. In the third notebook of this chapter we will show you a simple way to do this and make the Gauss-Seidel method achieve full potential.
 
 Let's solve our problem with the Gauss-Seidel method, **but beware**, it will take some time...
 
 ```{code-cell} ipython3
-p0 = np.zeros((nx,ny))
-pnew = p0.copy()
-
 tolerance = 1e-10
 max_iter = 10000
 
-pbar = tqdm(total=max_iter)
-pbar.set_description("iter / max_iter")
+p0 = np.zeros((nx, ny))
+pnew = p0.copy()
+```
 
-iter = 0 # iteration counter
+```{code-cell} ipython3
+pbar = tqdm(total=max_it)
+pbar.set_description("it / max_it")
+
+it = 0 # iteration counter
 diff = 1.0
 tol_hist_gs = []
 while (diff > tolerance):
-    
-    if iter > max_iter:
+    if it > max_it:
         print('\nSolution did not converged within the maximum'
               ' number of iterations'
               f'\nLast l2_diff was: {diff:.5e}')
         break
-    
-    p = pnew.copy()
-    
+
+    np.copyto(p, pnew)
+
     # We only modify interior nodes. The boundary nodes remain equal to
     # zero and the Dirichlet boundary conditions are therefore automatically
     # enforced.
-    for i in range(1, nx-1):
-        for j in range(1, ny-1):
-            pnew[i, j] = ( 0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
-                             + p[i, j+1] - b[i, j]*dx**2 ))
-    
+    for j in range(1, ny-1):
+        for i in range(1, nx-1):
+            pnew[i, j] = (0.25 * (pnew[i-1, j]+p[i+1, j]+pnew[i, j-1]
+                       + p[i, j+1]-b[i, j]*dx**2))
+
     diff = l2_diff(pnew, p)
     tol_hist_gs.append(diff)
 
-    iter += 1
+    it += 1
     pbar.update(1)
 
 else:
-    print(f'\nThe solution converged after {iter} iterations')
+    print(f'\nThe solution converged after {it} iterations')
 ```
 
 The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how `l2_diff` decreases during the iteration procedure and compare the output with the Jacobi method:
 
 ```{code-cell} ipython3
-fig, ax = plt.subplots(figsize=(10,5))
+fig, ax = plt.subplots(figsize=(10, 5))
 ax.semilogy(tol_hist_jac, label='Jacobi')
 ax.semilogy(tol_hist_gs, color='red', label='Gauss-Seidel')
 
 
 # We set labels of x axis and y axis.
-ax.set_xlabel(r'$iteration$')
+ax.set_xlabel('iteration')
 ax.set_ylabel('l2_diff')
 ax.set_title('l2_diff decay')
 ax.legend();
@@ -697,7 +704,7 @@ ax.legend();
 We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
 The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
-If we collect all the unknowns in a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
+If we represent all the unknowns as a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
 
 \begin{equation*}
     A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
@@ -720,7 +727,7 @@ $A^J_1=-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
     \end{array}
   \right),
 \end{align*}
-and 
+and
 \begin{align*}
   U=
   \left(
@@ -754,7 +761,7 @@ The arguments developped here can be genelarized to any iterative method of the 
 
 where $A=A_1 - A_2$ and $A\boldsymbol p = c$ is the original matrix problem.
 
-The make the algorithm  work, $A_1$ needs to be easily invertible otherwise we would not save any effort. For the Jacobi method this is obvious because $A_1$ is proportional to the identity. For the Gauss-Seidel method things are sligthly more complicated but $\boldsymbol p^{k+1}$ can still be computed easily by looping in the order described in the previous section.
+The make the algorithm  work, $A_1$ needs to be easily invertible, otherwise we would not save any effort. For the Jacobi method this is obvious because $A_1$ is proportional to the identity. For the Gauss-Seidel method things are sligthly more complicated but $\boldsymbol p^{k+1}$ can still be computed easily by looping in the order described in the previous section.
 
 Let us denote by $\boldsymbol \epsilon^k$ the error at iteration $k$:
 
@@ -775,7 +782,7 @@ Obviously we need to have $\boldsymbol \epsilon^k \rightarrow 0$ for $\rightarro
   \vert \lambda_i \vert < 1.
 \end{align*}
 
-If the matrix $A^{-1}_1 A_2$ is diagonalizable, this result can be proven rather easily by expressing the error in the basis of eigenvectors. 
+If the matrix $A^{-1}_1 A_2$ is diagonalizable, this result can be proven rather easily by expressing the error in the basis of eigenvectors.
 
 The quantity $\rho= \hbox{max} \vert \lambda_i\vert$ is called the spectral radius of the matrix. The criteria for convergence is thus also equivalent to:
 
@@ -846,7 +853,7 @@ and the method converges since $\rho_{JC} < 1$. If $nx=ny$ are both large, we ha
   \rho_{JC} \simeq 1 - \frac12 \frac{\pi^2}{(nx-1)^2}
 \end{equation*}
 
-For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $46652$ iterations. 
+For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $46652$ iterations.
 
 $\bullet$ For the Gauss-Seidel method, we have $ \displaystyle A^{-1}_1 A_2 = (4\times I - L)^{-1} U$ and the eigenvalues are the squares of the eigenvalues of the Jacobi method \cite{watkins2010}:
 
@@ -866,7 +873,7 @@ and the method converges since $\rho_{GS} < 1$. The above relation also implies 
   \rho_{GS} \simeq 1 - \frac{\pi^2}{(nx-1)^2}
 \end{equation*}
 
-For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $23326$ iterations. 
+For $nx=ny=101$, a reduction of the error by a factor of $10^{-10}$ requires $23326$ iterations.
 
 These results confirm our observations when solving the sample problem described earlier in this notebook.
 

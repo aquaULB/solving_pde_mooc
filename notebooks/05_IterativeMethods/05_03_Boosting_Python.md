@@ -235,7 +235,7 @@ def timing(timing_on=True):
         def wrapper(*args, **kwargs):
             if not timing_on:
                 return func(*args, **kwargs)
-            
+
             t_init = default_timer()
             res = func(*args, **kwargs)
             t_fin = default_timer()
@@ -243,7 +243,7 @@ def timing(timing_on=True):
             print(f'Time elapsed: {t_fin-t_init} s')
 
             return res
-        
+
         return wrapper
     return inner_timing
 ```
@@ -401,7 +401,7 @@ ax[2].plot(x, c_p[:,jc], '--', label='Cython')
 
 for axis in ax:
     axis.set_xlabel('$x$')
-    
+
 ax[0].set_ylabel('$y$')
 ax[2].set_ylabel('$p(x,0)$')
 
@@ -457,9 +457,9 @@ except ModuleNotFoundError:
 ```
 This is the example of exceptions handling in Python. Exceptions are mostly errors that occur during the execution. But some of them are warnings or events.
 
-The minimal exception handling block consists of the `try` and `except` clauses. Inside the `try` clause you specify the code that is not exception-safe. `try` clause is not stand-alone and *must* be "accompanied" by the `except` clause. Inside the `except` clause you must specify the code that is do be executed if that from the `try` clause failed. If no exceptions occur inside the `try` clause, `except` clause is skipped. `pass` statement is used when you want do nothing.
+The minimal exception handling block consists of the `try` and `except` clauses. Inside the `try` clause you specify the code that is not exception-safe. `try` clause is not stand-alone and *must* be "accompanied" by the `except` clause. Inside the `except` clause you must specify the code that is do be executed if that from the `try` clause fails. If no exceptions occur inside the `try` clause, `except` clause is skipped. `pass` statement is used when you want do nothing.
 
-Main purpose of exception handling is two-fold making them not fatal. 
+Main purpose of exception handling is making them not fatal.
 
 Example made above perfectly fits this purpose. tqdm, unlike Numba or NumPy, *is not required* for the Gauss-Seidel solver to execute. It is rather a "luxury", not a necessity. We therefore try to import it inside the `try` clause and if exception of type `ModuleNotFoundError` is raised (tqdm is not found in system), the code doesn't terminate but just proceeds to the further statements.
 
@@ -468,7 +468,7 @@ You can also raise exceptions yourself to prevent undesired behaviour and to pro
 if p.shape != b.shape:
     raise ValueError('p and b must have the same shape')
 ```
-As we haven't provided try/except block when calling the function, the `ValueError` exception will be raised and the execution will be terminated if you supply `p` and `b` of different shape. In the case if you supply `p` and `b` that are not the `numpy.ndarray`, the execution will crash at the stage when trying to execute the `if` statement with the `AttributeError` being raised.
+As we haven't provided try/except block when calling the function, the `ValueError` exception will be raised and the execution will be terminated if you supply `p` and `b` of different shapes. In the case if you supply `p` and `b` that are not of type `numpy.ndarray`, the execution will crash at the stage when trying to execute the `if` statement with the `AttributeError` being raised.
 
 In a well-designed program exception handling must provide certain level of [exception safety][10].
 
@@ -476,12 +476,12 @@ We will not further concentrate on exception handling and will proceed to unders
 
 #### Cython syntax
 
-If look into the `csolver.pyx` file, you'll see that there is a bit of unfamiliar syntax. It is not *drastically* different though. Cython syntax builds upon the Python syntax and adds some extra. "Extra" that appeared to be enough to implement the Gauss-Seidel solver consists of ...
+If you look into the `csolver.pyx` file, you'll see that there is a bit of unfamiliar syntax. It is not *drastically* different though. Cython syntax builds upon the Python syntax and adds some extra. "Extra" that appeared to be enough to implement the Gauss-Seidel solver consists of ...
 
 * ... type declaration ...
 
     As it has been mentioned, dynamic typing is the major source for interpreter overhead in Python. In Cython we can use `cdef` statement to declare C variables. In this way Cython won't have to do the type conversion from Python types to C types.
-    
+
     You can declare and initialize variable at once:
     ```
     cdef int it = 0
@@ -491,7 +491,7 @@ If look into the `csolver.pyx` file, you'll see that there is a bit of unfamilia
     cdef Py_ssize_t i, j
     ```
     Note that `Py_ssize_t` is a C type for the indexing.
-    
+
     As you can see, we also declare types of the objects that we pass to the function:
     ```
     def c_gauss_seidel(<...>, DTYPE_t dx, DTYPE_t tol, int max_it):
@@ -502,20 +502,20 @@ If look into the `csolver.pyx` file, you'll see that there is a bit of unfamilia
     ctypedef np.float64_t DTYPE_t
     ```
 
-    When specifying types of function arguments like that, Python objects are immediately converted to C objects, and `dx`, `tol` and `max_it` are then local variables of declared C types.
+    When specifying types of function arguments like this, Python objects are immediately converted into C objects, and `dx`, `tol` and `max_it` are then local C variables.
 
 * ... and Cython memoryviews.
 
-    Cython works with NumPy types very well. If we looped over NumPy arrays though, it would barely provide any speedup. The reason for that is that `numpy.ndarray` is a Python type and cannot be combined with C types. Each time we access elements of `numpy.ndarray`, C integers must be converted to C integers.
-    
+    Cython supports NumPy arrays just as well as Python does. If we looped over NumPy arrays though, it would barely provide any speedup. The reason for that is that `numpy.ndarray` is a Python type and cannot be combined in the same expression with C types. Each time we access elements of `numpy.ndarray`, C integers must be converted to Python integers.
+
     > [In short, memoryviews][12] are C structures that can hold a pointer to the data of a NumPy array and all the necessary buffer metadata to provide efficient and safe access: dimensions, strides, item size, item type information, etc…
-    
+
     Syntax to create memoryview from the NumPy array is very simple:
     ```
     cdef np.ndarray[DTYPE_t, ndim=1] tol_hist_gs = np.zeros(max_it, dtype=DTYPE)
     cdef DTYPE_t[:] tol_hist_gs_view = tol_hist_gs
     ```
-    
+
     Now note how `p` and `b` are passed to the function:
     ```
     def c_gauss_seidel(DTYPE_t[:, :] p, DTYPE_t[:, :] b,
@@ -523,12 +523,12 @@ If look into the `csolver.pyx` file, you'll see that there is a bit of unfamilia
         <...>
     ```
     This way, when we originally pass the object of type `numpy.ndarray`, their memoryviews are created right away and can be accessed through the variables `p` and `b`.
-    
+
     NumPy array that is pointed to by the memoryview can be accessed through the `base` attribute of the memoryview:
     ```
     return <...>, p.base, <...>
     ```
-    
+
     It is due to the reason that we use memoryvies in the main loop of the program, that we gain such a speedup:
     ```
     for j in range(1, ny-1):
@@ -536,9 +536,9 @@ If look into the `csolver.pyx` file, you'll see that there is a bit of unfamilia
             p_new_view[i, j] = (0.25*(p_new_view[i-1, j] + p[i+1, j]
                 + p_new_view[i, j-1] + p[i, j+1] - b[i, j]*dx**2))
     ```
-    Note that as well as for the most of the rest of code, syntax for the loops in Cython is exactly that in Python.
-    
-    The downside we get when using memoryviews is that they are not as flexible as Numpy arrays. Many NumPy functions though still support memoryviews. Memoryvies even support some of the "same" methods and attributes that Numpy arrays do but the return value is always of the C type.
+    Note that as well as for the most of the rest of code, syntax for the loops in Cython is exactly that of Python.
+
+    The downside we get when using memoryviews is that they are not as flexible as Numpy arrays. Many NumPy functions though still support memoryviews. Memoryviews even support some of the "same" methods and attributes that Numpy arrays do but the return values are always of the C type.
 
 Generally almost *any* Python code is valid in Cython. This is no surprise, as aside from when working with C types directly, Cython makes calls to the Python interpreter. We have introduced typing and memoryvies as an extra of Cython to gain the speedup but the pure Python code should also compile.
 
@@ -567,7 +567,7 @@ is important to our code because we have imported the *definition* numpy file us
 cimport numpy as np
 ```
 
-Definition file is a file with C code with `.h` extension. That is how we got access to the C type `np.float64_t`.
+Definition file is the Cython analogy to the C header file. We needed numpy definition file for the C type `np.float64_t`.
 
 To run the Cython makefile, the following command must be executed:
 ```
@@ -575,7 +575,7 @@ python setup.py build_ext --build-lib <target_dir>
 ```
 where the `<target_dir>` specifies the location for the shared library.
 
-Overall, as you see, there is much more information to absorb when understanding Cython than when understanding Numba. Numba should certainly be your first choice when it is easily integratable. Cython though communicates much more naturally with C (and C++) code.  
+Overall, as you see, there is much more information to absorb when understanding Cython than when understanding Numba. Numba should certainly be your first choice when it is easily integratable. Cython though communicates much more naturally with C (and C++) code.
 
 [10]: <https://en.wikipedia.org/wiki/Exception_safety> "Exception safety"
 [11]: <https://docs.python.org/3/tutorial/errors.html> "Exception handling"
@@ -586,7 +586,7 @@ Overall, as you see, there is much more information to absorb when understanding
 ## Summary
 
 In this notebook we have dug deeper into the basic programming concepts, such as compilers and interpreters. We have investigated alternative tools to get C-like performance with Python - Numba and Cython. The sample implementation of Gauss-Seidel solver has been sped up by the factor of about $20$ with Numba and $100$ with Cython. It is important to note though that generally Numba and Cython show similar performance for the same kind of problems. We chose to implement partial compilation with Numba in order to use the logging tools of tqdm package. Python decorators and exception handling were introduced as a part of the tutorial.
-We therefore conclude the chapter on iterative methods with numerical tools for efficient implementation of iterative solvers.  
+We therefore conclude the chapter on iterative methods with numerical tools for efficient implementation of iterative solvers.
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

@@ -88,8 +88,8 @@ def c_gauss_seidel(DTYPE_t[:, :] p, DTYPE_t[:, :] b,
 
         # In a loop we manipulate the memoryviews, not numpy arrays. This pro-
         # vides the actual speed up.
-        for i in range(1, nx-1):
-            for j in range(1, ny-1):
+        for j in range(1, ny-1):
+            for i in range(1, nx-1):
                 p_new_view[i, j] = (0.25*(p_new_view[i-1, j] + p[i+1, j]
                     + p_new_view[i, j-1] + p[i, j+1] - b[i, j]*dx**2))
 

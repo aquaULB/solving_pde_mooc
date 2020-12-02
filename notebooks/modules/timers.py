@@ -1,4 +1,3 @@
-# +
 from timeit import default_timer
 from functools import wraps
 

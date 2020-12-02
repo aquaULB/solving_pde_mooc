@@ -28,7 +28,7 @@ def py_gauss_seidel_step(p, pnew, b, nx, ny, dx):
                        + p[i, j+1] - b[i, j]*dx**2))
     return pnew
 
-@jit
+@jit(nopython=True)
 def gauss_seidel_step(p, pnew, b, nx, ny, dx):
     '''Performs one Gauss-Seidel iteration'''
     for j in range(1, ny-1):

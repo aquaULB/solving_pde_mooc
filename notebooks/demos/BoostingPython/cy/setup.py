@@ -5,7 +5,6 @@ import numpy
 setup(
     ext_modules=cythonize('csolver.pyx',
                         build_dir='build',
-                        annotate=True,
                         language_level = '3'),
     include_dirs=[numpy.get_include()],
 )

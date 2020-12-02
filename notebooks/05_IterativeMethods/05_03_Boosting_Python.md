@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li><li><span><a href="#Implementing-Gauss-Seidel-solver" data-toc-modified-id="Implementing-Gauss-Seidel-solver-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Implementing Gauss-Seidel solver</a></span></li></ul></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Interpreters-VS-compilers" data-toc-modified-id="Interpreters-VS-compilers-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Interpreters VS compilers</a></span></li><li><span><a href="#Cython-and-Numba:-what,-when-and-how?" data-toc-modified-id="Cython-and-Numba:-what,-when-and-how?-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Cython and Numba: what, when and how?</a></span><ul class="toc-item"><li><span><a href="#Python-decorators" data-toc-modified-id="Python-decorators-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Python decorators</a></span></li><li><span><a href="#Implementing-Gauss-Seidel-solver" data-toc-modified-id="Implementing-Gauss-Seidel-solver-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>Implementing Gauss-Seidel solver</a></span><ul class="toc-item"><li><span><a href="#Efficiency" data-toc-modified-id="Efficiency-3.2.1"><span class="toc-item-num">3.2.1&nbsp;&nbsp;</span>Efficiency</a></span></li><li><span><a href="#Syntax-for-Numba-integration" data-toc-modified-id="Syntax-for-Numba-integration-3.2.2"><span class="toc-item-num">3.2.2&nbsp;&nbsp;</span>Syntax for Numba integration</a></span></li><li><span><a href="#Minimum-on-Exception-Handling" data-toc-modified-id="Minimum-on-Exception-Handling-3.2.3"><span class="toc-item-num">3.2.3&nbsp;&nbsp;</span>Minimum on Exception Handling</a></span></li><li><span><a href="#Cython-syntax" data-toc-modified-id="Cython-syntax-3.2.4"><span class="toc-item-num">3.2.4&nbsp;&nbsp;</span>Cython syntax</a></span></li></ul></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -309,6 +309,10 @@ If you're willing to recompile it, we refer you to `BoostingPython/README.md` fo
 
 Python and Cython code we provide is thoroughly documented but we will still comment on certain pieces.
 
+#### Efficiency
+
+But first run the cells below and see for yourself how performance compare.
+
 [8]: <https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html> "Cython compilation"
 
 ```{code-cell} ipython3
@@ -319,7 +323,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, '../demos/BoostingPython')
 
-import py.solvers as solver
+import py.solvers as solvers
 import cy.lib.csolver as csolver
 ```
 
@@ -335,8 +339,8 @@ xmin, xmax = 0.0, 1.0     # limits in the x direction
 ymin, ymax = -0.5, 0.5    # limits in the y direction
 lx = xmax - xmin          # domain length in the x direction
 ly = ymax - ymin          # domain length in the y direction
-dx = lx / (nx - 1)        # grid spacing in the x direction
-dy = ly / (ny - 1)        # grid spacing in the y direction
+dx = lx / (nx-1)          # grid spacing in the x direction
+dy = ly / (ny-1)          # grid spacing in the y direction
 
 # Iteration parameters
 tol = 1e-10               # convergence precision
@@ -344,8 +348,7 @@ max_it = 1000000          # maximal amount of iterations allowed
 ```
 
 ```{code-cell} ipython3
-# Create the gridline locations and the mesh grid;
-# see notebook 02_02_Runge_Kutta for more details
+# Create the gridline locations and the mesh grid
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
 X, Y = np.meshgrid(x, y)
@@ -356,45 +359,234 @@ b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
 ```
 
 ```{code-cell} ipython3
-p = np.zeros((nx, ny))
-nb_p = p.copy()
-c_p = np.zeros((nx, ny), dtype=np.float64)
+p = np.zeros((nx, ny)) # container for solution with Numba disabled
+nb_p = p.copy()        # container for solution with Numba enabled
+c_p = np.zeros((nx, ny), dtype=np.float64) # container for solution obtained with Cython
+```
+
+`gauss_seidel` function is implemented in Python. It has an optional parameter `use_numba`. Its default value is `False`.
+
+Note usage of underscore `_`. It has special meaning in Python. `_` stores the value of the last statement executed by interpreter. It is normally *not* used to *access* the value but rather to *ignore* it. Here the function returns three values but we are only interesting in storing one, so we assign others to the underscore variable. That is not the only meaning underscore can have in Python but this topic won't be covered further in this course. We invite you to [read about the underscore in Python][9] on your own if you're interested.
+
+[9]: <https://www.datacamp.com/community/tutorials/role-underscore-python> "Role of underscore in Python"
+
+```{code-cell} ipython3
+%time _, p, _ = solvers.gauss_seidel(p, b, dx, tol, max_it)
 ```
 
 ```{code-cell} ipython3
-%time _, p, _ = solver.gauss_seidel(p, b, dx, tol, max_it)
-```
-
-```{code-cell} ipython3
-%time _, nb_p, _ = solver.gauss_seidel(nb_p, b, dx, tol, max_it, use_numba=True)
+%time _, nb_p, _ = solvers.gauss_seidel(nb_p, b, dx, tol, max_it, use_numba=True)
 ```
 
 ```{code-cell} ipython3
 %time _, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
 ```
 
-You can see that the Cython code runs faster than that with Numba. This is the price we pay for choosing to only partially compile our code using Numba (more details below). There is *interpreter overhead*, as Python interpreter compiles the source code into bytecode and then interprets it before executing at each iteration. This is the example, though, when "slow" implementation is deliberate. The interpreter overhead is so little that we don't mind having it to be able to log the iteration progress with `tqmd` package.
+We check that solutions provided by Python and Cython agree:
 
 ```{code-cell} ipython3
-fig, ax = plt.subplots(1, 3, figsize=(14, 4))
+# We want to plot aling y=0
+jc = int(ly/(2*dy))
+```
+
+```{code-cell} ipython3
+fig, ax = plt.subplots(1, 3, figsize=(12, 3.5), tight_layout=True)
 
 ax[0].contourf(X, Y, nb_p, 20)
 ax[1].contourf(X, Y, c_p, 20)
 
-# plot along the line y=0:
-jc = int(ly/(2*dy))
-ax[2].plot(x, nb_p[:,jc], 'r*', label=r'$pnew$')
-ax[2].plot(x, c_p[:,jc], '--', label=r'$pnew$')
+ax[2].plot(x, nb_p[:,jc], 'o', label='Python', markerfacecolor='None')
+ax[2].plot(x, nb_p[:,jc], '*', label='Python+Numba')
+ax[2].plot(x, c_p[:,jc], '--', label='Cython')
 
-# add some labels and titles
-ax[0].set_xlabel(r'$x$')
-ax[0].set_ylabel(r'$y$')
-ax[0].set_title('Exact solution')
+for axis in ax:
+    axis.set_xlabel('$x$')
+    
+ax[0].set_ylabel('$y$')
+ax[2].set_ylabel('$p(x,0)$')
 
-ax[2].set_xlabel(r'$x$')
-ax[2].set_ylabel(r'$p$')
-ax[2].set_title(r'$p(x,0)$')
+ax[0].set_title('Solution with Python+Numba')
+ax[1].set_title('Solution with Cython')
+
+ax[2].legend(loc='upper center');
 ```
+
+First of all, both Numba and Cython provide quite a significant speedup. Why though the execution time for the Python code with Numba and for Cython differs by almost a factor of $10$? It is in fact caused by *how* the Numba is integrated into the Python code in this particular example. If you look into the source code, you'll see that the only piece of code that depends on whether Numba is used or not, is this one:
+
+```
+if use_numba:
+    pnew = gauss_seidel_step(p, pnew, b, nx, ny, dx)
+    diff = norms.l2_diff(pnew, p)
+else:
+    pnew = py_gauss_seidel_step(p, pnew, b, nx, ny, dx)
+    diff = norms.py_l2_diff(pnew, p)
+```
+This is the only piece of code that will be compiled by Numba. The rest of the code will still be treated by the Python interpreter causing the *interpreter overhead*.
+
+Could this function be implemented otherwise? Yes, it could. The choice has been made though fully deliberately. The thing is that *Numba doesn't interact with `tqdm` package*. Even if we have reverted to the standard `print` function, it would have been tricky, as Numba would not allow us to use raw or format strings, as well as it doesn't support some of the optional arguments of `print`. We therefore sacrificed some performance for having a fancy logging output. Even though the factor of (almost) $10$ is a significant difference, the time Python code partially compiled with Numba takes to execute in this particular case is still very little to the human perception.
+
+It is fair to say though that Numba is a very fast evolving package, so we would easily expect the support for `tqdm` to come in some of the future releases.
+
+#### Syntax for Numba integration
+
+Let us now look at how exactly Numba is integrated into the `gauss_seidel_step` function (example of `l2_diff` function is absolutely equivalent):
+```
+from numba import jit
+
+@jit(nopython=True)
+def gauss_seidel_step(p, pnew, b, nx, ny, dx):
+    '''Performs one Gauss-Seidel iteration'''
+    for j in range(1, ny-1):
+        for i in range(1, nx-1):
+            pnew[i, j] = (0.25*(pnew[i-1, j] + p[i+1, j] + pnew[i, j-1]
+                       + p[i, j+1] - b[i, j]*dx**2))
+    return pnew
+```
+Yes, it is as easy, as it looks. For the majority of problems it would only take decorating your function with a `jit` decorator. Parameter `nopython`, when evaluated to `True`, enables so-called *nopython* mode. In the case when `nopython` is set to `False`, the *object* mode is enabled. Nopython mode produces higher performance, as it does not use Python interpreter. Nevertheless it might fail depending on your implementation and then compilation will fall back to the object mode.
+
+Sometimes you'll also see notation `@njit`. It is the shortcut to `@jit(nopython=True)`.
+
+#### Minimum on Exception Handling
+
+There is another fragment of the source Python code that must be explained:
+```
+try:
+    from tqdm.auto import tqdm
+except ModuleNotFoundError:
+    pass
+```
+This is the example of exceptions handling in Python. Exceptions are mostly errors that occur during the execution. But some of them are warnings or events.
+
+The minimal exception handling block consists of the `try` and `except` clauses. Inside the `try` clause you specify the code that is not exception-safe. `try` clause is not stand-alone and *must* be "accompanied" by the `except` clause. Inside the `except` clause you must specify the code that is do be executed if that from the `try` clause failed. If no exceptions occur inside the `try` clause, `except` clause is skipped. `pass` statement is used when you want do nothing.
+
+Main purpose of exception handling is two-fold making them not fatal. 
+
+Example made above perfectly fits this purpose. tqdm, unlike Numba or NumPy, *is not required* for the Gauss-Seidel solver to execute. It is rather a "luxury", not a necessity. We therefore try to import it inside the `try` clause and if exception of type `ModuleNotFoundError` is raised (tqdm is not found in system), the code doesn't terminate but just proceeds to the further statements.
+
+You can also raise exceptions yourself to prevent undesired behaviour and to provide more informative logging of the code. Inside the `gauss_seidel` function you can see the following lines:
+```
+if p.shape != b.shape:
+    raise ValueError('p and b must have the same shape')
+```
+As we haven't provided try/except block when calling the function, the `ValueError` exception will be raised and the execution will be terminated if you supply `p` and `b` of different shape. In the case if you supply `p` and `b` that are not the `numpy.ndarray`, the execution will crash at the stage when trying to execute the `if` statement with the `AttributeError` being raised.
+
+In a well-designed program exception handling must provide certain level of [exception safety][10].
+
+We will not further concentrate on exception handling and will proceed to understanding Cython implementation of the Gauss-Seidel solver. If you are willing to learn more about exception handling in Python on your own, the good place to start is from the [tutorial provided in the official documentation][11].
+
+#### Cython syntax
+
+If look into the `csolver.pyx` file, you'll see that there is a bit of unfamiliar syntax. It is not *drastically* different though. Cython syntax builds upon the Python syntax and adds some extra. "Extra" that appeared to be enough to implement the Gauss-Seidel solver consists of ...
+
+* ... type declaration ...
+
+    As it has been mentioned, dynamic typing is the major source for interpreter overhead in Python. In Cython we can use `cdef` statement to declare C variables. In this way Cython won't have to do the type conversion from Python types to C types.
+    
+    You can declare and initialize variable at once:
+    ```
+    cdef int it = 0
+    ```
+    Or you can declare variable without initialization:
+    ```
+    cdef Py_ssize_t i, j
+    ```
+    Note that `Py_ssize_t` is a C type for the indexing.
+    
+    As you can see, we also declare types of the objects that we pass to the function:
+    ```
+    def c_gauss_seidel(<...>, DTYPE_t dx, DTYPE_t tol, int max_it):
+        <...>
+    ```
+    `DTYPE_t` here is just a shortcut we have created for the C type `np.float64_t` that corresponds to the Python type `np.float64` (double precision float):
+    ```
+    ctypedef np.float64_t DTYPE_t
+    ```
+
+    When specifying types of function arguments like that, Python objects are immediately converted to C objects, and `dx`, `tol` and `max_it` are then local variables of declared C types.
+
+* ... and Cython memoryviews.
+
+    Cython works with NumPy types very well. If we looped over NumPy arrays though, it would barely provide any speedup. The reason for that is that `numpy.ndarray` is a Python type and cannot be combined with C types. Each time we access elements of `numpy.ndarray`, C integers must be converted to C integers.
+    
+    > [In short, memoryviews][12] are C structures that can hold a pointer to the data of a NumPy array and all the necessary buffer metadata to provide efficient and safe access: dimensions, strides, item size, item type information, etc…
+    
+    Syntax to create memoryview from the NumPy array is very simple:
+    ```
+    cdef np.ndarray[DTYPE_t, ndim=1] tol_hist_gs = np.zeros(max_it, dtype=DTYPE)
+    cdef DTYPE_t[:] tol_hist_gs_view = tol_hist_gs
+    ```
+    
+    Now note how `p` and `b` are passed to the function:
+    ```
+    def c_gauss_seidel(DTYPE_t[:, :] p, DTYPE_t[:, :] b,
+                   DTYPE_t dx, DTYPE_t tol, int max_it):
+        <...>
+    ```
+    This way, when we originally pass the object of type `numpy.ndarray`, their memoryviews are created right away and can be accessed through the variables `p` and `b`.
+    
+    NumPy array that is pointed to by the memoryview can be accessed through the `base` attribute of the memoryview:
+    ```
+    return <...>, p.base, <...>
+    ```
+    
+    It is due to the reason that we use memoryvies in the main loop of the program, that we gain such a speedup:
+    ```
+    for j in range(1, ny-1):
+        for i in range(1, nx-1):
+            p_new_view[i, j] = (0.25*(p_new_view[i-1, j] + p[i+1, j]
+                + p_new_view[i, j-1] + p[i, j+1] - b[i, j]*dx**2))
+    ```
+    Note that as well as for the most of the rest of code, syntax for the loops in Cython is exactly that in Python.
+    
+    The downside we get when using memoryviews is that they are not as flexible as Numpy arrays. Many NumPy functions though still support memoryviews. Memoryvies even support some of the "same" methods and attributes that Numpy arrays do but the return value is always of the C type.
+
+Generally almost *any* Python code is valid in Cython. This is no surprise, as aside from when working with C types directly, Cython makes calls to the Python interpreter. We have introduced typing and memoryvies as an extra of Cython to gain the speedup but the pure Python code should also compile.
+
+As it has been said, learning to program efficiently in Cython should not be a complicated task for the Python programmer. Nevertheless, aside from writing the source code, it is also necessary to provide proper compile instructions (makefile). The makefile used in this demo is trivial:
+```
+from setuptools import setup
+from Cython.Build import cythonize
+import numpy
+
+setup(
+    ext_modules=cythonize('csolver.pyx',
+                        build_dir='build',
+                        annotate=True,
+                        language_level = '3'),
+    include_dirs=[numpy.get_include()],
+)
+```
+`Cython.Build.cythonize` function is responsible for that the source Cython file (`csolver.pyx` in this case) is compiled into C code that is further compiled into machine code, and the shared library is created. The latter is directly importable into Python code, as we have showed above. `build_dir` parameter specifies the location where the files created at compile time are stored. `language_level` specifies the standard of Python that is used.
+
+The line
+```
+include_dirs=[numpy.get_include()]
+```
+is important to our code because we have imported the *definition* numpy file using `cimport` command:
+```
+cimport numpy as np
+```
+
+Definition file is a file with C code with `.h` extension. That is how we got access to the C type `np.float64_t`.
+
+To run the Cython makefile, the following command must be executed:
+```
+python setup.py build_ext --build-lib <target_dir>
+```
+where the `<target_dir>` specifies the location for the shared library.
+
+Overall, as you see, there is much more information to absorb when understanding Cython than when understanding Numba. Numba should certainly be your first choice when it is easily integratable. Cython though communicates much more naturally with C (and C++) code.  
+
+[10]: <https://en.wikipedia.org/wiki/Exception_safety> "Exception safety"
+[11]: <https://docs.python.org/3/tutorial/errors.html> "Exception handling"
+[12]: <https://cython.readthedocs.io/en/latest/src/userguide/numpy_tutorial.html#efficient-indexing-with-memoryviews> "Memoryviews"
+
++++
+
+## Summary
+
+In this notebook we have dug deeper into the basic programming concepts, such as compilers and interpreters. We have investigated alternative tools to get C-like performance with Python - Numba and Cython. The sample implementation of Gauss-Seidel solver has been sped up by the factor of about $20$ with Numba and $100$ with Cython. It is important to note though that generally Numba and Cython show similar performance for the same kind of problems. We chose to implement partial compilation with Numba in order to use the logging tools of tqdm package. Python decorators and exception handling were introduced as a part of the tutorial.
+We therefore conclude the chapter on iterative methods with numerical tools for efficient implementation of iterative solvers.  
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

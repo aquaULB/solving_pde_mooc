@@ -269,6 +269,11 @@ print_identity('Joe', 78)
 Implementation of the timing function is accessible in `modules/timers.py` by the name `dummy_timer`. You are free to use it as an alternative to `time` magic. Note that it does not implement the decorator factory, as in the above example, and does not provide functionality of the `timeit` magic that estimated the time averaged among $n$ runs. Consider example using `dummy_timer`:
 
 ```{code-cell} ipython3
+import sys
+import os.path
+
+sys.path.insert(0, '../modules')
+
 import timers
 
 @timers.dummy_timer
@@ -343,11 +348,11 @@ max_it = 1000000          # maximal amount of iterations allowed
 # see notebook 02_02_Runge_Kutta for more details
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y, indexing ='ij')
+X, Y = np.meshgrid(x, y)
 
 # Compute the rhs
-b = (np.sin(np.pi * X / lx) * np.cos(np.pi * Y / ly) +
-     np.sin(5.0 * np.pi * X / lx) * np.cos(5.0 * np.pi * Y / ly))
+b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
+  + np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
 ```
 
 ```{code-cell} ipython3
@@ -368,34 +373,27 @@ c_p = np.zeros((nx, ny), dtype=np.float64)
 %time _, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
 ```
 
-You can see that the Cython code runs faster than that with Numba. This is the price we pay for choosing to only partially compile our code using Numba. There is *interpreter overhead*, as Python interpreter compiles the source code into bytecode before executing it at each iteration. This is the example, though, when "slow" implementation is deliberate. The interpreter overhead is so little that we don't mind having it to be able to log the iteration progress with `tqmd` package. 
+You can see that the Cython code runs faster than that with Numba. This is the price we pay for choosing to only partially compile our code using Numba (more details below). There is *interpreter overhead*, as Python interpreter compiles the source code into bytecode and then interprets it before executing at each iteration. This is the example, though, when "slow" implementation is deliberate. The interpreter overhead is so little that we don't mind having it to be able to log the iteration progress with `tqmd` package.
 
 ```{code-cell} ipython3
-fig, ax = plt.subplots(2, 2, figsize=(16, 10))
+fig, ax = plt.subplots(1, 3, figsize=(14, 4))
 
-# We shall now use the
-# matplotlib.pyplot.contourf function.
-# As X and Y, we pass the mesh data.
-#
-# For more info
-# https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
-#
-ax[0, 0].contourf(X, Y, nb_p, 20)
-ax[1, 0].contourf(X, Y, c_p, 20)
+ax[0].contourf(X, Y, nb_p, 20)
+ax[1].contourf(X, Y, c_p, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))
-ax[0, 1].plot(x, nb_p[:,jc], 'r*', label=r'$pnew$')
-ax[1, 1].plot(x, c_p[:,jc], '--', label=r'$pnew$')
+ax[2].plot(x, nb_p[:,jc], 'r*', label=r'$pnew$')
+ax[2].plot(x, c_p[:,jc], '--', label=r'$pnew$')
 
 # add some labels and titles
-ax[0, 0].set_xlabel(r'$x$')
-ax[0, 0].set_ylabel(r'$y$')
-ax[0, 0].set_title('Exact solution')
+ax[0].set_xlabel(r'$x$')
+ax[0].set_ylabel(r'$y$')
+ax[0].set_title('Exact solution')
 
-ax[0, 1].set_xlabel(r'$x$')
-ax[0, 1].set_ylabel(r'$p$')
-ax[0, 1].set_title(r'$p(x,0)$')
+ax[2].set_xlabel(r'$x$')
+ax[2].set_ylabel(r'$p$')
+ax[2].set_title(r'$p(x,0)$')
 ```
 
 ```{code-cell} ipython3

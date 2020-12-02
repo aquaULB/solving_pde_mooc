@@ -600,15 +600,15 @@ static PyObject *__pyx_pf_7csolver_c_gauss_seidel(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 /* … */
-  __pyx_tuple__26 = <span class='py_c_api'>PyTuple_Pack</span>(16, __pyx_n_s_p, __pyx_n_s_b, __pyx_n_s_dx, __pyx_n_s_tol, __pyx_n_s_max_it, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_isize, __pyx_n_s_diff, __pyx_n_s_tol_hist_gs, __pyx_n_s_tol_hist_gs_view, __pyx_n_s_p_new_view, __pyx_n_s_pbar, __pyx_n_s_it, __pyx_n_s_i, __pyx_n_s_j);<span class='error_goto'> if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 19, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_tuple__26);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_tuple__26);
+  __pyx_tuple__28 = <span class='py_c_api'>PyTuple_Pack</span>(16, __pyx_n_s_p, __pyx_n_s_b, __pyx_n_s_dx, __pyx_n_s_tol, __pyx_n_s_max_it, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_isize, __pyx_n_s_diff, __pyx_n_s_tol_hist_gs, __pyx_n_s_tol_hist_gs_view, __pyx_n_s_p_new_view, __pyx_n_s_pbar, __pyx_n_s_it, __pyx_n_s_i, __pyx_n_s_j);<span class='error_goto'> if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 19, __pyx_L1_error)</span>
+  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_tuple__28);
+  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_tuple__28);
 /* … */
   __pyx_t_1 = PyCFunction_NewEx(&amp;__pyx_mdef_7csolver_1c_gauss_seidel, NULL, __pyx_n_s_csolver);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_c_gauss_seidel, __pyx_t_1) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 19, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_codeobj__27 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(5, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_csolver_pyx, __pyx_n_s_c_gauss_seidel, 19, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 19, __pyx_L1_error)</span>
+  __pyx_codeobj__29 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(5, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_csolver_pyx, __pyx_n_s_c_gauss_seidel, 19, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 19, __pyx_L1_error)</span>
 </pre><pre class="cython line score-0">&#xA0;<span class="">020</span>:                    <span class="n">DTYPE_t</span> <span class="n">dx</span><span class="p">,</span> <span class="n">DTYPE_t</span> <span class="n">tol</span><span class="p">,</span> <span class="nb">int</span> <span class="n">max_it</span><span class="p">):</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">021</span>:     <span class="sd">&#39;&#39;&#39;Performs Gauss-Seidel iterations until convergence</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">022</span>: </pre>
@@ -914,16 +914,16 @@ static PyObject *__pyx_pf_7csolver_c_gauss_seidel(CYTHON_UNUSED PyObject *__pyx_
 <pre class="cython line score-0">&#xA0;<span class="">088</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">089</span>:         <span class="c"># In a loop we manipulate the memoryviews, not numpy arrays. This pro-</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">090</span>:         <span class="c"># vides the actual speed up.</span></pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">091</span>:         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span> <span class="n">nx</span><span class="o">-</span><span class="mf">1</span><span class="p">):</span></pre>
-<pre class='cython code score-0 '>    __pyx_t_14 = (__pyx_v_nx - 1);
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">091</span>:         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span> <span class="n">ny</span><span class="o">-</span><span class="mf">1</span><span class="p">):</span></pre>
+<pre class='cython code score-0 '>    __pyx_t_14 = (__pyx_v_ny - 1);
     __pyx_t_15 = __pyx_t_14;
     for (__pyx_t_16 = 1; __pyx_t_16 &lt; __pyx_t_15; __pyx_t_16+=1) {
-      __pyx_v_i = __pyx_t_16;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">092</span>:             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span> <span class="n">ny</span><span class="o">-</span><span class="mf">1</span><span class="p">):</span></pre>
-<pre class='cython code score-0 '>      __pyx_t_17 = (__pyx_v_ny - 1);
+      __pyx_v_j = __pyx_t_16;
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">092</span>:             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span> <span class="n">nx</span><span class="o">-</span><span class="mf">1</span><span class="p">):</span></pre>
+<pre class='cython code score-0 '>      __pyx_t_17 = (__pyx_v_nx - 1);
       __pyx_t_18 = __pyx_t_17;
       for (__pyx_t_19 = 1; __pyx_t_19 &lt; __pyx_t_18; __pyx_t_19+=1) {
-        __pyx_v_j = __pyx_t_19;
+        __pyx_v_i = __pyx_t_19;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">093</span>:                 <span class="n">p_new_view</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">p_new_view</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span></pre>
 <pre class='cython code score-0 '>        __pyx_t_20 = (__pyx_v_i - 1);
         __pyx_t_21 = __pyx_v_j;

@@ -299,19 +299,19 @@ The exact solution of the equation is:
 p_e = -\frac{1}{2\pi^2}\sin(\pi x) \cos(\pi y) -\frac{1}{50\pi^2}\sin(5\pi x) \cos(5\pi y)
 \end{equation}
 
-Sample solvers written in Python and Cython are provided along with the course in directory `solving_pde_mooc/notebooks/demos/BoostingPython`. Python solver can be used with or without Numba.
+Sample solvers written in Python and Cython are provided along with the course in the directory `solving_pde_mooc/notebooks/demos/BoostingPython`. The Python solver can be used with or without Numba.
 
-Cython solver is hosted in `BoostingPython/cy`. `BoostingPython/cy/csolver.pyx` contains the source Cython code. Library compiled from the source cose is located in `BoostingPython/cy/lib`. You therefore don't have to recompile the source code but can simply import the library by running:
+The Cython solver is hosted in `BoostingPython/cy`. `BoostingPython/cy/csolver.pyx` contains the source Cython code. The library compiled from the source code is located in `BoostingPython/cy/lib`. You therefore don't have to recompile the source code but you can simply import the library by running:
 ```
 import cy.lib.csolver as csolver
 ```
-If you're willing to recompile it, we refer you to `BoostingPython/README.md` for concrete instruction and to generic tutorial from Cython's [official documentation][8].
+If you're willing to recompile it, we refer you to `BoostingPython/README.md` for the instructions and to the generic tutorial from Cython's [official documentation][8].
 
-Python and Cython code we provide is thoroughly documented but we will still comment on certain pieces.
+The Python and Cython codes we provide are thoroughly documented but we will still provide some extra information here.
 
 #### Efficiency
 
-But first run the cells below and see for yourself how performance compare.
+But first run the cells below and see by yourself how the performance compare.
 
 [8]: <https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html> "Cython compilation"
 
@@ -344,7 +344,7 @@ dy = ly / (ny-1)          # grid spacing in the y direction
 
 # Iteration parameters
 tol = 1e-10               # convergence precision
-max_it = 1000000          # maximal amount of iterations allowed
+max_it = 10000            # maximal amount of iterations allowed
 ```
 
 ```{code-cell} ipython3
@@ -364,7 +364,7 @@ nb_p = p.copy()        # container for solution with Numba enabled
 c_p = np.zeros((nx, ny), dtype=np.float64) # container for solution obtained with Cython
 ```
 
-`gauss_seidel` function is implemented in Python. It has an optional parameter `use_numba`. Its default value is `False`.
+The `gauss_seidel` function is implemented in Python. It has an optional parameter `use_numba`. Its default value is `False`.
 
 Note usage of underscore `_`. It has special meaning in Python. `_` stores the value of the last statement executed by interpreter. It is normally *not* used to *access* the value but rather to *ignore* it. Here the function returns three values but we are only interesting in storing one, so we assign others to the underscore variable. That is not the only meaning underscore can have in Python but this topic won't be covered further in this course. We invite you to [read about the underscore in Python][9] on your own if you're interested.
 
@@ -382,7 +382,7 @@ Note usage of underscore `_`. It has special meaning in Python. `_` stores the v
 %time _, c_p, _ = csolver.c_gauss_seidel(c_p, b, dx, tol, max_it)
 ```
 
-We check that solutions provided by Python and Cython agree:
+We check that the solutions provided by Python and Cython agree:
 
 ```{code-cell} ipython3
 # We want to plot aling y=0
@@ -411,7 +411,7 @@ ax[1].set_title('Solution with Cython')
 ax[2].legend(loc='upper center');
 ```
 
-First of all, both Numba and Cython provide quite a significant speedup. Why though the execution time for the Python code with Numba and for Cython differs by almost a factor of $10$? It is in fact caused by *how* the Numba is integrated into the Python code in this particular example. If you look into the source code, you'll see that the only piece of code that depends on whether Numba is used or not, is this one:
+First of all, both Numba and Cython provide quite a significant speedup. However, the execution time for the Python code with Numba and for Cython differs by almost a factor of $10$? It is in fact caused by *how* Numba is integrated into the Python code in this particular example. If you look into the source code, you'll see that the only piece of code that depends on whether Numba is used or not, is this one:
 
 ```
 if use_numba:
@@ -423,7 +423,7 @@ else:
 ```
 This is the only piece of code that will be compiled by Numba. The rest of the code will still be treated by the Python interpreter causing the *interpreter overhead*.
 
-Could this function be implemented otherwise? Yes, it could. The choice has been made though fully deliberately. The thing is that *Numba doesn't interact with `tqdm` package*. Even if we have reverted to the standard `print` function, it would have been tricky, as Numba would not allow us to use raw or format strings, as well as it doesn't support some of the optional arguments of `print`. We therefore sacrificed some performance for having a fancy logging output. Even though the factor of (almost) $10$ is a significant difference, the time Python code partially compiled with Numba takes to execute in this particular case is still very little to the human perception.
+Could this function be implemented otherwise? Yes, it could. The choice has been made deliberately. The thing is that *Numba cannot be used with `tqdm` package*. And even if we have reverted to the standard `print` function, it would have been tricky, as Numba would not allow us to use raw or formatted strings, as well as it doesn't support some of the optional arguments of `print`. We therefore sacrificed some performance for having a fancy logging output. Even though the factor of (almost) $10$ is a significant difference, the time taken by the Python code -partially - compiled with Numba in this particular case is still very little to the human perception.
 
 It is fair to say though that Numba is a very fast evolving package, so we would easily expect the support for `tqdm` to come in some of the future releases.
 
@@ -442,9 +442,9 @@ def gauss_seidel_step(p, pnew, b, nx, ny, dx):
                        + p[i, j+1] - b[i, j]*dx**2))
     return pnew
 ```
-Yes, it is as easy, as it looks. For the majority of problems it would only take decorating your function with a `jit` decorator. Parameter `nopython`, when evaluated to `True`, enables so-called *nopython* mode. In the case when `nopython` is set to `False`, the *object* mode is enabled. Nopython mode produces higher performance, as it does not use Python interpreter. Nevertheless it might fail depending on your implementation and then compilation will fall back to the object mode.
+Yes, it is as easy, as it looks. For the majority of problems it would only take decorating your function with a `jit` decorator. The parameter `nopython`, when evaluated to `True`, enables the so-called *nopython* mode. When `nopython` is set to `False`, the *object* mode is enabled. Nopython mode produces higher performance, as it does not use the Python interpreter. Nevertheless it might fail depending on your implementation; compilation will fall back to the object mode only if `nopython` is set to false.
 
-Sometimes you'll also see notation `@njit`. It is the shortcut to `@jit(nopython=True)`.
+Sometimes you'll also see the notation `@njit`. It is the shortcut to `@jit(nopython=True)`.
 
 #### Minimum on Exception Handling
 
@@ -455,24 +455,24 @@ try:
 except ModuleNotFoundError:
     pass
 ```
-This is the example of exceptions handling in Python. Exceptions are mostly errors that occur during the execution. But some of them are warnings or events.
+This is an example of exceptions handling in Python. Exceptions are mostly errors that occur during the execution. But some of them are warnings or events.
 
-The minimal exception handling block consists of the `try` and `except` clauses. Inside the `try` clause you specify the code that is not exception-safe. `try` clause is not stand-alone and *must* be "accompanied" by the `except` clause. Inside the `except` clause you must specify the code that is do be executed if that from the `try` clause fails. If no exceptions occur inside the `try` clause, `except` clause is skipped. `pass` statement is used when you want do nothing.
+The minimal exception handling block consists of the `try` and `except` clauses. Inside the `try` clause you specify the code that is not exception-safe. `try` clause is not stand-alone and *must* be "accompanied" by the `except` clause. Inside the `except` clause you must specify code that is do be executed if that from the `try` clause fails. If no exceptions occur inside the `try` clause, the `except` clause is skipped. The `pass` statement is used when you want do nothing.
 
-Main purpose of exception handling is making them not fatal.
+The main purpose of exception handling is making them not fatal.
 
-Example made above perfectly fits this purpose. tqdm, unlike Numba or NumPy, *is not required* for the Gauss-Seidel solver to execute. It is rather a "luxury", not a necessity. We therefore try to import it inside the `try` clause and if exception of type `ModuleNotFoundError` is raised (tqdm is not found in system), the code doesn't terminate but just proceeds to the further statements.
+The example made above perfectly fits this purpose. tqdm, unlike Numba or NumPy, *is not required* for the Gauss-Seidel solver to execute. It is rather a "luxury", not a necessity. We therefore try to import it inside the `try` clause and if the exception of type `ModuleNotFoundError` is raised (tqdm is not found in system), the code doesn't terminate but just proceeds to the further statements.
 
-You can also raise exceptions yourself to prevent undesired behaviour and to provide more informative logging of the code. Inside the `gauss_seidel` function you can see the following lines:
+You can also raise exceptions yourself to prevent and undesired behavior and to provide more informative logging of the code. Inside the `gauss_seidel` function you can see the following lines:
 ```
 if p.shape != b.shape:
     raise ValueError('p and b must have the same shape')
 ```
-As we haven't provided try/except block when calling the function, the `ValueError` exception will be raised and the execution will be terminated if you supply `p` and `b` of different shapes. In the case if you supply `p` and `b` that are not of type `numpy.ndarray`, the execution will crash at the stage when trying to execute the `if` statement with the `AttributeError` being raised.
+As we haven't provided try/except block when calling the function, the `ValueError` exception will be raised and the execution will be terminated if you supply `p` and `b` of different shapes. If you supply `p` and `b` that are not of type `numpy.ndarray`, the execution will crash at the stage when trying to execute the `if` statement with the `AttributeError` being raised.
 
-In a well-designed program exception handling must provide certain level of [exception safety][10].
+In a well-designed program, exception handling must provide a certain level of [exception safety][10].
 
-We will not further concentrate on exception handling and will proceed to understanding Cython implementation of the Gauss-Seidel solver. If you are willing to learn more about exception handling in Python on your own, the good place to start is from the [tutorial provided in the official documentation][11].
+We will not further concentrate on exception handling and will proceed to understanding the Cython implementation of the Gauss-Seidel solver. If you are willing to learn more about exception handling in Python on your own, the good place to start is from the [tutorial provided in the official documentation][11].
 
 #### Cython syntax
 

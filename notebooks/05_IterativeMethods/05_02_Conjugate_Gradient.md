@@ -292,7 +292,7 @@ else:
 
 # When the progress bar will not be used
 # further, it has to be closed
-pbar.close()
+del(pbar)
 ```
 
 We can measure the accuracy of our solution with the same diagnostics as above.
@@ -426,7 +426,7 @@ else:
 
 # When the progress bar will not be used
 # further, it has to be closed
-pbar.close()
+del(pbar)
 ```
 
 You are not mistaken, it only took 3 iterations to reach the desired tolerance! This is a rather a special case because the right-hand side of the equation is simple. But you can try other choices and still observe the conjugate gradient method to be much faster than the steepest descent method.

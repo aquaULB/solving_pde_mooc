@@ -287,7 +287,7 @@ def d2_mat_dirichlet_2d(nx, ny, dx, dy):
     diagonals = [diag_g, diag_a, diag_c, diag_a, diag_g]
     # and a sequence of positions of the diagonal entries relative to the main
     # diagonal.
-    offsets = [-(ny-2), -1, 0, 1, ny-2]
+    offsets = [-(nx-2), -1, 0, 1, nx-2]
 
     # Call to the diags routine; note that diags return a representation of the
     # array; to explicitly obtain its ndarray realisation, the call to .toarray()
@@ -544,7 +544,7 @@ else:
 
 # When the progress bar will not be used
 # further, it has to be closed
-pbar.close()
+del(pbar)
 ```
 
 We can measure the accuracy of our solution with the same diagnostics as above.
@@ -682,6 +682,8 @@ while (diff > tolerance):
 
 else:
     print(f'\nThe solution converged after {it} iterations')
+
+del(pbar)
 ```
 
 The number of iterations was indeed cut by approximately a factor of $2$. We can even compare how `l2_diff` decreases during the iteration procedure and compare the output with the Jacobi method:

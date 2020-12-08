@@ -234,15 +234,13 @@ b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
 
 # b is currently a 2D array. We need to convert it to a row-major
 # ordered 1D array. This is done with the flatten numpy function.
-# We use the parameter 'F' to specify that we want want row-major
-# ordering. The letter 'F' is used because this is the natural
-# ordering of the popular Fortran language. For column-major
-# ordering you can pass 'C' as paremeter (column-major ordering)
-# is the natural ordering for the C language.
+# We use the parameter 'C' to specify that we want want row-major
+# ordering. The letter 'C' is used because this is the natural
+# ordering of the popular C language. For column-major
+# ordering you can pass 'F' as paremeter, which is the natural
+# ordering for the Fortran language.
 # More info
 # https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html
-
-# Flatten the rhs using the row-major order.
 bflat = b[1:-1, 1:-1].flatten('C')
 
 # Allocate array for the (full) solution, including boundary values
@@ -339,12 +337,9 @@ Ainv = np.linalg.inv(A)
 # https://numpy.org/doc/stable/reference/generated/numpy.reshape.html
 #
 # Note that we have specified the array dimensions nx-2,
-# ny-2 and passed 'F' as the value for the 'order' argument.
-# This indicates that we are working with a vector in row major order
-# as standard in the {F}ortran programming language.
-#
-# Note that we have explicitly specified the row-major order of the
-# operation.
+# ny-2 and passed 'C' as the value for the 'order' argument.
+# This indicates that we are working with a vector in row-major order
+# as standard in the C programming language.
 pvec = np.reshape(np.dot(Ainv, bflat), (nx-2, ny-2), order='C')
 
 # Construct the full solution and apply boundary conditions

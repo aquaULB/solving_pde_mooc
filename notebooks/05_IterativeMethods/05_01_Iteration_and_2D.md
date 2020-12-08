@@ -242,8 +242,8 @@ b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
 # More info
 # https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html
 
-# Flatten the rhs
-bflat = b[1:-1, 1:-1].flatten('F')
+# Flatten the rhs using the row-major order.
+bflat = b[1:-1, 1:-1].flatten('C')
 
 # Allocate array for the (full) solution, including boundary values
 p = np.empty((nx, ny))
@@ -342,7 +342,10 @@ Ainv = np.linalg.inv(A)
 # ny-2 and passed 'F' as the value for the 'order' argument.
 # This indicates that we are working with a vector in row major order
 # as standard in the {F}ortran programming language.
-pvec = np.reshape(np.dot(Ainv, bflat), (nx-2, ny-2), order='F')
+#
+# Note that we have explicitly specified the row-major order of the
+# operation.
+pvec = np.reshape(np.dot(Ainv, bflat), (nx-2, ny-2), order='C')
 
 # Construct the full solution and apply boundary conditions
 p[1:-1, 1:-1] = pvec

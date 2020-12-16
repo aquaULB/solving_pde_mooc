@@ -192,7 +192,7 @@ dy = ly / (ny - 1)        # grid spacing in the y direction
 # see notebook 02_02_Runge_Kutta for more details
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y)
+X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Create the source term.
 b = rhs_2d(X, Y)

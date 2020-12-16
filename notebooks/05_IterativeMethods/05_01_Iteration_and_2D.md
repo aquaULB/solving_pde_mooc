@@ -129,7 +129,7 @@ p_{0, j} = p_{nx-1, j} = 0\;\; \forall j,\;\;p_{i,0} = p_{i,ny-1}=0\;\; \forall 
 $$
 
 This implies that we have to solve a system containing a total of $(nx-2)\times (ny-2)$ unknowns.
-If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *row major order*. The first components of our vector are then $p_{1,1}, p_{2,1},\ldots, p_{nx-2,1}$. The list then goes on with $p_{1,2}, p_{2,2},\ldots, p_{nx-2,2}$ and so on until we reach the last components $p_{1,ny-2}, p_{2,ny-2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $(i-1)+(j-1)\times (nx-2)$.
+If we want to represent this equation in matrix form, things get a bit more intricate. We need to store all the unknowns consecutively in a vector. Here we choose to order all grid points in *column-major order*. The first components of our vector are then $p_{1,1}, p_{2,1},\ldots, p_{nx-2,1}$. The list then goes on with $p_{1,2}, p_{2,2},\ldots, p_{nx-2,2}$ and so on until we reach the last components $p_{1,ny-2}, p_{2,ny-2},\ldots, p_{nx-2,ny-2}$. The index of any unknown $p_{i,j}$ in this vector is therefore $(i-1)+(j-1)\times (nx-2)$.
 
 Let's take for example $nx=ny=6$. The system of equations \eqref{eq:discPoisson2D} may then be written as:
 
@@ -224,7 +224,10 @@ We now create the grid, the right-hand side of the equation and allocate an arra
 # see notebook 02_02_Runge_Kutta for more details
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y)
+# We pass the argument `indexing='ij'` to np.meshgrid
+# as x and y should be associated respectively with the
+# rows and columns of X, Y.
+X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Compute the rhs. Note that we non-dimensionalize the coordinates
 # x and y with the size of the domain in their respective dire-
@@ -232,17 +235,15 @@ X, Y = np.meshgrid(x, y)
 b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
   + np.sin(5.0*np.pi*X)*np.cos(5.0*np.pi*Y))
 
-# b is currently a 2D array. We need to convert it to a row-major
+# b is currently a 2D array. We need to convert it to a column-major
 # ordered 1D array. This is done with the flatten numpy function.
-# We use the parameter 'F' to specify that we want want row-major
+# We use the parameter 'F' to specify that we want want column-major
 # ordering. The letter 'F' is used because this is the natural
-# ordering of the popular Fortran language. For column-major
-# ordering you can pass 'C' as paremeter (column-major ordering)
-# is the natural ordering for the C language.
+# ordering of the popular Fortran language. For row-major
+# ordering you can pass 'C' as paremeter, which is the natural
+# ordering for the C language.
 # More info
 # https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html
-
-# Flatten the rhs
 bflat = b[1:-1, 1:-1].flatten('F')
 
 # Allocate array for the (full) solution, including boundary values
@@ -332,7 +333,7 @@ Ainv = np.linalg.inv(A)
 
 # The numerical solution is obtained by performing
 # the multiplication A^{-1}*b. This returns a vector
-# in row major ordering. To convert it back to a 2D array
+# in column-major ordering. To convert it back to a 2D array
 # that is of the form p(x,y) we pass it immediately to
 # the reshape function.
 # For more info:
@@ -340,8 +341,8 @@ Ainv = np.linalg.inv(A)
 #
 # Note that we have specified the array dimensions nx-2,
 # ny-2 and passed 'F' as the value for the 'order' argument.
-# This indicates that we are working with a vector in row major order
-# as standard in the {F}ortran programming language.
+# This indicates that we are working with a vector in column-major order
+# as standard in the Fortran programming language.
 pvec = np.reshape(np.dot(Ainv, bflat), (nx-2, ny-2), order='F')
 
 # Construct the full solution and apply boundary conditions
@@ -457,7 +458,7 @@ dy = ly / (ny-1)          # grid spacing in the y direction
 # see notebook 02_02_Runge_Kutta for more details
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y)
+X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Compute the rhs
 b = (np.sin(np.pi*X)*np.cos(np.pi*Y)
@@ -621,7 +622,7 @@ for j in range(1, ny-1):
                        + p[i, j+1]-b[i, j]*dx**2))
 ```
 
-Note how we are looping in row major order. For each value of `j`, the inner loops updates `i` from `1` to `nx-1` before proceeding to the next value of `j`. Graphically, the loops scan the domain in this order:
+Note how we are looping in column-major order. For each value of `j`, the inner loops updates `i` from `1` to `nx-1` before proceeding to the next value of `j`. Graphically, the loops scan the domain in this order:
 
 <img width="450px" src="../figures/GSgrid_e.png">
 
@@ -706,10 +707,10 @@ ax.legend();
 We have observed empirically that the Jacobi and Gauss-Seidel methods converge to the solution of the discretized Poisson equation. In this section we explore this convergence process in more detail.
 
 The definition of the Jacobi method is given by \eqref{eq:iterkSolPoisson} (we keep the assumption that $\Delta x=\Delta y = \Delta$).
-If we represent all the unknowns as a vector $\boldsymbol p = [p_{i,j}]$ (using again row major ordering), we can write this formula as:
+If we represent all the unknowns as a vector $\boldsymbol p = [p_{i,j}]$ (using again column-major ordering), we can write this formula as:
 
 \begin{equation*}
-    A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
+    A^J_1\boldsymbol p^{k+1} = A^J_2 \boldsymbol p^k - \boldsymbol b \Delta^2.
 \end{equation*}
 
 $A^J_1=-4\times I$ and $A^J_2=L+U$ where, for $nx=6, ny=4$:
@@ -748,7 +749,7 @@ and
 Similarly, the Gauss-Seidel algorithm may be written as:
 
 \begin{equation*}
-  A^{GS}_1\boldsymbol p^{k+1} = A^{GS}_2 \boldsymbol p^k - \frac14\boldsymbol b \Delta^2.
+  A^{GS}_1\boldsymbol p^{k+1} = A^{GS}_2 \boldsymbol p^k - \boldsymbol b \Delta^2.
 \end{equation*}
 
 with $A_1^{GS}=4\times I - L$ and $A_2^{GS}=U$.

@@ -351,7 +351,7 @@ max_it = 10000            # maximal amount of iterations allowed
 # Create the gridline locations and the mesh grid
 x = np.linspace(xmin, xmax, nx)
 y = np.linspace(ymin, ymax, ny)
-X, Y = np.meshgrid(x, y)
+X, Y = np.meshgrid(x, y, indexing='ij')
 
 # Compute the rhs
 b = (np.sin(np.pi*X)*np.cos(np.pi*Y)

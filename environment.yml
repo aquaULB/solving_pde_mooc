@@ -1,0 +1,20 @@
+name: course
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.9
+  - numpy
+  - scipy 
+  - matplotlib 
+  - jupyter
+  - numba
+  - jupytext 
+  - jupyter_contrib_nbextensions 
+  - tqdm
+  - ipywidgets
+  - pip
+  - pip:
+    - jupyter-book
+    - ghp-import
+  

@@ -3,6 +3,7 @@ __pycache__
 *.ipynb
 .ipynb_checkpoints
 *.pyc
+latex
 
 # Vi/Joe backup files or crash reports
 *~

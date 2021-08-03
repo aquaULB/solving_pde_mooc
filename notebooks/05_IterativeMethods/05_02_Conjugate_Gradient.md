@@ -5,8 +5,8 @@ jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.12
-    jupytext_version: 1.6.0
+    format_version: 0.13
+    jupytext_version: 1.10.3
 kernelspec:
   display_name: Python 3
   language: python
@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Projection-methods" data-toc-modified-id="Projection-methods-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Projection methods</a></span></li><li><span><a href="#Steepest-descend-method" data-toc-modified-id="Steepest-descend-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Steepest descend method</a></span></li><li><span><a href="#Conjugate-gradient-method" data-toc-modified-id="Conjugate-gradient-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Conjugate gradient method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Projection-methods" data-toc-modified-id="Projection-methods-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Projection methods</a></span></li><li><span><a href="#Steepest-descend-method" data-toc-modified-id="Steepest-descend-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Steepest descend method</a></span></li><li><span><a href="#Conjugate-gradient-method" data-toc-modified-id="Conjugate-gradient-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Conjugate gradient method</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 

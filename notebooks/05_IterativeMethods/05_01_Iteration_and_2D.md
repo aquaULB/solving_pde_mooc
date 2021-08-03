@@ -5,8 +5,8 @@ jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.12
-    jupytext_version: 1.6.0
+    format_version: 0.13
+    jupytext_version: 1.10.3
 kernelspec:
   display_name: Python 3
   language: python
@@ -37,7 +37,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Convergence-of-Jacobi-and-Gauss-Seidel-methods" data-toc-modified-id="Convergence-of-Jacobi-and-Gauss-Seidel-methods-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Convergence of Jacobi and Gauss-Seidel methods</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>References</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Higher-dimensional-discretizations" data-toc-modified-id="Higher-dimensional-discretizations-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Higher-dimensional discretizations</a></span><ul class="toc-item"><li><span><a href="#Discretization" data-toc-modified-id="Discretization-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Discretization</a></span></li><li><span><a href="#Direct-inversion" data-toc-modified-id="Direct-inversion-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Direct inversion</a></span></li></ul></li><li><span><a href="#Jacobi-method" data-toc-modified-id="Jacobi-method-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Jacobi method</a></span></li><li><span><a href="#Gauss-Seidel-method" data-toc-modified-id="Gauss-Seidel-method-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Gauss-Seidel method</a></span></li><li><span><a href="#Convergence-of-Jacobi-and-Gauss-Seidel-methods" data-toc-modified-id="Convergence-of-Jacobi-and-Gauss-Seidel-methods-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Convergence of Jacobi and Gauss-Seidel methods</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 

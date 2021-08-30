@@ -5,16 +5,17 @@ channels:
 dependencies:
   - python>=3.9
   - numpy
-  - scipy 
-  - matplotlib 
+  - scipy
+  - matplotlib
   - jupyter
   - numba
-  - jupytext 
-  - jupyter_contrib_nbextensions 
+  - jupytext
+  - jupyter_contrib_nbextensions
   - tqdm
   - ipywidgets
+  - cython
   - pip
   - pip:
     - jupyter-book
     - ghp-import
-  
+

@@ -194,4 +194,3 @@ dependencies:
     - uc-micro-py==1.0.1
     - urllib3==1.26.6
     - websocket-client==1.2.1
-prefix: /Users/yelyzavetavelizhanina/opt/anaconda3/envs/course

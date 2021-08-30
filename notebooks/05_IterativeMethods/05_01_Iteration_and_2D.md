@@ -482,7 +482,7 @@ tolerance = 1e-10
 max_it = 100000
 ```
 
-When your programs might take an extended time to execute, it is useful to add a progress bar while it executes. A nice Python package that provides this functionality without adding a significant overhead to the execution time is `tqdm` (you may want to check out its [documentation][51]). To use it, you first have to install it in your Python environment (if it's not already done). To do so, open a terminal and type the following commands:
+When your programs might take an extended time to execute, it is useful to add a progress bar while it executes. A nice Python package that provides this functionality without adding a significant overhead to the execution time is `tqdm` (you may want to check out its [documentation][52]). To use it, you first have to install it in your Python environment (if it's not already done). To do so, open a terminal and type the following commands:
 
 ```
 conda activate course
@@ -501,7 +501,7 @@ conda install -c conda-forge ipywidgets
 
 You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm`that we are goind to use:
 
-[51]: <https://tqdm.github.io> "TQDM documentation"
+[52]: <https://tqdm.github.io> "TQDM documentation"
 
 ```{code-cell} ipython3
 from tqdm.notebook import tqdm

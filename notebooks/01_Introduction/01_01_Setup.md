@@ -128,9 +128,33 @@ Open command line and make sure you are "located" in the root directory of the c
 
     conda env create -f environment.yml
 
-This will launch the installation of multiple packages. We will discuss their use as soon as we need them in the course.
+This will create a conda environment named "course" and launch the installation of multiple packages.
+
+In order to activate the *course* environment, run
+
+```
+conda activate course
+```
+
+and then you can deactivate it with
+
+```
+conda deactivate
+```
 
 ## Working with Jupyter Notebook
+
+We recommend that you use Jupyter Notebook to work with the study material, as it includes sample codes along with the text material.
+
+Before trying to view the notebooks in Jupyter Notebook, activate the *course* conda environment, as the notebooks rely on some of the newly installed packages. Launch the Jupyter Notebook application with the following command line command:
+
+```
+jupyter notebook
+```
+
+Course notes notebooks require some Jupyter Notebook extensions to display properly. In the extension menu check out the following boxes:
+
+<img src="../figures/jupextensions.png">
 
 [1]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [2]: <https://docs.anaconda.com> "Anaconda"

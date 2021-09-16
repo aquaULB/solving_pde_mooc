@@ -54,7 +54,7 @@ toc:
 
 ## Installation
 
-*In this course you are expected to run basic commands via command line. In case you don't know how to open command prompt, read how to do this on [MacOS, Linux or Windows][6].*
+*In this course you are expected to run basic commands via command line. In case you don't know how to open command prompt, read how to do this on [MacOS, Linux or Windows][7].*
 
 ### Install Git
 
@@ -65,10 +65,10 @@ toc:
       git --version
   It will start the installation of Git.
 
-  If you are running an earlier version of MacOS, please visit [official website][7] for instructions.
+  If you are running an earlier version of MacOS, please visit [official website][8] for instructions.
 * **Windows**
 
-  Download Git from the [official website][8] and install it via graphical installer.
+  Download Git from the [official website][9] and install it via graphical installer.
 * **Linux**
 
   Open command line and run:
@@ -79,23 +79,28 @@ To check that Git was properly installed and its version, run from the command l
 
     git --version
 
+*In case you are interested in learning more about git, here is some reading to begin with:*
+
+* [How git works](https://hackernoon.com/understanding-git-fcffd87c15a3)
+* [Guide through basic git commands](https://rogerdudler.github.io/git-guide/)
+
 ### Get the course notes
 
-The material of this course is available online and can be accessed [on GitHub][10] or [on a dedicated webpage][11].
+The material of this course is available online and can be accessed [on GitHub][11] or [on a dedicated webpage][12].
 
 On GitHub each chapter is a collection of Jupyter Notebook files.
 
 >The Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
-In a Jupyter Notebook coding is easy and interactive. In a single file you can combine [Markdown][12] *cells* and code *cells*.
+In a Jupyter Notebook coding is easy and interactive. In a single file you can combine [Markdown][13] *cells* and code *cells*.
 
 *We ask you to download the course notes on your computer*.
 
 You can do it in few simple steps using Git.
 
-1. Create your [GitHub][13] account in case you don't have one.
+1. Create your [GitHub][14] account in case you don't have one.
 
-2. Go to the [GitHub page][10] of the course.
+2. Go to the [GitHub page][11] of the course.
 
 3. Click the green "Code" button and copy the HTTP address of this repository.
 
@@ -115,14 +120,26 @@ A directory named `solving_pde_mooc` will be created in your current folder. Loc
 
 *Note that `git clone` does much more than just copies the files in their current state.* It in fact does what it says - clones, creates exact duplicate of the *remote* repository (that on GitHub). It means that you will have full access to all of the changes that will appear on GitHub. We will guide you through how to download those changes further in the course.
 
-### Install Anaconda
+### Install Anaconda (or Miniconda)
 
-*In this course we ask you to install Anaconda and provide you with a recipe to install all required packages in one click*.
+*In this course we ask you to install Anaconda (or Miniconda) and provide you with a recipe to install all required packages in one click*.
 
-For Anaconda installation we refer you to [Anaconda website][5].
+*Note that in case you are working on a ULB computer, necessary Anaconda components are already installed. You can immediately procced to the next step.*
+
+Both Anaconda and Miniconda come with the latest stable release of Python and conda package manager - this is all you need to proceed to setting up your work environment.
+
+* Install Anaconda if you do not mind dedicating several GB of your disk space, do not want to worry about installing various Python packages individually and want to have access to the graphical interface to launch applications and manage conda environments.
+
+  For the Anaconda installation, we refer you to [Anaconda website][5].
+
+* Install Miniconda if you are prepared to learn basic usage of conda command line commands and prefer to only install those Python packages that you will actually need.
+
+  For the Miniconda installation, we refer you to the [official installation guide][6].
+
+### Setup an environment
 
 You will now be quided through the setup of the working environment that you'll use throughout this course. To isolate it from your other projects that you might use Anaconda for, we'll use **conda environment** -
-> ... [a directory that contains a specific collection of conda packages that you have installed][9]... If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
+> ... [a directory that contains a specific collection of conda packages that you have installed][10]... If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
 Open command line and make sure you are "located" in the root directory of the course (`path/to/the/course/directory/solving_pde_mooc`) and run the following command:
 
@@ -136,7 +153,21 @@ In order to activate the *course* environment, run
 conda activate course
 ```
 
-and then you can deactivate it with
+*You might run into the following error:*
+
+```
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+```
+
+*Normally, the Anaconda (or Miniconda) installer should update your shell scripts to initialize conda but if it didn't, as it is said in the error message, you'll have to do it manually. Run*
+
+```
+conda init
+```
+
+*and then restart you command line application. Now `conda activate` command should be recognized.*
+
+To deactivate your `course` environment, run
 
 ```
 conda deactivate
@@ -146,7 +177,7 @@ conda deactivate
 
 We recommend that you use Jupyter Notebook to work with the study material, as it includes sample codes along with the text material.
 
-Before trying to view the notebooks in Jupyter Notebook, activate the *course* conda environment, as the notebooks rely on some of the newly installed packages. Launch the Jupyter Notebook application with the following command line command:
+Before trying to view the notebooks in Jupyter Notebook, activate the *course* conda environment, as the notebooks rely on some of the newly installed packages. Launch the Jupyter Notebook application running the following command from `solving_pde_mooc/notebooks` folder:
 
 ```
 jupyter notebook
@@ -156,16 +187,38 @@ Course notes notebooks require some Jupyter Notebook extensions to display prope
 
 <img src="../figures/jupextensions.png">
 
+After having opened a notebook, run its last cell containing the following code:
+
+```
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```
+
+It will apply preconfigured styling.
+
 [1]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [2]: <https://docs.anaconda.com> "Anaconda"
 [3]: <https://git-scm.com> "Git"
 [4]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
 [5]: <https://docs.anaconda.com/anaconda/install/> "Anaconda installation"
-[6]: <https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955> "How to open command line"
-[7]: <https://git-scm.com/download/mac> "Git Mac Download"
-[8]: <https://git-scm.com/download/win> "Git Win Download"
-[9]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
-[10]: <https://github.com/aquaULB/solving_pde_mooc> "GitHub course notes"
-[11]: <https://aquaulb.github.io/book_solving_pde_mooc/solving_pde_mooc/notebooks/01_Introduction/01_00_Preface.html> "Webbook course notes"
-[12]: <https://en.wikipedia.org/wiki/Markdown> "Markdown"
-[13]: <https://github.com> "GitHub"
+[6]: <https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation> "Miniconda installation"
+[7]: <https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955> "How to open command line"
+[8]: <https://git-scm.com/download/mac> "Git Mac Download"
+[9]: <https://git-scm.com/download/win> "Git Win Download"
+[10]: <https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html> "conda environment"
+[11]: <https://github.com/aquaULB/solving_pde_mooc> "GitHub course notes"
+[12]: <https://aquaulb.github.io/book_solving_pde_mooc/solving_pde_mooc/notebooks/01_Introduction/01_00_Preface.html> "Webbook course notes"
+[13]: <https://en.wikipedia.org/wiki/Markdown> "Markdown"
+[14]: <https://github.com> "GitHub"
+
+
+## Summary
+
+In this notebook, you've learnt how to set up your work environment for this course. Further on, you'll learn how to construct approximate solution of partial differential equations.
+
+```{code-cell} ipython3
+from IPython.core.display import HTML
+css_file = '../styles/notebookstyle.css'
+HTML(open(css_file, 'r').read())
+```

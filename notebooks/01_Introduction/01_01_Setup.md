@@ -25,6 +25,13 @@ toc:
   toc_window_display: false
 ---
 
++++ {"toc": true}
+
+<h1>Table of Contents<span class="tocSkip"></span></h1>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Tools-we-will-rely-on" data-toc-modified-id="Tools-we-will-rely-on-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Tools we will rely on</a></span></li><li><span><a href="#Installation" data-toc-modified-id="Installation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Installation</a></span><ul class="toc-item"><li><span><a href="#Install-Git" data-toc-modified-id="Install-Git-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Install Git</a></span></li><li><span><a href="#Get-the-course-notes" data-toc-modified-id="Get-the-course-notes-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Get the course notes</a></span></li><li><span><a href="#Install-Anaconda" data-toc-modified-id="Install-Anaconda-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Install Anaconda</a></span></li></ul></li><li><span><a href="#Working-with-Jupyter-Notebook" data-toc-modified-id="Working-with-Jupyter-Notebook-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Working with Jupyter Notebook</a></span></li></ul></div>
+
++++
+
 <div class="copyright" property="vk:rights">&copy;
   <span property="vk:dateCopyrighted">2020</span>
   <span property="vk:publisher">B. Knaepen & Y. Velizhanina</span>
@@ -81,17 +88,13 @@ To check that Git was properly installed and its version, run from the command l
 
 ### Get the course notes
 
-The material of this course is available online and can be accessed [on GitHub][10] or [on a dedicated webpage][11].
-
-On GitHub each chapter is a collection of Jupyter Notebook files.
+The material of this course is available online and can be alternatively accessed [on GitHub][10] or [on a dedicated webpage][11]. The second option is recommended for an easy navigation through the different chapters. However, the content is static and not suited to experiment with the various concepts we discuss. For that purpose, each chapter of the course is also distributed as a collection of Jupyter notebooks [on GitHub][10].
 
 >The Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
 In a Jupyter Notebook coding is easy and interactive. In a single file you can combine [Markdown][12] *cells* and code *cells*.
 
-*We ask you to download the course notes on your computer*.
-
-You can do it in few simple steps using Git.
+*You should download the course notes on your computer by following these few steps:*
 
 1. Create your [GitHub][13] account in case you don't have one.
 
@@ -117,44 +120,46 @@ A directory named `solving_pde_mooc` will be created in your current folder. Loc
 
 ### Install Anaconda
 
-*In this course we ask you to install Anaconda and provide you with a recipe to install all required packages in one click*.
+*In this course we ask you to install Anaconda and provide you a recipe to install all the required packages in one click*.
 
-For Anaconda installation we refer you to [Anaconda website][5].
+For the installation of Anaconda, we refer you to [Anaconda's website][5].
 
-You will now be quided through the setup of the working environment that you'll use throughout this course. To isolate it from your other projects that you might use Anaconda for, we'll use **conda environment** -
+You will now be guided through the setup of the working environment that you will use throughout the course. To isolate it from your other projects that might also use Anaconda, we will use a dedicated **conda environment** -
 > ... [a directory that contains a specific collection of conda packages that you have installed][9]... If you change one environment, your other environments are not affected. You can easily activate or deactivate environments, which is how you switch between them.
 
-Open command line and make sure you are "located" in the root directory of the course (`path/to/the/course/directory/solving_pde_mooc`) and run the following command:
+Open the command line and make sure you are "located" in the root directory of the course (`path/to/the/course/directory/solving_pde_mooc`). Run the following command:
 
     conda env create -f environment.yml
 
-This will create a conda environment named "course" and launch the installation of multiple packages.
-
-In order to activate the *course* environment, run
+This will create a conda environment named "course" and launch the installation of multiple packages. This step only has to be done once. After that, you may activate this specific environment by typing in any terminal window,
 
 ```
 conda activate course
 ```
 
-and then you can deactivate it with
+At any time you can deactivate the environment by typing:
 
 ```
 conda deactivate
 ```
 
+This will switch you back to the base Anaconda environment but you can return to the "course" environment by activating it again.
+
 ## Working with Jupyter Notebook
 
-We recommend that you use Jupyter Notebook to work with the study material, as it includes sample codes along with the text material.
+We recommend that you use Jupyter notebooks to work with the course material, as it includes sample codes along with the relevant explanations.
 
-Before trying to view the notebooks in Jupyter Notebook, activate the *course* conda environment, as the notebooks rely on some of the newly installed packages. Launch the Jupyter Notebook application with the following command line command:
+Before trying to view the notebooks in Jupyter Notebook window, activate the conda environment *course* , as the notebooks rely on some of the newly installed packages. Launch the Jupyter Notebook application with the following command line command:
 
 ```
 jupyter notebook
 ```
 
-Course notes notebooks require some Jupyter Notebook extensions to display properly. In the extension menu check out the following boxes:
+The course's notebooks require some Jupyter Notebook extensions to display properly. In the extension menu check out the following boxes:
 
 <img src="../figures/jupextensions.png">
+
+After performing all the steps above, you will have a working setup to view and explore all the content provided in this course.
 
 [1]: <https://wiki.python.org/moin/BeginnersGuide/Overview> "What is Python"
 [2]: <https://docs.anaconda.com> "Anaconda"

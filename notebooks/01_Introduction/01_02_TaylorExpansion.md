@@ -78,7 +78,7 @@ f(x+\Delta x)=f(x)+f'(x)\Delta x+\frac{f''(x)}{2!}\Delta x^2+\dots + \frac{f^{(k
 R_{k+1} = \frac{f^{(k+1)}(\xi)}{(k+1)!}\Delta x^{k+1}, \quad\quad x\leq \xi \leq x+\Delta x.
 \end{equation}
 
-In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note, that at this stage, no approximations have been made. 
+In the above formula, $f^{(k)}$ denotes the $k$-th derivative of $f$. Note, that at this stage, no approximations have been made.
 
 Assuming that $\vert f^{(k+1)}\vert$ is bounded by a constant $C$ in $[a\ b]$, read $\vert f^{(k+1)} \vert \leq C$, we can then write:
 
@@ -120,7 +120,7 @@ As $e^x$ is monotonously increasing, we certainly can bound $e^{\xi}$ by $e$ whe
 
 Let's write a Python code to check if this is indeed the case.
 
-First of all, we need to *import* some Python packages into our code. One Python file can access the content of another by *importing* it. Packages we are going to be interested in the most throughout the course are: 
+First of all, we need to *import* some Python packages into our code. One Python file can access the content of another by *importing* it. Packages we are going to be interested in the most throughout the course are:
 
 * ``NumPy``
 
@@ -133,7 +133,7 @@ First of all, we need to *import* some Python packages into our code. One Python
 * ``Matplotlib``
     > [Matplotlib][12] is a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
-*NumPy*, *SciPy* and *Matplotlib* are fundamental packages for scientific computations in Python. 
+*NumPy*, *SciPy* and *Matplotlib* are fundamental packages for scientific computations in Python.
 
 *NumPy* and *SciPy* are better to be understood together, because *SciPy actually builds on NumPy*.
 
@@ -297,7 +297,7 @@ delta = np.array(delta_list)
 ```{code-cell} ipython3
 %%timeit
 
-# As you can see we managed to shorten our code - 
+# As you can see we managed to shorten our code -
 # what has been previously accomplished in 3 lines,
 # is now done in 1 line.
 # For more info:
@@ -318,7 +318,7 @@ for i in range(len(delta)):
     delta[i] = 2**(-i-1)
 ```
 
-For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][15]. 
+For such a small piece of data we cannot see any advantages in speed for one method over the other. Sometimes you will certainly encounter situations when the efficiency advantage of one approach over the other will not be evident. A good recommendation would be **to keep the balance between efficiency and good programming style in your code**. You might think that style only affects the looks and, therefore, is not that important for production code, but this would be wrong. Whatever your results, you will barely find a person who is going to get interested in your code if it is not readable. Moreover, in 99% of the cases, programming is a collaborative work, so there are *coding conventions* in each programmimg language which regulate the style of coding. Python's coding conventions are provided by [PEP 8][15].
 
 We are now <a name="exc2"> all set to build $R_3$</a>.
 
@@ -326,7 +326,7 @@ We are now <a name="exc2"> all set to build $R_3$</a>.
 
 ```{code-cell} ipython3
 # Here you can clearly see the advantage of
-# NumPy over built-in tools of Python. 
+# NumPy over built-in tools of Python.
 #
 # NumPy functions, such as exp, sin, cos, log etc.,
 # can be applied on the WHOLE array and
@@ -352,7 +352,7 @@ R3 = np.exp(delta) - (1 + delta + delta**2 / 2)
 slope = delta**3
 ```
 
-As we have built the set of numerical data, we are ready to visualize it. 
+As we have built the set of numerical data, we are ready to visualize it.
 
 The fundamental object of *Matplotlib* is [`matplotlib.pyplot.figure`][4]. Whenever you created a plot, all the data is stored inside the instance of this object. *If you don't create the figure explicitly, it will be created implicitly*, but an explicit call to the object allows you to manipulate your plots in a more flexible way.
 
@@ -372,7 +372,7 @@ We have create 2 figures - *figure 0* and *figure 1*, - and use them to demonstr
 # when set to True, tries to optimize organi-
 # zation of your plot - how the subplots, labels,
 # legends are placed in a figure. In most cases
-# it is a useful feature, but sometimes you 
+# it is a useful feature, but sometimes you
 # will face a problem, that it won't know
 # how to optimize your figure just because of
 # how you have organized it manually. We disable
@@ -422,7 +422,7 @@ The logic behind subplotting with `subplots` is very similar to the one of `add_
 fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3)
 ```
 
-But we only need to create one plot at the moment, so we don't provide any arguments to `subplots` - single subplot in a figure is its default. 
+But we only need to create one plot at the moment, so we don't provide any arguments to `subplots` - single subplot in a figure is its default.
 
 We then want to plot $R_3$ as a function of $\Delta x$ and use *log scaling* for both $x$ and $y$ axes - there is a function just for that - [`matplotlib.pyplot.loglog`][6]. For the plot with linear scaling refer to [`matplotlib.pyplot.plot`][7], which has the same syntax.
 
@@ -446,10 +446,10 @@ ax.loglog(delta, R3, '*', label='$R_3$')
 # that you can configure the color of dots and
 # lines you plot with the color argument.
 #
-# This is one way to set a color of a curve - 
+# This is one way to set a color of a curve -
 # by simply passing the name of a color to
 # the function. But this way is limited to only
-# 8 colors. If you need bigger variety, 
+# 8 colors. If you need bigger variety,
 # Matplotlib supports RGBA format. You can either
 # pass a tuple of float values in range [0, 1]
 # as (red, green, blue, alpha), or you can
@@ -512,37 +512,6 @@ In this notebook we have introduced the concepts of numerical precision and nume
 
 In the next notebook we will introduce Euler time-advancement schemes - numerical procedures for solving ordinary differential equations -, define numerical stability of the time-advancement scheme and the concepts of explicit and implicit time integration methods.
 
-## Exercises
-
-
-Some exercises' prefixes are links, click on them to see what part of text they refer to.
-
-[**Exercise 1:**](#exc1) If you were to make a valid estimate of which approach to generate the deltas is the fastest, how would you proceed? What result do you then get?
-
-
-[**Exercise 2:**](#exc2) In order to see by yourself the advantages of *NumPy*, generate the $R_3$ sequence using *Python's* standard `math` module. For that purpose, only use the `delta_list` object instead of the `delta` numpy array. Time both the referenced cell and your code. *Note* that by design, cell magic commands *must* be at the very top of the cell. In order to import the `math` module, run
-
-```python
-import math
-```
-
-**Exercise 3:** Expand these functions into series using Taylor's expansion:
-
-* $\displaystyle f(x)=2x\cos^2\frac{x}{2}-x$ at $x=0$;
-* $\displaystyle f(x)=\frac{1}{2x-x^2}$ at $x=1$;
-* $f(x)=3x$ at $x=1$.
-
-Make a figure of 9 subplots (3 rows by 3 columns). Each line must correspond to one of three expansions for the functions above. For each subplot in a row, increase amount of expansion terms taken into account - in this way each row must demonstrate the growth in accuracy. Each subplot must also contain an *exact curve* for the function. This is a great way to check if your expansions are correct.
-
-For a better understanding of the task consider the following example:
-
-<img src="../figures/TaylorExampleExercise.png">
-
-Source: Find expansion of the example function on [*Wikipedia*][9].
-
-[9]: <https://en.wikipedia.org/wiki/Taylor_series> "Example"
-
-+++
 
 ## References
 

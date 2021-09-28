@@ -15,7 +15,3 @@ dependencies:
   - ipywidgets
   - cython
   - pip
-  - pip:
-    - jupyter-book
-    - ghp-import
-

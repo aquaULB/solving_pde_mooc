@@ -176,6 +176,15 @@ conda deactivate
 
 This will switch you back to the base Anaconda environment but you can return to the "course" environment by activating it again.
 
+**For Windows users:** In some cases, the Jupyter notebook extensions we use are not properly installed automatically when the environment is created. To finish their installation you should type the following commands in a terminal window:
+
+```
+1) conda activate course (only needed if the course environment is not yet activated in the terminal)
+2) jupyter contrib nbextension install --user
+3) jupyter nbextension enable varInspector/main
+```
+
+These extra steps have to be performed only once to get a functional installation.
 ## Working with Jupyter Notebook
 
 We recommend that you use Jupyter notebooks to work with the course material, as it includes sample codes along with the relevant explanations.

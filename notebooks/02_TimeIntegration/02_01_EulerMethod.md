@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.10.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 toc:
@@ -361,14 +361,18 @@ For the problem of radioactive decay, we first observe that according to equatio
 
 Equation \ref{eq:demo_stability} implies that $N^n\to \infty$ if $\vert 1-\alpha dt \vert^n \to \infty$. In such a case the numerical scheme is called *unstable* - i.e when solution grows unbounded (blows up in the jargon). On the other hand, in the case $\vert 1-\alpha dt \vert \le 1$, the Euler scheme is said to be stable. This requirement limits the time step allowed when performing the numerical integration.
 
-In many problems, the coefficients of the equations are complex (e.g. Schrödinger equation). If we generalize our radioactive decay problem to allow for complex valued coefficients $\alpha=\alpha_r + i\alpha_i$, the criteria for stability of the forward Euler scheme becomes,
+In many problems, the coefficients of the equations are complex (e.g. Schrödinger equation). If we generalize our radioactive decay problem to allow for complex valued coefficients,
+\begin{equation}
+ \frac{dy}{dt} = \lambda y
+\end{equation}
+with $\lambda=\lambda_r + i\lambda_i$, the criteria for stability of the forward Euler scheme becomes,
 
 \begin{equation}
 \label{eq:complex_stability}
-  \vert 1-\alpha dt \vert \le 1 \Leftrightarrow (1-\alpha_rdt)^2+(\alpha_idt)^2 \le 1.
+  \vert 1+\lambda dt \vert \le 1 \Leftrightarrow (1+\lambda_rdt)^2+(\lambda_idt)^2 \le 1.
 \end{equation}
 
-Given this, one can then draw a stability diagram indicating the region of the complex plane $(\alpha_rdt , \alpha_idt)$, where the forward Euler scheme is stable. As it is obvious from \ref{eq:complex_stability}, the bounded region of stability *is a circle*.
+Given this, one can then draw a stability diagram indicating the region of the complex plane $(\lambda_rdt , \lambda_idt)$, where the forward Euler scheme is stable. From \ref{eq:complex_stability}, we conclude that the bounded region of stability *is a circle* centered around $(-1,0)$.
 
 ```{code-cell} ipython3
 # Let's configure the size of the figure

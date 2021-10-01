@@ -78,7 +78,7 @@ However, our objective here is to obtain the above time evolution using a numeri
 
 ## The forward Euler method
 
-The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward (explicit) Euler method - it is actually member of the Euler family of numerical methods for ordinary differential equations. We use it to introduce several fundamental concepts that will pop up frequently in the rest of the course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. For radioactive decay, we then have:
+The most elementary time integration scheme - we also call these 'time advancement schemes' - is known as the forward (explicit) Euler method - it is actually member of the Euler family of numerical methods for ordinary differential equations. We use it to introduce several fundamental concepts that will pop up frequently in the rest of the course. This scheme is based on computing an approximation of the unknown function at time $t+dt$ from its known value at time $t$ using the Taylor expansion limited to the first two terms. We then have:
 
 \begin{align}
 \label{eq:ForwardEuler}

@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.10.3
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 toc:
@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#A-two-stage-Runge-Kutta-scheme" data-toc-modified-id="A-two-stage-Runge-Kutta-scheme-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>A two-stage Runge-Kutta scheme</a></span><ul class="toc-item"><li><span><a href="#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme" data-toc-modified-id="Numerical-stability-of-a-two-stage-Runge-Kutta-scheme-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical stability of a two-stage Runge-Kutta scheme</a></span></li></ul></li><li><span><a href="#General-Runge-Kutta-schemes" data-toc-modified-id="General-Runge-Kutta-schemes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>General Runge-Kutta schemes</a></span></li><li><span><a href="#Implicit-Runge-Kutta-schemes" data-toc-modified-id="Implicit-Runge-Kutta-schemes-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Implicit Runge-Kutta schemes</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#A-two-stage-Runge-Kutta-scheme" data-toc-modified-id="A-two-stage-Runge-Kutta-scheme-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>A two-stage Runge-Kutta scheme</a></span><ul class="toc-item"><li><span><a href="#Numerical-stability-of-a-two-stage-Runge-Kutta-scheme" data-toc-modified-id="Numerical-stability-of-a-two-stage-Runge-Kutta-scheme-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Numerical stability of a two-stage Runge-Kutta scheme</a></span></li></ul></li><li><span><a href="#General-Runge-Kutta-schemes" data-toc-modified-id="General-Runge-Kutta-schemes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>General Runge-Kutta schemes</a></span></li><li><span><a href="#Implicit-Runge-Kutta-schemes" data-toc-modified-id="Implicit-Runge-Kutta-schemes-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Implicit Runge-Kutta schemes</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -241,8 +241,6 @@ ax[1].set_title('Height vs time (m)')
 for axis in ax:
     axis.set_xlim(t[0], t[-1])
 ```
-
-In exercise 2, we ask you to check the accuracy of your solution.
 
 ## General Runge-Kutta schemes
 
@@ -567,20 +565,6 @@ for axis in ax:
 In this notebook we have introduced a family of Runge-Kutta explicit and implicit methods. While we won't consider Runge-Kutta schemes of order higher than 4 in the course, we discussed the complexities one would face trying to construct equations for the coefficients $k_i$ for higher-order schemes. We also gave insight into implicit Runge-Kutta schemes and provided an implementation of Qin and Zhang's second-order implicit method.
 
 With this we conclude the chapter dedicated to **time integration**. In the following chapter we will consider the finite differences method to approximate derivatives in partial differential equations and convert them into a system of linear equations.
-
-## Exercises
-
-**Exercise 1.** Prove analytically that the two stage (explicit) Runge-Kutta scheme is not fourth-order accurate for one time step.
-
-**Exercise 2.** For the problem of a body in free fall, compare the solution obtained with the two-stage (explicit) Runge-Kutta scheme to the exact solution. Check that the method is second-order accurate for a finite time interval.
-
-**Exercise 3.** Solve the problem of a body in free fall using the explicit RK4 method.
-
-**Exercise 4.** Solve again the equation of the harmonic oscillator using the explicit RK4 method and show that the solution is not blowing up (choose an appropriate time step).
-
-**Exercise 5.** Implement *Pareschi and Russo's two-stage second-order Diagonally Implicit Runge-Kutta method*. The relevant coefficients can be found on [Wikipedia][2].
-
-[2]: <https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods> "list of RK"
 
 +++
 

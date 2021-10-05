@@ -82,7 +82,7 @@ The most elementary time integration scheme - we also call these 'time advanceme
 
 \begin{align}
 \label{eq:ForwardEuler}
-N(t+dt) \equiv N(t) + N'(t)dt \;\;\;\; \textrm{Forward Euler method} 
+N(t+dt) \equiv N(t) + N'(t)dt \;\;\;\; \textrm{Forward Euler method}
 \end{align}
 
 From this equation, we note that the forward Euler method is of second order for going from $t$ to $t+dt$ (the dropped term in the Taylor expansion is $O(dt^2)$). Once the value of $N$ is known at time $t+dt$, one can re-use \eqref{eq:ForwardEuler} to reach time $t+2dt$ and so on.
@@ -751,7 +751,7 @@ ax[1].set_ylabel('$h$')
 ax[1].set_title('Height vs time (m)')
 ```
 
-In the above plots we have explicitly changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style file according to your taste !
+In the above plots we have explicitly changed our usual plotting style: we used a thin black line. We do so to show you how to set those two parameters but for nearly all our plots we rely on our matplotlib style file. We advise you to do the same to keep the appearance of your plots consistent. But feel free to edit any style file according to your taste!
 
 ### Numerical stability of the forward Euler method revisited
 
@@ -1014,7 +1014,7 @@ ax.set_title('Radioactive decay')
 ax.legend();
 ```
 
-Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticeably. Even though they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case. [In the exercise 3](#exc3) we ask you to explain this phenomenon.
+Here we observe some interesting things. The solutions predicted by the explicit and implicit Euler schemes differ noticably. Even though they are both of the same order of accuracy, they are obviously not identical and the implicit Euler scheme matches the exact solution a bit better. Also, for the chosen time step, both methods are stable in this case.
 
 +++
 

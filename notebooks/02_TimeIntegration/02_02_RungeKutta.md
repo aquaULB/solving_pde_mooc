@@ -100,7 +100,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
          & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3),
 \end{align}
 
-where we have used the property: $y''=\partial_t f + f\partial_y f$. The last equation proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval (we leave it as an exercise to show that this two-stage Runge-Kutta scheme does not match further the Taylor expansion of $y^{n+1}$, and is, therefore, not of higher-order accuracy).
+where we have used the property: $y''=\partial_t f + f\partial_y f$. The last equation proves that the two-stage Runge-Kutta method is of third order for one time step and, as a consequence, it is expected to be second-order accurate for a complete time interval.
 
 ### Numerical stability of a two-stage Runge-Kutta scheme
 

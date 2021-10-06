@@ -5,17 +5,17 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.6.0
+      format_version: '1.3'
+      jupytext_version: 1.10.3
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
 
 <!-- #region toc=true -->
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#2D-grid" data-toc-modified-id="2D-grid-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>2D grid</a></span></li><li><span><a href="#Gauss-Seidel" data-toc-modified-id="Gauss-Seidel-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Gauss-Seidel</a></span></li><li><span><a href="#2D-stencils" data-toc-modified-id="2D-stencils-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>2D stencils</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Forward-Euler" data-toc-modified-id="Forward-Euler-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Forward Euler</a></span></li><li><span><a href="#RK2" data-toc-modified-id="RK2-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>RK2</a></span></li><li><span><a href="#Stability-map-for-backward-Euler" data-toc-modified-id="Stability-map-for-backward-Euler-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Stability map for backward Euler</a></span></li><li><span><a href="#Stability-map-for-forward-Euler---centered-FD" data-toc-modified-id="Stability-map-for-forward-Euler---centered-FD-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Stability map for forward Euler - centered FD</a></span></li><li><span><a href="#Modified-wave-number" data-toc-modified-id="Modified-wave-number-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Modified wave number</a></span></li><li><span><a href="#Logo" data-toc-modified-id="Logo-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Logo</a></span></li><li><span><a href="#2D-grid" data-toc-modified-id="2D-grid-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>2D grid</a></span></li><li><span><a href="#Gauss-Seidel" data-toc-modified-id="Gauss-Seidel-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>Gauss-Seidel</a></span></li><li><span><a href="#2D-stencils" data-toc-modified-id="2D-stencils-9"><span class="toc-item-num">9&nbsp;&nbsp;</span>2D stencils</a></span></li></ul></div>
 <!-- #endregion -->
 
 ```python
@@ -139,6 +139,57 @@ ax.set_ylim(-2., 2.)
 # Save figure. Default format is png.
 # dpi defines the resolution in dots per inch.
 fig.savefig('../figures/RK2.png', dpi=300)
+```
+
+## Stability map for backward Euler
+
+```python
+# All these instructions are documented in the EulerMethod notebook
+fig, ax = plt.subplots(figsize=(6, 6))
+
+rectangle = plt.Rectangle((-2, -2), 4, 4, fc='green', hatch='/', alpha=0.5)
+ax.add_artist(rectangle)
+
+circle = plt.Circle((1, 0), 1, ec='k', fc='white')
+ax.add_artist(circle)
+
+ax.set_aspect(1)
+
+ax.spines['left'].set_position('center')
+ax.spines['bottom'].set_position('center')
+
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+xmin, xmax = -2.3, 2.3
+ymin, ymax = -2., 2.
+
+ax.set_xlim(xmin ,xmax)
+ax.set_ylim(ymin, ymax)
+
+ax.arrow(xmin, 0., xmax-xmin, 0., fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(ymax-ymin), head_length=1./20.*(xmax-xmin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
+         head_width=1./20.*(xmax-xmin), head_length=1./20.*(ymax-ymin),
+         overhang = 0.3, length_includes_head= True, clip_on = False)
+
+ax.set_xlabel(r'$\lambda_r dt$')
+ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
+
+ax.yaxis.set_label_coords(0.6, 0.92)
+ax.xaxis.set_label_coords(1.05, 0.475)
+
+ax.set_title('Stability of backward Euler scheme', y=1.01)
+
+ax.set_xticks((-2, 2))
+ax.set_yticks((-2, -1, 1))
+
+ax.tick_params(width=2, pad=10)
+
+# fig.savefig('../figures/eulerBackwardStabilityMap.png', dpi=300)
+
 ```
 
 ## Stability map for forward Euler - centered FD

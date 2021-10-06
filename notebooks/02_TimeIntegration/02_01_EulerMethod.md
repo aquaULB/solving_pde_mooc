@@ -912,7 +912,7 @@ y^{n+1} = y^{n}+ Ly^{n}dt\;\; & \Leftrightarrow \;\; Q^{-1}y^{n+1} = Q^{-1}y^{n}
 & \Leftrightarrow \;\; z^{n+1} = z^{n} + \Lambda z^{n}dt.
 \end{align}
 
-In \eqref{eq:eigenCoor}, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) x + z_2(t) v$. In this basis, the system of equation is decoupled and reads:
+In the last equation, $z=(z_1\;\; z_2)$ are the coordinates in the eigenvector basis $y=z_1(t) v_1 + z_2(t) v_2$. In this basis, the system of equation is decoupled and reads:
 
 \begin{align}
     & z_1^{n+1} = z_1^{n} + i\gamma z_1^{n} dt\\
@@ -1034,7 +1034,7 @@ For this problem, the scheme reads:
 +&
 \begin{pmatrix}
     0 & 1 \\
-    \gamma^2 & 0
+    -\gamma^2 & 0
 \end{pmatrix}
 \begin{pmatrix}
     x^{n+1} \\
@@ -1047,7 +1047,7 @@ After a little rearrangement:
 \begin{align}
 \begin{pmatrix}
 1 & -dt\\
--\gamma^2 dt & 1
+\gamma^2 dt & 1
 \end{pmatrix}
 \begin{pmatrix}
     x^{n+1} \\
@@ -1067,7 +1067,7 @@ and finally:
 \end{pmatrix}
 = \begin{pmatrix}
 1 & -dt\\
--\gamma^2 dt & 1
+\gamma^2 dt & 1
 \end{pmatrix}^{-1}
 \begin{pmatrix}
     x^{n} \\

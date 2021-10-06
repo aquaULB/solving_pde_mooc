@@ -456,8 +456,8 @@ ax.arrow(0., ymin, 0., ymax-ymin, fc='k', ec='k', lw=0.5,
 # Let's set location for the axes labels, and
 # change the orientation of the label of the y-
 # axis - by default it is 90.
-ax.set_xlabel(r'$\alpha_r dt$')
-ax.set_ylabel(r'$\alpha_i dt$', rotation=0)
+ax.set_xlabel(r'$\lambda_r dt$')
+ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
 
 ax.yaxis.set_label_coords(0.6, 0.95)
 ax.xaxis.set_label_coords(1.05, 0.475)
@@ -867,7 +867,7 @@ Let's inspect the forward Euler scheme stability for the system we are solving. 
 L=
 \begin{pmatrix}
     0 & 1 \\
-    \gamma^2 & 0
+    -\gamma^2 & 0
 \end{pmatrix},
 \end{align}
 

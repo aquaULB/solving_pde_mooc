@@ -1,6 +1,6 @@
 # Local jupyter-notebook checkpoints or Python cache files
 __pycache__
-# *.ipynb
+*.ipynb
 .ipynb_checkpoints
 *.pyc
 latex

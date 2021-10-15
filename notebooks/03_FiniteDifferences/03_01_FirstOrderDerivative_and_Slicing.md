@@ -98,7 +98,7 @@ Expression \eqref{TaylorSer} is exact and allows us to get the following express
 f'(x) = \frac{f(x+\Delta x) - f(x)}{\Delta x}+O(\Delta x)
 \end{equation}
 
-This expression is the usual left derivative of $f(x)$.
+This expression is the usual right derivative of $f(x)$.
 
 To approximate \eqref{eq:forwardTaylorDiff1} on the grid $x_0, x_1,\dots, x_i,\dots x_{n-1}, x_n$, we define the following first-order accurate approximation of $f'$ at $x_i$:
 
@@ -543,7 +543,7 @@ In section [First-order derivative](#First-order-derivative) we mentioned that t
     \end{cases}
 \end{equation}
 
-The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first-order accurate at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished. We will give an example of this behavior later on.
+The inconvenience of this formulation is that it is second-order accurate for interior grid points but only first-order accurate at boundary nodes. It might not seem a big issue, but for certain problems the overall accuracy of the solution will be first order throughout the domain and not second order as we might have wished.
 
 To improve our discretized operator, we have to find second-order accurate expressions for the boundary nodes and we can use Taylor's theorem to achieve this goal. At the left boundary node we have:
 
@@ -552,7 +552,7 @@ f(x_0 + \Delta x) = f(x_0) +f'(x_0)\Delta x+\frac12 f''(x_0)\Delta x^2+O(\Delta 
 f(x_0 + 2\Delta x) = f(x_0) +2f'(x_0)\Delta x+4\frac12 f''(x_0)\Delta x^2+O(\Delta x^3)
 \end{align*}
 
-If we multiply the first equation by two and then substract the second one, we get:
+If we multiply the first equation by four and then substract the second one, we get:
 
 \begin{equation*}
 4 f(x_0 + \Delta x) - f(x_0 + 2\Delta x) = 3 f(x_0) + 2f'(x_0)\Delta x + O(\Delta x^3)

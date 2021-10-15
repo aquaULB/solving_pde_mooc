@@ -256,7 +256,7 @@ A = d2_mat_dirichlet(nx, dx)
 print(A)
 ```
 
-We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat`and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][2].
+We now import the `scipy.linalg.inv` function to compute the inverse of `d2mat` and act with it on the right-hand side vector $b$. This operation is performed with the help of the `numpy.dot` function that allows many sorts of vector and matrix multiplications. You should have a look at its [documentation page][2].
 
 [2]: <https://numpy.org/doc/stable/reference/generated/numpy.dot.html> "documentation for numpy.dot"
 
@@ -275,7 +275,7 @@ T[1:-1] = np.dot(A_inv, b[1:-1])
 T[0], T[-1] = [0, 0]
 ```
 
-That's it! If everything went how we expected, $T$ now contains the approximate solution. We can compare it with the exact solution $T(x)=\displaystyle\frac{1}{2}x(1-x)$, which obviously satisfies the required boundary conditions.
+That's it! If everything went according to plan, $T$ now contains the approximate solution. We can compare it with the exact solution $T(x)=\displaystyle\frac{1}{2}x(1-x)$, which obviously satisfies the required boundary conditions.
 
 ```{code-cell} ipython3
 T_exact = 0.5*x * (1-x) # notice how we multiply numpy arrays pointwise.

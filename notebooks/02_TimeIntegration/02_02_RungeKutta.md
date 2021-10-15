@@ -531,7 +531,7 @@ for i in range(nt):
     y_imp[i+1] = y_imp[i] + 0.5*dt*(k_1+k_2)
 ```
 
-As you may observe from the code, our implementation is somewhat 'naive', meaning that we don't solve equations for $k_i$ numerically, as we have solved them analytically. In a production code, a better approach would be to design the code in such a way that the coefficients are computed automatically from the generic Runge-Kutta formulas.
+Let's now plot our solution:
 
 ```{code-cell} ipython3
 t = np.arange(nt+1) * dt

@@ -465,7 +465,7 @@ ax.set_title('Advection with forward Euler scheme - backward finite differences'
 ax.legend();
 ```
 
-This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. By reducing the time step and grid spacing we can however reduce this phenomenon. You should however rerun this version of the discretization with a lager time step, for example $dt=0.05$. What happens in that case?
+This time, the solution does not seem to be unstable, but it's still not what we would like: the maximum decreases as the wave is advected and close inspection reveals that the packet widens. By reducing the time step and grid spacing we can however reduce this phenomenon. You should however rerun this version of the discretization with a larger time step, for example $dt=0.05$. What happens in that case?
 
 Before digging more on the stability and accuracy of the numerical schemes used so far, we introduce two other topics: one theoretical (on periodic boundary condition) and one computational (on how to create animations to visualize our simulation results).
 

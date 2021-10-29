@@ -270,8 +270,8 @@ where $m\times m$ are the matrix dimensions. Contrary to the matrices $A$ and $\
 This property is very useful here as it allows us to make a direct connexion with the stability analysis discussed in the notebook *02_01_EulerMethod*. To that end, let us denote by $\boldsymbol{z}^{m}$ the coordinates of $\boldsymbol{u}^m$ in the basis of eigenvectors. Because $B$ is diagonal in this basis we have:
 
 \begin{equation}
-    \boldsymbol{z}^{n+1} = (I-\frac{cdt}{2\Delta x}\Lambda) \boldsymbol{z}^{n}
-    \; \; \Leftrightarrow \; \; \boldsymbol{z}^{n+1} = (I-\frac{cdt}{2\Delta x}\Lambda)^{n+1}\boldsymbol{z}^{0}
+    \boldsymbol{z}^{n+1} = (I+\frac{cdt}{2\Delta x}\Lambda) \boldsymbol{z}^{n}
+    \; \; \Leftrightarrow \; \; \boldsymbol{z}^{n+1} = (I+\frac{cdt}{2\Delta x}\Lambda)^{n+1}\boldsymbol{z}^{0}
 \end{equation}
 
 where $\Lambda$ is the diagonal matrix built with the $(nx-2)$ eigenvalues of $B$. In these coordinates, our problem is reduced to a system of $nx-2$ uncoupled equations.

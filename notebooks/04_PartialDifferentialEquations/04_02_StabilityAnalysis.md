@@ -270,13 +270,13 @@ where $m\times m$ are the matrix dimensions. Contrary to the matrices $A$ and $\
 This property is very useful here as it allows us to make a direct connexion with the stability analysis discussed in the notebook *02_01_EulerMethod*. To that end, let us denote by $\boldsymbol{z}^{m}$ the coordinates of $\boldsymbol{u}^m$ in the basis of eigenvectors. Because $B$ is diagonal in this basis we have:
 
 \begin{equation}
-    \boldsymbol{z}^{n+1} = (I-\frac{cdt}{2\Delta x}\Lambda) \boldsymbol{z}^{n}
-    \; \; \Leftrightarrow \; \; \boldsymbol{z}^{n+1} = (I-\frac{cdt}{2\Delta x}\Lambda)^{n+1}\boldsymbol{z}^{0}
+    \boldsymbol{z}^{n+1} = (1+\frac{cdt}{2\Delta x}\Lambda) \boldsymbol{z}^{n}
+    \; \; \Leftrightarrow \; \; \boldsymbol{z}^{n+1} = (1+\frac{cdt}{2\Delta x}\Lambda)^{n+1}\boldsymbol{z}^{0}
 \end{equation}
 
 where $\Lambda$ is the diagonal matrix built with the $(nx-2)$ eigenvalues of $B$. In these coordinates, our problem is reduced to a system of $nx-2$ uncoupled equations.
 
-Our solution will remain finite as long as the condition $\vert 1  -\frac{cdt}{2\Delta x}\lambda_k\vert <1, \forall k$. Unfortunately there is no way to satisfy these constraints as the eigenvalues $\eqref{eq:eigenvals1}$ are purely imaginary with $b=-1$ and $c=1$. The numerical scheme discussed here is therefore *unconditionnally unstable* for the first order wave equation.
+Our solution will remain finite as long as the condition $\vert 1  +\frac{cdt}{2\Delta x}\lambda_k\vert <1, \forall k$. Unfortunately there is no way to satisfy these constraints as the eigenvalues $\eqref{eq:eigenvals1}$ are purely imaginary with $b=-1$ and $c=1$. The numerical scheme discussed here is therefore *unconditionnally unstable* for the first order wave equation.
 
 +++
 
@@ -341,7 +341,7 @@ with
 \lambda_{m} = \frac{c}{\Delta x}\left(1-e^{ik_m \Delta x}\right).
 \end{equation}
 
-The locus on which those values lie is, the complex plane $z=x+iy$, a circle of radius $\frac{c}{\Delta x}$ centered around $(1,0)$.
+The locus on which those values lie is, the complex plane $z=x+iy$, a circle of radius $\frac{c}{\Delta x}$ centered around $(\frac{c}{\Delta x},0)$.
 
 Using the Fourier decomposition, we have transformed the original equation into a set of coupled ordinary differential equations. Each has now the same form as \eqref{eq:basicForm}. 
 
@@ -392,7 +392,7 @@ Very importantly we now have:
 \lambda_{m} = -\frac{c}{\Delta x}\left(1 - e^{-ik_m \Delta x}\right).
 \end{equation}
 
-The locus on which those values lie is a circle of radius $\frac{c}{\Delta x}$ centered around $(-1,0)$.
+The locus on which those values lie is a circle of radius $\frac{c}{\Delta x}$ centered around $(-\frac{c}{\Delta x},0)$.
 
 By restricting the time step with the condition
 

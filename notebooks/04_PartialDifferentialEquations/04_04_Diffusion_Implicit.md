@@ -365,7 +365,7 @@ nt = int((tf-ti)/dt)      # number of time steps
 A = np.eye(nx-2) - 0.5*alpha*dt*D2
 Ainv = np.linalg.inv(A)
 
-# I+0.5*A matric
+# I+0.5*A matrix
 B = np.eye(nx-2) + 0.5*alpha*dt*D2
 
 # (I+0.5A)^{-1} * (I-0.5*A)

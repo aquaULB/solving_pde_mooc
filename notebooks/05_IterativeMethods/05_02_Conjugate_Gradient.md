@@ -312,8 +312,8 @@ fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
 #
-ax_1.contourf(X, Y, pnew, 20)
-ax_2.contourf(X, Y, p_exact, 20)
+ax_1.contourf(X, Y, p_exact, 20)
+ax_2.contourf(X, Y, pnew, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))
@@ -448,8 +448,8 @@ fig, (ax_1, ax_2, ax_3) = plt.subplots(1, 3, figsize=(16,5))
 # For more info
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html
 #
-ax_1.contourf(X, Y, pnew, 20)
-ax_2.contourf(X, Y, p_exact, 20)
+ax_1.contourf(X, Y, p_exact, 20)
+ax_2.contourf(X, Y, pnew, 20)
 
 # plot along the line y=0:
 jc = int(ly/(2*dy))

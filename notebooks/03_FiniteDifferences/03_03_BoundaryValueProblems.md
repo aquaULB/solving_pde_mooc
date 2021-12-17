@@ -376,7 +376,7 @@ This shows that the Neumann boundary condition can be implemented by eliminating
     \frac{-\frac23 T_1 + \frac 23 T_2}{\Delta x^2} = b_1 + \frac{4}{3 \Delta x}.
 \end{equation}
 
-The effect of the Neumann boundary condition is two-fold: it modifies the left-hand side matrix coefficients and the right-hand side source term. Around the other grid nodes, there are no further modifications (except around grid node $nx-2$ where we impose the non-homogeneous condition $T(0)=1$).
+The effect of the Neumann boundary condition is two-fold: it modifies the left-hand side matrix coefficients and the right-hand side source term. Around the other grid nodes, there are no further modifications (except around grid node $nx-2$ where we impose the non-homogeneous condition $T(1)=1$).
 
 All the necessary bits of code are now scattered at different places in the notebook. We rewrite here some of them to make the algorithm easier to follow:
 

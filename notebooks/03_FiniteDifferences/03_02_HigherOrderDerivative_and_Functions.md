@@ -788,7 +788,7 @@ def d1_mat(nx, dx):
     # We replace the first and last lines of d1mat with the proper
     # one-sided finite differences
     d1mat[0, :3] = np.array([-3./2., 2, -1./2.]) # first line
-    d1mat[-1, -3:] = np.array([1./2., -2, 3./2.]) # second line
+    d1mat[-1, -3:] = np.array([1./2., -2, 3./2.]) # last line
 
     # Return the final array divided by the grid spacing
     return d1mat / dx
@@ -837,7 +837,7 @@ def d2_mat(nx, dx):
     # We replace the first and last lines of d1mat with the proper
     # one-sided finite differences
     d2mat[0, :4] = np.array([2., -5, 4., -1.]) # first line
-    d2mat[-1, -4:] = np.array([-1., 4., -5., 2.]) # second line
+    d2mat[-1, -4:] = np.array([-1., 4., -5., 2.]) # last line
 
     # Return the final array divided by the grid spacing **2
     return d2mat / dx**2

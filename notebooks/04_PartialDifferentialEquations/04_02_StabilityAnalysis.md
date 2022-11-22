@@ -190,7 +190,7 @@ with $\displaystyle{\tilde \lambda = \frac{dx}{cdt}-1}$ and $\displaystyle \tild
  dt < \frac{2dx}{c}
 \end{equation}
 
-we can avoid instability of the numerical scheme when using the forward Euler method with backward first-order finite differentiation. Even if the method does not blow up, it does not mean that you would get an accurate physical solution when using a large time step. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \displaystyle\frac{2dx}{c}$ and check what happens.
+we can avoid exponential blow up of the solution for $t\rightarrow \infty$ when using the forward Euler method with backward first-order finite differentiation. However, even if the method does not blow up, it does not mean that we would get an accurate physical solution when fullfilling the above criteria. Errors can still experience very large transient growth at finite times and this necessary condition is not sufficient to ensure a proper solution to our problem. This ultimately boils down to the fact that the matrix $A$ is highly non-normal. For the present scheme, the proper criteria to adopt is $dt < \frac{dx}{c}$ \cite{leveque2007}. Go back to the previous notebook and check that this criteria was indeed satisfied. Run again the simulation with $dt > \displaystyle\frac{dx}{c}$ and check what happens.
 
 The non-dimensional number,
 
@@ -198,10 +198,10 @@ The non-dimensional number,
 C = \frac{cdt}{dx}
 \end{equation}
 
-is called the CFL number after the mathematicians Courant, Friedrich and Lewy. Here the condition for stability is:
+is called the CFL number after the mathematicians Courant, Friedrich and Lewy. Here the condition for stability at finite and long times is:
 
 \begin{equation}
-C<2.
+C<1.
 \end{equation}
 
 This condition limits the allowed time step for a given grid spacing and has a very important practical consequence. If you increase the numerical resolution by using a finer grid, you also need to reduce the time step. You pay the price twice. But at least the method is *conditionnally stable* for the first order wave equation (and $c>0$).
@@ -439,6 +439,9 @@ In this notebook, we have introduced two methods to analyse the stability of the
 ## References
 
 (<a id="cit-horn2013" href="#call-horn2013">Horn and Johnson, 2013</a>) RA Horn and CR Johnson, ``_Matrix Analysis_'',  2013.
+
+(<a id="cit-leveque2007" href="#call-leveque2007">?</a>) RJ LeVeque, ``_Finite Difference Methods for Ordinary and Partial Differential Equations_'',  2007.
+
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

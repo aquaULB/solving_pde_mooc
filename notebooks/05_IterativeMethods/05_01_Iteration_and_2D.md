@@ -499,7 +499,7 @@ If it doesn't, install it by running:
 conda install -c conda-forge ipywidgets
 ```
 
-You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm`that we are goind to use:
+You should then close this notebook and relaunch it to make the package available. After that, you can import the submodule of `tqdm` that we are going to use:
 
 [52]: <https://tqdm.github.io> "TQDM documentation"
 

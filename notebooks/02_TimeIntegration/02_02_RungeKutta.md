@@ -97,7 +97,7 @@ In notebook 1.1, we discussed the fact that the forward Euler method is second-o
 \label{TaylorRK2}
  y^{n+1} & = y^n + dt f(t^n+\frac{dt}{2},y^n + \frac{dt}{2}f(t^n, y^n)) \nonumber \\
          & = y^n + dt \left[ f(t^n, y^n) + \frac{dt}{2} \partial_t f(t^n, y^n) + \frac{dt}{2} f(t^n, y^n)\partial_y f(t^n,y^n)\\
-         \frac{dt^2}{8} \partial_{tt} f(t^n, y^n) + \frac{dt^2}{4} f(t^n, y^n) \partial_{yt} f(t^n, y^n) + \frac{dt^2}{8} f^2(t^n, y^n) \partial_{yy} f(t^n, y^n) + O(dt^3) \right] \nonumber \\
+         + \frac{dt^2}{8} \partial_{tt} f(t^n, y^n) + \frac{dt^2}{4} f(t^n, y^n) \partial_{yt} f(t^n, y^n) + \frac{dt^2}{8} f^2(t^n, y^n) \partial_{yy} f(t^n, y^n) + O(dt^3) \right] \nonumber \\
          & = y^n + dt y'^n + \frac{dt^2}{2}y''^n + O(dt^3),
 \end{align}
 
@@ -569,7 +569,7 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 
 +++
 
-## References
+# References
 
 (<a id="cit-Hairer1987" href="#call-Hairer1987">Hairer, Norsett <em>et al.</em>, 1987</a>) Ernst Hairer, Syvert Paul Norsett and Gerhard Wanner, ``_Solving Ordinary Differential Equations I: Nonstiff Problems: With 105 Figures_'',  1987.
 

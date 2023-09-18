@@ -6,9 +6,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.10.3
+    jupytext_version: 1.15.2
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 toc:
@@ -35,7 +35,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Taylor's-theorem" data-toc-modified-id="Taylor's-theorem-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Taylor's theorem</a></span><ul class="toc-item"><li><span><a href="#Expansion-of-exponential-function" data-toc-modified-id="Expansion-of-exponential-function-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Expansion of exponential function</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#Exercises" data-toc-modified-id="Exercises-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Exercises</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Taylor's-theorem" data-toc-modified-id="Taylor's-theorem-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Taylor's theorem</a></span><ul class="toc-item"><li><span><a href="#Expansion-of-exponential-function" data-toc-modified-id="Expansion-of-exponential-function-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Expansion of exponential function</a></span></li></ul></li><li><span><a href="#Summary" data-toc-modified-id="Summary-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Summary</a></span></li><li><span><a href="#References" data-toc-modified-id="References-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>References</a></span></li></ul></div>
 
 +++
 
@@ -379,8 +379,11 @@ We have create 2 figures - *figure 0* and *figure 1*, - and use them to demonstr
 # it for the first figure, so that it doesn't
 # complain about that we INTENTIONALLY overlap
 # one subplot with another.
-fig_0 = plt.figure(tight_layout=False)
+fig_0 = plt.figure()
 fig_1 = plt.figure()
+
+fig_0.set_tight_layout(False)
+fig_1.set_tight_layout(False)
 
 # Position axes in figure 0 using add_axes.
 # We pass coordinates for our axes in a list
@@ -405,7 +408,7 @@ ax_3 = fig_1.add_subplot(222)
 ax_4 = fig_1.add_subplot(223)
 ax_5 = fig_1.add_subplot(224)
 
-fig_1.suptitle('Subplots', fontsize=18, y=1.05)
+fig_1.suptitle('Subplots', fontsize=18, y=1.05);
 ```
 
 It is mostly a matter of your taste which approach you use, but certainly, in cases where you want to create multiple subplots in one figure, the approach of using `add_subplots` is more convenient and, therefore, more reasonable.
@@ -516,7 +519,6 @@ In the next notebook we will introduce Euler time-advancement schemes - numerica
 ## References
 
 (<a id="cit-arfken2012" href="#call-arfken2012">Arfken, Weber <em>et al.</em>, 2012</a>) GB Arfken, HJ Weber and FE Harris, ``_Mathematical methods for physicists: A comprehensive guide._'',  2012.
-
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

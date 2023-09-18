@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.0
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -443,11 +443,13 @@ ax.text(-3.17, 0.49, r'-2.79', fontsize=14, horizontalalignment='center')
 
 # Axis labels
 ax.set_xlabel(r'$\lambda_r dt$')
+ax.xaxis.set_label_coords(0.8, 0.99)
 ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
+ax.yaxis.set_label_coords(0.85, 0.5)
 
 ax.set_aspect(1)
 
-ax.set_title('Stability regions', x=0.7, y=1.01)
+ax.set_title('Stability regions', x=0.7, y=1.01);
 
 # fig.savefig('../figures/stabilityDomains.png', dpi=300)
 ```
@@ -578,7 +580,6 @@ With this we conclude the chapter dedicated to **time integration**. In the foll
 (<a id="cit-Butcher1996" href="#call-Butcher1996">Butcher, 1996</a>) Butcher J.C., ``_A history of Runge-Kutta methods_'', Applied Numerical Mathematics, vol. 20, number 3, pp. 247--260,  1996.
 
 (<a id="cit-Kutta1901" href="#call-Kutta1901">Kutta, 1901</a>) Kutta Wilhelm, ``_Beitrag zur naherungsweisen Integration totaler Differentialgleichungen_'', Z. Math. Phys., vol. 46, number , pp. 435--453,  1901.
-
 
 ```{code-cell} ipython3
 from IPython.core.display import HTML

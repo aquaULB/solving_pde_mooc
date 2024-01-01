@@ -57,11 +57,11 @@ Many models appearing in engineering or physical applications are mathematically
 
 By the end of the course, the student should have acquired the necessary skills to solve numerically equations such as the heat equation or Schrödinger's equation:  
 
-<img style="display: block; margin-left: auto; margin-right: auto;" src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Balign*%7D%0A%5Cfrac%7B%5Cpartial%20T(%5Cboldsymbol%20r%2Ct)%7D%7B%5Cpartial%20t%7D%20%20%26%20%3D%20%5Calpha%20%5CDelta%20T(%5Cboldsymbol%20r%2Ct)%2C%20%26%5Chbox%7BHeat%20equation%7D%5C%5C%0Ai%5Chbar%20%5Cfrac%7B%5Cpartial%20%5CPsi(%5Cboldsymbol%20r%2Ct)%7D%7B%5Cpartial%20t%7D%20%26%20%3D%20%5Cleft%5B%20%5Cfrac%7B-%5Chbar%5E2%7D%7B2m%7D%5CDelta%20%2B%20V(%5Cboldsymbol%20r%2Ct)%20%5Cright%5D%5CPsi(%5Cboldsymbol%20r%2Ct)%2C%20%26%5Chbox%7BSchr%C3%B6dinger%20equation%7D%0A%5Cend%7Balign*%7D">
+$\frac{\partial T}{\partial t} = \alpha \Delta T, \hspace{1cm} -\frac{\hbar^2}{2m} \Delta \psi + V\psi = E\psi$ .
 
 We don't further describing those equations here (it's not a problem if you have never heard about them), but we just emphasises that they both contain the laplacian operator
 
-<img style="display: block; margin-left: auto; margin-right: auto;" src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Bequation*%7D%0A%20%5CDelta%20%3D%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20x%5E2%7D%2B%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20y%5E2%7D%2B%20%5Cfrac%7B%5Cpartial%5E2%7D%7B%5Cpartial%20z%5E2%7D%0A%5Cend%7Bequation*%7D%0A">
+$\Delta = \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}$,
 
 that makes them partial differential equations. Our main objective is then to formulate such operators numerically and to solve the resulting problems with computer algorithms. This also requires to complement the equations with suitable boundary conditions and to implement them consistently with the differential operators.
 
@@ -82,15 +82,6 @@ This course covers the following topics:
 * **Iterative methods**
     
     Many of the techniques involved in solving ODEs or PDEs require to invert matrices. For low dimensional matrices, this can be done through standard elimination methods. For large matrices, such methods are prohibitively expensive and some approximate inversion techniques are needed. In this chapter we describe some of them belonging to the class of iterative methods.
-
-* **Fourier transform**
-    
-    In the chapter about finite difference schemes we have described an intuitive way to compute spatial derivatives. Here we introduce a more accurate technique that relies on the expansion of the unknown functions using a basis of functions. We illustrate the concepts introduced to solve problems with periodic boundary conditions.
-    
-* **Chebyshev discretisation**
-    
-    We conclude this course by giving a brief introduction on the Chebyshev spectral method. It also relies on the concept of Fourier transforms but the expansion basis is constructed using Chebyshev polynomials. This method is very accurate and well adapted to problems with physical boundaries as opposed to problems with periodic boundary conditions.
-
 
 <h2 id="Tools">Tools</h2>
 

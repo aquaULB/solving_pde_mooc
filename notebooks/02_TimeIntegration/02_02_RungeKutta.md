@@ -442,9 +442,9 @@ ax.arrow(-3.05, 0.4, 0.26, -0.4, fc='k', ec='k', lw=0.5,
 ax.text(-3.17, 0.49, r'-2.79', fontsize=14, horizontalalignment='center')
 
 # Axis labels
-ax.set_xlabel(r'$\lambda_r dt$')
+ax.set_xlabel(r'$\lambda_i dt$')
 ax.xaxis.set_label_coords(0.8, 0.99)
-ax.set_ylabel(r'$\lambda_i dt$', rotation=0)
+ax.set_ylabel(r'$\lambda_r dt$', rotation=0)
 ax.yaxis.set_label_coords(0.85, 0.5)
 
 ax.set_aspect(1)

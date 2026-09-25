@@ -6,9 +6,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.10.3
+    jupytext_version: 1.15.2
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 toc:
@@ -28,7 +28,7 @@ toc:
 +++ {"toc": true}
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Tools-we-will-rely-on" data-toc-modified-id="Tools-we-will-rely-on-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Tools we will rely on</a></span></li><li><span><a href="#Installation" data-toc-modified-id="Installation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Installation</a></span><ul class="toc-item"><li><span><a href="#Install-Git" data-toc-modified-id="Install-Git-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Install Git</a></span></li><li><span><a href="#Get-the-course-notes" data-toc-modified-id="Get-the-course-notes-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Get the course notes</a></span></li><li><span><a href="#Install-Anaconda" data-toc-modified-id="Install-Anaconda-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Install Anaconda</a></span></li></ul></li><li><span><a href="#Working-with-Jupyter-Notebook" data-toc-modified-id="Working-with-Jupyter-Notebook-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Working with Jupyter Notebook</a></span></li></ul></div>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Tools-we-will-rely-on" data-toc-modified-id="Tools-we-will-rely-on-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Tools we will rely on</a></span></li><li><span><a href="#Installation" data-toc-modified-id="Installation-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Installation</a></span><ul class="toc-item"><li><span><a href="#Install-Git" data-toc-modified-id="Install-Git-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Install Git</a></span></li><li><span><a href="#Get-the-course-notes" data-toc-modified-id="Get-the-course-notes-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Get the course notes</a></span></li><li><span><a href="#Install-Anaconda-(or-Miniconda)" data-toc-modified-id="Install-Anaconda-(or-Miniconda)-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Install Anaconda (or Miniconda)</a></span></li><li><span><a href="#Setup-an-environment" data-toc-modified-id="Setup-an-environment-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Setup an environment</a></span></li></ul></li><li><span><a href="#Working-with-Jupyter-Notebook" data-toc-modified-id="Working-with-Jupyter-Notebook-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Working with Jupyter Notebook</a></span></li><li><span><a href="#Summary" data-toc-modified-id="Summary-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Summary</a></span></li></ul></div>
 
 +++
 
@@ -70,7 +70,8 @@ toc:
   If you are running *10.9 Mavericks or a later version of MacOS*, launch the command line and run:
 
       git --version
-  It will start the installation of Git.
+
+  A window should pop-up prompting you to accept the installation of the required tools and Git.
 
   If you are running an earlier version of MacOS, please visit [official website][8] for instructions.
 * **Windows**
@@ -93,31 +94,23 @@ To check that Git was properly installed and its version, run from the command l
 
 ### Get the course notes
 
-The material of this course is available online and can be alternatively accessed [on GitHub][10] or [on a dedicated webpage][11]. The second option is recommended for an easy navigation through the different chapters. However, the content is static and not suited to experiment with the various concepts we discuss. For that purpose, each chapter of the course is also distributed as a collection of Jupyter notebooks [on GitHub][10].
+The material of this course is available online and can be alternatively accessed [on GitHub][11] or [on a dedicated webpage][12]. The second option is recommended for an easy navigation through the different chapters. However, the content is static and not suited to experiment with the various concepts we discuss. For that purpose, each chapter of the course is also distributed as a collection of Jupyter notebooks [on GitHub][11].
 
 >The Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
 In a Jupyter Notebook coding is easy and interactive. In a single file you can combine [Markdown][13] *cells* and code *cells*.
 
-*You should download the course notes on your computer by following these few steps:*
+**To download the notebooks to your computer follow these steps:**
 
-1. Create your [GitHub][14] account in case you don't have one.
+1. Open the command line.
 
-2. Go to the [GitHub page][11] of the course.
+2. **Optional:** if you want the course notes to reside at a specific location on your computer, move to the wanted directory first.
 
-3. Click the green "Code" button and copy the HTTP address of this repository.
-
-<img src="../figures/code_copy.png">
-
-4. Open the command line.
-
-5. **Optional:** if you want the course notes to reside at a specific location on your computer, change the directory first.
-
-6. Run from the command line:
+3. Run from the command line:
 
         git clone https://github.com/aquaULB/solving_pde_mooc.git
 
-    *You will be asked to enter your GitHub credentials.*
+    *You may be asked to enter your GitHub credentials.*
 
 A directory named `solving_pde_mooc` will be created in your current folder. Locally, you'll have access to all of the content that is available on GitHub.
 
@@ -125,19 +118,17 @@ A directory named `solving_pde_mooc` will be created in your current folder. Loc
 
 ### Install Anaconda (or Miniconda)
 
-*In this course we ask you to install Anaconda (or Miniconda) and provide you with a recipe to install all the required packages in one click*.
+To properly run the notebooks provided as part of this course, you need an installation of Python with a required set of packages. If you already have a recent version of Python installed and are familiar with Python package managers like pip or conda, you may go directly to the next step. Otherwise, follow these instructions.
 
-*Note that in case you are working on a ULB computer, Anaconda is already installed and you can immediately proceed to the next step.*
+To setup your Python environnement, we propose two alternative ways to do it, both based on a Python distribution called Anaconda. Both methods provide the latest stable release of Python and the conda package manager - this is all you need to proceed to setting up your work environment.
 
-Both Anaconda and Miniconda come with the latest stable release of Python and the conda package manager - this is all you need to proceed to setting up your work environment.
-
-* Install Anaconda if you do not mind dedicating several GB of your disk space to the installation, do not mind installing a large set of Python packages at once and want to have access to a graphical interface to launch applications and manage conda environments.
+* Method 1: Install the full Anaconda distribution if you do not mind dedicating several GB of your disk space to the installation, do not mind installing a large set of Python packages at once and want to have access to a graphical interface to launch applications and manage conda environments. This is not recommended on ULB computers due to disk space limits.
 
   To install Anaconda we refer you to the [Anaconda website][5].
+<br/>
+* Method 2: Install Miniconda if you are tight on disk space, if you don't need access to a graphical interface to manage your environments or if you prefer to only install only the Python packages that you actually need. This is the method we recommend.
 
-* Install Miniconda if you are tight on disk space, if you don't need access to a graphical interface to manage your environments or if you prefer to only install only the Python packages that you actually need.
-
-  For the Miniconda installation, we refer you to the [official installation guide][6].
+  For the Miniconda installation, we refer you to the [official installation guide][6]. Make sure you select your platform correctly.
 
 ### Setup an environment
 
@@ -174,7 +165,7 @@ At any time you can deactivate the environment by typing:
 conda deactivate
 ```
 
-This will switch you back to the base Anaconda environment but you can return to the "course" environment by activating it again.
+This will switch you back to the base environment but you can return to the "course" environment by activating it again.
 
 **For Windows users:** In some cases, the Jupyter notebook extensions we use are not properly installed automatically when the environment is created. To finish their installation you should type the following commands in a terminal window:
 
@@ -199,7 +190,7 @@ The course's notebooks require some Jupyter Notebook extensions to display prope
 
 <img src="../figures/jupextensions.png">
 
-We think that the course notebooks are best displayed using a custom HTML theme. To activate it, you must execute the last cell of each notebook after opening them: 
+We think that the course notebooks are best displayed using a custom HTML theme. To activate it, you must execute the last cell of each notebook after opening them:
 
 ```
 from IPython.core.display import HTML
@@ -214,7 +205,7 @@ This will immediately apply the preconfigured styling.
 [3]: <https://git-scm.com> "Git"
 [4]: <https://www.freecodecamp.org/news/compiled-versus-interpreted-languages/> "Interpreted vs compiled"
 [5]: <https://docs.anaconda.com/anaconda/install/> "Anaconda installation"
-[6]: <https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation> "Miniconda installation"
+[6]: <https://docs.anaconda.com/anaconda/install/> "Miniconda installation"
 [7]: <https://towardsdatascience.com/a-quick-guide-to-using-command-line-terminal-96815b97b955> "How to open command line"
 [8]: <https://git-scm.com/download/mac> "Git Mac Download"
 [9]: <https://git-scm.com/download/win> "Git Win Download"
